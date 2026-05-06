@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Score Guarantee Terms — AI Catalog Score</title>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; max-width: 800px; margin: 0 auto; padding: 40px 20px; line-height: 1.7; color: #333; }
+    h1 { font-size: 2rem; margin-bottom: 8px; }
+    h2 { margin-top: 32px; font-size: 1.3rem; }
+    .date { color: #666; margin-bottom: 32px; }
+    a { color: #0066cc; }
+    code { background: #f4f4f4; padding: 2px 5px; border-radius: 3px; font-size: 0.9em; }
+    .legal-banner { background: #e7f0fd; border-left: 4px solid #0066cc; padding: 12px 16px; margin: 16px 0; }
+    .success-banner { background: #e6f7ec; border-left: 4px solid #28a745; padding: 12px 16px; margin: 24px 0; }
+  </style>
+</head>
+<body>
+  <h1>Score Guarantee — Contractual Terms</h1>
+  <p class="date">Version v1.0-2026-05-03 · Effective May 3, 2026</p>
+
+  <div class="legal-banner">
+    <strong>This is a legal contract</strong> between the merchant and AI Catalog Score — not marketing copy. Refunds triggered by these clauses are processed automatically via Shopify Billing API app credits, with no manual review required.
+  </div>
+
+  <p>This page describes the contractual money-back guarantee included with every paid subscription to AI Catalog Score on the Shopify App Store. By installing the app on a Shopify store and accepting these Terms in-app, the merchant ("Merchant") accepts these terms.</p>
+
+  <h2>1. The Promise</h2>
+  <p>For every fix the Merchant applies through AI Catalog Score — including auto-fixes, bulk fixes, and AI-generated content — the app records the product's AI Catalog Score before applying and re-audits immediately after. If the resulting improvement is less than <strong>10 points</strong>, the fix is considered unsuccessful under this guarantee.</p>
+  <p>A fix that yields a score improvement of <strong>10 points or more</strong> is considered successful and is <strong>not</strong> eligible for refund.</p>
+
+  <h2>2. Refund Mechanic</h2>
+  <p>When a Merchant qualifies for the guarantee on at least one fix in a billing month, AI Catalog Score will issue a <strong>Shopify app credit</strong> equal to the full price of that month's subscription. The credit is applied automatically to the next Shopify invoice via the Shopify Billing API.</p>
+  <p>There is no claim form, no approval delay, and no manual review required. The refund is <strong>automatic</strong> — issued either:</p>
+  <ul>
+    <li><strong>Immediately upon Merchant claim</strong> from the Score Guarantee page in the app, OR</li>
+    <li><strong>Automatically by background process</strong> 30 days after the fix was applied if the Merchant has not already claimed and the fix did not meet the +10-point threshold.</li>
+  </ul>
+
+  <h2>3. Scope of Coverage</h2>
+  <p><strong>Covered:</strong></p>
+  <ul>
+    <li>Auto-fixes triggered from the Checklist page</li>
+    <li>Bulk fixes applied from the Bulk Fix page</li>
+    <li>LLM-generated descriptions, alt text, tags, SEO titles</li>
+    <li>Category, vendor, type, and metafield writes initiated by the app</li>
+  </ul>
+  <p><strong>Not covered:</strong></p>
+  <ul>
+    <li>Catalog edits made directly in Shopify Admin without going through AI Catalog Score</li>
+    <li>Score regressions caused by external factors (pricing changes, inventory going to zero, third-party app conflicts) verifiable in the audit history</li>
+    <li>Refunds requested for fixes that <strong>did</strong> improve the score by 10 points or more — those fixes are considered successful</li>
+  </ul>
+
+  <h2>4. Refund Limits</h2>
+  <ul>
+    <li>One refund maximum per billing month per shop, regardless of the number of unsuccessful fixes during that month.</li>
+    <li>Refund amount equals the full price of the active subscription tier at the time of the fix.</li>
+    <li>Free-trial periods are not refundable in cash; the trial extends by one month instead.</li>
+    <li>Free-tier accounts (no recurring charge) are not eligible for monetary refunds; the contractual remedy is removal of the unsuccessful fix and re-application up to three times at no cost.</li>
+  </ul>
+
+  <h2>5. Eligibility</h2>
+  <p>The guarantee is active for any Shopify store that:</p>
+  <ol>
+    <li>Has installed AI Catalog Score, AND</li>
+    <li>Has accepted these Terms (acceptance is captured the first time the store owner or a collaborator opens the app post-install), AND</li>
+    <li>Holds a paid subscription on the date a fix is applied.</li>
+  </ol>
+
+  <h2>6. Changes to These Terms</h2>
+  <p>If we change the threshold, refund mechanic, or scope of coverage, we will:</p>
+  <ol>
+    <li>Bump the <code>GUARANTEE_TERMS_VERSION</code> constant.</li>
+    <li>Prompt the Merchant for fresh consent on the next app load.</li>
+    <li>Continue to honor the previous version's terms for any fix applied before the version bump.</li>
+  </ol>
+
+  <h2>7. Performance Pricing Tier (optional)</h2>
+  <p>A separate optional subscription tier — <strong>Performance</strong> — is available in the Pricing page. Its terms are governed by these clauses in addition to the Score Guarantee above:</p>
+  <ul>
+    <li><strong>Base price:</strong> $0/month.</li>
+    <li><strong>Variable price:</strong> 5% of the Merchant's measured AI revenue uplift over the billing month, computed from AI-attributed orders captured by AI Catalog Score's per-agent attribution layer (the AI Agent Traffic dashboard).</li>
+    <li><strong>Cap:</strong> $5,000 USD per billing month, regardless of the actual uplift size.</li>
+    <li><strong>Uplift formula:</strong> <code>uplift_month = max(0, AI_revenue_month - AI_revenue_baseline)</code>. The baseline is the Merchant's average monthly AI-attributed revenue over the 30 days preceding the switch to the Performance tier (or 0 if no pre-tier history).</li>
+    <li><strong>Recommended baseline:</strong> stores doing $500,000+/month in Shopify revenue. Not enforced as a hard gate — smaller stores can opt in but the monthly charge may be erratic due to lower signal volume.</li>
+    <li><strong>Billing cycle:</strong> uplift is computed on the 2nd of each month for the month that just closed; the charge is submitted to Shopify Billing API as an <code>AppUsageRecord</code> against the Performance subscription. The Score Guarantee in sections 1-6 still applies in full to fixes applied while on the Performance tier.</li>
+  </ul>
+
+  <h2>8. Contact</h2>
+  <p>Questions, edge cases, or formal disputes:</p>
+  <ul>
+    <li>Email: <a href="mailto:support@aicatalogscore.com">support@aicatalogscore.com</a></li>
+    <li>In-app: the "Score Guarantee" page in the navigation menu</li>
+  </ul>
+
+  <div class="success-banner">
+    This guarantee is the operational implementation of our promise to Merchants. Our business model is aligned: we make money only when your AI Catalog Score actually improves.
+  </div>
+
+  <p style="margin-top: 32px; font-size: 0.85em; color: #666;">
+    Privacy Policy: <a href="privacy.html">privacy.html</a> · Source code:
+    <a href="https://github.com/Kingdompe/ai-catalog-score">github.com/Kingdompe/ai-catalog-score</a>
+  </p>
+</body>
+</html>
