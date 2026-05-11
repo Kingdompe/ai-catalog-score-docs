@@ -2165,7 +2165,21 @@ function resizeCanvas(){
 resizeCanvas();
 window.addEventListener('resize', () => { dpr = window.devicePixelRatio || 1; resizeCanvas(); });
 
+// Pause the hero animation when the hero is scrolled off-screen — saves
+// continuous CPU/canvas work while user is looking at other sections.
+let heroVisible = true;
+const heroEl = document.querySelector('.hero');
+if (heroEl){
+  new IntersectionObserver(entries => {
+    entries.forEach(e => { heroVisible = e.isIntersecting; });
+  }, { threshold: 0 }).observe(heroEl);
+}
+
 function drawCanvas(){
+  if (!heroVisible){
+    requestAnimationFrame(drawCanvas);
+    return;
+  }
   const w = canvas.width / dpr;
   const h = canvas.height / dpr;
   ctx.clearRect(0, 0, w, h);
@@ -2493,13 +2507,11 @@ if (terminalBody) terminalObserver.observe(terminalBody);
   const uBg = gl.getUniformLocation(prog, 'uBg');
   gl.uniform3fv(uBg, new Float32Array([0.04, 0.04, 0.035])); // matches --bg-dark
 
-  const PRICING_MAX_W = 1280, PRICING_MAX_H = 1024;
   function resize(){
     if (!section) return;
     const r = section.getBoundingClientRect();
-    const scale = Math.min(PRICING_MAX_W / r.width, PRICING_MAX_H / r.height, 1.0);
-    canvas.width = Math.max(2, Math.floor(r.width * scale));
-    canvas.height = Math.max(2, Math.floor(r.height * scale));
+    canvas.width = Math.max(2, Math.floor(r.width));
+    canvas.height = Math.max(2, Math.floor(r.height));
     canvas.style.width = r.width + 'px';
     canvas.style.height = r.height + 'px';
     gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
@@ -2543,14 +2555,16 @@ if (terminalBody) terminalObserver.observe(terminalBody);
 
   const vsrc = 'attribute vec2 aPosition; void main(){ gl_Position = vec4(aPosition, 0.0, 1.0); }';
   // Direct port of the 21st.dev "Animated Shader Background" fragment shader.
-  // The only adjustment is a manual tanh() — GLSL ES 1.0 (WebGL 1) does not
-  // include it as a built-in (it's only available from GLSL 1.30+ / WebGL 2).
+  // Optimizations vs original (visually imperceptible):
+  // - NUM_OCTAVES 3 → 2: octave 3 contributes only ~5% of FBM amplitude
+  // - Skip i=0..3 in main loop (thinnessFactor < 0.025 — invisible)
+  // - tanh polyfill required for GLSL ES 1.0 (WebGL 1.0)
   const fsrc = `
     precision highp float;
     uniform float iTime;
     uniform vec2 iResolution;
 
-    #define NUM_OCTAVES 3
+    #define NUM_OCTAVES 2
 
     vec4 tanh4(vec4 x){
       vec4 e2 = exp(2.0 * x);
@@ -2592,7 +2606,8 @@ if (terminalBody) terminalObserver.observe(terminalBody);
 
       float f = 2.0 + fbm(p + vec2(iTime * 5.0, 0.0)) * 0.5;
 
-      for (float i = 0.0; i < 35.0; i++){
+      // Start at i=4 — first 4 iters have thinnessFactor < 0.025 (invisible)
+      for (float i = 4.0; i < 35.0; i++){
         v = p + cos(i * i + (iTime + p.x * 0.08) * 0.025 + i * vec2(13.0, 11.0)) * 3.5
             + vec2(sin(iTime * 3.0 + i) * 0.003, cos(iTime * 3.5 - i) * 0.003);
         float tailNoise = fbm(v + vec2(iTime * 0.5, i)) * 0.3 * (1.0 - (i / 35.0));
@@ -2642,15 +2657,14 @@ if (terminalBody) terminalObserver.observe(terminalBody);
   const uTime = gl.getUniformLocation(prog, 'iTime');
   const uRes = gl.getUniformLocation(prog, 'iResolution');
 
-  // Cap internal resolution — the 35-iter + FBM shader is fragment-heavy,
-  // and oversampling above ~1280px width gives no visible benefit for this
-  // soft aurora pattern. Saves 3-4× fragment work on high-DPI displays.
-  const MAX_W = 1280, MAX_H = 720;
+  // Render at CSS-pixel resolution (DPR = 1) — soft aurora pattern doesn't
+  // benefit visibly from retina oversampling, and the per-fragment cost is
+  // high. Quality stays crisp because the streaks are sub-pixel anti-aliased
+  // by the shader itself via length() falloff.
   function resize(){
     const r = section.getBoundingClientRect();
-    const scale = Math.min(MAX_W / r.width, MAX_H / r.height, 1.0);
-    canvas.width = Math.max(2, Math.floor(r.width * scale));
-    canvas.height = Math.max(2, Math.floor(r.height * scale));
+    canvas.width = Math.max(2, Math.floor(r.width));
+    canvas.height = Math.max(2, Math.floor(r.height));
     canvas.style.width = r.width + 'px';
     canvas.style.height = r.height + 'px';
     gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
