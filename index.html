@@ -1017,6 +1017,222 @@ section{ position: relative; }
 .text-center .eyebrow{ justify-content: center; }
 .text-center .section-head{ margin-left: auto; margin-right: auto; }
 
+/* ============ ANIMATED GLASSY PRICING ============ */
+.pricing-glassy{
+  position: relative;
+  overflow: hidden;
+  background: var(--bg-dark);
+  color: var(--ink-dark-1);
+  border-top: 1px solid var(--border-dark);
+  border-bottom: 1px solid var(--border-dark);
+  min-height: 900px;
+  display: flex; align-items: center;
+}
+.pricing-shader-canvas{
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  z-index: 0;
+  display: block;
+}
+.pricing-shader-fallback{
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 60% 70% at 50% 50%, rgba(0,208,132,.2), transparent 60%),
+    radial-gradient(ellipse 80% 60% at 30% 30%, rgba(139,92,246,.15), transparent 60%),
+    radial-gradient(ellipse 60% 80% at 70% 70%, rgba(37,99,235,.15), transparent 60%),
+    var(--bg-dark);
+  z-index: 0;
+}
+.pricing-glassy .container{ position: relative; z-index: 2; }
+.pricing-glassy-head{
+  text-align: center;
+  max-width: 880px;
+  margin: 0 auto 64px;
+}
+.pricing-glassy-head h2{
+  font-size: clamp(40px, 5vw, 64px);
+  font-weight: 300;
+  letter-spacing: -.035em;
+  line-height: 1.05;
+  background: linear-gradient(135deg, #ffffff 0%, var(--brand-light) 50%, var(--accent-blue) 100%);
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: var(--ink-dark-0);
+}
+.pricing-glassy-head h2 .accent{
+  background: linear-gradient(135deg, var(--brand-light), var(--brand));
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.pricing-glassy-head p{
+  font-size: 18px;
+  color: rgba(255,255,255,.75);
+  margin-top: 18px;
+  font-weight: 400;
+}
+.pricing-glassy-grid{
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  align-items: stretch;
+}
+@media (max-width: 1100px){ .pricing-glassy-grid{ grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 600px){ .pricing-glassy-grid{ grid-template-columns: 1fr; } }
+.pricing-glassy-card{
+  position: relative;
+  padding: 32px 28px;
+  border-radius: 20px;
+  background: linear-gradient(180deg, rgba(255,255,255,.08) 0%, rgba(255,255,255,.02) 100%);
+  border: 1px solid rgba(255,255,255,.1);
+  backdrop-filter: blur(16px) saturate(1.1);
+  -webkit-backdrop-filter: blur(16px) saturate(1.1);
+  box-shadow:
+    0 4px 12px rgba(0,0,0,.2),
+    inset 0 1px 0 rgba(255,255,255,.1);
+  display: flex; flex-direction: column;
+  transition: all var(--transition);
+  color: var(--ink-dark-1);
+}
+.pricing-glassy-card:hover{
+  transform: translateY(-4px);
+  background: linear-gradient(180deg, rgba(255,255,255,.12) 0%, rgba(255,255,255,.04) 100%);
+  border-color: rgba(255,255,255,.18);
+  box-shadow:
+    0 12px 32px rgba(0,0,0,.3),
+    inset 0 1px 0 rgba(255,255,255,.15);
+}
+.pricing-glassy-card.popular{
+  background: linear-gradient(180deg, rgba(0,208,132,.14) 0%, rgba(0,208,132,.04) 100%);
+  border-color: rgba(0,208,132,.4);
+  box-shadow:
+    0 0 0 1px rgba(0,208,132,.2),
+    0 12px 40px rgba(0,208,132,.2),
+    inset 0 1px 0 rgba(255,255,255,.12);
+  transform: scale(1.04);
+}
+@media (max-width: 1100px){ .pricing-glassy-card.popular{ transform: scale(1); } }
+.pricing-glassy-card.popular:hover{ transform: scale(1.05) translateY(-3px); }
+.pricing-glassy-card .pop-badge{
+  position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+  background: linear-gradient(135deg, var(--brand), var(--brand-light));
+  color: var(--brand-ink);
+  font-family: var(--font-mono); font-size: 10px; font-weight: 700;
+  letter-spacing: .12em; text-transform: uppercase;
+  padding: 5px 12px; border-radius: 100px;
+  box-shadow: 0 4px 12px rgba(0,208,132,.4);
+}
+.pricing-glassy-card .name{
+  font-family: var(--font-display);
+  font-size: 36px; font-weight: 300;
+  letter-spacing: -.025em;
+  color: var(--ink-dark-0);
+  line-height: 1.05;
+}
+.pricing-glassy-card .sub{
+  font-size: 14px;
+  color: rgba(255,255,255,.65);
+  margin-top: 8px;
+  min-height: 38px;
+  line-height: 1.45;
+}
+.pricing-glassy-card .price-row{
+  margin-top: 28px;
+  display: flex; align-items: baseline; gap: 4px;
+}
+.pricing-glassy-card .price{
+  font-family: var(--font-mono);
+  font-size: 44px;
+  font-weight: 300;
+  color: var(--ink-dark-0);
+  letter-spacing: -.03em;
+  line-height: 1;
+}
+.pricing-glassy-card .unit{
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: rgba(255,255,255,.6);
+}
+.pricing-glassy-card .limit{
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: rgba(255,255,255,.55);
+  text-transform: uppercase; letter-spacing: .12em;
+  margin-top: 8px;
+}
+.pricing-glassy-card .divider{
+  margin: 24px 0 20px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.18) 20%, rgba(255,255,255,.28) 50%, rgba(255,255,255,.18) 80%, transparent);
+}
+.pricing-glassy-card .feats{
+  display: flex; flex-direction: column; gap: 10px;
+  font-size: 13.5px;
+  color: rgba(255,255,255,.85);
+  flex: 1;
+}
+.pricing-glassy-card .feat{
+  display: flex; align-items: center; gap: 10px;
+}
+.pricing-glassy-card .feat-check{
+  display: inline-grid; place-items: center;
+  width: 16px; height: 16px;
+  color: var(--brand);
+  flex-shrink: 0;
+}
+.pricing-glassy-card .pcta{
+  margin-top: 24px;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  padding: 12px 16px;
+  border-radius: 12px;
+  font-family: var(--font-body);
+  font-size: 14px; font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition);
+  text-decoration: none;
+  border: none;
+  isolation: isolate;
+}
+.pricing-glassy-card .pcta.primary{
+  background: linear-gradient(135deg, var(--brand) 0%, var(--brand-light) 100%);
+  color: var(--brand-ink);
+  box-shadow: 0 4px 16px rgba(0,208,132,.3);
+}
+.pricing-glassy-card .pcta.primary:hover{
+  box-shadow: 0 8px 24px rgba(0,208,132,.5);
+  transform: translateY(-1px);
+}
+.pricing-glassy-card .pcta.secondary{
+  background: rgba(255,255,255,.08);
+  color: var(--ink-dark-0);
+  border: 1px solid rgba(255,255,255,.15);
+}
+.pricing-glassy-card .pcta.secondary:hover{
+  background: rgba(255,255,255,.14);
+  border-color: rgba(255,255,255,.25);
+}
+.pcta-ripple{
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255,255,255,.4);
+  transform: scale(0);
+  animation: pcta-ripple-anim 700ms ease-out;
+  pointer-events: none;
+}
+@keyframes pcta-ripple-anim{
+  to{ transform: scale(2.5); opacity: 0; }
+}
+.pricing-glassy-trial{
+  font-size: 11px;
+  color: rgba(255,255,255,.5);
+  text-align: center;
+  margin-top: 10px;
+  font-family: var(--font-mono);
+  letter-spacing: .04em;
+}
+
 /* ============ INTERACTIVE 3D SECTION ============ */
 .interactive-3d-section{
   background: var(--bg-dark);
@@ -1698,79 +1914,80 @@ section{ position: relative; }
   </div>
 </section>
 
-<!-- PRICING -->
-<section id="pricing" class="section-pad" style="border-top:1px solid var(--border);background:var(--bg-sunk)">
+<!-- PRICING — Animated Glassy -->
+<section id="pricing" class="pricing-glassy section-pad">
+  <canvas class="pricing-shader-canvas" id="pricingShaderCanvas"></canvas>
+  <div class="pricing-shader-fallback" id="pricingShaderFallback" style="display:none"></div>
   <div class="container">
-    <div class="pricing-head reveal">
-      <div class="eyebrow" style="justify-content:center"><span class="dot"></span> PRICING</div>
-      <h2>Free plan with real value. Paid plans with real results.</h2>
+    <div class="pricing-glassy-head reveal">
+      <h2>Free plan with <span class="accent">real value</span>.<br/>Paid plans with real results.</h2>
       <p>7-day free trial on every paid plan. Cancel any time. No hidden rescan fees.</p>
     </div>
-    <div class="pricing-grid reveal-stagger">
-      <div class="card pricing-card">
+    <div class="pricing-glassy-grid reveal-stagger">
+      <div class="pricing-glassy-card">
         <div class="name">Free</div>
         <div class="sub">Scan, score, and read the report.</div>
-        <div class="price-row"><span class="price num">$0</span><span class="unit">/mo</span></div>
+        <div class="price-row"><span class="price">$0</span><span class="unit">/mo</span></div>
         <div class="limit">Up to 50 SKUs scored</div>
-        <a href="#install" class="btn btn-sm btn-ghost" style="width:100%;justify-content:center;margin-top:18px">Install free</a>
-        <div class="sep"></div>
-        <div class="stack-8">
-          <div class="feat"><span class="check">✓</span><span>Global AI score + grade</span></div>
-          <div class="feat"><span class="check">✓</span><span>Top 20 issues surfaced</span></div>
-          <div class="feat"><span class="check">✓</span><span>Query Simulator (10 / mo)</span></div>
-          <div class="feat"><span class="check">✓</span><span>Agentic Readiness Checklist</span></div>
-          <div class="feat"><span class="check">✓</span><span>Shared Experiment Library (read)</span></div>
+        <div class="divider"></div>
+        <div class="feats">
+          <div class="feat"><span class="feat-check">✓</span><span>Global AI score + grade</span></div>
+          <div class="feat"><span class="feat-check">✓</span><span>Top 20 issues surfaced</span></div>
+          <div class="feat"><span class="feat-check">✓</span><span>Query Simulator (10 / mo)</span></div>
+          <div class="feat"><span class="feat-check">✓</span><span>Agentic Readiness Checklist</span></div>
+          <div class="feat"><span class="feat-check">✓</span><span>Shared Experiment Library (read)</span></div>
         </div>
+        <a href="#install" class="pcta secondary">Install free</a>
       </div>
-      <div class="card pricing-card">
+      <div class="pricing-glassy-card">
         <div class="name">Growth</div>
         <div class="sub">Single store, apply-fixes unlocked.</div>
-        <div class="price-row"><span class="price num">$49</span><span class="unit">/mo</span></div>
+        <div class="price-row"><span class="price">$49</span><span class="unit">/mo</span></div>
         <div class="limit">Up to 500 SKUs</div>
-        <a href="#install" class="btn btn-sm btn-ghost" style="width:100%;justify-content:center;margin-top:18px">Start 7-day trial</a>
-        <div class="trial">7-day free trial</div>
-        <div class="sep"></div>
-        <div class="stack-8">
-          <div class="feat"><span class="check">✓</span><span>Everything in Free</span></div>
-          <div class="feat"><span class="check">✓</span><span>One-Click Apply Fixes</span></div>
-          <div class="feat"><span class="check">✓</span><span>Bulk Fix (up to 25 SKUs)</span></div>
-          <div class="feat"><span class="check">✓</span><span>100 queries / mo</span></div>
-          <div class="feat"><span class="check">✓</span><span>Email alerts on score drops</span></div>
+        <div class="divider"></div>
+        <div class="feats">
+          <div class="feat"><span class="feat-check">✓</span><span>Everything in Free</span></div>
+          <div class="feat"><span class="feat-check">✓</span><span>One-Click Apply Fixes</span></div>
+          <div class="feat"><span class="feat-check">✓</span><span>Bulk Fix (up to 25 SKUs)</span></div>
+          <div class="feat"><span class="feat-check">✓</span><span>100 queries / mo</span></div>
+          <div class="feat"><span class="feat-check">✓</span><span>Email alerts on score drops</span></div>
         </div>
+        <a href="#install" class="pcta secondary">Start 7-day trial</a>
+        <div class="pricing-glassy-trial">7-day free trial</div>
       </div>
-      <div class="card pricing-card popular">
-        <div class="badge">MOST POPULAR</div>
+      <div class="pricing-glassy-card popular">
+        <div class="pop-badge">MOST POPULAR</div>
         <div class="name">Pro</div>
         <div class="sub">Full catalog, unlimited fixes, guardrails.</div>
-        <div class="price-row"><span class="price num">$99</span><span class="unit">/mo</span></div>
+        <div class="price-row"><span class="price">$99</span><span class="unit">/mo</span></div>
         <div class="limit">Up to 5,000 SKUs</div>
-        <a href="#install" class="btn btn-sm btn-primary" style="width:100%;justify-content:center;margin-top:18px">Start 7-day trial</a>
-        <div class="trial">7-day free trial</div>
-        <div class="sep"></div>
-        <div class="stack-8">
-          <div class="feat"><span class="check">✓</span><span>Everything in Growth</span></div>
-          <div class="feat"><span class="check">✓</span><span>Unlimited Bulk Fix</span></div>
-          <div class="feat"><span class="check">✓</span><span>Causal A/B (DiD + p-values)</span></div>
-          <div class="feat"><span class="check">✓</span><span>Catalog Guardrails (webhooks)</span></div>
-          <div class="feat"><span class="check">✓</span><span>Cross-agent visibility report</span></div>
-          <div class="feat"><span class="check">✓</span><span>Priority support</span></div>
+        <div class="divider"></div>
+        <div class="feats">
+          <div class="feat"><span class="feat-check">✓</span><span>Everything in Growth</span></div>
+          <div class="feat"><span class="feat-check">✓</span><span>Unlimited Bulk Fix</span></div>
+          <div class="feat"><span class="feat-check">✓</span><span>Causal A/B (DiD + p-values)</span></div>
+          <div class="feat"><span class="feat-check">✓</span><span>Catalog Guardrails (webhooks)</span></div>
+          <div class="feat"><span class="feat-check">✓</span><span>Cross-agent visibility report</span></div>
+          <div class="feat"><span class="feat-check">✓</span><span>Priority support</span></div>
         </div>
+        <a href="#install" class="pcta primary">Start 7-day trial</a>
+        <div class="pricing-glassy-trial">7-day free trial</div>
       </div>
-      <div class="card pricing-card">
+      <div class="pricing-glassy-card">
         <div class="name">Performance</div>
         <div class="sub">Pay only when we lift your AI revenue.</div>
-        <div class="price-row"><span class="price num">5%</span><span class="unit">of AI uplift</span></div>
+        <div class="price-row"><span class="price">5%</span><span class="unit">of AI uplift</span></div>
         <div class="limit">$5,000 / mo cap</div>
-        <a href="#install" class="btn btn-sm btn-ghost" style="width:100%;justify-content:center;margin-top:18px">Contact sales</a>
-        <div class="trial">No fee if no lift</div>
-        <div class="sep"></div>
-        <div class="stack-8">
-          <div class="feat"><span class="check">✓</span><span>Everything in Pro</span></div>
-          <div class="feat"><span class="check">✓</span><span>Unlimited SKUs</span></div>
-          <div class="feat"><span class="check">✓</span><span>Score Guarantee +10 pts</span></div>
-          <div class="feat"><span class="check">✓</span><span>Causal attribution dashboard</span></div>
-          <div class="feat"><span class="check">✓</span><span>Dedicated account manager</span></div>
+        <div class="divider"></div>
+        <div class="feats">
+          <div class="feat"><span class="feat-check">✓</span><span>Everything in Pro</span></div>
+          <div class="feat"><span class="feat-check">✓</span><span>Unlimited SKUs</span></div>
+          <div class="feat"><span class="feat-check">✓</span><span>Score Guarantee +10 pts</span></div>
+          <div class="feat"><span class="feat-check">✓</span><span>Causal attribution dashboard</span></div>
+          <div class="feat"><span class="feat-check">✓</span><span>Dedicated account manager</span></div>
         </div>
+        <a href="#install" class="pcta secondary">Contact sales</a>
+        <div class="pricing-glassy-trial">No fee if no lift</div>
       </div>
     </div>
   </div>
@@ -2157,6 +2374,147 @@ const terminalObserver = new IntersectionObserver(entries => {
   });
 }, { threshold: 0.3 });
 if (terminalBody) terminalObserver.observe(terminalBody);
+
+// ===== PRICING SHADER (WebGL) =====
+(function initPricingShader(){
+  const canvas = document.getElementById('pricingShaderCanvas');
+  const fallback = document.getElementById('pricingShaderFallback');
+  if (!canvas) return;
+  const gl = canvas.getContext('webgl', { antialias: true, alpha: false });
+  if (!gl){
+    canvas.style.display = 'none';
+    if (fallback) fallback.style.display = 'block';
+    return;
+  }
+  const section = canvas.closest('.pricing-glassy');
+
+  const vsrc = 'attribute vec2 aPosition; void main(){ gl_Position = vec4(aPosition, 0.0, 1.0); }';
+  // Fragment shader adapted: brand green / cyan / purple tint instead of original RGB
+  const fsrc = `
+    precision highp float;
+    uniform float iTime;
+    uniform vec2 iResolution;
+    uniform vec3 uBg;
+    mat2 rotate2d(float a){ float c=cos(a), s=sin(a); return mat2(c,-s,s,c); }
+    float variation(vec2 v1, vec2 v2, float strength, float speed){
+      return sin(dot(normalize(v1), normalize(v2)) * strength + iTime * speed) / 100.0;
+    }
+    vec3 paintCircle(vec2 uv, vec2 center, float rad, float width){
+      vec2 diff = center - uv;
+      float len = length(diff);
+      len += variation(diff, vec2(0., 1.), 5., 2.);
+      len -= variation(diff, vec2(1., 0.), 5., 2.);
+      float circle = smoothstep(rad - width, rad, len) - smoothstep(rad, rad + width, len);
+      return vec3(circle);
+    }
+    void main(){
+      vec2 uv = gl_FragCoord.xy / iResolution.xy;
+      uv.x *= iResolution.x / iResolution.y;
+      uv.x -= (iResolution.x / iResolution.y - 1.0) * 0.5;
+      float mask = 0.0;
+      float radius = .35;
+      vec2 center = vec2(.5);
+      mask += paintCircle(uv, center, radius, .04).r;
+      mask += paintCircle(uv, center, radius - .018, .012).r;
+      mask += paintCircle(uv, center, radius + .018, .006).r;
+      vec2 v = rotate2d(iTime * 0.5) * (uv - 0.5);
+      // brand-tinted foreground: mix green / cyan / purple based on rotated v
+      vec3 baseColor = vec3(
+        0.0 + v.x * 0.4 + 0.1,
+        0.65 + v.y * 0.3 + 0.2,
+        0.52 + v.x * v.y * 0.6 + 0.3
+      );
+      vec3 foregroundColor = clamp(baseColor, 0.0, 1.0);
+      vec3 color = mix(uBg, foregroundColor, mask);
+      color = mix(color, vec3(0.6, 1.0, 0.85), paintCircle(uv, center, radius, .003).r);
+      gl_FragColor = vec4(color, 1.0);
+    }
+  `;
+
+  function compile(type, source){
+    const sh = gl.createShader(type);
+    gl.shaderSource(sh, source);
+    gl.compileShader(sh);
+    if (!gl.getShaderParameter(sh, gl.COMPILE_STATUS)){
+      console.error('Shader compile error:', gl.getShaderInfoLog(sh));
+      return null;
+    }
+    return sh;
+  }
+  const vs = compile(gl.VERTEX_SHADER, vsrc);
+  const fs = compile(gl.FRAGMENT_SHADER, fsrc);
+  if (!vs || !fs){
+    canvas.style.display = 'none';
+    if (fallback) fallback.style.display = 'block';
+    return;
+  }
+  const prog = gl.createProgram();
+  gl.attachShader(prog, vs);
+  gl.attachShader(prog, fs);
+  gl.linkProgram(prog);
+  gl.useProgram(prog);
+
+  const buf = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 1,-1, -1,1, -1,1, 1,-1, 1,1]), gl.STATIC_DRAW);
+  const aPos = gl.getAttribLocation(prog, 'aPosition');
+  gl.enableVertexAttribArray(aPos);
+  gl.vertexAttribPointer(aPos, 2, gl.FLOAT, false, 0, 0);
+
+  const uTime = gl.getUniformLocation(prog, 'iTime');
+  const uRes = gl.getUniformLocation(prog, 'iResolution');
+  const uBg = gl.getUniformLocation(prog, 'uBg');
+  gl.uniform3fv(uBg, new Float32Array([0.04, 0.04, 0.035])); // matches --bg-dark
+
+  function resize(){
+    if (!section) return;
+    const r = section.getBoundingClientRect();
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    canvas.width = Math.floor(r.width * dpr);
+    canvas.height = Math.floor(r.height * dpr);
+    canvas.style.width = r.width + 'px';
+    canvas.style.height = r.height + 'px';
+    gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  let isVisible = true;
+  const visObserver = new IntersectionObserver(entries => {
+    entries.forEach(e => { isVisible = e.isIntersecting; });
+  }, { threshold: 0 });
+  visObserver.observe(section);
+
+  function render(t){
+    if (isVisible){
+      gl.uniform1f(uTime, t * 0.001);
+      gl.uniform2f(uRes, gl.drawingBufferWidth, gl.drawingBufferHeight);
+      gl.drawArrays(gl.TRIANGLES, 0, 6);
+    }
+    requestAnimationFrame(render);
+  }
+  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+    requestAnimationFrame(render);
+  } else {
+    canvas.style.display = 'none';
+    if (fallback) fallback.style.display = 'block';
+  }
+})();
+
+// ===== PRICING BUTTONS RIPPLE EFFECT =====
+document.querySelectorAll('.pcta').forEach(btn => {
+  btn.addEventListener('click', e => {
+    const rect = btn.getBoundingClientRect();
+    const ripple = document.createElement('span');
+    ripple.className = 'pcta-ripple';
+    const size = Math.max(rect.width, rect.height);
+    ripple.style.width = ripple.style.height = size + 'px';
+    ripple.style.left = (e.clientX - rect.left - size / 2) + 'px';
+    ripple.style.top = (e.clientY - rect.top - size / 2) + 'px';
+    btn.appendChild(ripple);
+    setTimeout(() => ripple.remove(), 700);
+  });
+});
 
 // ===== SPLINE 3D LOADER =====
 const splineViewer = document.getElementById('splineViewer');
