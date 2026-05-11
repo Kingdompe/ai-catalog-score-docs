@@ -2538,61 +2538,65 @@ if (terminalBody) terminalObserver.observe(terminalBody);
   if (!section){ canvas.style.display = 'none'; return; }
 
   const vsrc = 'attribute vec2 aPosition; void main(){ gl_Position = vec4(aPosition, 0.0, 1.0); }';
-  // Diagonal aurora light streaks. Brand palette = green / mint / cyan / blue.
-  // Red channel kept dim to avoid orange tones that clash with brand identity.
+  // Diagonal meteor streaks — sharp heads + fading tails.
+  // Palette tuned to brand: cyan / blue / mint-cyan / soft purple. No orange/red.
   const fsrc = `
     precision highp float;
     uniform float iTime;
     uniform vec2 iResolution;
     float hash(vec2 p){ return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453123); }
-    float noise(vec2 p){
-      vec2 i = floor(p), f = fract(p);
-      vec2 u = f * f * (3.0 - 2.0 * f);
-      return mix(
-        mix(hash(i + vec2(0.,0.)), hash(i + vec2(1.,0.)), u.x),
-        mix(hash(i + vec2(0.,1.)), hash(i + vec2(1.,1.)), u.x),
-        u.y);
-    }
-    float fbm(vec2 p){
-      float v = 0.0, a = 0.5;
-      for (int i = 0; i < 3; i++){ v += a * noise(p); p *= 2.0; a *= 0.5; }
-      return v;
-    }
     mat2 rot(float a){ float c=cos(a), s=sin(a); return mat2(c,-s,s,c); }
     void main(){
       vec2 uv = (gl_FragCoord.xy * 2.0 - iResolution.xy) / iResolution.y;
-      // Diagonal orientation — light streaks travel bottom-left → top-right
-      uv = rot(0.55) * uv;
+      // Rotate so motion in rotated +x maps to top-left → bottom-right on screen.
+      // Falling angle ~ 35° from vertical.
+      vec2 ruv = rot(0.62) * uv;
+      float aspect = iResolution.x / iResolution.y;
+      float wrap = aspect * 2.4 + 1.6;
 
-      vec4 finalColor = vec4(0.0);
-      for (int idx = 0; idx < 22; idx++){
-        float i = float(idx);
-        vec2 p = uv;
-        p.x += iTime * 0.22 + i * 0.14;
-        p.y += iTime * 0.06;
+      vec3 col = vec3(0.0);
+      for (int i = 0; i < 56; i++){
+        float fi = float(i);
+        float ry    = (hash(vec2(fi, 1.7)) - 0.5) * (2.0 + aspect * 0.6);
+        float speed = 0.35 + hash(vec2(fi, 2.9)) * 0.75;
+        float phase = hash(vec2(fi, 3.7)) * wrap;
+        float life  = 0.55 + hash(vec2(fi, 4.1)) * 0.6;  // tail length factor
+        // Position moves +x, wraps. We offset by -wrap*0.5 so range straddles zero.
+        float px = mod(iTime * speed + phase, wrap) - wrap * 0.5;
 
-        // Each iteration draws one wavy diagonal lane
-        float lane = (i - 10.5) * 0.18;
-        float wobble = sin(p.x * 1.4 + i * 0.7 + iTime * 0.35) * 0.18;
-        float d = abs(p.y - lane - wobble);
-        float intensity = exp(-d * 18.0) * 0.55;
+        float dx = ruv.x - px;
+        float dy = ruv.y - ry;
 
-        // FBM modulates intensity so streaks fade in/out like real aurora
-        intensity *= 0.4 + 1.0 * fbm(p * 1.6 + iTime * 0.25);
+        // Perpendicular: very thin gaussian → crisp 1-2px streak line
+        float perp = exp(-dy * dy * 700.0);
+        // Along-streak: tail extends behind head (toward -x). Ahead of head fades very fast.
+        float along = exp(-max(0.0, -dx) / life) * step(-life * 2.2, dx);
+        float ahead = exp(-max(0.0,  dx) * 22.0);
+        float streak = perp * (along + ahead * 0.4);
 
-        vec4 c = vec4(
-          0.06 + 0.14 * sin(i * 0.2 + iTime * 0.4),    // R: dim, mild pulse
-          0.42 + 0.45 * cos(i * 0.3 + iTime * 0.5),    // G: brand-dominant
-          0.78 + 0.22 * sin(i * 0.4 + iTime * 0.3),    // B: cyan/blue richness
-          1.0);
+        // Sharp head — small bright concentrated spot
+        float headDist = dx * dx * 90.0 + dy * dy * 1200.0;
+        float head = exp(-headDist) * 1.4;
 
-        finalColor += c * intensity;
+        // Brightness scaler per-particle so some streaks are dimmer
+        float bri = 0.4 + hash(vec2(fi, 5.9)) * 0.8;
+
+        // Color per particle — cyan / blue / mint / soft purple
+        float h = hash(vec2(fi, 6.7));
+        vec3 c;
+        if (h < 0.45){
+          c = mix(vec3(0.15, 0.85, 1.0), vec3(0.1, 0.55, 1.0), h / 0.45);   // cyan → azure
+        } else if (h < 0.85){
+          c = mix(vec3(0.1, 0.55, 1.0), vec3(0.35, 0.25, 1.0), (h - 0.45) / 0.4); // azure → indigo
+        } else {
+          c = mix(vec3(0.35, 0.25, 1.0), vec3(0.55, 0.2, 0.95), (h - 0.85) / 0.15); // indigo → purple
+        }
+
+        col += c * (streak + head) * bri;
       }
-      // Tone-map (tanh substitute for GLSL ES 1.0) so highlights don't blow out
-      vec3 mapped = vec3(1.0) - exp(-finalColor.rgb * 0.95);
-      // Deep base color matches --bg-dark
-      vec3 base = vec3(0.04, 0.04, 0.035);
-      gl_FragColor = vec4(base + mapped, 1.0);
+      // Soft tone-map so bright heads don't clip to white
+      col = vec3(1.0) - exp(-col * 1.1);
+      gl_FragColor = vec4(col, 1.0);
     }
   `;
 
