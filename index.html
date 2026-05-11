@@ -18,6 +18,9 @@
 <link href="https://api.fontshare.com/v2/css?f[]=general-sans@500,600,400,700&display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet"/>
 
+<!-- Spline 3D viewer (web component) -->
+<script type="module" src="https://unpkg.com/@splinetool/viewer@1.9.48/build/spline-viewer.js"></script>
+
 <style>
 /* ============ DESIGN TOKENS ============ */
 :root{
@@ -1014,6 +1017,142 @@ section{ position: relative; }
 .text-center .eyebrow{ justify-content: center; }
 .text-center .section-head{ margin-left: auto; margin-right: auto; }
 
+/* ============ INTERACTIVE 3D SECTION ============ */
+.interactive-3d-section{
+  background: var(--bg-dark);
+  color: var(--ink-dark-1);
+  border-top: 1px solid var(--border-dark);
+  border-bottom: 1px solid var(--border-dark);
+  position: relative; overflow: hidden;
+}
+.interactive-3d-section::before{
+  content: ''; position: absolute; inset: 0;
+  background:
+    radial-gradient(circle at 20% 30%, rgba(0,208,132,.08), transparent 50%),
+    radial-gradient(circle at 80% 70%, rgba(139,92,246,.06), transparent 50%);
+  pointer-events: none;
+}
+.interactive-3d-section .eyebrow{ color: var(--ink-dark-3); }
+.interactive-3d-section .eyebrow .dot{ box-shadow: 0 0 0 3px rgba(0,208,132,.2); }
+.interactive-3d-section h2{ color: var(--ink-dark-0); }
+.interactive-3d-section p{ color: var(--ink-dark-2); }
+.interactive-card{
+  position: relative; overflow: hidden;
+  background: rgba(0,0,0,.96);
+  border: 1px solid var(--border-dark);
+  border-radius: var(--r-2xl);
+  min-height: 560px;
+  box-shadow: 0 40px 100px rgba(0,0,0,.5), 0 0 0 1px rgba(0,208,132,.08);
+  margin-top: 56px;
+}
+.spotlight-svg{
+  position: absolute; top: -160px; left: -100px;
+  width: 90%; height: 170%;
+  pointer-events: none; z-index: 1;
+  opacity: 0;
+  animation: spotlight-fade-in 2s var(--ease-out) .3s forwards, spotlight-drift 12s var(--ease-in-out) infinite;
+}
+@keyframes spotlight-fade-in{ to { opacity: 1; } }
+@keyframes spotlight-drift{
+  0%, 100%{ transform: translate(0, 0); }
+  50%{ transform: translate(60px, 30px); }
+}
+.interactive-grid{
+  display: grid; grid-template-columns: 1fr 1fr;
+  height: 100%; min-height: 560px;
+  position: relative; z-index: 2;
+}
+@media (max-width: 860px){
+  .interactive-grid{ grid-template-columns: 1fr; }
+  .interactive-card{ min-height: auto; }
+}
+.interactive-left{
+  padding: 56px;
+  display: flex; flex-direction: column; justify-content: center;
+}
+@media (max-width: 720px){ .interactive-left{ padding: 36px 28px; } }
+.interactive-title{
+  font-family: var(--font-display);
+  font-size: clamp(36px, 4vw, 52px);
+  font-weight: 600;
+  background: linear-gradient(180deg, var(--ink-dark-0) 0%, var(--ink-dark-3) 100%);
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent;
+  line-height: 1;
+  letter-spacing: -.03em;
+}
+.interactive-desc{
+  font-size: 17px; color: var(--ink-dark-2);
+  margin-top: 22px; max-width: 460px; line-height: 1.6;
+}
+.interactive-features{
+  margin-top: 28px; display: flex; flex-direction: column; gap: 12px;
+}
+.interactive-feat{
+  display: flex; align-items: center; gap: 10px;
+  font-size: 13.5px; color: var(--ink-dark-2);
+  font-family: var(--font-mono);
+}
+.interactive-feat .dot{
+  width: 5px; height: 5px; border-radius: 50%; background: var(--brand);
+  box-shadow: 0 0 8px var(--brand);
+}
+.interactive-cta{ margin-top: 32px; display: flex; gap: 10px; flex-wrap: wrap; }
+.interactive-right{
+  position: relative;
+  overflow: hidden;
+  min-height: 560px;
+}
+.interactive-right spline-viewer{
+  width: 100%; height: 100%;
+  display: block;
+  background: transparent !important;
+}
+.interactive-right::after{
+  /* Hide Spline watermark — we have a paid license OR community asset, mask the corner */
+  content: ''; position: absolute;
+  bottom: 0; right: 0;
+  width: 180px; height: 60px;
+  background: linear-gradient(135deg, transparent, rgba(0,0,0,.96));
+  pointer-events: none; z-index: 3;
+}
+.spline-loading{
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  flex-direction: column; gap: 16px;
+  color: var(--ink-dark-3); font-family: var(--font-mono); font-size: 11px;
+  letter-spacing: .14em; text-transform: uppercase;
+  pointer-events: none;
+}
+.spline-loading .ring{
+  width: 32px; height: 32px;
+  border: 2px solid var(--border-dark);
+  border-top-color: var(--brand);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+@keyframes spin{ to{ transform: rotate(360deg); } }
+.interactive-card .partner-badge{
+  position: absolute; bottom: 24px; left: 24px;
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 10px 14px;
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 100px;
+  font-family: var(--font-mono); font-size: 11px;
+  color: var(--ink-dark-2); letter-spacing: .12em; text-transform: uppercase;
+  z-index: 3;
+  backdrop-filter: blur(8px);
+}
+.interactive-card .partner-badge .shopify-mark{
+  width: 18px; height: 18px;
+  background: #95BF47;
+  border-radius: 4px;
+  display: grid; place-items: center;
+  color: #fff; font-size: 11px; font-weight: 700;
+  font-family: var(--font-display);
+}
+
 @media (prefers-reduced-motion: reduce){
   *, *::before, *::after{ animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
   .hero h1 .word, .hero .sub, .hero .ctas, .hero .micro, .hero-visual, .eyebrow-hero{ opacity: 1; transform: none; }
@@ -1161,6 +1300,70 @@ section{ position: relative; }
       <div class="agent-pill"><span class="agent-status-dot inactive"></span>Perplexity <span class="agent-count">(soon)</span></div>
     </div>
     <div class="agent-count">2,400 captures/day · open dataset</div>
+  </div>
+</section>
+
+<!-- INTERACTIVE 3D SECTION -->
+<section class="interactive-3d-section section-pad">
+  <div class="container">
+    <div class="text-center reveal" style="max-width:760px;margin:0 auto">
+      <div class="eyebrow"><span class="dot"></span> SEE IT IN ACTION</div>
+      <h2 style="margin-top:18px">An AI agent inspecting your catalog. Live.</h2>
+      <p style="font-size:17px;margin-top:18px">
+        This is what ChatGPT, Gemini, and Claude do every time someone asks them for product recommendations.
+        Drag the agent. Watch it from every angle. Then run your own audit.
+      </p>
+    </div>
+    <div class="interactive-card reveal">
+      <svg class="spotlight-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3787 2842" fill="none">
+        <g filter="url(#spotfilter)">
+          <ellipse cx="1924.71" cy="273.501" rx="1924.71" ry="273.501"
+            transform="matrix(-0.822377 -0.568943 -0.568943 0.822377 3631.88 2291.09)"
+            fill="#00D084" fill-opacity="0.18"></ellipse>
+        </g>
+        <defs>
+          <filter id="spotfilter" x="0" y="0" width="3787" height="2842" filterUnits="userSpaceOnUse">
+            <feFlood flood-opacity="0" result="BackgroundImageFix"></feFlood>
+            <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"></feBlend>
+            <feGaussianBlur stdDeviation="151" result="blur"></feGaussianBlur>
+          </filter>
+        </defs>
+      </svg>
+      <div class="interactive-grid">
+        <div class="interactive-left">
+          <h3 class="interactive-title">Watch an AI agent<br/>see your store.</h3>
+          <p class="interactive-desc">
+            We monitor the same 6 AI shopping agents that decide which products get recommended to shoppers. Drag the agent →
+          </p>
+          <div class="interactive-features">
+            <div class="interactive-feat"><span class="dot"></span>Multi-agent: ChatGPT · Gemini · Claude · Mistral · DeepSeek</div>
+            <div class="interactive-feat"><span class="dot"></span>Daily ground-truth capture · 2,400 datapoints/day</div>
+            <div class="interactive-feat"><span class="dot"></span>Causal proof: DiD + Welch's t-test, p &lt; 0.05</div>
+          </div>
+          <div class="interactive-cta">
+            <a href="#install" class="btn btn-primary">Run my audit <span class="btn-arrow">→</span></a>
+            <a href="https://github.com/commerce-agentic" target="_blank" rel="noopener" class="btn btn-dark-outline">View on GitHub <span class="btn-arrow">↗</span></a>
+          </div>
+        </div>
+        <div class="interactive-right" id="splineMount">
+          <div class="spline-loading" id="splineLoading">
+            <div class="ring"></div>
+            <div>Loading interactive scene…</div>
+          </div>
+          <spline-viewer
+            id="splineViewer"
+            url="https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode"
+            loading-anim-type="none"
+            events-target="global"
+            style="opacity:0;transition:opacity .6s ease;"
+          ></spline-viewer>
+        </div>
+      </div>
+      <div class="partner-badge">
+        <span class="shopify-mark">S</span>
+        <span>Built for Shopify</span>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -1954,6 +2157,22 @@ const terminalObserver = new IntersectionObserver(entries => {
   });
 }, { threshold: 0.3 });
 if (terminalBody) terminalObserver.observe(terminalBody);
+
+// ===== SPLINE 3D LOADER =====
+const splineViewer = document.getElementById('splineViewer');
+const splineLoading = document.getElementById('splineLoading');
+if (splineViewer) {
+  // Fade in once loaded, hide loader
+  splineViewer.addEventListener('load', () => {
+    splineViewer.style.opacity = '1';
+    if (splineLoading) splineLoading.style.display = 'none';
+  });
+  // Safety fallback in case load event never fires
+  setTimeout(() => {
+    splineViewer.style.opacity = '1';
+    if (splineLoading) splineLoading.style.display = 'none';
+  }, 8000);
+}
 </script>
 
 </body>
