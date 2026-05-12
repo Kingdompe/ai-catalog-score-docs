@@ -353,102 +353,350 @@ section{ position: relative; }
   transform: translateY(40px);
   transform-style: preserve-3d;
 }
-.split{
+@keyframes rotate-bg{ to{ transform: rotate(360deg); } }
+
+/* ============ DASHBOARD SCENE (hero) ============ */
+.dash-scene{
+  position: relative;
+  padding: 32px 0 28px;
+  perspective: 1800px;
+  max-width: 1180px; margin: 0 auto;
+}
+
+/* MAIN DASHBOARD */
+.dash-main{
+  position: relative;
   background: var(--bg-raised);
   border: 1px solid var(--border);
-  border-radius: var(--r-2xl);
-  box-shadow: var(--shadow-lg), 0 60px 120px rgba(0,208,132,.1);
+  border-radius: 18px;
+  box-shadow:
+    0 1px 2px rgba(20,18,10,.04),
+    0 24px 60px -16px rgba(20,18,10,.18),
+    0 60px 120px -40px rgba(0,208,132,.18);
   overflow: hidden;
-  position: relative;
+  transform: rotateX(2deg) rotateY(-2.5deg);
+  transform-style: preserve-3d;
+  transition: transform .8s cubic-bezier(.2,.8,.2,1);
+  z-index: 2;
 }
-.split::before{
+.dash-main:hover{
+  transform: rotateX(1deg) rotateY(-1deg);
+}
+.dash-main::before{
   content:''; position: absolute; inset: -1px;
-  border-radius: var(--r-2xl);
-  background: conic-gradient(from 0deg, var(--brand), var(--accent-purple), var(--accent-blue), var(--brand));
-  opacity: .15; z-index: 0;
+  border-radius: 18px;
+  background: conic-gradient(from 0deg, var(--brand) 0deg, transparent 90deg, transparent 270deg, var(--brand) 360deg);
+  opacity: .14;
   pointer-events: none;
-  animation: rotate-bg 20s linear infinite;
+  animation: rotate-bg 14s linear infinite;
+  z-index: 0;
 }
-@keyframes rotate-bg{ to{ transform: rotate(360deg); } }
-.split-grid{ display: grid; grid-template-columns: 1fr 1.25fr; position: relative; z-index: 1; background: var(--bg-raised); margin: 1px; border-radius: calc(var(--r-2xl) - 1px); overflow: hidden; }
-@media (max-width: 860px){ .split-grid{ grid-template-columns: 1fr; } }
-.split-left{
-  background: var(--bg-dark);
-  color: var(--ink-dark-1);
-  padding: 32px;
-  border-right: 1px solid var(--border-dark);
-  position: relative;
-  min-height: 560px;
-  display: flex; flex-direction: column;
+@media (max-width: 880px){
+  .dash-main{ transform: none; border-radius: 14px; }
+  .dash-main:hover{ transform: none; }
 }
-.split-left::after{
-  content: ''; position: absolute; inset: 0;
-  background: radial-gradient(circle at 30% 0%, rgba(229,72,77,.1), transparent 50%);
-  pointer-events: none;
-}
-@media (max-width: 860px){ .split-left{ border-right: none; border-bottom: 1px solid var(--border-dark); min-height: auto; } }
-.split-right{
+
+/* HEADER */
+.dash-header{
   background: var(--bg-raised);
-  padding: 32px;
+  border-bottom: 1px solid var(--border);
+  padding: 12px 20px;
+  display: flex; align-items: center; gap: 14px;
+  position: relative; z-index: 1;
+}
+.dash-traffic{ display: flex; gap: 6px; }
+.dash-traffic span{ width: 10px; height: 10px; border-radius: 50%; background: var(--bg-sunk); }
+.dash-traffic span:nth-child(1){ background: #FF5F57; }
+.dash-traffic span:nth-child(2){ background: #FEBC2E; }
+.dash-traffic span:nth-child(3){ background: #28C840; }
+.dash-brand-mini{ display: flex; align-items: center; gap: 8px; }
+.dash-brand-mini .mark{
+  width: 22px; height: 22px; border-radius: 6px;
+  background: var(--ink-0); color: var(--brand);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-display); font-size: 13px; font-weight: 700;
+}
+.dash-brand-mini .name{
+  font-family: var(--font-display); font-size: 13.5px; font-weight: 600;
+  color: var(--ink-0); letter-spacing: -.01em;
+}
+.dash-store{
+  font-family: var(--font-mono); font-size: 11px; color: var(--ink-3);
+  padding: 4px 10px; border-radius: 100px; background: var(--bg-sunk);
+  margin-left: auto;
+}
+.dash-live{
+  display: inline-flex; align-items: center; gap: 6px;
+  font-family: var(--font-mono); font-size: 10px;
+  letter-spacing: .14em; text-transform: uppercase;
+  color: var(--brand-deep); font-weight: 700;
+}
+.dash-live .live-dot{ width: 6px; height: 6px; border-radius: 50%; background: var(--brand); position: relative; }
+.dash-live .live-dot::after{ content:''; position: absolute; inset: -3px; border-radius: 50%; background: var(--brand); animation: live-pulse 1.6s var(--ease-in-out) infinite; }
+
+/* BODY */
+.dash-body{ padding: 22px 24px 18px; background: var(--bg-raised); position: relative; z-index: 1; }
+
+/* TOP ROW: gauge + KPIs */
+.dash-top{
+  display: grid; grid-template-columns: 200px 1fr;
+  gap: 28px; align-items: center;
+  padding-bottom: 22px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 18px;
+}
+@media (max-width: 720px){ .dash-top{ grid-template-columns: 1fr; gap: 18px; } }
+
+/* Score gauge */
+.score-gauge{
   position: relative;
-  min-height: 560px;
-  display: flex; flex-direction: column;
+  width: 180px; height: 180px;
+  margin: 0 auto;
 }
-.split-right::after{
-  content: ''; position: absolute; inset: 0;
-  background: radial-gradient(circle at 70% 0%, rgba(0,208,132,.08), transparent 50%);
-  pointer-events: none;
+.score-gauge svg{ width: 100%; height: 100%; }
+.gauge-track{ fill: none; stroke: var(--bg-sunk); stroke-width: 10; }
+.gauge-fill{
+  fill: none; stroke-width: 10; stroke-linecap: round;
+  stroke-dasharray: 502.65;
+  stroke-dashoffset: 502.65;
+  transition: stroke-dashoffset 1.6s cubic-bezier(.2,.8,.2,1) .4s;
+  filter: drop-shadow(0 0 10px rgba(0,208,132,.5));
 }
-@media (max-width: 860px){ .split-right{ min-height: auto; } }
-.split-foot{
-  border-top: 1px solid var(--border);
-  background: var(--bg-sunk);
-  padding: 14px 24px;
-  display: flex; justify-content: space-between; align-items: center;
-  font-size: 12px; color: var(--ink-3); font-family: var(--font-mono);
-  flex-wrap: wrap; gap: 10px;
-  position: relative; z-index: 2;
+.dash-scene.in-view .gauge-fill{ stroke-dashoffset: 110.58; }
+.gauge-center{
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  text-align: center;
 }
-.grade-letter{ font-family: var(--font-display); font-weight: 500; line-height: .9; letter-spacing: -.06em; }
-.dark-snippet{ font-family: var(--font-mono); font-size: 12.5px; line-height: 1.9; position: relative; z-index: 2; }
-.dark-snippet .ds-row{ display: flex; gap: 10px; }
-.dark-snippet .key{ color: var(--ink-dark-3); width: 96px; flex-shrink: 0; }
-.dark-snippet .val-dim{ color: var(--ink-dark-2); }
-.dark-snippet .val-crit{ color: var(--crit); }
-.score-block{ display: flex; align-items: baseline; gap: 16px; position: relative; z-index: 2; }
-.score-block .grade{
-  font-family: var(--font-display); font-size: 72px;
+.gauge-grade{
+  font-family: var(--font-display); font-size: 44px;
+  font-weight: 600; letter-spacing: -.04em;
   background: linear-gradient(135deg, var(--brand-deep), var(--brand));
   -webkit-background-clip: text; background-clip: text;
   -webkit-text-fill-color: transparent;
-  font-weight: 600; letter-spacing: -.04em; line-height: 1;
+  line-height: 1;
 }
-.score-block .meta .score{ font-family: var(--font-mono); font-size: 24px; color: var(--ink-0); font-weight: 500; }
-.score-block .meta .label{ font-family: var(--font-mono); font-size: 11px; color: var(--brand-deep); margin-top: 4px; letter-spacing: .1em; text-transform: uppercase; font-weight: 600; }
-.mini-tiles{ margin-top: 24px; display: grid; gap: 10px; grid-template-columns: 1fr 1fr; position: relative; z-index: 2; }
-.mini-tile{ padding: 14px; border-radius: 10px; transition: transform var(--transition); }
-.mini-tile:hover{ transform: translateY(-2px); }
-.mini-tile .label{ font-family: var(--font-mono); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; font-weight: 600; }
-.mini-tile .value{ font-family: var(--font-mono); font-size: 24px; color: var(--ink-0); font-weight: 500; margin-top: 4px; }
-.mini-tile.brand{ background: var(--brand-wash); }
-.mini-tile.brand .label{ color: var(--brand-deep); }
-.mini-tile.warn{ background: var(--warn-wash); }
-.mini-tile.warn .label{ color: var(--warn); }
-.fixes{ margin-top: 22px; border-top: 1px solid var(--border); padding-top: 20px; flex: 1; position: relative; z-index: 2; }
-.fix-row{
+.gauge-score{
+  font-family: var(--font-mono); font-size: 13px;
+  color: var(--ink-3); font-weight: 500;
+  margin-top: 6px;
+}
+.gauge-score .n{ color: var(--ink-0); font-weight: 700; }
+.gauge-trend{
+  font-family: var(--font-mono); font-size: 9.5px;
+  color: var(--brand-deep); font-weight: 700;
+  margin-top: 4px; letter-spacing: .04em;
+}
+
+/* KPI grid */
+.kpi-grid{ display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+@media (max-width: 720px){ .kpi-grid{ grid-template-columns: repeat(2, 1fr); } }
+.kpi{
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 14px;
+  transition: transform .2s ease, border-color .2s;
+  position: relative;
+}
+.kpi:hover{ transform: translateY(-2px); border-color: var(--border-strong); }
+.kpi.is-brand{
+  background: linear-gradient(135deg, var(--brand-wash), var(--bg));
+  border-color: rgba(0,208,132,.25);
+}
+.kpi-label{
+  font-family: var(--font-mono); font-size: 9.5px;
+  text-transform: uppercase; letter-spacing: .12em;
+  color: var(--ink-3); font-weight: 600;
+}
+.kpi-value{
+  font-family: var(--font-display); font-size: 28px;
+  font-weight: 500; color: var(--ink-0); letter-spacing: -.02em;
+  margin-top: 4px; line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+.kpi-value.brand-text{ color: var(--brand-deep); }
+.kpi-value.warn-text{ color: var(--warn); }
+.kpi-value.crit-text{ color: var(--crit); }
+.kpi-trend{
+  font-family: var(--font-mono); font-size: 10px;
+  margin-top: 4px; font-weight: 600;
+}
+.kpi-trend.up{ color: var(--brand-deep); }
+.kpi-trend.down{ color: var(--crit); }
+.kpi-trend.neutral{ color: var(--ink-3); }
+
+/* BOTTOM ROW: agents + fixes */
+.dash-bottom{ display: grid; grid-template-columns: 1.2fr 1fr; gap: 32px; }
+@media (max-width: 720px){ .dash-bottom{ grid-template-columns: 1fr; gap: 22px; } }
+.dash-section-label{
+  font-family: var(--font-mono); font-size: 9.5px;
+  text-transform: uppercase; letter-spacing: .14em;
+  color: var(--ink-3); font-weight: 700;
+  margin-bottom: 12px;
   display: flex; justify-content: space-between; align-items: center;
-  font-size: 13px; padding: 8px 12px; background: var(--brand-wash);
-  border-radius: 8px; color: var(--brand-ink);
-  transition: transform var(--transition);
-  opacity: 0; transform: translateX(-10px);
-  animation: fix-in .5s var(--ease-out) forwards;
 }
-@keyframes fix-in{ to { opacity: 1; transform: translateX(0); } }
-.fix-row:hover{ transform: translateX(4px); }
-.fix-row .pts{ font-family: var(--font-mono); font-weight: 600; }
-.dark-bars{ position: absolute; bottom: 28px; left: 32px; right: 32px; display: flex; gap: 6px; z-index: 2; }
-.dark-bars span{ flex: 1; height: 4px; background: var(--ink-dark-4); border-radius: 100px; }
-.dark-bars span.fail{ background: var(--crit); }
+.dash-section-label .badge{
+  color: var(--brand-deep); font-weight: 700;
+  background: var(--brand-wash); padding: 2px 7px; border-radius: 100px;
+  letter-spacing: .04em;
+}
+
+/* Agent bars */
+.agent-bars{ display: flex; flex-direction: column; gap: 9px; }
+.ab-row{
+  display: grid; grid-template-columns: 78px 1fr 38px;
+  gap: 12px; align-items: center;
+  font-size: 12.5px;
+}
+.ab-name{ color: var(--ink-1); font-weight: 500; }
+.ab-bar{
+  height: 6px; background: var(--bg-sunk);
+  border-radius: 100px; overflow: hidden;
+  border: 1px solid var(--border);
+}
+.ab-bar > span{
+  display: block; height: 100%; width: 0;
+  background: linear-gradient(90deg, var(--brand) 0%, var(--brand-deep) 100%);
+  border-radius: 100px;
+  transition: width 1.2s cubic-bezier(.2,.8,.2,1) var(--d, 0s);
+  box-shadow: 0 0 6px rgba(0,208,132,.4);
+}
+.dash-scene.in-view .ab-bar > span{ width: var(--w); }
+.ab-row.is-low .ab-bar > span{ background: linear-gradient(90deg, var(--warn) 0%, #b97a04 100%); box-shadow: 0 0 6px rgba(245,158,11,.4); }
+.ab-pct{ font-family: var(--font-mono); font-size: 11px; color: var(--ink-2); text-align: right; font-weight: 600; font-variant-numeric: tabular-nums; }
+
+/* Top fixes list */
+.fix-list{ list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 2px; }
+.fix-li{
+  display: flex; align-items: center; gap: 10px;
+  padding: 8px 10px; border-radius: 7px;
+  font-size: 12.5px;
+  transition: background .2s, transform .2s;
+}
+.fix-li:hover{ background: var(--bg-sunk); transform: translateX(2px); }
+.fix-dot{
+  width: 7px; height: 7px; border-radius: 50%;
+  flex-shrink: 0;
+}
+.fix-dot.crit{ background: var(--crit); box-shadow: 0 0 0 3px rgba(229,72,77,.16); }
+.fix-dot.warn{ background: var(--warn); box-shadow: 0 0 0 3px rgba(245,158,11,.16); }
+.fix-dot.info{ background: var(--info); box-shadow: 0 0 0 3px rgba(37,99,235,.16); }
+.fix-text{ flex: 1; color: var(--ink-1); }
+.fix-pts{
+  font-family: var(--font-mono); font-size: 10.5px;
+  color: var(--brand-deep); font-weight: 700;
+  padding: 2px 8px; border-radius: 100px;
+  background: var(--brand-wash);
+}
+
+/* FOOTER */
+.dash-foot{
+  margin-top: 18px; padding-top: 14px;
+  border-top: 1px dashed var(--border);
+  display: flex; justify-content: space-between;
+  font-family: var(--font-mono); font-size: 10.5px;
+  color: var(--ink-3);
+  flex-wrap: wrap; gap: 8px;
+}
+.dash-foot .accent{ color: var(--brand-deep); font-weight: 600; }
+
+/* ============ FLOATING CARDS ============ */
+.float-card{
+  position: absolute;
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 14px 16px;
+  box-shadow:
+    0 4px 12px -2px rgba(20,18,10,.12),
+    0 20px 40px -16px rgba(20,18,10,.16);
+  z-index: 3;
+  backdrop-filter: blur(12px);
+  animation: floatBob 6s ease-in-out infinite;
+  opacity: 0;
+  transform: translateY(8px) scale(.96);
+}
+.dash-scene.in-view .float-card{ opacity: 1; transform: translateY(0) scale(1); transition: opacity .6s ease, transform .8s cubic-bezier(.2,.8,.2,1); }
+.dash-scene.in-view .float-toast{ transition-delay: 1.0s; }
+.dash-scene.in-view .float-did{ transition-delay: 1.3s; }
+.dash-scene.in-view .float-agent{ transition-delay: 1.6s; }
+@keyframes floatBob{
+  0%, 100%{ animation-timing-function: ease-in-out; }
+  50%{ transform: translateY(-5px); }
+}
+
+/* Top-right toast */
+.float-toast{
+  top: -22px; right: 24px;
+  min-width: 280px;
+  animation-delay: -.5s;
+  display: flex; align-items: center; gap: 12px;
+}
+@media (max-width: 880px){ .float-toast{ top: -16px; right: 12px; min-width: 240px; } }
+.ft-icon{
+  width: 32px; height: 32px; border-radius: 8px;
+  background: linear-gradient(135deg, var(--brand) 0%, var(--brand-deep) 100%);
+  color: white; display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 16px; flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(0,208,132,.4);
+}
+.ft-content{ font-size: 13px; line-height: 1.35; }
+.ft-title{ color: var(--ink-0); font-weight: 600; font-size: 13px; }
+.ft-body{ color: var(--ink-2); font-size: 12px; margin-top: 1px; }
+.ft-body .ft-pts{ color: var(--brand-deep); font-weight: 700; font-family: var(--font-mono); }
+
+/* Bottom-left DiD card */
+.float-did{
+  bottom: -18px; left: 16px;
+  min-width: 260px;
+  animation-delay: -3s;
+}
+@media (max-width: 880px){ .float-did{ bottom: -12px; left: 12px; min-width: 220px; } }
+.fd-head{
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 6px;
+}
+.fd-tag{
+  font-family: var(--font-mono); font-size: 9.5px;
+  text-transform: uppercase; letter-spacing: .14em;
+  color: var(--ink-3); font-weight: 700;
+}
+.fd-pval{
+  font-family: var(--font-mono); font-size: 10.5px;
+  color: var(--brand-deep); font-weight: 700;
+  padding: 2px 8px; border-radius: 100px;
+  background: var(--brand-wash);
+}
+.fd-metric{ display: flex; align-items: baseline; gap: 8px; }
+.fd-num{
+  font-family: var(--font-display); font-size: 30px;
+  font-weight: 600;
+  background: linear-gradient(135deg, var(--brand-deep), var(--brand));
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: -.03em; line-height: 1;
+}
+.fd-label{ font-size: 12px; color: var(--ink-2); font-weight: 500; }
+.fd-sub{ font-family: var(--font-mono); font-size: 10px; color: var(--ink-3); margin-top: 4px; }
+
+/* Top-left agent badge */
+.float-agent{
+  top: 88px; left: -28px;
+  display: flex; align-items: center; gap: 10px;
+  animation-delay: -1.5s;
+}
+@media (max-width: 880px){ .float-agent{ display: none; } }
+.fa-icon{
+  width: 30px; height: 30px; border-radius: 8px;
+  background: linear-gradient(135deg, #10A37F, #1A7F64);
+  display: flex; align-items: center; justify-content: center;
+  color: white; font-weight: 700; font-size: 14px;
+  flex-shrink: 0;
+  box-shadow: 0 4px 10px rgba(16,163,127,.35);
+}
+.fa-content .fa-name{ font-size: 12.5px; font-weight: 700; color: var(--ink-0); }
+.fa-content .fa-status{ font-family: var(--font-mono); font-size: 10px; color: var(--brand-deep); font-weight: 600; margin-top: 1px; }
 
 /* ============ TICKER ============ */
 .ticker-wrap{
@@ -1531,74 +1779,143 @@ section{ position: relative; }
     </div>
 
     <div class="hero-visual" id="heroVisual">
-      <div class="split">
-        <div class="split-grid">
-          <div class="split-left">
-            <div class="row-sb">
-              <div class="mono" style="font-size:10px;letter-spacing:.18em;color:var(--ink-dark-3);text-transform:uppercase">BEFORE · Raw Shopify catalog</div>
-              <span class="mono" style="font-size:10px;color:var(--ink-dark-3)">scanned 14m ago</span>
+      <div class="dash-scene" id="dashScene">
+
+        <!-- Floating toast top-right -->
+        <div class="float-card float-toast">
+          <div class="ft-icon">✓</div>
+          <div class="ft-content">
+            <div class="ft-title">Fix applied</div>
+            <div class="ft-body"><span class="ft-pts">+12 pts</span> · Alt text generated for 4 images</div>
+          </div>
+        </div>
+
+        <!-- Floating agent badge top-left -->
+        <div class="float-card float-agent">
+          <div class="fa-icon">C</div>
+          <div class="fa-content">
+            <div class="fa-name">ChatGPT</div>
+            <div class="fa-status">+147 sessions today</div>
+          </div>
+        </div>
+
+        <!-- Floating DiD card bottom-left -->
+        <div class="float-card float-did">
+          <div class="fd-head">
+            <span class="fd-tag">CAUSAL A/B</span>
+            <span class="fd-pval">p &lt; 0.05</span>
+          </div>
+          <div class="fd-metric">
+            <span class="fd-num">+9.2%</span>
+            <span class="fd-label">AI sessions</span>
+          </div>
+          <div class="fd-sub">DiD + Welch's t-test · n=263</div>
+        </div>
+
+        <!-- MAIN DASHBOARD -->
+        <div class="dash-main">
+          <div class="dash-header">
+            <div class="dash-traffic"><span></span><span></span><span></span></div>
+            <div class="dash-brand-mini">
+              <span class="mark">A</span>
+              <span class="name">AI Catalog Score</span>
             </div>
-            <div style="margin-top:32px">
-              <div class="grade-letter" style="font-size:88px;color:var(--crit)">F</div>
-              <div class="mono num" style="font-size:16px;color:var(--ink-dark-2);margin-top:10px">29 <span style="color:var(--ink-dark-4)">/ 100</span></div>
-              <div style="font-size:13px;color:var(--ink-dark-3);margin-top:6px">"Invisible" — ChatGPT will not recommend this product</div>
-            </div>
-            <div style="margin-top:32px;border-top:1px dashed var(--border-dark);padding-top:22px;position:relative;z-index:2">
-              <div class="mono" style="font-size:10px;letter-spacing:.14em;color:var(--ink-dark-4);text-transform:uppercase;margin-bottom:12px">AS CHATGPT SEES IT</div>
-              <div class="dark-snippet">
-                <div class="ds-row"><span class="key">title:</span><span class="val-dim">Beanie</span></div>
-                <div class="ds-row"><span class="key">description:</span><span class="val-dim">Warm cashmere.</span></div>
-                <div class="ds-row"><span class="key">material:</span><span class="val-crit">null</span></div>
-                <div class="ds-row"><span class="key">category:</span><span class="val-crit">null</span></div>
-                <div class="ds-row"><span class="key">alt_text:</span><span class="val-crit">null</span></div>
-                <div class="ds-row"><span class="key">jsonld:</span><span class="val-crit">not-emitted</span></div>
-                <div class="ds-row"><span class="key">reviews:</span><span class="val-dim">0</span></div>
-              </div>
-            </div>
-            <div class="dark-bars">
-              <span class="fail"></span><span class="fail"></span><span class="fail"></span>
-              <span class="fail"></span><span></span><span></span>
-            </div>
+            <span class="dash-store">meridian-supply.myshopify.com</span>
+            <span class="dash-live"><span class="live-dot"></span>LIVE</span>
           </div>
 
-          <div class="split-right">
-            <div class="row-sb">
-              <div class="mono" style="font-size:10px;letter-spacing:.18em;color:var(--ink-3);text-transform:uppercase">AFTER · Fixed with one click</div>
-              <span class="chip chip-brand" style="font-size:10px">✓ 6 fixes applied</span>
-            </div>
-            <div style="margin-top:24px" class="score-block">
-              <div class="grade">A+</div>
-              <div class="meta">
-                <div class="score num">96 <span style="color:var(--ink-3);font-size:14px">/ 100</span></div>
-                <div class="label">+67 PTS · TOP 3%</div>
+          <div class="dash-body">
+            <!-- Top: gauge + KPIs -->
+            <div class="dash-top">
+              <div class="score-gauge">
+                <svg viewBox="0 0 200 200">
+                  <defs>
+                    <linearGradient id="gaugeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stop-color="var(--brand)"/>
+                      <stop offset="100%" stop-color="var(--brand-deep)"/>
+                    </linearGradient>
+                  </defs>
+                  <circle class="gauge-track" cx="100" cy="100" r="80" transform="rotate(-90 100 100)"/>
+                  <circle class="gauge-fill" cx="100" cy="100" r="80" transform="rotate(-90 100 100)" stroke="url(#gaugeGrad)"/>
+                </svg>
+                <div class="gauge-center">
+                  <div class="gauge-grade">B+</div>
+                  <div class="gauge-score"><span class="n" data-target="78">0</span>/100</div>
+                  <div class="gauge-trend">↑ +14 pts this week</div>
+                </div>
+              </div>
+
+              <div class="kpi-grid">
+                <div class="kpi">
+                  <div class="kpi-label">Total SKUs</div>
+                  <div class="kpi-value" data-target="263">0</div>
+                  <div class="kpi-trend neutral">↑ +14</div>
+                </div>
+                <div class="kpi is-brand">
+                  <div class="kpi-label">AI Ready</div>
+                  <div class="kpi-value brand-text" data-target="142">0</div>
+                  <div class="kpi-trend up">↑ +47 this week</div>
+                </div>
+                <div class="kpi">
+                  <div class="kpi-label">Needs work</div>
+                  <div class="kpi-value warn-text" data-target="87">0</div>
+                  <div class="kpi-trend up">↓ -33</div>
+                </div>
+                <div class="kpi">
+                  <div class="kpi-label">Critical</div>
+                  <div class="kpi-value crit-text" data-target="12">0</div>
+                  <div class="kpi-trend up">↓ -8</div>
+                </div>
               </div>
             </div>
-            <div class="mini-tiles">
-              <div class="mini-tile brand">
-                <div class="label">AI Ready</div>
-                <div class="value num">142</div>
+
+            <!-- Bottom: agents + fixes -->
+            <div class="dash-bottom">
+              <div class="agent-viz">
+                <div class="dash-section-label">
+                  <span>Agent visibility</span>
+                  <span class="badge">5 agents live</span>
+                </div>
+                <div class="agent-bars">
+                  <div class="ab-row" style="--w:87%; --d:.5s">
+                    <span class="ab-name">ChatGPT</span><span class="ab-bar"><span></span></span><span class="ab-pct">87%</span>
+                  </div>
+                  <div class="ab-row" style="--w:81%; --d:.6s">
+                    <span class="ab-name">Claude</span><span class="ab-bar"><span></span></span><span class="ab-pct">81%</span>
+                  </div>
+                  <div class="ab-row" style="--w:74%; --d:.7s">
+                    <span class="ab-name">Gemini</span><span class="ab-bar"><span></span></span><span class="ab-pct">74%</span>
+                  </div>
+                  <div class="ab-row is-low" style="--w:68%; --d:.8s">
+                    <span class="ab-name">Mistral</span><span class="ab-bar"><span></span></span><span class="ab-pct">68%</span>
+                  </div>
+                  <div class="ab-row is-low" style="--w:56%; --d:.9s">
+                    <span class="ab-name">DeepSeek</span><span class="ab-bar"><span></span></span><span class="ab-pct">56%</span>
+                  </div>
+                </div>
               </div>
-              <div class="mini-tile warn">
-                <div class="label">Needs work</div>
-                <div class="value num">87</div>
+
+              <div class="top-fixes">
+                <div class="dash-section-label">
+                  <span>Top fixes</span>
+                  <span class="badge">+43 pts pending</span>
+                </div>
+                <ul class="fix-list">
+                  <li class="fix-li"><span class="fix-dot crit"></span><span class="fix-text">Alt text missing on 47 SKUs</span><span class="fix-pts">+18</span></li>
+                  <li class="fix-li"><span class="fix-dot warn"></span><span class="fix-text">JSON-LD not emitted (67%)</span><span class="fix-pts">+12</span></li>
+                  <li class="fix-li"><span class="fix-dot warn"></span><span class="fix-text">Material metafield empty</span><span class="fix-pts">+8</span></li>
+                  <li class="fix-li"><span class="fix-dot info"></span><span class="fix-text">Taxonomy unclear (23 SKUs)</span><span class="fix-pts">+5</span></li>
+                </ul>
               </div>
             </div>
-            <div class="fixes">
-              <div class="mono" style="font-size:10px;letter-spacing:.14em;color:var(--ink-3);text-transform:uppercase;margin-bottom:12px">FIXES APPLIED</div>
-              <div class="stack-8">
-                <div class="fix-row" style="animation-delay:1.6s"><span>✓ Alt text generated for 4 images</span><span class="pts num">+10 pts</span></div>
-                <div class="fix-row" style="animation-delay:1.75s"><span>✓ Description expanded to 212 chars</span><span class="pts num">+10 pts</span></div>
-                <div class="fix-row" style="animation-delay:1.9s"><span>✓ JSON-LD Product schema emitted</span><span class="pts num">+8 pts</span></div>
-                <div class="fix-row" style="animation-delay:2.05s"><span>✓ Metafields: material, care, country</span><span class="pts num">+8 pts</span></div>
-                <div class="fix-row" style="animation-delay:2.2s"><span>✓ Taxonomy → Chelsea Boots</span><span class="pts num">+2 pts</span></div>
-              </div>
+
+            <div class="dash-foot">
+              <span>263 SKUs scanned · last refresh 14m ago · 4.2s</span>
+              <span>commerce-agentic <span class="accent">spec v1.0</span></span>
             </div>
           </div>
         </div>
-        <div class="split-foot">
-          <span>MERIDIAN-SUPPLY.MYSHOPIFY.COM · 263 SKUs</span>
-          <span><span style="color:var(--crit)">F · 29</span> → <span style="color:var(--brand-deep);font-weight:600">A+ · 96</span> · elapsed 4.2s</span>
-        </div>
+
       </div>
     </div>
   </div>
@@ -2792,6 +3109,67 @@ if (terminalBody) terminalObserver.observe(terminalBody);
     gl.uniform1f(uTime, 0.0);
     gl.uniform2f(uRes, gl.drawingBufferWidth, gl.drawingBufferHeight);
     gl.drawArrays(gl.TRIANGLES, 0, 6);
+  }
+})();
+
+// ===== HERO DASHBOARD — counter animations + in-view trigger =====
+(function initDashScene(){
+  const scene = document.getElementById('dashScene');
+  if (!scene) return;
+
+  function animateCounters(){
+    const targets = scene.querySelectorAll('[data-target]');
+    targets.forEach(el => {
+      const target = parseInt(el.dataset.target, 10);
+      if (isNaN(target)) return;
+      const duration = 1400; // ms
+      const startTime = performance.now();
+      const startVal = 0;
+      function tick(now){
+        const elapsed = now - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        // ease-out cubic
+        const eased = 1 - Math.pow(1 - progress, 3);
+        const value = Math.round(startVal + (target - startVal) * eased);
+        el.textContent = value.toLocaleString('en-US');
+        if (progress < 1) requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+    });
+  }
+
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting){
+        scene.classList.add('in-view');
+        animateCounters();
+        obs.disconnect();
+      }
+    });
+  }, { threshold: 0.15 });
+  obs.observe(scene);
+
+  // Subtle parallax tilt on mouse move (desktop only)
+  if (window.matchMedia('(min-width: 880px)').matches && !window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+    const main = scene.querySelector('.dash-main');
+    const toast = scene.querySelector('.float-toast');
+    const did = scene.querySelector('.float-did');
+    const agent = scene.querySelector('.float-agent');
+    scene.addEventListener('mousemove', (e) => {
+      const r = scene.getBoundingClientRect();
+      const mx = (e.clientX - r.left) / r.width - 0.5;   // -0.5..0.5
+      const my = (e.clientY - r.top) / r.height - 0.5;
+      if (main) main.style.transform = `rotateX(${2 - my * 3}deg) rotateY(${-2.5 + mx * 4}deg)`;
+      if (toast) toast.style.transform = `translate(${mx * -10}px, ${my * -10}px)`;
+      if (did)   did.style.transform   = `translate(${mx * 12}px, ${my * 12}px)`;
+      if (agent) agent.style.transform = `translate(${mx * -14}px, ${my * 8}px)`;
+    });
+    scene.addEventListener('mouseleave', () => {
+      if (main) main.style.transform = '';
+      if (toast) toast.style.transform = '';
+      if (did)   did.style.transform = '';
+      if (agent) agent.style.transform = '';
+    });
   }
 })();
 
