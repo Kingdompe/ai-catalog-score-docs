@@ -1358,31 +1358,179 @@ section{ position: relative; }
   border-bottom: 1px solid var(--border);
   position: relative; overflow: hidden;
 }
+/* Decorative red wash behind 41% card */
 .problem-section::before{
-  content:''; position: absolute; top: 0; right: 0;
-  width: 400px; height: 400px;
-  background: radial-gradient(circle, var(--crit-wash), transparent);
-  border-radius: 50%; opacity: .5;
+  content:''; position: absolute; top: 30%; right: -100px;
+  width: 500px; height: 500px;
+  background: radial-gradient(circle, var(--crit-wash), transparent 65%);
+  border-radius: 50%; opacity: .6;
   pointer-events: none;
 }
+/* Subtle dot grid background */
+.problem-section::after{
+  content:''; position: absolute; inset: 0;
+  background-image: radial-gradient(rgba(229,72,77,.06) 1px, transparent 1px);
+  background-size: 32px 32px;
+  mask-image: radial-gradient(ellipse 70% 70% at 50% 70%, #000 0%, transparent 80%);
+  -webkit-mask-image: radial-gradient(ellipse 70% 70% at 50% 70%, #000 0%, transparent 80%);
+  opacity: .6; pointer-events: none;
+}
+.problem-section .container{ position: relative; z-index: 1; }
+
 .problem-grid{ display: grid; grid-template-columns: 1.2fr 1fr; gap: 64px; margin-top: 22px; align-items: center; position: relative; }
 @media (max-width: 860px){ .problem-grid{ grid-template-columns: 1fr; gap: 32px; } }
 .stat-grid{ margin-top: 72px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; position: relative; }
 @media (max-width: 860px){ .stat-grid{ grid-template-columns: 1fr; } }
 .stat-tile{
-  padding: 32px; position: relative; overflow: hidden;
-  transition: all var(--transition);
+  padding: 28px 28px 24px; position: relative; overflow: hidden;
+  transition: transform .3s ease, box-shadow .3s ease, border-color .3s ease;
+  display: flex; flex-direction: column;
+  background: var(--bg-raised);
 }
-.stat-tile:hover{ transform: translateY(-4px); box-shadow: var(--shadow-md); }
-.stat-tile.highlight{ border-color: var(--ink-0); }
-.stat-tile.highlight::before{ content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--crit); }
+.stat-tile::after{
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(400px circle at var(--bento-bx, 50%) var(--bento-by, 50%), rgba(0,208,132,.06), transparent 40%);
+  opacity: 0; transition: opacity .3s; pointer-events: none;
+}
+.stat-tile:hover{ transform: translateY(-6px); box-shadow: 0 18px 40px -12px rgba(20,18,10,.18); border-color: var(--border-strong); }
+.stat-tile:hover::after{ opacity: 1; }
+.stat-tile.highlight{ border-color: rgba(229,72,77,.4); box-shadow: 0 0 0 1px rgba(229,72,77,.15), 0 12px 30px -10px rgba(229,72,77,.15); }
+.stat-tile.highlight::before{
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  background: linear-gradient(90deg, transparent, var(--crit) 20%, var(--crit) 80%, transparent);
+  z-index: 1;
+  animation: highlightShimmer 4s ease-in-out infinite;
+}
+@keyframes highlightShimmer{
+  0%, 100%{ opacity: .8; }
+  50%{ opacity: 1; box-shadow: 0 0 14px rgba(229,72,77,.5); }
+}
+.stat-tile.highlight::after{
+  background: radial-gradient(400px circle at var(--bento-bx, 50%) var(--bento-by, 50%), rgba(229,72,77,.1), transparent 40%);
+}
+
+/* Top tag chip */
+.stat-tag{
+  display: inline-flex; align-items: center; gap: 6px;
+  align-self: flex-start;
+  padding: 4px 10px; border-radius: 100px;
+  font-family: var(--font-mono); font-size: 9.5px;
+  letter-spacing: .14em; text-transform: uppercase; font-weight: 700;
+  background: var(--bg-sunk); color: var(--ink-2); border: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+.stat-tile.highlight .stat-tag{
+  background: var(--crit-wash); color: #8b1a1f; border-color: transparent;
+}
+.stat-tag .tag-dot{
+  width: 5px; height: 5px; border-radius: 50%;
+  background: var(--brand);
+}
+.stat-tile.highlight .stat-tag .tag-dot{ background: var(--crit); }
+
 .stat-tile .big{
-  font-family: var(--font-mono); font-size: 64px; font-weight: 500;
+  font-family: var(--font-mono); font-size: 60px; font-weight: 500;
   color: var(--ink-0); letter-spacing: -.04em; line-height: 1;
+  font-variant-numeric: tabular-nums;
 }
 .stat-tile.highlight .big{ color: var(--crit); }
 .stat-tile .sub{ font-size: 15px; color: var(--ink-1); margin-top: 14px; font-weight: 500; line-height: 1.45; }
 .stat-tile .foot{ font-family: var(--font-mono); font-size: 11px; color: var(--ink-3); margin-top: 12px; letter-spacing: .04em; }
+
+/* Per-card visualizations */
+.stat-viz{ margin-top: 20px; padding-top: 18px; border-top: 1px dashed var(--border); }
+
+/* Card 1: rising bars (12 months) */
+.stat-bars{
+  display: flex; align-items: flex-end; gap: 5px; height: 48px;
+}
+.stat-bars span{
+  flex: 1; min-height: 4px;
+  background: linear-gradient(180deg, var(--brand) 0%, var(--brand-deep) 100%);
+  border-radius: 3px 3px 0 0;
+  transform: scaleY(0); transform-origin: bottom;
+  transition: transform .9s cubic-bezier(.2,.8,.2,1) var(--d, 0s);
+  box-shadow: 0 0 6px rgba(0,208,132,.2);
+}
+.stat-grid.in-view .stat-bars span{ transform: scaleY(1); }
+.stat-bars-labels{
+  display: flex; justify-content: space-between;
+  margin-top: 6px;
+  font-family: var(--font-mono); font-size: 9px; color: var(--ink-3);
+  letter-spacing: .05em;
+}
+
+/* Card 2: 41% horizontal bar */
+.stat-fill-bar{
+  position: relative;
+  height: 28px; background: var(--bg);
+  border: 1px solid var(--border); border-radius: 8px;
+  overflow: hidden;
+  display: flex; align-items: stretch;
+}
+.stat-fill-bar .filled{
+  height: 100%; width: 0;
+  background: linear-gradient(90deg, var(--crit) 0%, #F87171 100%);
+  transition: width 1.4s cubic-bezier(.2,.8,.2,1) .5s;
+  display: flex; align-items: center; justify-content: flex-end;
+  padding-right: 10px;
+  position: relative;
+}
+.stat-fill-bar .filled::after{
+  content: ''; position: absolute; top: 0; right: 0; bottom: 0;
+  width: 4px; background: linear-gradient(180deg, transparent, rgba(255,255,255,.4), transparent);
+}
+.stat-grid.in-view .stat-fill-bar .filled{ width: 41%; }
+.stat-fill-bar .filled-pct{
+  font-family: var(--font-mono); font-size: 11px; font-weight: 700;
+  color: white; opacity: 0;
+  transition: opacity .3s ease 1.4s;
+}
+.stat-grid.in-view .stat-fill-bar .filled-pct{ opacity: 1; }
+.stat-fill-bar .rest-pct{
+  position: absolute; top: 50%; right: 10px; transform: translateY(-50%);
+  font-family: var(--font-mono); font-size: 11px; color: var(--ink-3); font-weight: 600;
+  opacity: 0; transition: opacity .3s ease 1.6s;
+}
+.stat-grid.in-view .stat-fill-bar .rest-pct{ opacity: 1; }
+.stat-fill-labels{
+  display: flex; justify-content: space-between;
+  margin-top: 8px;
+  font-family: var(--font-mono); font-size: 10px; color: var(--ink-3);
+  letter-spacing: .04em;
+}
+.stat-fill-labels .invisible{ color: var(--crit); font-weight: 600; }
+
+/* Card 3: agent strip + capture dots */
+.stat-agents-strip{
+  display: flex; gap: 6px; flex-wrap: wrap;
+}
+.stat-agents-strip .agent-mini{
+  width: 26px; height: 26px; border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+  color: white; font-family: var(--font-display); font-weight: 700; font-size: 11px;
+  letter-spacing: -.02em;
+  transition: transform .2s;
+}
+.stat-agents-strip .agent-mini:hover{ transform: translateY(-2px) scale(1.08); }
+.stat-agents-strip .agent-mini.gpt{ background: linear-gradient(135deg, #10A37F, #1A7F64); }
+.stat-agents-strip .agent-mini.cld{ background: linear-gradient(135deg, #D97757, #B85F3F); }
+.stat-agents-strip .agent-mini.gem{ background: linear-gradient(135deg, #4285F4, #2D63D3); }
+.stat-agents-strip .agent-mini.mst{ background: linear-gradient(135deg, #FA520F, #C13D03); }
+.stat-agents-strip .agent-mini.dsk{ background: linear-gradient(135deg, #4D6BFE, #2D4AC8); }
+.stat-agents-strip .agent-mini.plx{ background: linear-gradient(135deg, #1A8FA0, #0F6973); }
+.stat-capture-line{
+  display: flex; align-items: center; gap: 8px;
+  margin-top: 12px;
+  font-family: var(--font-mono); font-size: 10.5px; color: var(--ink-3);
+}
+.stat-capture-line .pulse-dot{
+  width: 6px; height: 6px; border-radius: 50%; background: var(--brand);
+  box-shadow: 0 0 0 0 rgba(0,208,132,.5);
+  animation: barPulse 1.6s ease-in-out infinite;
+  flex-shrink: 0;
+}
+.stat-capture-line .accent{ color: var(--brand-deep); font-weight: 700; }
 
 /* ============ HOW IT WORKS ============ */
 .how-section{ border-bottom: 1px solid var(--border); }
@@ -2835,21 +2983,70 @@ section{ position: relative; }
         </div>
       </div>
     </div>
-    <div class="stat-grid reveal-stagger">
+    <div class="stat-grid reveal-stagger" id="statGrid">
       <div class="card stat-tile">
+        <span class="stat-tag"><span class="tag-dot"></span>AGENTIC TRAFFIC</span>
         <div class="big num" data-count="700" data-suffix="%" data-prefix="+">+0%</div>
         <div class="sub">AI traffic to Shopify stores, trailing 12 months.</div>
         <div class="foot">Source: Shopify Merchant Insights, Q1 2026</div>
+        <div class="stat-viz">
+          <div class="stat-bars">
+            <span style="height:14%; --d:.4s"></span>
+            <span style="height:18%; --d:.45s"></span>
+            <span style="height:22%; --d:.5s"></span>
+            <span style="height:28%; --d:.55s"></span>
+            <span style="height:35%; --d:.6s"></span>
+            <span style="height:42%; --d:.65s"></span>
+            <span style="height:52%; --d:.7s"></span>
+            <span style="height:60%; --d:.75s"></span>
+            <span style="height:71%; --d:.8s"></span>
+            <span style="height:82%; --d:.85s"></span>
+            <span style="height:92%; --d:.9s"></span>
+            <span style="height:100%; --d:.95s"></span>
+          </div>
+          <div class="stat-bars-labels">
+            <span>Q1 '25</span>
+            <span>Q1 '26</span>
+          </div>
+        </div>
       </div>
+
       <div class="card stat-tile highlight">
+        <span class="stat-tag"><span class="tag-dot"></span>CATALOG GAP</span>
         <div class="big num" data-count="41" data-suffix="%">0%</div>
         <div class="sub">of Shopify products are invisible to at least one major AI shopping agent.</div>
         <div class="foot">Benchmarked across 898 public Shopify catalogs</div>
+        <div class="stat-viz">
+          <div class="stat-fill-bar">
+            <div class="filled"><span class="filled-pct">41%</span></div>
+            <span class="rest-pct">59% indexed</span>
+          </div>
+          <div class="stat-fill-labels">
+            <span class="invisible">● Invisible to agents</span>
+            <span>● Indexed</span>
+          </div>
+        </div>
       </div>
+
       <div class="card stat-tile">
+        <span class="stat-tag"><span class="tag-dot"></span>OPEN DATASET</span>
         <div class="big num" data-count="31" data-suffix="k+">0</div>
         <div class="sub">Ground-truth captures across 6 AI shopping agents in our open dataset.</div>
         <div class="foot">Updated 2× daily · github.com/commerce-agentic</div>
+        <div class="stat-viz">
+          <div class="stat-agents-strip">
+            <span class="agent-mini gpt" title="ChatGPT">C</span>
+            <span class="agent-mini cld" title="Claude">A</span>
+            <span class="agent-mini gem" title="Gemini">G</span>
+            <span class="agent-mini mst" title="Mistral">M</span>
+            <span class="agent-mini dsk" title="DeepSeek">D</span>
+            <span class="agent-mini plx" title="Perplexity">P</span>
+          </div>
+          <div class="stat-capture-line">
+            <span class="pulse-dot"></span>
+            <span><span class="accent">+2,400</span> captures /day · CC0 dataset</span>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -3883,6 +4080,26 @@ if (terminalBody) terminalObserver.observe(terminalBody);
       const r = kpi.getBoundingClientRect();
       kpi.style.setProperty('--mx', `${e.clientX - r.left}px`);
       kpi.style.setProperty('--my', `${e.clientY - r.top}px`);
+    });
+  });
+})();
+
+// ===== PROBLEM STAT-GRID — trigger viz animations + cursor spotlight =====
+(function initStatGrid(){
+  const grid = document.getElementById('statGrid');
+  if (!grid) return;
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting){ grid.classList.add('in-view'); obs.disconnect(); }
+    });
+  }, { threshold: 0.2 });
+  obs.observe(grid);
+  // Cursor spotlight per tile
+  grid.querySelectorAll('.stat-tile').forEach(tile => {
+    tile.addEventListener('mousemove', e => {
+      const r = tile.getBoundingClientRect();
+      tile.style.setProperty('--bento-bx', `${e.clientX - r.left}px`);
+      tile.style.setProperty('--bento-by', `${e.clientY - r.top}px`);
     });
   });
 })();
