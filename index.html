@@ -778,19 +778,157 @@ section{ position: relative; }
 
 /* ============ COMPARISON ============ */
 .compare-section{ border-top: 1px solid var(--border); }
+
+/* ----- Variant switcher ----- */
+.compare-switcher{
+  display: inline-flex; gap: 4px;
+  padding: 4px; margin: 40px auto 0;
+  background: var(--bg-sunk); border: 1px solid var(--border);
+  border-radius: 100px;
+  position: relative; z-index: 2;
+}
+.compare-switcher-wrap{ display: flex; justify-content: center; }
+.cs-btn{
+  background: transparent; border: none;
+  padding: 8px 18px; font-size: 13px; font-weight: 500;
+  font-family: var(--font-body); color: var(--ink-3);
+  border-radius: 100px; cursor: pointer;
+  transition: background .2s, color .2s;
+}
+.cs-btn:hover{ color: var(--ink-1); }
+.cs-btn.active{ background: var(--ink-0); color: var(--bg); }
+
+.compare-variant{ margin-top: 32px; }
+.compare-variant[hidden]{ display: none; }
+
+/* ----- Variant 1: Scorecards ----- */
+.compare-cards{
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+}
+@media (max-width: 880px){ .compare-cards{ grid-template-columns: 1fr; } }
+.cc{
+  position: relative;
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  border-radius: var(--r-xl);
+  padding: 36px 32px 32px;
+  display: flex; flex-direction: column; gap: 0;
+  transition: transform .3s ease;
+}
+.cc:hover{ transform: translateY(-4px); }
+.cc.is-us{
+  background:
+    radial-gradient(ellipse at 50% 0%, var(--brand-wash) 0%, transparent 60%),
+    var(--bg-raised);
+  border-color: rgba(0,208,132,.4);
+  box-shadow:
+    0 1px 0 rgba(255,255,255,.6) inset,
+    0 20px 60px -20px rgba(0,208,132,.35),
+    0 0 0 1px rgba(0,208,132,.15);
+}
+.cc.is-us::after{
+  content:''; position: absolute; inset: -1px;
+  border-radius: var(--r-xl);
+  background: conic-gradient(from var(--angle, 0deg),
+    transparent 0%,
+    rgba(0,208,132,.5) 15%,
+    transparent 30%,
+    transparent 100%);
+  -webkit-mask: linear-gradient(#000, #000) content-box, linear-gradient(#000, #000);
+  -webkit-mask-composite: xor; mask-composite: exclude;
+  padding: 1px;
+  animation: ccBorder 8s linear infinite;
+  pointer-events: none;
+}
+@property --angle{ syntax: '<angle>'; initial-value: 0deg; inherits: false; }
+@keyframes ccBorder{ to{ --angle: 360deg; } }
+@supports not (background: conic-gradient(from 0deg, red, red)){
+  .cc.is-us::after{ display: none; }
+}
+
+.cc-tag{
+  font-family: var(--font-mono); font-size: 11px;
+  text-transform: uppercase; letter-spacing: .14em;
+  color: var(--ink-4); text-align: center;
+}
+.cc.is-us .cc-tag{ color: var(--brand-deep); }
+.cc-name{
+  font-family: var(--font-display); font-size: 22px;
+  font-weight: 500; color: var(--ink-0); margin-top: 6px; text-align: center;
+  letter-spacing: -.02em;
+}
+.cc-score{
+  font-family: var(--font-display); font-weight: 500;
+  text-align: center; margin: 22px 0 14px;
+  line-height: 1;
+}
+.cc-score .num{
+  font-size: 80px; letter-spacing: -.05em; color: var(--ink-1);
+}
+.cc.is-us .cc-score .num{
+  color: var(--brand-deep);
+  text-shadow: 0 0 36px rgba(0,208,132,.25);
+}
+.cc-score .total{ font-size: 32px; color: var(--ink-4); letter-spacing: -.04em; }
+.cc-bar{
+  height: 4px; background: var(--bg-sunk); border-radius: 100px;
+  overflow: hidden; margin-bottom: 28px;
+}
+.cc-bar > span{
+  display: block; height: 100%; background: var(--ink-4);
+  width: 0; border-radius: 100px;
+  transition: width 1.2s cubic-bezier(.2,.8,.2,1) .2s;
+}
+.cc.is-us .cc-bar > span{
+  background: linear-gradient(90deg, var(--brand) 0%, var(--brand-deep) 100%);
+  box-shadow: 0 0 12px rgba(0,208,132,.4);
+}
+.in-view .cc-bar > span{ width: var(--w, 100%); }
+
+.cc-list{ list-style: none; padding: 0; margin: 0; }
+.cc-li{
+  display: flex; align-items: flex-start; gap: 12px;
+  padding: 13px 0; border-top: 1px solid var(--border);
+  font-size: 14px;
+}
+.cc-mark{
+  flex-shrink: 0; width: 18px; height: 18px; margin-top: 1px;
+  display: inline-flex; align-items: center; justify-content: center;
+  border-radius: 50%; font-size: 11px; font-weight: 700;
+}
+.cc-li.yes .cc-mark{ background: var(--brand-wash); color: var(--brand-deep); }
+.cc-li.partial .cc-mark{ background: var(--warn-wash); color: #8b5e00; }
+.cc-li.no .cc-mark{ background: var(--bg-sunk); color: var(--ink-4); }
+.cc-li.yes .cc-text{ color: var(--ink-1); font-weight: 500; }
+.cc-li.partial .cc-text{ color: var(--ink-2); }
+.cc-li.no .cc-text{ color: var(--ink-4); }
+.cc-cap{ flex: 1; color: var(--ink-3); font-size: 12px; margin-top: 2px; font-family: var(--font-mono); }
+
+/* ----- Variant 2: Enhanced table ----- */
 .compare-table{
-  margin-top: 56px;
   background: var(--bg-raised);
   border: 1px solid var(--border); border-radius: var(--r-xl);
   overflow: hidden;
   box-shadow: var(--shadow-md);
+  position: relative;
 }
 .compare-row{
   display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr;
   align-items: center;
   border-bottom: 1px solid var(--border);
   transition: background var(--transition);
+  opacity: 0; transform: translateY(8px);
+  transition: opacity .5s ease, transform .5s ease, background .2s;
 }
+.compare-table.in-view .compare-row{ opacity: 1; transform: none; }
+.compare-table.in-view .compare-row:nth-child(1){ transition-delay: 0ms; }
+.compare-table.in-view .compare-row:nth-child(2){ transition-delay: 60ms; }
+.compare-table.in-view .compare-row:nth-child(3){ transition-delay: 120ms; }
+.compare-table.in-view .compare-row:nth-child(4){ transition-delay: 180ms; }
+.compare-table.in-view .compare-row:nth-child(5){ transition-delay: 240ms; }
+.compare-table.in-view .compare-row:nth-child(6){ transition-delay: 300ms; }
+.compare-table.in-view .compare-row:nth-child(7){ transition-delay: 360ms; }
+.compare-table.in-view .compare-row:nth-child(8){ transition-delay: 420ms; }
 .compare-row:last-child{ border-bottom: none; }
 .compare-row:hover{ background: var(--bg-sunk); }
 .compare-row.header{
@@ -800,15 +938,98 @@ section{ position: relative; }
   color: var(--ink-3);
 }
 .compare-row.header .col{ padding: 18px 24px; }
-.compare-row.header .col.us{ color: var(--brand-deep); font-weight: 600; }
-.compare-row .col{ padding: 18px 24px; font-size: 14px; }
+.compare-row.header .col.us{ color: var(--brand-deep); font-weight: 600; position: relative; }
+.compare-row .col{ padding: 18px 24px; font-size: 14px; position: relative; }
 .compare-row .col.feat{ font-weight: 500; color: var(--ink-0); }
-.compare-row .col.us{ background: linear-gradient(180deg, transparent, var(--brand-wash)); color: var(--brand-ink); font-weight: 600; }
+.compare-row .col.us{
+  background: linear-gradient(180deg, transparent, var(--brand-wash));
+  color: var(--brand-ink); font-weight: 600;
+  position: relative; overflow: hidden;
+}
+.compare-row .col.us::before{
+  content:''; position: absolute; top: 0; left: -100%;
+  width: 60%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.5), transparent);
+  animation: shimmer 6s ease-in-out infinite;
+}
+@keyframes shimmer{
+  0%, 100%{ left: -100%; }
+  50%{ left: 200%; }
+}
 .compare-row .col .check{ color: var(--brand-deep); font-weight: 700; }
 .compare-row .col .x{ color: var(--ink-4); }
+.compare-row.total{ background: var(--bg-sunk); }
+.compare-row.total .col{ padding: 16px 24px; font-family: var(--font-mono); font-size: 12px; }
+.compare-row.total .col.feat{ text-transform: uppercase; letter-spacing: .14em; color: var(--ink-3); font-weight: 600; }
+.compare-row.total .score-pill{
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--font-mono); font-size: 13px; font-weight: 600;
+}
+.compare-row.total .score-bar{
+  display: inline-block; width: 80px; height: 5px;
+  background: var(--bg); border-radius: 100px; overflow: hidden;
+  vertical-align: middle; border: 1px solid var(--border);
+}
+.compare-row.total .score-bar > span{
+  display: block; height: 100%; width: 0; border-radius: 100px;
+  transition: width 1s cubic-bezier(.2,.8,.2,1) .5s;
+}
+.compare-table.in-view .compare-row.total .score-bar > span{ width: var(--w); }
+.compare-row.total .col.us .score-bar > span{ background: var(--brand); }
+.compare-row.total .col.us{ color: var(--brand-deep); }
+.compare-row.total .score-bar > span{ background: var(--ink-4); }
+
 @media (max-width: 720px){
   .compare-row{ grid-template-columns: 2fr 1fr 1fr 1fr; }
   .compare-row .col{ padding: 14px 12px; font-size: 13px; }
+  .compare-row .col.us::before{ display: none; }
+}
+
+/* ----- Variant 3: Radar ----- */
+.compare-radar{
+  display: grid; grid-template-columns: 1.4fr 1fr; gap: 48px; align-items: center;
+  background: var(--bg-raised);
+  border: 1px solid var(--border); border-radius: var(--r-xl);
+  padding: 48px;
+  box-shadow: var(--shadow-md);
+}
+@media (max-width: 880px){ .compare-radar{ grid-template-columns: 1fr; padding: 32px; } }
+.radar-svg{ width: 100%; height: auto; max-width: 480px; margin: 0 auto; display: block; }
+.radar-axis{ stroke: var(--border); stroke-width: 1; }
+.radar-grid{ fill: none; stroke: var(--border); stroke-width: 1; stroke-dasharray: 2 4; }
+.radar-label{
+  font-family: var(--font-mono); font-size: 10.5px; font-weight: 500;
+  fill: var(--ink-2); text-transform: uppercase; letter-spacing: .1em;
+}
+.radar-poly{ stroke-width: 2; fill-opacity: .25; transition: fill-opacity .3s; }
+.radar-poly.is-us{ stroke: var(--brand-deep); fill: var(--brand); filter: drop-shadow(0 4px 16px rgba(0,208,132,.3)); }
+.radar-poly.is-generic{ stroke: var(--ink-4); fill: var(--ink-4); fill-opacity: .12; }
+.radar-poly.is-other{ stroke: var(--ink-3); fill: var(--ink-3); fill-opacity: .15; }
+.radar-svg .radar-vertex{ fill: var(--brand-deep); }
+.radar-svg .radar-vertex.is-generic{ fill: var(--ink-4); }
+.radar-svg .radar-vertex.is-other{ fill: var(--ink-3); }
+.radar-legend{ display: flex; flex-direction: column; gap: 16px; }
+.radar-legend-item{
+  display: flex; align-items: center; gap: 12px;
+  padding: 14px 16px;
+  background: var(--bg);
+  border: 1px solid var(--border); border-radius: var(--r-md);
+}
+.radar-legend-item.is-us{
+  background: linear-gradient(135deg, var(--brand-wash), transparent);
+  border-color: rgba(0,208,132,.3);
+}
+.radar-legend-swatch{
+  width: 14px; height: 14px; border-radius: 4px;
+  flex-shrink: 0;
+}
+.radar-legend-name{ flex: 1; font-weight: 500; color: var(--ink-0); font-size: 14px; }
+.radar-legend-score{ font-family: var(--font-mono); font-size: 14px; font-weight: 600; color: var(--ink-3); }
+.radar-legend-item.is-us .radar-legend-score{ color: var(--brand-deep); }
+.radar-poly{ stroke-dasharray: 1000; stroke-dashoffset: 1000; animation: drawPoly 1.2s ease-out forwards; }
+.compare-variant[data-variant="radar"][hidden] .radar-poly{ animation: none; }
+@keyframes drawPoly{
+  to{ stroke-dashoffset: 0; }
 }
 
 /* ============ ECOSYSTEM ============ */
@@ -1861,48 +2082,187 @@ section{ position: relative; }
         <p style="font-size:17px;color:var(--ink-2);margin-top:18px">Most "AI catalog" apps cover one of these. None cover all three.</p>
       </div>
     </div>
-    <div class="compare-table reveal">
-      <div class="compare-row header">
-        <div class="col">Capability</div>
-        <div class="col us">AI Catalog Score</div>
-        <div class="col">Generic SEO tool</div>
-        <div class="col">Other AI apps</div>
+    <div class="compare-switcher-wrap reveal">
+      <div class="compare-switcher" role="tablist">
+        <button class="cs-btn active" data-variant="cards" role="tab">Scorecards</button>
+        <button class="cs-btn" data-variant="table" role="tab">Detailed table</button>
+        <button class="cs-btn" data-variant="radar" role="tab">Radar</button>
       </div>
-      <div class="compare-row">
-        <div class="col feat">Open scoring methodology (CC0)</div>
-        <div class="col us"><span class="check">●</span> Public spec</div>
-        <div class="col"><span class="x">—</span></div>
-        <div class="col"><span class="x">Closed</span></div>
+    </div>
+
+    <!-- VARIANT 1: SCORECARDS -->
+    <div class="compare-variant reveal" data-variant="cards">
+      <div class="compare-cards">
+
+        <div class="cc is-us" style="--w: 100%">
+          <div class="cc-tag">★ AI Catalog Score ★</div>
+          <div class="cc-name">Built for agentic commerce</div>
+          <div class="cc-score"><span class="num">6</span><span class="total">/6</span></div>
+          <div class="cc-bar"><span></span></div>
+          <ul class="cc-list">
+            <li class="cc-li yes"><span class="cc-mark">✓</span><div><div class="cc-text">Public spec</div><div class="cc-cap">Open methodology (CC0)</div></div></li>
+            <li class="cc-li yes"><span class="cc-mark">✓</span><div><div class="cc-text">Daily capture</div><div class="cc-cap">6 agents ground truth</div></div></li>
+            <li class="cc-li yes"><span class="cc-mark">✓</span><div><div class="cc-text">DiD + Welch's t-test</div><div class="cc-cap">Causal A/B with p-values</div></div></li>
+            <li class="cc-li yes"><span class="cc-mark">✓</span><div><div class="cc-text">dry_run gated</div><div class="cc-cap">One-click apply Shopify</div></div></li>
+            <li class="cc-li yes"><span class="cc-mark">✓</span><div><div class="cc-text">No fee if no lift</div><div class="cc-cap">Performance pricing</div></div></li>
+            <li class="cc-li yes"><span class="cc-mark">✓</span><div><div class="cc-text">8 skills shipped</div><div class="cc-cap">Open source (MIT)</div></div></li>
+          </ul>
+        </div>
+
+        <div class="cc" style="--w: 8%">
+          <div class="cc-tag">Generic SEO tool</div>
+          <div class="cc-name">Audit-style scanners</div>
+          <div class="cc-score"><span class="num">0</span><span class="total">/6</span></div>
+          <div class="cc-bar"><span></span></div>
+          <ul class="cc-list">
+            <li class="cc-li no"><span class="cc-mark">—</span><div><div class="cc-text">—</div><div class="cc-cap">Open methodology</div></div></li>
+            <li class="cc-li no"><span class="cc-mark">—</span><div><div class="cc-text">—</div><div class="cc-cap">Multi-agent ground truth</div></div></li>
+            <li class="cc-li no"><span class="cc-mark">—</span><div><div class="cc-text">—</div><div class="cc-cap">Causal A/B</div></div></li>
+            <li class="cc-li partial"><span class="cc-mark">~</span><div><div class="cc-text">Audit-only</div><div class="cc-cap">One-click apply</div></div></li>
+            <li class="cc-li no"><span class="cc-mark">—</span><div><div class="cc-text">Fixed SaaS</div><div class="cc-cap">Performance pricing</div></div></li>
+            <li class="cc-li no"><span class="cc-mark">—</span><div><div class="cc-text">—</div><div class="cc-cap">Open source skills</div></div></li>
+          </ul>
+        </div>
+
+        <div class="cc" style="--w: 25%">
+          <div class="cc-tag">Other AI apps</div>
+          <div class="cc-name">ChatGPT-only optimisers</div>
+          <div class="cc-score"><span class="num">1</span><span class="total">/6</span></div>
+          <div class="cc-bar"><span></span></div>
+          <ul class="cc-list">
+            <li class="cc-li no"><span class="cc-mark">—</span><div><div class="cc-text">Closed</div><div class="cc-cap">Open methodology</div></div></li>
+            <li class="cc-li partial"><span class="cc-mark">~</span><div><div class="cc-text">ChatGPT only</div><div class="cc-cap">Multi-agent ground truth</div></div></li>
+            <li class="cc-li no"><span class="cc-mark">—</span><div><div class="cc-text">Observational</div><div class="cc-cap">Causal A/B</div></div></li>
+            <li class="cc-li partial"><span class="cc-mark">~</span><div><div class="cc-text">Some</div><div class="cc-cap">One-click apply</div></div></li>
+            <li class="cc-li no"><span class="cc-mark">—</span><div><div class="cc-text">Fixed SaaS</div><div class="cc-cap">Performance pricing</div></div></li>
+            <li class="cc-li no"><span class="cc-mark">—</span><div><div class="cc-text">Closed</div><div class="cc-cap">Open source skills</div></div></li>
+          </ul>
+        </div>
+
       </div>
-      <div class="compare-row">
-        <div class="col feat">Multi-agent ground truth (6 agents)</div>
-        <div class="col us"><span class="check">●</span> Daily capture</div>
-        <div class="col"><span class="x">—</span></div>
-        <div class="col"><span class="x">ChatGPT only</span></div>
+    </div>
+
+    <!-- VARIANT 2: ENHANCED TABLE -->
+    <div class="compare-variant reveal" data-variant="table" hidden>
+      <div class="compare-table">
+        <div class="compare-row header">
+          <div class="col">Capability</div>
+          <div class="col us">AI Catalog Score</div>
+          <div class="col">Generic SEO tool</div>
+          <div class="col">Other AI apps</div>
+        </div>
+        <div class="compare-row">
+          <div class="col feat">Open scoring methodology (CC0)</div>
+          <div class="col us"><span class="check">●</span> Public spec</div>
+          <div class="col"><span class="x">—</span></div>
+          <div class="col"><span class="x">Closed</span></div>
+        </div>
+        <div class="compare-row">
+          <div class="col feat">Multi-agent ground truth (6 agents)</div>
+          <div class="col us"><span class="check">●</span> Daily capture</div>
+          <div class="col"><span class="x">—</span></div>
+          <div class="col"><span class="x">ChatGPT only</span></div>
+        </div>
+        <div class="compare-row">
+          <div class="col feat">Causal A/B with p-values</div>
+          <div class="col us"><span class="check">●</span> DiD + Welch's t-test</div>
+          <div class="col"><span class="x">—</span></div>
+          <div class="col"><span class="x">Observational</span></div>
+        </div>
+        <div class="compare-row">
+          <div class="col feat">One-click apply in Shopify</div>
+          <div class="col us"><span class="check">●</span> dry_run gated</div>
+          <div class="col"><span class="x">Audit-only</span></div>
+          <div class="col"><span class="check" style="color:var(--ink-3)">Some</span></div>
+        </div>
+        <div class="compare-row">
+          <div class="col feat">Performance pricing (5% AI uplift)</div>
+          <div class="col us"><span class="check">●</span> No fee if no lift</div>
+          <div class="col"><span class="x">Fixed SaaS</span></div>
+          <div class="col"><span class="x">Fixed SaaS</span></div>
+        </div>
+        <div class="compare-row">
+          <div class="col feat">Open source skills (MIT)</div>
+          <div class="col us"><span class="check">●</span> 8 skills shipped</div>
+          <div class="col"><span class="x">—</span></div>
+          <div class="col"><span class="x">Closed</span></div>
+        </div>
+        <div class="compare-row total">
+          <div class="col feat">Total coverage</div>
+          <div class="col us">
+            <span class="score-pill"><span class="score-bar" style="--w:100%"><span></span></span> 6/6</span>
+          </div>
+          <div class="col">
+            <span class="score-pill"><span class="score-bar" style="--w:8%"><span></span></span> 0/6</span>
+          </div>
+          <div class="col">
+            <span class="score-pill"><span class="score-bar" style="--w:18%"><span></span></span> 1/6</span>
+          </div>
+        </div>
       </div>
-      <div class="compare-row">
-        <div class="col feat">Causal A/B with p-values</div>
-        <div class="col us"><span class="check">●</span> DiD + Welch's t-test</div>
-        <div class="col"><span class="x">—</span></div>
-        <div class="col"><span class="x">Observational</span></div>
-      </div>
-      <div class="compare-row">
-        <div class="col feat">One-click apply in Shopify</div>
-        <div class="col us"><span class="check">●</span> dry_run gated</div>
-        <div class="col"><span class="x">Audit-only</span></div>
-        <div class="col"><span class="check" style="color:var(--ink-3)">Some</span></div>
-      </div>
-      <div class="compare-row">
-        <div class="col feat">Performance pricing (5% AI uplift)</div>
-        <div class="col us"><span class="check">●</span> No fee if no lift</div>
-        <div class="col"><span class="x">Fixed SaaS</span></div>
-        <div class="col"><span class="x">Fixed SaaS</span></div>
-      </div>
-      <div class="compare-row">
-        <div class="col feat">Open source skills (MIT)</div>
-        <div class="col us"><span class="check">●</span> 8 skills shipped</div>
-        <div class="col"><span class="x">—</span></div>
-        <div class="col"><span class="x">Closed</span></div>
+    </div>
+
+    <!-- VARIANT 3: RADAR -->
+    <div class="compare-variant reveal" data-variant="radar" hidden>
+      <div class="compare-radar">
+        <div>
+          <svg class="radar-svg" viewBox="0 0 480 420" xmlns="http://www.w3.org/2000/svg">
+            <!-- Grid hexagons at 25, 50, 75, 100% -->
+            <polygon class="radar-grid" points="240,75 383,157.5 383,322.5 240,405 97,322.5 97,157.5"/>
+            <polygon class="radar-grid" points="240,116.25 348,178.13 348,301.88 240,363.75 132,301.88 132,178.13"/>
+            <polygon class="radar-grid" points="240,157.5 312,198.75 312,281.25 240,322.5 168,281.25 168,198.75"/>
+            <polygon class="radar-grid" points="240,198.75 276,219.38 276,260.63 240,281.25 204,260.63 204,219.38"/>
+            <!-- Axes -->
+            <line class="radar-axis" x1="240" y1="240" x2="240" y2="75"/>
+            <line class="radar-axis" x1="240" y1="240" x2="383" y2="157.5"/>
+            <line class="radar-axis" x1="240" y1="240" x2="383" y2="322.5"/>
+            <line class="radar-axis" x1="240" y1="240" x2="240" y2="405"/>
+            <line class="radar-axis" x1="240" y1="240" x2="97" y2="322.5"/>
+            <line class="radar-axis" x1="240" y1="240" x2="97" y2="157.5"/>
+            <!-- Labels (slight padding outside the 100% hex) -->
+            <text class="radar-label" x="240" y="60" text-anchor="middle">Open methodology</text>
+            <text class="radar-label" x="395" y="153" text-anchor="start">Multi-agent</text>
+            <text class="radar-label" x="395" y="330" text-anchor="start">Causal A/B</text>
+            <text class="radar-label" x="240" y="420" text-anchor="middle">One-click apply</text>
+            <text class="radar-label" x="85" y="330" text-anchor="end">Perf pricing</text>
+            <text class="radar-label" x="85" y="153" text-anchor="end">MIT skills</text>
+
+            <!-- Other AI Apps: low coverage [0.05, 0.4, 0.1, 0.5, 0.05, 0.05] -->
+            <polygon class="radar-poly is-other" points="240,231.75 297.2,222.75 254.3,260.63 240,322.5 232.85,242.13 232.85,235.88"/>
+            <!-- Generic SEO: very low [0.05, 0.05, 0.05, 0.3, 0.05, 0.05] -->
+            <polygon class="radar-poly is-generic" points="240,231.75 247.15,235.88 247.15,260.63 240,289.5 232.85,242.13 232.85,235.88"/>
+            <!-- AI Catalog: full coverage -->
+            <polygon class="radar-poly is-us" points="240,75 383,157.5 383,322.5 240,405 97,322.5 97,157.5"/>
+
+            <!-- Vertex dots for AI Catalog -->
+            <circle class="radar-vertex" cx="240" cy="75" r="4"/>
+            <circle class="radar-vertex" cx="383" cy="157.5" r="4"/>
+            <circle class="radar-vertex" cx="383" cy="322.5" r="4"/>
+            <circle class="radar-vertex" cx="240" cy="405" r="4"/>
+            <circle class="radar-vertex" cx="97" cy="322.5" r="4"/>
+            <circle class="radar-vertex" cx="97" cy="157.5" r="4"/>
+          </svg>
+        </div>
+        <div class="radar-legend">
+          <div class="radar-legend-item is-us">
+            <span class="radar-legend-swatch" style="background:var(--brand)"></span>
+            <span class="radar-legend-name">AI Catalog Score</span>
+            <span class="radar-legend-score">6/6</span>
+          </div>
+          <div class="radar-legend-item">
+            <span class="radar-legend-swatch" style="background:var(--ink-3)"></span>
+            <span class="radar-legend-name">Other AI apps</span>
+            <span class="radar-legend-score">1/6</span>
+          </div>
+          <div class="radar-legend-item">
+            <span class="radar-legend-swatch" style="background:var(--ink-4)"></span>
+            <span class="radar-legend-name">Generic SEO tool</span>
+            <span class="radar-legend-score">0/6</span>
+          </div>
+          <p style="font-size:13px;color:var(--ink-3);margin-top:12px;line-height:1.6">
+            Only AI Catalog Score covers all six dimensions of agentic commerce — methodology, multi-agent capture, causal proof, native apply, performance pricing, and open skills.
+          </p>
+        </div>
       </div>
     </div>
   </div>
@@ -2698,6 +3058,63 @@ if (terminalBody) terminalObserver.observe(terminalBody);
     gl.uniform1f(uTime, 0.0);
     gl.uniform2f(uRes, gl.drawingBufferWidth, gl.drawingBufferHeight);
     gl.drawArrays(gl.TRIANGLES, 0, 6);
+  }
+})();
+
+// ===== COMPARISON VARIANT SWITCHER =====
+(function initCompareSwitcher(){
+  const buttons = document.querySelectorAll('.cs-btn');
+  const variants = document.querySelectorAll('.compare-variant');
+  if (!buttons.length) return;
+
+  function activate(variantName){
+    buttons.forEach(b => b.classList.toggle('active', b.dataset.variant === variantName));
+    variants.forEach(v => {
+      const match = v.dataset.variant === variantName;
+      v.hidden = !match;
+      if (match){
+        // Force restart of stagger + bar animations
+        v.classList.remove('in-view');
+        // Re-flow to restart CSS animation if any
+        void v.offsetWidth;
+        // Re-trigger in-view for inner table / cards
+        const table = v.querySelector('.compare-table');
+        if (table){
+          table.classList.remove('in-view');
+          void table.offsetWidth;
+          table.classList.add('in-view');
+        }
+        v.classList.add('in-view');
+        // Restart radar polygon drawing
+        const polys = v.querySelectorAll('.radar-poly');
+        polys.forEach(p => {
+          p.style.animation = 'none';
+          void p.offsetWidth;
+          p.style.animation = '';
+        });
+      }
+    });
+  }
+
+  buttons.forEach(btn => {
+    btn.addEventListener('click', () => activate(btn.dataset.variant));
+  });
+
+  // Trigger initial in-view when the section enters viewport
+  const section = document.querySelector('.compare-section');
+  if (section){
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting){
+          obs.disconnect();
+          // Mark all variant containers + nested .compare-table to enable
+          // the CSS transitions even after switching tabs later.
+          variants.forEach(v => v.classList.add('in-view'));
+          document.querySelectorAll('.compare-table').forEach(t => t.classList.add('in-view'));
+        }
+      });
+    }, { threshold: 0.15 });
+    obs.observe(section);
   }
 })();
 
