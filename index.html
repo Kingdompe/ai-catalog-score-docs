@@ -246,10 +246,9 @@ section{ position: relative; }
 
 /* ============ HERO ============ */
 .hero{
-  padding: 88px 0 120px;
+  padding: 64px 0 56px;
   position: relative;
   overflow: hidden;
-  min-height: 100vh;
 }
 .hero-canvas{
   position: absolute; inset: 0;
@@ -281,11 +280,14 @@ section{ position: relative; }
 @keyframes float-b{ 0%,100%{ transform: translate(0,0); } 50%{ transform: translate(-100px,-40px); } }
 @keyframes float-c{ 0%,100%{ transform: translateX(-50%) translateY(0); } 50%{ transform: translateX(-50%) translateY(50px); } }
 
-.hero-content{ max-width: 980px; margin: 0 auto; text-align: center; position: relative; z-index: 1; }
+.hero-content{ max-width: 1200px; margin: 0 auto; text-align: center; position: relative; z-index: 1; }
 .hero h1{
-  margin-top: 22px;
-  max-width: 940px; margin-left: auto; margin-right: auto;
+  margin-top: 18px;
+  max-width: 1200px; margin-left: auto; margin-right: auto;
+  font-size: clamp(40px, 5.2vw, 72px);
+  letter-spacing: -.035em;
 }
+@media (max-width: 1100px){ .hero h1{ font-size: clamp(36px, 5.6vw, 60px); } }
 .hero h1 .word{
   display: inline-block;
   opacity: 0; transform: translateY(24px) skewY(2deg);
@@ -299,18 +301,18 @@ section{ position: relative; }
 }
 @keyframes word-in{ to { opacity: 1; transform: translateY(0) skewY(0); } }
 .hero .sub{
-  font-size: 20px; color: var(--ink-2); margin-top: 26px;
-  max-width: 720px; margin-left: auto; margin-right: auto; line-height: 1.55;
+  font-size: 17px; color: var(--ink-2); margin-top: 18px;
+  max-width: 760px; margin-left: auto; margin-right: auto; line-height: 1.5;
   opacity: 0; animation: fade-up 1s var(--ease-out) .6s forwards;
 }
 .hero .ctas{
   display: flex; gap: 12px; justify-content: center;
-  margin-top: 36px; flex-wrap: wrap;
+  margin-top: 24px; flex-wrap: wrap;
   opacity: 0; animation: fade-up 1s var(--ease-out) .8s forwards;
 }
 .hero .micro{
   font-family: var(--font-mono); font-size: 11px; color: var(--ink-3);
-  margin-top: 18px; letter-spacing: .08em;
+  margin-top: 14px; letter-spacing: .08em;
   opacity: 0; animation: fade-up 1s var(--ease-out) 1s forwards;
 }
 @keyframes fade-up{ to { opacity: 1; transform: translateY(0); } }
@@ -345,7 +347,7 @@ section{ position: relative; }
 
 /* ============ HERO SPLIT VISUAL ============ */
 .hero-visual{
-  margin-top: 90px;
+  margin-top: 40px;
   position: relative; z-index: 1;
   opacity: 0; animation: fade-up 1s var(--ease-out) 1.2s forwards;
   transform: translateY(40px);
