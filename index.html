@@ -2714,12 +2714,65 @@ section + .cta-section{ padding-top: 64px; }
 }
 .pricing-glassy-grid{
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 20px;
   align-items: stretch;
+  max-width: 1100px;
+  margin: 0 auto;
 }
-@media (max-width: 1100px){ .pricing-glassy-grid{ grid-template-columns: repeat(2, 1fr); } }
-@media (max-width: 600px){ .pricing-glassy-grid{ grid-template-columns: 1fr; } }
+@media (max-width: 1100px){ .pricing-glassy-grid{ grid-template-columns: 1fr; max-width: 480px; } }
+
+/* Monthly / Yearly toggle */
+.pricing-toggle{
+  display: inline-flex; gap: 4px;
+  padding: 4px;
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 100px;
+  margin: 28px auto 0;
+  backdrop-filter: blur(8px);
+}
+.pricing-toggle-wrap{
+  display: flex; justify-content: center;
+  margin-bottom: 40px;
+}
+.pt-opt{
+  border: none; background: transparent;
+  padding: 9px 18px;
+  font-family: var(--font-body); font-size: 13px;
+  color: rgba(255,255,255,.6); font-weight: 600;
+  border-radius: 100px;
+  cursor: pointer;
+  transition: background .2s, color .2s;
+  display: inline-flex; align-items: center; gap: 8px;
+}
+.pt-opt:hover{ color: rgba(255,255,255,.9); }
+.pt-opt.active{ background: white; color: var(--ink-0); }
+.pt-save{
+  font-family: var(--font-mono); font-size: 10.5px; font-weight: 700;
+  background: var(--brand-wash); color: var(--brand-deep);
+  padding: 2px 7px; border-radius: 100px;
+  letter-spacing: .04em;
+}
+.pt-opt:not(.active) .pt-save{ background: rgba(0,208,132,.18); color: var(--brand-light); }
+
+/* Alt pricing line for Performance card */
+.pricing-glassy-card .price-alt{
+  font-family: var(--font-mono); font-size: 12.5px;
+  color: var(--ink-3); font-weight: 500;
+  margin-top: 6px;
+  display: flex; align-items: center; gap: 6px;
+}
+.pricing-glassy-card .price-alt::before{ content: 'or'; color: var(--ink-4); font-style: italic; font-family: var(--font-body); }
+.pricing-glassy-card .price-alt strong{ color: var(--brand-deep); font-weight: 700; }
+
+/* Yearly hint under main price */
+.pricing-glassy-card .yearly-hint{
+  font-family: var(--font-mono); font-size: 10.5px;
+  color: var(--ink-3); margin-top: 4px;
+  letter-spacing: .02em;
+}
+.pricing-glassy-card .yearly-hint strong{ color: var(--brand-deep); font-weight: 700; }
 .pricing-glassy-card{
   position: relative;
   padding: 32px 28px;
@@ -3923,33 +3976,27 @@ section + .cta-section{ padding-top: 64px; }
   <div class="pricing-shader-fallback" id="pricingShaderFallback" style="display:none"></div>
   <div class="container">
     <div class="pricing-glassy-head reveal">
-      <h2>Free plan with <span class="accent">real value</span>.<br/>Paid plans with real results.</h2>
-      <p>7-day free trial on every paid plan. Cancel any time. No hidden rescan fees.</p>
+      <h2>Plans for every <span class="accent">Shopify catalog</span>.</h2>
+      <p>7-day free trial on every plan. Cancel any time. Score Guarantee on every paid tier.</p>
     </div>
-    <div class="pricing-glassy-grid reveal-stagger">
-      <div class="pricing-glassy-card">
-        <div class="name">Free</div>
-        <div class="sub">Scan, score, and read the report.</div>
-        <div class="price-row"><span class="price">$0</span><span class="unit">/mo</span></div>
-        <div class="limit">Up to 50 SKUs scored</div>
-        <div class="divider"></div>
-        <div class="feats">
-          <div class="feat"><span class="feat-check">✓</span><span>Global AI score + grade</span></div>
-          <div class="feat"><span class="feat-check">✓</span><span>Top 20 issues surfaced</span></div>
-          <div class="feat"><span class="feat-check">✓</span><span>Query Simulator (10 / mo)</span></div>
-          <div class="feat"><span class="feat-check">✓</span><span>Agentic Readiness Checklist</span></div>
-          <div class="feat"><span class="feat-check">✓</span><span>Shared Experiment Library (read)</span></div>
-        </div>
-        <a href="#install" class="pcta secondary">Install free</a>
+
+    <div class="pricing-toggle-wrap reveal">
+      <div class="pricing-toggle" id="pricingToggle" role="tablist">
+        <button class="pt-opt active" data-billing="monthly" role="tab">Monthly</button>
+        <button class="pt-opt" data-billing="yearly" role="tab">Yearly <span class="pt-save">-30%</span></button>
       </div>
+    </div>
+
+    <div class="pricing-glassy-grid reveal-stagger">
       <div class="pricing-glassy-card">
         <div class="name">Growth</div>
         <div class="sub">Single store, apply-fixes unlocked.</div>
-        <div class="price-row"><span class="price">$49</span><span class="unit">/mo</span></div>
+        <div class="price-row"><span class="price" data-monthly="$59" data-yearly="$41">$59</span><span class="unit">/mo</span></div>
+        <div class="yearly-hint" data-monthly-hint="" data-yearly-hint="billed yearly · <strong>$492/yr</strong>"></div>
         <div class="limit">Up to 500 SKUs</div>
         <div class="divider"></div>
         <div class="feats">
-          <div class="feat"><span class="feat-check">✓</span><span>Everything in Free</span></div>
+          <div class="feat"><span class="feat-check">✓</span><span>Full scan, score and grade</span></div>
           <div class="feat"><span class="feat-check">✓</span><span>One-Click Apply Fixes</span></div>
           <div class="feat"><span class="feat-check">✓</span><span>Bulk Fix (up to 25 SKUs)</span></div>
           <div class="feat"><span class="feat-check">✓</span><span>100 queries / mo</span></div>
@@ -3961,9 +4008,10 @@ section + .cta-section{ padding-top: 64px; }
       <div class="pricing-glassy-card popular">
         <div class="pop-badge">MOST POPULAR</div>
         <div class="name">Pro</div>
-        <div class="sub">Full catalog, unlimited fixes, guardrails.</div>
-        <div class="price-row"><span class="price">$99</span><span class="unit">/mo</span></div>
-        <div class="limit">Up to 5,000 SKUs</div>
+        <div class="sub">Mid-catalog, unlimited fixes, guardrails.</div>
+        <div class="price-row"><span class="price" data-monthly="$169" data-yearly="$118">$169</span><span class="unit">/mo</span></div>
+        <div class="yearly-hint" data-monthly-hint="" data-yearly-hint="billed yearly · <strong>$1,416/yr</strong>"></div>
+        <div class="limit">Up to 3,000 SKUs</div>
         <div class="divider"></div>
         <div class="feats">
           <div class="feat"><span class="feat-check">✓</span><span>Everything in Growth</span></div>
@@ -3978,19 +4026,21 @@ section + .cta-section{ padding-top: 64px; }
       </div>
       <div class="pricing-glassy-card">
         <div class="name">Performance</div>
-        <div class="sub">Pay only when we lift your AI revenue.</div>
-        <div class="price-row"><span class="price">5%</span><span class="unit">of AI uplift</span></div>
-        <div class="limit">$5,000 / mo cap</div>
+        <div class="sub">Large catalog, pay-on-results option.</div>
+        <div class="price-row"><span class="price" data-monthly="$499" data-yearly="$349">$499</span><span class="unit">/mo</span></div>
+        <div class="yearly-hint" data-monthly-hint="" data-yearly-hint="billed yearly · <strong>$4,188/yr</strong>"></div>
+        <div class="price-alt"><strong>5% of AI uplift</strong> · $5k/mo cap</div>
+        <div class="limit">Unlimited SKUs</div>
         <div class="divider"></div>
         <div class="feats">
           <div class="feat"><span class="feat-check">✓</span><span>Everything in Pro</span></div>
-          <div class="feat"><span class="feat-check">✓</span><span>Unlimited SKUs</span></div>
           <div class="feat"><span class="feat-check">✓</span><span>Score Guarantee +10 pts</span></div>
           <div class="feat"><span class="feat-check">✓</span><span>Causal attribution dashboard</span></div>
           <div class="feat"><span class="feat-check">✓</span><span>Dedicated account manager</span></div>
+          <div class="feat"><span class="feat-check">✓</span><span>SLA 99.9% · priority queue</span></div>
         </div>
-        <a href="#install" class="pcta secondary">Contact sales</a>
-        <div class="pricing-glassy-trial">No fee if no lift</div>
+        <a href="#install" class="pcta secondary">Start 7-day trial</a>
+        <div class="pricing-glassy-trial">7-day free trial or no fee if no lift</div>
       </div>
     </div>
   </div>
@@ -4976,6 +5026,28 @@ if (terminalBody) terminalObserver.observe(terminalBody);
       const r = kpi.getBoundingClientRect();
       kpi.style.setProperty('--mx', `${e.clientX - r.left}px`);
       kpi.style.setProperty('--my', `${e.clientY - r.top}px`);
+    });
+  });
+})();
+
+// ===== PRICING MONTHLY/YEARLY TOGGLE =====
+(function initPricingToggle(){
+  const toggle = document.getElementById('pricingToggle');
+  if (!toggle) return;
+  const prices = document.querySelectorAll('.pricing-glassy-card .price');
+  const hints = document.querySelectorAll('.pricing-glassy-card .yearly-hint');
+  toggle.querySelectorAll('.pt-opt').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const billing = btn.dataset.billing;
+      toggle.querySelectorAll('.pt-opt').forEach(b => b.classList.toggle('active', b === btn));
+      prices.forEach(p => {
+        const v = p.dataset[billing];
+        if (v) p.textContent = v;
+      });
+      hints.forEach(h => {
+        const v = billing === 'yearly' ? h.dataset.yearlyHint : h.dataset.monthlyHint;
+        h.innerHTML = v || '';
+      });
     });
   });
 })();
