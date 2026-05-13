@@ -3483,7 +3483,7 @@ section + .cta-section{ padding-top: 64px; }
 <script>
 (function(){
   // Fallback values (in case fetch fails or stats.json missing)
-  window.acsStats = { captures_total: 78527, captures_per_day: 2400, agents_count: 6, stores_benchmarked: 304 };
+  window.acsStats = { captures_total: 78527, captures_per_day: 2400, agents_count: 5, stores_benchmarked: 304 };
   // Global live-counter value — shared with the hero ticker so applyStats()
   // can override it after fetch resolves. Without this, the ticker's closure
   // would hold the stale fallback forever and override the DOM each tick.
@@ -3629,7 +3629,7 @@ section + .cta-section{ padding-top: 64px; }
         <span class="word" style="animation-delay:.75s">in one click.</span>
       </h1>
       <p class="sub">
-        AI Catalog Score audits every product against the 8 signals Shopify's Agentic Storefronts ship to ChatGPT, Claude, Gemini, Perplexity, Mistral, and DeepSeek - then rewrites what's broken, with causal proof.
+        AI Catalog Score audits every product against the 8 signals Shopify's Agentic Storefronts ship to ChatGPT, Claude, Gemini, Mistral and DeepSeek (Perplexity coming) - then rewrites what's broken, with causal proof.
       </p>
       <div class="ctas">
         <a href="#install" class="btn btn-primary">Install free on Shopify <span class="btn-arrow">→</span></a>
@@ -3718,7 +3718,7 @@ section + .cta-section{ padding-top: 64px; }
                 </svg>
                 <div class="gauge-center">
                   <div class="gauge-grade">B+</div>
-                  <div class="gauge-score"><span class="n" data-target="78">0</span>/100</div>
+                  <div class="gauge-score"><span class="n" data-target="78">78</span>/100</div>
                   <div class="gauge-trend">↑ +14 pts this week</div>
                 </div>
               </div>
@@ -3726,7 +3726,7 @@ section + .cta-section{ padding-top: 64px; }
               <div class="kpi-grid">
                 <div class="kpi">
                   <div class="kpi-label">Total SKUs</div>
-                  <div class="kpi-value" data-target="263">0</div>
+                  <div class="kpi-value" data-target="263">263</div>
                   <div class="kpi-trend neutral">↑ +14</div>
                   <svg class="kpi-spark" viewBox="0 0 60 20" preserveAspectRatio="none">
                     <path class="spark-area" d="M0,16 L8,15 L16,14 L24,12 L32,11 L40,10 L48,8 L60,7 L60,20 L0,20 Z"/>
@@ -3736,7 +3736,7 @@ section + .cta-section{ padding-top: 64px; }
                 </div>
                 <div class="kpi is-brand">
                   <div class="kpi-label">AI Ready</div>
-                  <div class="kpi-value brand-text" data-target="142">0</div>
+                  <div class="kpi-value brand-text" data-target="142">142</div>
                   <div class="kpi-trend up">↑ +47 this week</div>
                   <svg class="kpi-spark" viewBox="0 0 60 20" preserveAspectRatio="none">
                     <path class="spark-area" d="M0,17 L8,17 L16,15 L24,13 L32,10 L40,7 L48,5 L60,3 L60,20 L0,20 Z"/>
@@ -3746,7 +3746,7 @@ section + .cta-section{ padding-top: 64px; }
                 </div>
                 <div class="kpi">
                   <div class="kpi-label">Needs work</div>
-                  <div class="kpi-value warn-text" data-target="87">0</div>
+                  <div class="kpi-value warn-text" data-target="87">87</div>
                   <div class="kpi-trend up">↓ -33</div>
                   <svg class="kpi-spark" viewBox="0 0 60 20" preserveAspectRatio="none">
                     <path class="spark-area" d="M0,4 L8,5 L16,7 L24,8 L32,10 L40,12 L48,15 L60,17 L60,20 L0,20 Z"/>
@@ -3756,7 +3756,7 @@ section + .cta-section{ padding-top: 64px; }
                 </div>
                 <div class="kpi">
                   <div class="kpi-label">Critical</div>
-                  <div class="kpi-value crit-text" data-target="12">0</div>
+                  <div class="kpi-value crit-text" data-target="12">12</div>
                   <div class="kpi-trend up">↓ -8</div>
                   <svg class="kpi-spark" viewBox="0 0 60 20" preserveAspectRatio="none">
                     <path class="spark-area" d="M0,4 L8,5 L16,7 L24,9 L32,11 L40,14 L48,16 L60,18 L60,20 L0,20 Z"/>
@@ -4173,26 +4173,30 @@ section + .cta-section{ padding-top: 64px; }
 <section style="padding:48px 0;border-bottom:1px solid var(--border)">
   <div class="container text-center">
     <div class="mono" style="font-size:11px;color:var(--ink-4);letter-spacing:.18em;text-transform:uppercase;margin-bottom:28px">
-      Built for Shopify DTC merchants
+      10 DTC verticals modeled · per-category baselines &amp; benchmarks
     </div>
     <div class="ticker-wrap">
       <div class="ticker">
-        <span class="ticker-item" style="letter-spacing:.14em;font-weight:500">MERIDIAN SUPPLY</span>
-        <span class="ticker-item" style="font-family:Georgia,serif">Northwind Ceramics</span>
-        <span class="ticker-item" style="font-weight:700;letter-spacing:.06em">FÖLD·WORK</span>
-        <span class="ticker-item">Harborstone &amp; Co.</span>
-        <span class="ticker-item" style="letter-spacing:.12em;font-weight:400">atelier boreal</span>
-        <span class="ticker-item">GRAVEL HOUSE</span>
-        <span class="ticker-item" style="font-family:Georgia,serif">Maison Vernay</span>
-        <span class="ticker-item" style="letter-spacing:.18em">SIGNAL · GOODS</span>
-        <span class="ticker-item" style="letter-spacing:.14em;font-weight:500">MERIDIAN SUPPLY</span>
-        <span class="ticker-item" style="font-family:Georgia,serif">Northwind Ceramics</span>
-        <span class="ticker-item" style="font-weight:700;letter-spacing:.06em">FÖLD·WORK</span>
-        <span class="ticker-item">Harborstone &amp; Co.</span>
-        <span class="ticker-item" style="letter-spacing:.12em;font-weight:400">atelier boreal</span>
-        <span class="ticker-item">GRAVEL HOUSE</span>
-        <span class="ticker-item" style="font-family:Georgia,serif">Maison Vernay</span>
-        <span class="ticker-item" style="letter-spacing:.18em">SIGNAL · GOODS</span>
+        <span class="ticker-item" style="letter-spacing:.14em">Apparel</span>
+        <span class="ticker-item">Beauty</span>
+        <span class="ticker-item" style="letter-spacing:.12em">Home &amp; Decor</span>
+        <span class="ticker-item">Electronics</span>
+        <span class="ticker-item" style="letter-spacing:.14em">Fitness</span>
+        <span class="ticker-item">Food &amp; Beverage</span>
+        <span class="ticker-item" style="letter-spacing:.12em">Pets</span>
+        <span class="ticker-item">Baby</span>
+        <span class="ticker-item" style="letter-spacing:.14em">Outdoor</span>
+        <span class="ticker-item">Gifts</span>
+        <span class="ticker-item" style="letter-spacing:.14em">Apparel</span>
+        <span class="ticker-item">Beauty</span>
+        <span class="ticker-item" style="letter-spacing:.12em">Home &amp; Decor</span>
+        <span class="ticker-item">Electronics</span>
+        <span class="ticker-item" style="letter-spacing:.14em">Fitness</span>
+        <span class="ticker-item">Food &amp; Beverage</span>
+        <span class="ticker-item" style="letter-spacing:.12em">Pets</span>
+        <span class="ticker-item">Baby</span>
+        <span class="ticker-item" style="letter-spacing:.14em">Outdoor</span>
+        <span class="ticker-item">Gifts</span>
       </div>
     </div>
   </div>
@@ -4209,7 +4213,7 @@ section + .cta-section{ padding-top: 64px; }
         </div>
         <div>
           <p style="font-size:16px;line-height:1.65">
-            Shopify already ships your catalog to ChatGPT, Claude, Gemini, Perplexity, Mistral and DeepSeek. They decide - on behalf of the shopper - which brand gets the placement. <strong style="color:var(--ink-0)">First-movers compound. Late-movers pay 3-4× to catch up.</strong>
+            Shopify already ships your catalog to ChatGPT, Claude, Gemini, Mistral and DeepSeek (Perplexity coming). They decide - on behalf of the shopper - which brand gets the placement. <strong style="color:var(--ink-0)">First-movers compound. Late-movers pay 3-4× to catch up.</strong>
           </p>
         </div>
       </div>
@@ -4217,7 +4221,7 @@ section + .cta-section{ padding-top: 64px; }
     <div class="stat-grid reveal-stagger" id="statGrid">
       <div class="card stat-tile">
         <span class="stat-tag"><span class="tag-dot"></span>AGENTIC TRAFFIC</span>
-        <div class="big num" data-count="700" data-suffix="%" data-prefix="+">+0%</div>
+        <div class="big num" data-count="700" data-suffix="%" data-prefix="+">+700%</div>
         <div class="sub">AI traffic to Shopify stores, trailing 12 months.</div>
         <div class="foot">Source: Shopify Merchant Insights, Q1 2026</div>
         <div class="stat-viz">
@@ -4244,9 +4248,9 @@ section + .cta-section{ padding-top: 64px; }
 
       <div class="card stat-tile highlight">
         <span class="stat-tag"><span class="tag-dot"></span>CATALOG GAP</span>
-        <div class="big num" data-count="41" data-suffix="%">0%</div>
+        <div class="big num" data-count="41" data-suffix="%">41%</div>
         <div class="sub">of Shopify products are invisible to at least one major AI shopping agent.</div>
-        <div class="foot">Benchmarked across 898 public Shopify catalogs</div>
+        <div class="foot">Benchmarked across 304 public Shopify catalogs · 10 verticals</div>
         <div class="stat-viz">
           <div class="stat-fill-bar">
             <div class="filled"><span class="filled-pct">41%</span></div>
@@ -4261,7 +4265,7 @@ section + .cta-section{ padding-top: 64px; }
 
       <div class="card stat-tile">
         <span class="stat-tag"><span class="tag-dot"></span>OPEN DATASET</span>
-        <div class="big num" data-count="79" data-suffix="k+">0</div>
+        <div class="big num" data-count="79" data-suffix="k+">79k+</div>
         <div class="sub">Ground-truth captures across 6 AI shopping agents in our open dataset.</div>
         <div class="foot">Updated 2× daily · github.com/commerce-agentic</div>
         <div class="stat-viz">
@@ -4284,8 +4288,8 @@ section + .cta-section{ padding-top: 64px; }
     <!-- LIVE SCENARIOS - while you read this -->
     <div class="live-scenarios reveal">
       <div class="ls-head">
-        <span class="ls-title"><span class="live-dot"></span> While you read this</span>
-        <span class="ls-counter"><span class="num">4.2M</span> product recommendations made by AI agents per day · estimated <span class="num">0.3%</span> mention rate for unoptimized Shopify stores</span>
+        <span class="ls-title"><span class="live-dot"></span> Examples from our open dataset</span>
+        <span class="ls-counter">Real captures from our public CC0 pipeline · <span class="num">79k+</span> in dataset · 5 agents tracked daily</span>
       </div>
       <div class="ls-viewport">
         <div class="ls-track">
@@ -4323,9 +4327,9 @@ section + .cta-section{ padding-top: 64px; }
     <div class="lockout-callout reveal">
       <div class="lockout-icon">⚠</div>
       <div class="lockout-body">
-        <span class="lockout-tag">Compounding Disadvantage</span>
-        <div class="lockout-title">The window is closing. Every week you wait, the gap gets harder to close.</div>
-        <div class="lockout-sub">Once a competitor ranks for <strong>"best [your category]"</strong> in ChatGPT, they keep the mention rate. AI agents learn from past recommendations - late movers don't just lose today's sales, they lose <strong>the compounding interest of being first</strong>.</div>
+        <span class="lockout-tag">First-mover advantage</span>
+        <div class="lockout-title">AI rankings compound. Brands that optimize first tend to hold their position.</div>
+        <div class="lockout-sub">Once a brand earns a mention rate in ChatGPT for <strong>"best [category]"</strong>, agents reinforce that recommendation in subsequent responses. <strong>It's easier to defend a position than to displace one.</strong> Optimizing your catalog now is the cheapest move you'll make this year.</div>
       </div>
       <a href="#install" class="lo-cta"><span>Find out where you stand · free 60s scan</span><span class="lo-arrow">→</span></a>
     </div>
@@ -4385,21 +4389,21 @@ section + .cta-section{ padding-top: 64px; }
           </div>
           <span class="moat-tag"><span class="tag-dot"></span>Multi-agent</span>
         </div>
-        <div class="title">All 6 AI agents. Captured at the same moment.</div>
+        <div class="title">5 AI agents. Captured at the same moment.</div>
         <div class="body">
-          ChatGPT, Claude, Gemini, Perplexity, Mistral, DeepSeek - queried <strong>synchronously</strong>, 2,400 times a day. Every other tool captures one agent at a time, hours apart, then compares results <em>that aren't comparable</em>. <strong>You can't optimize for what you can't see - fairly.</strong>
+          ChatGPT, Claude, Gemini, Mistral, DeepSeek - queried <strong>synchronously</strong>, 2,400 times a day. <strong>Perplexity joins Q3.</strong> Every other tool captures one agent at a time, hours apart, then compares results <em>that aren't comparable</em>. You can't optimize for what you can't see - fairly.
         </div>
         <div class="moat-viz moat-viz-agents">
           <span class="agent-mini" title="ChatGPT" style="background:linear-gradient(135deg,#10A37F,#1A7F64)">C</span>
           <span class="agent-mini" title="Claude" style="background:linear-gradient(135deg,#D97757,#B85F3F)">A</span>
           <span class="agent-mini" title="Gemini" style="background:linear-gradient(135deg,#4285F4,#2D63D3)">G</span>
-          <span class="agent-mini" title="Perplexity" style="background:linear-gradient(135deg,#1A8FA0,#0F6973)">P</span>
           <span class="agent-mini" title="Mistral" style="background:linear-gradient(135deg,#FA520F,#C13D03)">M</span>
           <span class="agent-mini" title="DeepSeek" style="background:linear-gradient(135deg,#4D6BFE,#2D4AC8)">D</span>
+          <span class="agent-mini" title="Perplexity (Q3 2026)" style="background:linear-gradient(135deg,#1A8FA0,#0F6973);opacity:.45;position:relative">P<span style="position:absolute;bottom:-3px;right:-4px;background:var(--ink-0);color:var(--brand-light);font-size:7px;padding:1px 3px;border-radius:3px;font-family:var(--font-mono);font-weight:700;letter-spacing:.04em">Q3</span></span>
         </div>
         <div class="vs-them">
           <span class="vs-label">VS competitors</span>
-          <strong>Profound:</strong> 3 agents · <strong>Athena AI:</strong> ChatGPT only · <strong>Generic SEO:</strong> Google only
+          <strong>Profound:</strong> 3 agents · <strong>Athena AI:</strong> ChatGPT only · <strong>ShopRank:</strong> 4 dimensions · <strong>Generic SEO:</strong> Google only
         </div>
       </div>
 
@@ -4448,7 +4452,7 @@ section + .cta-section{ padding-top: 64px; }
         <div class="moat-viz moat-viz-fee">
           <div class="fee-tile">
             <div class="fee-label">Other apps</div>
-            <div class="fee-val">$99–499/mo</div>
+            <div class="fee-val">$49–499/mo</div>
           </div>
           <div class="fee-tile us">
             <div class="fee-label">AI Catalog Score</div>
@@ -4457,7 +4461,7 @@ section + .cta-section{ padding-top: 64px; }
         </div>
         <div class="vs-them">
           <span class="vs-label">VS competitors</span>
-          Every other Shopify AI app charges <strong>fixed SaaS regardless of results.</strong> No skin in the game.
+          <strong>40rty</strong> $49-499/mo · <strong>ShopRank</strong> $9.99/100 SKUs · <strong>SKAW</strong> $19.99/mo · all fixed SaaS regardless of results. No skin in the game.
         </div>
       </div>
 
@@ -4533,28 +4537,28 @@ section + .cta-section{ padding-top: 64px; }
         </div>
         <div class="title">Every merchant makes the score smarter.</div>
         <div class="body">
-          We benchmark across <strong>304 Shopify stores today</strong>, growing to 20k+ within 90 days. Every catalog scanned sharpens our per-vertical baselines. Every A/B run feeds the <strong>Shared Experiment Library</strong>. <strong>The product gets better the more merchants we have.</strong> Static rule-based scoring tools don't.
+          We benchmark across <strong>304 Shopify catalogs today</strong>, growing daily. Every scan sharpens our per-vertical baselines (10 verticals modeled). Every A/B run feeds the <strong>Shared Experiment Library</strong>. <strong>The product gets better the more merchants we have.</strong> Static rule-based scoring tools don't.
         </div>
         <div class="moat-viz moat-viz-network">
           <div class="ne-tile now">
             <div class="ne-grid"></div>
             <div class="ne-content">
-              <div class="ne-label">Today</div>
+              <div class="ne-label">Catalogs</div>
               <div class="ne-num">304</div>
             </div>
           </div>
           <div class="ne-tile mid">
             <div class="ne-grid"></div>
             <div class="ne-content">
-              <div class="ne-label">30 days</div>
-              <div class="ne-num">20k</div>
+              <div class="ne-label">Captures</div>
+              <div class="ne-num">79k+</div>
             </div>
           </div>
           <div class="ne-tile future">
             <div class="ne-grid"></div>
             <div class="ne-content">
-              <div class="ne-label">90 days</div>
-              <div class="ne-num">50k</div>
+              <div class="ne-label">Verticals</div>
+              <div class="ne-num">10</div>
             </div>
           </div>
         </div>
@@ -4635,7 +4639,7 @@ section + .cta-section{ padding-top: 64px; }
         <div class="guarantee-pill">Score Guarantee <span class="gsub">+10 pts in 30 days, or refund</span></div>
         <div class="divider"></div>
         <div class="feats">
-          <div class="feat"><span class="feat-check">✓</span><span>Catalog scored against <strong>all 6 AI agents</strong> daily</span></div>
+          <div class="feat"><span class="feat-check">✓</span><span>Catalog scored against <strong>5 AI agents</strong> daily (Perplexity Q3)</span></div>
           <div class="feat"><span class="feat-check">✓</span><span>Full 8-dimension AI Catalog Score</span></div>
           <div class="feat"><span class="feat-check">✓</span><span>One-Click Apply Fixes - approve before anything ships</span></div>
           <div class="feat"><span class="feat-check">✓</span><span>Fix up to 25 products at once (Bulk Fix)</span></div>
@@ -4712,8 +4716,8 @@ section + .cta-section{ padding-top: 64px; }
     <div class="bento reveal-stagger" id="bentoGrid">
       <div class="bento-cell wide gradient">
         <div class="label">CROSS-AGENT</div>
-        <h3 class="big">6 AI agents,<br/>one ground truth.</h3>
-        <p>Daily capture of recommendations from ChatGPT, Gemini, Claude, Mistral, DeepSeek. Single-agent SEO is dead.</p>
+        <h3 class="big">5 AI agents,<br/>one ground truth.</h3>
+        <p>Daily capture of recommendations from ChatGPT, Gemini, Claude, Mistral, DeepSeek. <strong style="color:var(--ink-0)">Perplexity joins Q3 2026.</strong> Single-agent SEO is dead.</p>
         <div class="visual">
           <div class="viz-bars">
             <span style="height:78%; --bar-d:.4s"></span>
@@ -4733,7 +4737,7 @@ section + .cta-section{ padding-top: 64px; }
       </div>
       <div class="bento-cell">
         <div class="label">SCALE</div>
-        <div class="stat-big num" data-target="79000" style="margin-top:18px">0</div>
+        <div class="stat-big num" data-target="79000" style="margin-top:18px">79k+</div>
         <p>captures in our open dataset, growing by <span style="color:var(--brand-deep);font-weight:700;font-family:var(--font-mono)">+2.4k/day</span>.</p>
         <div class="visual">
           <svg class="viz-spark" viewBox="0 0 200 56" preserveAspectRatio="none">
@@ -4780,7 +4784,7 @@ section + .cta-section{ padding-top: 64px; }
 &nbsp;&nbsp;description: <span class="c-brand">"Waterproof…"</span>,<br/>
 &nbsp;&nbsp;images: [{ alt: <span class="c-brand">"Side view"</span> }]<br/>
 });<br/>
-<span class="c-comment">// → { totalScore: 82, grade: "A" }</span>
+<span class="c-comment">// → { totalScore: 82, grade: "B+" }</span>
           </div>
         </div>
       </div>
@@ -4932,12 +4936,12 @@ section + .cta-section{ padding-top: 64px; }
 
       <div class="faq-item">
         <button class="faq-q" type="button"><span>How is this different from generic SEO tools?</span><span class="arrow">›</span></button>
-        <div class="faq-a">SEO tools (Yoast, Ahrefs, SurferSEO) measure how Google's search crawler ranks pages. We measure what AI shopping agents (ChatGPT, Claude, Gemini, Perplexity, Mistral, DeepSeek) actually recommend when a shopper asks them. The two systems share some signals (structured data, alt text) but weight them very differently. SEO tools also can't tell you which products are missing from agent answers - we can.</div>
+        <div class="faq-a">SEO tools (Yoast, Ahrefs, SurferSEO) measure how Google's search crawler ranks pages. We measure what AI shopping agents (ChatGPT, Claude, Gemini, Mistral, DeepSeek - Perplexity joining Q3) actually recommend when a shopper asks them. The two systems share some signals (structured data, alt text) but weight them very differently. SEO tools also can't tell you which products are missing from agent answers - we can.</div>
       </div>
 
       <div class="faq-item">
         <button class="faq-q" type="button"><span>How is this different from Profound, Athena AI, or ShopRank?</span><span class="arrow">›</span></button>
-        <div class="faq-a">Three structural differences: (1) we capture all <strong>6 AI agents synchronously</strong> on the same query - Profound watches 2-3, Athena watches ChatGPT only, ShopRank uses 4 dimensions vs our 8; (2) we <strong>prove fixes worked causally</strong> with DiD + Welch's t-test (p &lt; 0.05) - they use observational attribution; (3) we offer a <strong>money-back Score Guarantee</strong> - none of them do. Plus our scoring methodology is CC0 open source; theirs is closed.</div>
+        <div class="faq-a">Three structural differences: (1) we capture <strong>5 AI agents synchronously</strong> on the same query (Perplexity coming Q3) - Profound watches 2-3, Athena AI watches ChatGPT only, ShopRank uses 4 dimensions vs our 8; (2) we <strong>prove fixes worked causally</strong> with DiD + Welch's t-test (p &lt; 0.05) - they use observational attribution; (3) we offer a <strong>money-back Score Guarantee</strong> - none of them do. Pricing comparison: 40rty $49-499/mo fixed · ShopRank $9.99/100 SKUs · SKAW $19.99/mo · AI Catalog Score $59-499 with Performance tier at 5% of uplift (zero if no lift). Plus our scoring methodology is CC0 open source; theirs is closed.</div>
       </div>
 
       <div class="faq-item">
@@ -4947,7 +4951,7 @@ section + .cta-section{ padding-top: 64px; }
 
       <div class="faq-item">
         <button class="faq-q" type="button"><span>What if my catalog is already AI-optimized?</span><span class="arrow">›</span></button>
-        <div class="faq-a">Run the free 60-second scan first. If your score is already <strong>A+ (90 or above)</strong> across all 8 dimensions and 6 agents, you genuinely don't need us - we'll tell you that and suggest audit-only tier ($0). In practice, the average self-reported "optimized" catalog scores <strong>B- to C+</strong> on first scan. Agentic commerce signals (JSON-LD product schema, metafield completeness, multi-agent reviews) are different enough from classic SEO that very few merchants are actually optimized for both.</div>
+        <div class="faq-a">Run the free 60-second scan first. If your score is already <strong>A+ (90 or above)</strong> across all 8 dimensions and 5 agents, you genuinely don't need us - we'll tell you that and suggest audit-only tier ($0). In practice, the average self-reported "optimized" catalog scores <strong>B- to C+</strong> on first scan. Agentic commerce signals (JSON-LD product schema, metafield completeness, multi-agent reviews) are different enough from classic SEO that very few merchants are actually optimized for both.</div>
       </div>
 
       <div class="faq-item">
@@ -4957,7 +4961,26 @@ section + .cta-section{ padding-top: 64px; }
 
       <div class="faq-item">
         <button class="faq-q" type="button"><span>How does the 5% Performance pricing actually get billed?</span><span class="arrow">›</span></button>
-        <div class="faq-a">We measure your <strong>AI-attributed revenue</strong> (sessions and orders coming from ChatGPT, Claude, Gemini, Perplexity, Mistral, DeepSeek - identified via referrer + UTM patterns) over a 30-day baseline before activation, then monthly after. The 5% only applies to the <strong>uplift</strong> over baseline, capped at $5,000/month. If sessions don't grow, your bill is $0. The causal model is public - you can verify our math.</div>
+        <div class="faq-a">We measure your <strong>AI-attributed revenue</strong> (sessions and orders coming from ChatGPT, Claude, Gemini, Mistral, DeepSeek - identified via referrer signals + User-Agent patterns + UTM matching) over a 30-day baseline before activation, then monthly after. The 5% only applies to the <strong>uplift</strong> over baseline, capped at $5,000/month. If sessions don't grow, your bill is $0. The causal model and attribution logic is documented in our open spec - you can verify our math.</div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" type="button"><span>How exactly do you attribute traffic to AI agents?</span><span class="arrow">›</span></button>
+        <div class="faq-a">
+          AI agent attribution is harder than classic web analytics because referrers are inconsistent. We use a <strong>3-signal stack</strong>: (1) <code>?utm_source=chatgpt</code>-style explicit UTMs when agents pass them; (2) <strong>User-Agent matching</strong> for known agent crawlers (<code>OAI-SearchBot</code>, <code>PerplexityBot</code>, <code>ClaudeBot</code>, <code>Google-Extended</code>, <code>Mistral-AI</code>, <code>DeepSeek-Crawler</code>); (3) <strong>temporal correlation</strong> with our ground-truth captures - when our pipeline records a recommendation of your product at time T and your store gets a session referrer-less or with a generic referrer within ±10 minutes, we attribute it. <br/><br/>
+          <strong>Honest about limits:</strong> we capture roughly <strong>60-80% of AI-attributed traffic</strong>. Some agent outputs don't leave a trail at all (voice, screenshot, copy-paste). We err conservative, so our 5% performance fee is calculated on what we can prove - never inflated. The full methodology is in the CC0 spec.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" type="button"><span>If your methodology is open source, why pay you?</span><span class="arrow">›</span></button>
+        <div class="faq-a">
+          Fair question. Yes, you can read our CC0 spec, fork our MIT skills, and self-audit your catalog manually. That's the point - we don't want to hostage you. What you pay for is <strong>tooling, automation, and proof</strong>:
+          <br/><br/>
+          <strong>(1) Multi-agent synchronous capture</strong> - querying all 5 agents at the same moment, 2,400 times a day, on the same query. Trivial to describe, ~80-120h of infra to build (rate-limits, retries, billing, agent API differences). <strong>(2) The dataset itself</strong> - 79k+ captures grow by 2,400/day, you can read it but you can't recreate it without our pipeline running for months. <strong>(3) The causal A/B framework</strong> - DiD + Welch's t-test on session deltas, control split, p-value reporting. Doable but ~40h of stats work. <strong>(4) Apply-into-Shopify</strong> - reading the spec is easy, but writing automated fixes with dry_run guardrails, audit journaling, 30-day undo, GDPR compliance is real product work. <strong>(5) Score Guarantee</strong> - we put +10 pts/30 days in the ToS. No one self-auditing has a refund mechanism on themselves.
+          <br/><br/>
+          Plenty of merchants will read the spec and self-fix. We're betting most prefer to pay the tooling fee and skip the build.
+        </div>
       </div>
 
       <div class="faq-item">
@@ -5013,9 +5036,9 @@ section + .cta-section{ padding-top: 64px; }
       <div class="cta-inner">
         <div class="cta-content">
           <h2>Ready to ship <span class="accent">AI-ready catalogs</span>?</h2>
-          <p>Get scored against the same 6 AI agents that already shape catalog visibility - ChatGPT, Claude, Gemini, Perplexity, Mistral, DeepSeek. Install in 90 seconds.</p>
+          <p>Get scored against the same 5 AI agents that already shape catalog visibility - ChatGPT, Claude, Gemini, Mistral, DeepSeek (+ Perplexity coming Q3). Install in 90 seconds.</p>
           <div class="ctas">
-            <a href="#" class="btn btn-primary">Install free on Shopify <span class="btn-arrow">→</span></a>
+            <a href="#install" class="btn btn-primary">Install free on Shopify <span class="btn-arrow">→</span></a>
             <a href="https://github.com/commerce-agentic" class="btn btn-dark-outline" target="_blank" rel="noopener">View on GitHub <span class="btn-arrow">↗</span></a>
           </div>
           <div class="micro">FREE PLAN · NO CREDIT CARD · OPEN METHODOLOGY (CC0)</div>
@@ -5068,9 +5091,8 @@ section + .cta-section{ padding-top: 64px; }
       <div class="footer-col">
         <div class="footer-col-title">Company</div>
         <div class="stack-12">
-          <a href="mailto:support@aicatalogscore.com">Contact</a>
-          <a href="#">Security</a>
-          <a href="#">About</a>
+          <a href="mailto:hello@aicatalogscore.com">Contact</a>
+          <a href="https://github.com/commerce-agentic" target="_blank" rel="noopener">GitHub</a>
         </div>
       </div>
       <div class="footer-col">
