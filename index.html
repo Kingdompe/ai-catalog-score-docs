@@ -1935,6 +1935,85 @@ section{ position: relative; }
 .moat-viz-open .lic.mit{ color: var(--accent-blue); border-color: rgba(37,99,235,.25); background: var(--accent-blue-wash); }
 .moat-viz-open .lic .lic-icon{ font-size: 12px; }
 
+/* Moat 5: Score Guarantee — ring + checklist */
+.moat-viz-guarantee{
+  display: grid; grid-template-columns: 84px 1fr; gap: 16px; align-items: center;
+}
+.moat-viz-guarantee .gring{
+  position: relative; width: 84px; height: 84px;
+}
+.moat-viz-guarantee .gring svg{ width: 100%; height: 100%; transform: rotate(-90deg); }
+.moat-viz-guarantee .gtrack{ fill: none; stroke: var(--bg-sunk); stroke-width: 7; }
+.moat-viz-guarantee .gfill{
+  fill: none; stroke-width: 7; stroke-linecap: round;
+  stroke-dasharray: 226.2; stroke-dashoffset: 226.2;
+  transition: stroke-dashoffset 1.4s cubic-bezier(.2,.8,.2,1) .6s;
+  filter: drop-shadow(0 0 4px rgba(0,208,132,.4));
+}
+.why-card.in-view .gfill{ stroke-dashoffset: 22.62; }
+.moat-viz-guarantee .gcenter{
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+}
+.moat-viz-guarantee .gnum{
+  font-family: var(--font-display); font-size: 22px;
+  font-weight: 600; color: var(--brand-deep); line-height: 1; letter-spacing: -.02em;
+}
+.moat-viz-guarantee .glabel{
+  font-family: var(--font-mono); font-size: 8px;
+  color: var(--ink-3); font-weight: 700; letter-spacing: .08em;
+  margin-top: 3px;
+}
+.moat-viz-guarantee .gmeta{
+  display: flex; flex-direction: column; gap: 6px;
+  font-size: 13px; color: var(--ink-2);
+}
+.moat-viz-guarantee .gmeta .gm-row{
+  display: flex; align-items: center; gap: 8px;
+}
+.moat-viz-guarantee .gmeta .gm-row::before{
+  content: '✓'; color: var(--brand-deep); font-weight: 700;
+}
+
+/* Moat 6: Data network effect — growth trajectory */
+.moat-viz-network{
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;
+}
+.moat-viz-network .ne-tile{
+  padding: 10px 8px; border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--bg-sunk);
+  text-align: center;
+  position: relative; overflow: hidden;
+}
+.moat-viz-network .ne-tile.now{
+  background: linear-gradient(135deg, var(--brand-wash), transparent);
+  border-color: rgba(0,208,132,.35);
+}
+.moat-viz-network .ne-label{
+  font-family: var(--font-mono); font-size: 9px;
+  letter-spacing: .12em; text-transform: uppercase;
+  color: var(--ink-3); font-weight: 700;
+}
+.moat-viz-network .ne-num{
+  font-family: var(--font-display); font-size: 18px;
+  font-weight: 700; letter-spacing: -.02em;
+  margin-top: 4px; line-height: 1;
+}
+.moat-viz-network .ne-tile.now .ne-num{ color: var(--brand-deep); }
+.moat-viz-network .ne-tile.future .ne-num{ color: var(--ink-3); }
+.moat-viz-network .ne-tile.future .ne-num::before{ content: '→ '; color: var(--ink-4); }
+.moat-viz-network .ne-grid{
+  position: absolute; inset: 0;
+  background-image: radial-gradient(rgba(0,208,132,.3) 1px, transparent 1px);
+  pointer-events: none;
+  opacity: 0;
+}
+.moat-viz-network .ne-tile.now .ne-grid{ background-size: 6px 6px; opacity: .6; }
+.moat-viz-network .ne-tile.mid .ne-grid{ background-size: 4px 4px; opacity: .35; background-image: radial-gradient(rgba(0,208,132,.25) 1px, transparent 1px); }
+.moat-viz-network .ne-tile.future .ne-grid{ background-size: 3px 3px; opacity: .25; background-image: radial-gradient(rgba(0,208,132,.2) 1px, transparent 1px); }
+.moat-viz-network .ne-content{ position: relative; z-index: 1; }
+
 /* ============ COMPARISON ============ */
 .compare-section{ border-top: 1px solid var(--border); position: relative; overflow: hidden; }
 .compare-section::before{
@@ -3639,9 +3718,9 @@ section{ position: relative; }
           </div>
           <span class="moat-tag"><span class="tag-dot"></span>Multi-agent</span>
         </div>
-        <div class="title">We watch all 6 AI agents — no one else does.</div>
+        <div class="title">All 6 AI agents. Captured at the same moment.</div>
         <div class="body">
-          ChatGPT, Claude, Gemini, Perplexity, Mistral, DeepSeek — every day. Your visibility report covers the whole picture. <strong>You can't optimize for what you can't see.</strong>
+          ChatGPT, Claude, Gemini, Perplexity, Mistral, DeepSeek — queried <strong>synchronously</strong>, 2,400 times a day. Every other tool captures one agent at a time, hours apart, then compares results <em>that aren't comparable</em>. <strong>You can't optimize for what you can't see — fairly.</strong>
         </div>
         <div class="moat-viz moat-viz-agents">
           <span class="agent-mini" title="ChatGPT" style="background:linear-gradient(135deg,#10A37F,#1A7F64)">C</span>
@@ -3734,6 +3813,87 @@ section{ position: relative; }
         <div class="vs-them">
           <span class="vs-label">VS competitors</span>
           <strong>Closed source.</strong> Their score = their secret. You leave, you lose everything.
+        </div>
+      </div>
+
+      <!-- MOAT 5: Score Guarantee -->
+      <div class="card why-card" id="moat-5">
+        <div class="why-card-head">
+          <div class="icon">
+            <svg viewBox="0 0 24 24"><path d="M12 2L3 6v6c0 5 4 9 9 10 5-1 9-5 9-10V6l-9-4z"/><path d="M9 12l2 2 4-4"/></svg>
+          </div>
+          <span class="moat-tag"><span class="tag-dot"></span>Score Guarantee</span>
+        </div>
+        <div class="title">+10 points in 30 days, or your money back.</div>
+        <div class="body">
+          The only Shopify AI app that puts the guarantee <strong>in the Terms of Service</strong>, not the marketing copy. If your AI Catalog Score doesn't lift by at least +10 points within 30 days of activation, every dollar comes back. No fine print.
+        </div>
+        <div class="moat-viz moat-viz-guarantee">
+          <div class="gring">
+            <svg viewBox="0 0 80 80">
+              <defs>
+                <linearGradient id="whyGuarGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="var(--brand)"/>
+                  <stop offset="100%" stop-color="var(--brand-deep)"/>
+                </linearGradient>
+              </defs>
+              <circle class="gtrack" cx="40" cy="40" r="36"/>
+              <circle class="gfill" cx="40" cy="40" r="36" stroke="url(#whyGuarGrad)"/>
+            </svg>
+            <div class="gcenter">
+              <div class="gnum">+10</div>
+              <div class="glabel">PTS · 30 D</div>
+            </div>
+          </div>
+          <div class="gmeta">
+            <div class="gm-row">Written in ToS v1.0</div>
+            <div class="gm-row">Full refund, no questions</div>
+          </div>
+        </div>
+        <div class="vs-them">
+          <span class="vs-label">VS competitors</span>
+          <strong>None offer a money-back guarantee.</strong> They charge regardless of whether their fixes actually moved your score.
+        </div>
+      </div>
+
+      <!-- MOAT 6: Data network effect -->
+      <div class="card why-card" id="moat-6">
+        <div class="why-card-head">
+          <div class="icon">
+            <svg viewBox="0 0 24 24"><circle cx="6" cy="6" r="2"/><circle cx="18" cy="6" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="6" cy="18" r="2"/><circle cx="18" cy="18" r="2"/><path d="M6 8v8M18 8v8M8 6h8M8 18h8M7.5 7.5l3 3M16.5 7.5l-3 3M7.5 16.5l3-3M16.5 16.5l-3-3"/></svg>
+          </div>
+          <span class="moat-tag"><span class="tag-dot"></span>Network effect</span>
+        </div>
+        <div class="title">Every merchant makes the score smarter.</div>
+        <div class="body">
+          We benchmark across <strong>304 Shopify stores today</strong>, growing to 20k+ within 90 days. Every catalog scanned sharpens our per-vertical baselines. Every A/B run feeds the <strong>Shared Experiment Library</strong>. <strong>The product gets better the more merchants we have.</strong> Static rule-based scoring tools don't.
+        </div>
+        <div class="moat-viz moat-viz-network">
+          <div class="ne-tile now">
+            <div class="ne-grid"></div>
+            <div class="ne-content">
+              <div class="ne-label">Today</div>
+              <div class="ne-num">304</div>
+            </div>
+          </div>
+          <div class="ne-tile mid">
+            <div class="ne-grid"></div>
+            <div class="ne-content">
+              <div class="ne-label">30 days</div>
+              <div class="ne-num">20k</div>
+            </div>
+          </div>
+          <div class="ne-tile future">
+            <div class="ne-grid"></div>
+            <div class="ne-content">
+              <div class="ne-label">90 days</div>
+              <div class="ne-num">50k</div>
+            </div>
+          </div>
+        </div>
+        <div class="vs-them">
+          <span class="vs-label">VS competitors</span>
+          <strong>Static scoring rules.</strong> They don't get smarter as they scale — we do. Every new customer compounds our edge.
         </div>
       </div>
 
