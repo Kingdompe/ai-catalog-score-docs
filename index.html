@@ -2771,8 +2771,61 @@ section + .cta-section{ padding-top: 64px; }
   font-family: var(--font-mono); font-size: 10.5px;
   color: var(--ink-3); margin-top: 4px;
   letter-spacing: .02em;
+  min-height: 14px;
 }
 .pricing-glassy-card .yearly-hint strong{ color: var(--brand-deep); font-weight: 700; }
+.pricing-glassy-card .yearly-hint .save-pill{
+  display: inline-block;
+  background: var(--brand-wash); color: var(--brand-deep);
+  padding: 1px 8px; border-radius: 100px;
+  font-weight: 700; margin-left: 4px;
+}
+
+/* Founding member ribbon */
+.pricing-glassy-card .founding-ribbon{
+  display: inline-flex; align-items: center; gap: 6px;
+  align-self: flex-start;
+  margin-bottom: 14px;
+  padding: 5px 10px;
+  background: linear-gradient(135deg, rgba(245,158,11,.18), rgba(245,158,11,.06));
+  border: 1px solid rgba(245,158,11,.35);
+  border-radius: 100px;
+  font-family: var(--font-mono); font-size: 9.5px; font-weight: 700;
+  color: #B97A04; letter-spacing: .12em; text-transform: uppercase;
+}
+.pricing-glassy-card .founding-ribbon::before{
+  content: ''; width: 6px; height: 6px; border-radius: 50%;
+  background: var(--warn);
+  box-shadow: 0 0 0 0 rgba(245,158,11,.5);
+  animation: barPulse 1.6s ease-in-out infinite;
+}
+.pricing-glassy-card .founding-sub{
+  font-family: var(--font-mono); font-size: 10.5px;
+  color: var(--ink-3); margin-top: 6px;
+  letter-spacing: .02em;
+}
+.pricing-glassy-card .founding-sub strong{
+  color: var(--ink-1); text-decoration: line-through; text-decoration-color: var(--ink-4); font-weight: 600;
+}
+
+/* Score Guarantee badge inside each card */
+.pricing-glassy-card .guarantee-pill{
+  display: inline-flex; align-items: center; gap: 6px;
+  margin-top: 14px; padding: 8px 12px;
+  background: linear-gradient(135deg, var(--brand-wash), transparent);
+  border: 1px solid rgba(0,208,132,.3);
+  border-radius: 10px;
+  font-family: var(--font-mono); font-size: 11px; font-weight: 700;
+  color: var(--brand-deep);
+  letter-spacing: .04em;
+}
+.pricing-glassy-card .guarantee-pill::before{
+  content: '✓'; font-size: 12px; font-weight: 800;
+}
+.pricing-glassy-card .guarantee-pill .gsub{
+  color: var(--ink-2); font-weight: 500; font-size: 10.5px;
+  letter-spacing: 0;
+}
 .pricing-glassy-card{
   position: relative;
   padding: 32px 28px;
@@ -3988,59 +4041,80 @@ section + .cta-section{ padding-top: 64px; }
     </div>
 
     <div class="pricing-glassy-grid reveal-stagger">
+      <!-- GROWTH -->
       <div class="pricing-glassy-card">
+        <span class="founding-ribbon">Founding price · locked 12 months</span>
         <div class="name">Growth</div>
-        <div class="sub">Single store, apply-fixes unlocked.</div>
+        <div class="sub">Solo merchant, one store, getting AI-ready.</div>
         <div class="price-row"><span class="price" data-monthly="$59" data-yearly="$41">$59</span><span class="unit">/mo</span></div>
-        <div class="yearly-hint" data-monthly-hint="" data-yearly-hint="billed yearly · <strong>$492/yr</strong>"></div>
+        <div class="yearly-hint" data-monthly-hint="" data-yearly-hint='billed yearly <span class="save-pill">save $216/yr</span>'></div>
+        <div class="founding-sub">Standard price after first 200 stores: <strong>$89/mo</strong></div>
         <div class="limit">Up to 500 SKUs</div>
+        <div class="guarantee-pill">Score Guarantee <span class="gsub">+10 pts in 30 days, or refund</span></div>
         <div class="divider"></div>
         <div class="feats">
-          <div class="feat"><span class="feat-check">✓</span><span>Full scan, score and grade</span></div>
-          <div class="feat"><span class="feat-check">✓</span><span>One-Click Apply Fixes</span></div>
-          <div class="feat"><span class="feat-check">✓</span><span>Bulk Fix (up to 25 SKUs)</span></div>
-          <div class="feat"><span class="feat-check">✓</span><span>100 queries / mo</span></div>
+          <div class="feat"><span class="feat-check">✓</span><span>Catalog scored against <strong>all 6 AI agents</strong> daily</span></div>
+          <div class="feat"><span class="feat-check">✓</span><span>Full 8-dimension AI Catalog Score</span></div>
+          <div class="feat"><span class="feat-check">✓</span><span>One-Click Apply Fixes - approve before anything ships</span></div>
+          <div class="feat"><span class="feat-check">✓</span><span>Fix up to 25 products at once (Bulk Fix)</span></div>
+          <div class="feat"><span class="feat-check">✓</span><span>Per-agent visibility report (see your blind spots)</span></div>
+          <div class="feat"><span class="feat-check">✓</span><span>100 cross-agent visibility tests / month</span></div>
+          <div class="feat"><span class="feat-check">✓</span><span>90-day score history &amp; trends</span></div>
           <div class="feat"><span class="feat-check">✓</span><span>Email alerts on score drops</span></div>
         </div>
         <a href="#install" class="pcta secondary">Start 7-day trial</a>
-        <div class="pricing-glassy-trial">7-day free trial</div>
+        <div class="pricing-glassy-trial">7-day free trial · no card required</div>
       </div>
+
+      <!-- PRO -->
       <div class="pricing-glassy-card popular">
         <div class="pop-badge">MOST POPULAR</div>
+        <span class="founding-ribbon">Founding price · locked 12 months</span>
         <div class="name">Pro</div>
-        <div class="sub">Mid-catalog, unlimited fixes, guardrails.</div>
+        <div class="sub">Growing brand, mid-catalog, ready to compound.</div>
         <div class="price-row"><span class="price" data-monthly="$169" data-yearly="$118">$169</span><span class="unit">/mo</span></div>
-        <div class="yearly-hint" data-monthly-hint="" data-yearly-hint="billed yearly · <strong>$1,416/yr</strong>"></div>
+        <div class="yearly-hint" data-monthly-hint="" data-yearly-hint='billed yearly <span class="save-pill">save $612/yr</span>'></div>
+        <div class="founding-sub">Standard price after first 200 stores: <strong>$239/mo</strong></div>
         <div class="limit">Up to 3,000 SKUs</div>
+        <div class="guarantee-pill">Score Guarantee <span class="gsub">+10 pts in 30 days, or refund</span></div>
         <div class="divider"></div>
         <div class="feats">
-          <div class="feat"><span class="feat-check">✓</span><span>Everything in Growth</span></div>
-          <div class="feat"><span class="feat-check">✓</span><span>Unlimited Bulk Fix</span></div>
-          <div class="feat"><span class="feat-check">✓</span><span>Causal A/B (DiD + p-values)</span></div>
-          <div class="feat"><span class="feat-check">✓</span><span>Catalog Guardrails (webhooks)</span></div>
-          <div class="feat"><span class="feat-check">✓</span><span>Cross-agent visibility report</span></div>
-          <div class="feat"><span class="feat-check">✓</span><span>Priority support</span></div>
+          <div class="feat"><span class="feat-check">✓</span><span>Everything in Growth, plus:</span></div>
+          <div class="feat"><span class="feat-check">✓</span><span>Unlimited Bulk Fix - scale to your whole catalog</span></div>
+          <div class="feat"><span class="feat-check">✓</span><span>Prove every fix worked, with <strong>p-values</strong> (causal A/B)</span></div>
+          <div class="feat"><span class="feat-check">✓</span><span>Auto-protect your score (Guardrails on every catalog edit)</span></div>
+          <div class="feat"><span class="feat-check">✓</span><span>Unlimited cross-agent visibility tests</span></div>
+          <div class="feat"><span class="feat-check">✓</span><span>Per-vertical benchmarks (compare to top in your category)</span></div>
+          <div class="feat"><span class="feat-check">✓</span><span>Slack alerts + priority support (&lt; 24h response)</span></div>
+          <div class="feat"><span class="feat-check">✓</span><span>Shared Experiment Library (browse + contribute)</span></div>
         </div>
         <a href="#install" class="pcta primary">Start 7-day trial</a>
-        <div class="pricing-glassy-trial">7-day free trial</div>
+        <div class="pricing-glassy-trial">7-day free trial · no card required</div>
       </div>
+
+      <!-- PERFORMANCE -->
       <div class="pricing-glassy-card">
+        <span class="founding-ribbon">Founding price · locked 12 months</span>
         <div class="name">Performance</div>
-        <div class="sub">Large catalog, pay-on-results option.</div>
+        <div class="sub">Large catalog, results-aligned pricing, white-glove.</div>
         <div class="price-row"><span class="price" data-monthly="$499" data-yearly="$349">$499</span><span class="unit">/mo</span></div>
-        <div class="yearly-hint" data-monthly-hint="" data-yearly-hint="billed yearly · <strong>$4,188/yr</strong>"></div>
+        <div class="yearly-hint" data-monthly-hint="" data-yearly-hint='billed yearly <span class="save-pill">save $1,800/yr</span>'></div>
+        <div class="founding-sub">Standard price after first 200 stores: <strong>$699/mo</strong></div>
         <div class="price-alt"><strong>5% of AI uplift</strong> · $5k/mo cap</div>
         <div class="limit">Unlimited SKUs</div>
+        <div class="guarantee-pill">Double Guarantee <span class="gsub">+20 pts in 30 days, or refund</span></div>
         <div class="divider"></div>
         <div class="feats">
-          <div class="feat"><span class="feat-check">✓</span><span>Everything in Pro</span></div>
-          <div class="feat"><span class="feat-check">✓</span><span>Score Guarantee +10 pts</span></div>
-          <div class="feat"><span class="feat-check">✓</span><span>Causal attribution dashboard</span></div>
-          <div class="feat"><span class="feat-check">✓</span><span>Dedicated account manager</span></div>
-          <div class="feat"><span class="feat-check">✓</span><span>SLA 99.9% · priority queue</span></div>
+          <div class="feat"><span class="feat-check">✓</span><span>Everything in Pro, plus:</span></div>
+          <div class="feat"><span class="feat-check">✓</span><span>Unlimited SKUs - no caps, no tiers</span></div>
+          <div class="feat"><span class="feat-check">✓</span><span>Choice: $499 flat <strong>or</strong> 5% of AI uplift</span></div>
+          <div class="feat"><span class="feat-check">✓</span><span>Causal attribution dashboard (every $ traced)</span></div>
+          <div class="feat"><span class="feat-check">✓</span><span>Custom vertical model (trained on your category)</span></div>
+          <div class="feat"><span class="feat-check">✓</span><span>Dedicated success manager</span></div>
+          <div class="feat"><span class="feat-check">✓</span><span>White-label option for agencies</span></div>
         </div>
         <a href="#install" class="pcta secondary">Start 7-day trial</a>
-        <div class="pricing-glassy-trial">7-day free trial or no fee if no lift</div>
+        <div class="pricing-glassy-trial">7-day trial · or no fee if no lift</div>
       </div>
     </div>
   </div>
