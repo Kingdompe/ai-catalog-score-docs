@@ -969,133 +969,6 @@ section{ position: relative; }
 .fa-content .fa-name{ font-size: 12.5px; font-weight: 700; color: var(--ink-0); }
 .fa-content .fa-status{ font-family: var(--font-mono); font-size: 10px; color: var(--brand-deep); font-weight: 600; margin-top: 1px; }
 
-/* ============ HERO MASCOT — the AI bot image floating beside the dashboard ============ */
-.hero-mascot{
-  position: absolute;
-  top: -40px;
-  right: -180px;
-  width: 320px; height: 320px;
-  z-index: 5;
-  pointer-events: auto;
-  opacity: 0; transform: scale(0.75) rotate(-12deg) translateY(20px);
-  transition:
-    opacity 1.1s cubic-bezier(.2,.8,.2,1),
-    transform 1.3s cubic-bezier(.2,.8,.2,1);
-}
-.dash-scene.in-view .hero-mascot{
-  opacity: 1; transform: scale(1) rotate(0deg) translateY(0);
-  transition-delay: 0.6s;
-}
-@media (max-width: 1320px){ .hero-mascot{ right: -120px; width: 280px; height: 280px; } }
-@media (max-width: 1100px){ .hero-mascot{ right: -60px; top: -30px; width: 220px; height: 220px; } }
-@media (max-width: 760px){ .hero-mascot{ display: none; } }
-
-/* Outer halo — breathing glow */
-.hm-halo{
-  position: absolute; inset: -15%;
-  background:
-    radial-gradient(circle, rgba(0,208,132,.5) 0%, rgba(255,196,0,.18) 35%, transparent 65%);
-  filter: blur(28px);
-  animation: hmHaloBreathe 5s ease-in-out infinite;
-  pointer-events: none; z-index: 0;
-}
-@keyframes hmHaloBreathe{
-  0%, 100%{ transform: scale(0.88); opacity: 0.55; }
-  50%{ transform: scale(1.16); opacity: 1; }
-}
-
-/* Orbit ring — dashed circle rotating around the bot */
-.hm-orbit{
-  position: absolute; inset: -8%;
-  border: 1.5px dashed rgba(0,208,132,.35);
-  border-radius: 50%;
-  animation: hmOrbit 22s linear infinite;
-  pointer-events: none; z-index: 1;
-  opacity: 0.7;
-}
-.hm-orbit::after{
-  content: ''; position: absolute;
-  top: -5px; left: 50%; transform: translateX(-50%);
-  width: 8px; height: 8px; border-radius: 50%;
-  background: var(--brand);
-  box-shadow: 0 0 12px var(--brand);
-}
-@keyframes hmOrbit{ to{ transform: rotate(360deg); } }
-
-/* Inner subtle orbit (counter-rotation) */
-.hm-orbit-inner{
-  position: absolute; inset: 4%;
-  border: 1px dashed rgba(0,208,132,.18);
-  border-radius: 50%;
-  animation: hmOrbitInner 18s linear infinite reverse;
-  pointer-events: none; z-index: 1;
-}
-@keyframes hmOrbitInner{ to{ transform: rotate(360deg); } }
-
-/* The PNG bot image itself */
-.hm-img{
-  position: relative; z-index: 2;
-  width: 100%; height: 100%;
-  object-fit: contain;
-  animation: hmFloat 6s ease-in-out infinite;
-  filter:
-    drop-shadow(0 24px 48px rgba(0,0,0,.45))
-    drop-shadow(0 0 32px rgba(0,208,132,.32));
-  transition: transform .4s cubic-bezier(.2,.8,.2,1), filter .4s ease;
-  will-change: transform;
-}
-@keyframes hmFloat{
-  0%, 100%{ transform: translateY(0) rotate(0deg); }
-  25%{ transform: translateY(-8px) rotate(-1.2deg); }
-  50%{ transform: translateY(-14px) rotate(0deg); }
-  75%{ transform: translateY(-8px) rotate(1.2deg); }
-}
-
-.hero-mascot:hover .hm-img{
-  transform: scale(1.06) rotate(-1deg);
-  filter:
-    drop-shadow(0 28px 56px rgba(0,0,0,.5))
-    drop-shadow(0 0 48px rgba(0,208,132,.55))
-    drop-shadow(0 0 80px rgba(255,196,0,.25));
-}
-
-/* Diagonal scan ray sweeping across the bot every 7s */
-.hm-scan{
-  position: absolute; inset: 0; z-index: 3;
-  pointer-events: none; overflow: hidden;
-  border-radius: 50%;
-  mask: radial-gradient(circle, #000 0%, #000 50%, transparent 75%);
-  -webkit-mask: radial-gradient(circle, #000 0%, #000 50%, transparent 75%);
-}
-.hm-scan::before{
-  content: ''; position: absolute;
-  top: -50%; left: -150%;
-  width: 80%; height: 200%;
-  background: linear-gradient(110deg, transparent 30%, rgba(0,255,168,.35) 50%, transparent 70%);
-  animation: hmScanSweep 7s ease-in-out infinite;
-}
-@keyframes hmScanSweep{
-  0%, 100%{ transform: translateX(0); opacity: 0; }
-  10%, 90%{ opacity: 1; }
-  50%{ transform: translateX(280%); opacity: 1; }
-}
-
-/* Tiny floating particles around the mascot */
-.hm-particles{ position: absolute; inset: 0; pointer-events: none; z-index: 1; }
-.hm-particles .hp{
-  position: absolute;
-  width: 4px; height: 4px; border-radius: 50%;
-  background: var(--brand);
-  box-shadow: 0 0 8px var(--brand);
-}
-.hm-particles .hp:nth-child(1){ top: 18%; left: 8%; animation: hpFloat1 7s ease-in-out infinite; }
-.hm-particles .hp:nth-child(2){ top: 72%; right: 4%; animation: hpFloat2 9s ease-in-out infinite; }
-.hm-particles .hp:nth-child(3){ top: 38%; right: -6%; animation: hpFloat3 6s ease-in-out infinite; }
-.hm-particles .hp:nth-child(4){ top: 88%; left: 12%; animation: hpFloat4 8s ease-in-out infinite; }
-@keyframes hpFloat1{ 0%, 100%{ transform: translateY(0); opacity: 0.5; } 50%{ transform: translateY(-14px); opacity: 1; } }
-@keyframes hpFloat2{ 0%, 100%{ transform: translateY(0); opacity: 0.4; } 50%{ transform: translateY(10px); opacity: 1; } }
-@keyframes hpFloat3{ 0%, 100%{ transform: translateX(0); opacity: 0.6; } 50%{ transform: translateX(8px); opacity: 1; } }
-@keyframes hpFloat4{ 0%, 100%{ transform: translateY(0); opacity: 0.5; } 50%{ transform: translateY(-10px); opacity: 0.9; } }
 
 /* ============ TICKER ============ */
 .ticker-wrap{
@@ -5310,8 +5183,6 @@ if (terminalBody) terminalObserver.observe(terminalBody);
     const toast = scene.querySelector('.float-toast');
     const did = scene.querySelector('.float-did');
     const agent = scene.querySelector('.float-agent');
-    const mascotImg = scene.querySelector('.hero-mascot .hm-img');
-    const mascotHalo = scene.querySelector('.hero-mascot .hm-halo');
     scene.addEventListener('mousemove', (e) => {
       const r = scene.getBoundingClientRect();
       const mx = (e.clientX - r.left) / r.width - 0.5;   // -0.5..0.5
@@ -5320,21 +5191,12 @@ if (terminalBody) terminalObserver.observe(terminalBody);
       if (toast) toast.style.transform = `translate(${mx * -10}px, ${my * -10}px)`;
       if (did)   did.style.transform   = `translate(${mx * 12}px, ${my * 12}px)`;
       if (agent) agent.style.transform = `translate(${mx * -14}px, ${my * 8}px)`;
-      // Mascot tilts inversely to dashboard (3D layered feel) and gets a parallax shift
-      if (mascotImg){
-        mascotImg.style.transform = `perspective(900px) rotateX(${my * -6}deg) rotateY(${mx * 10}deg) translate(${mx * 16}px, ${my * -8}px)`;
-      }
-      if (mascotHalo){
-        mascotHalo.style.transform = `translate(${mx * -10}px, ${my * 4}px)`;
-      }
     });
     scene.addEventListener('mouseleave', () => {
       if (main) main.style.transform = '';
       if (toast) toast.style.transform = '';
       if (did)   did.style.transform = '';
       if (agent) agent.style.transform = '';
-      if (mascotImg) mascotImg.style.transform = '';
-      if (mascotHalo) mascotHalo.style.transform = '';
     });
   }
 
