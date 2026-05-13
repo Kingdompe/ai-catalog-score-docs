@@ -3154,8 +3154,15 @@ section + .cta-section{ padding-top: 64px; }
 (function(){
   // Fallback values (in case fetch fails or stats.json missing)
   window.acsStats = { captures_total: 78527, captures_per_day: 2400, agents_count: 6, stores_benchmarked: 304 };
+  // Global live-counter value — shared with the hero ticker so applyStats()
+  // can override it after fetch resolves. Without this, the ticker's closure
+  // would hold the stale fallback forever and override the DOM each tick.
+  window.__acsLiveValue = window.acsStats.captures_total;
+
   function applyStats(s){
     if (!s || typeof s.captures_total !== 'number') return;
+    window.acsStats = s;
+    window.__acsLiveValue = s.captures_total;
     // Hero live counter element
     var lc = document.getElementById('liveCounter');
     if (lc) lc.textContent = s.captures_total.toLocaleString('en-US');
@@ -3166,16 +3173,19 @@ section + .cta-section{ padding-top: 64px; }
     var bento = document.querySelector('.stat-big[data-target]');
     if (bento) bento.dataset.target = s.captures_total;
   }
-  // Apply fallback now (before DOM scripts at end of body), then refine when fetch resolves
+  // Apply fallback now, then refine when fetch resolves
   document.addEventListener('DOMContentLoaded', function(){ applyStats(window.acsStats); });
-  fetch('/stats.json', { cache: 'no-cache' })
-    .then(function(r){ return r.ok ? r.json() : null; })
-    .then(function(data){
-      if (!data) return;
-      window.acsStats = data;
-      applyStats(data);
-    })
-    .catch(function(){ /* silent: keep fallback values */ });
+
+  function fetchStats(){
+    fetch('/stats.json?t=' + Date.now(), { cache: 'no-cache' })
+      .then(function(r){ return r.ok ? r.json() : null; })
+      .then(function(data){ if (data) applyStats(data); })
+      .catch(function(){ /* silent: keep current values */ });
+  }
+  fetchStats();
+  // Refetch every 5 minutes so long-lived tabs stay in sync with the
+  // hourly stats.json refresh from the GitHub Action.
+  setInterval(fetchStats, 5 * 60 * 1000);
 })();
 </script>
 
@@ -4722,10 +4732,15 @@ if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) drawCanvas()
 
 // ===== LIVE COUNTER (hero) =====
 const liveCounter = document.getElementById('liveCounter');
-let liveValue = (window.acsStats && window.acsStats.captures_total) || 78527;
+// Use window-scoped value so the bootstrap's applyStats() can override
+// the counter after fetch resolves (otherwise this closure holds the
+// stale fallback and overrides the fetch-updated DOM each 4.2s tick).
+if (typeof window.__acsLiveValue !== 'number') {
+  window.__acsLiveValue = (window.acsStats && window.acsStats.captures_total) || 78527;
+}
 setInterval(() => {
-  liveValue += Math.floor(Math.random() * 3) + 1;
-  if (liveCounter) liveCounter.textContent = liveValue.toLocaleString('en-US');
+  window.__acsLiveValue += Math.floor(Math.random() * 3) + 1;
+  if (liveCounter) liveCounter.textContent = window.__acsLiveValue.toLocaleString('en-US');
 }, 4200);
 
 // ===== NAV SCROLL STATE =====
