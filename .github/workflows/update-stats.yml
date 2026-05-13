@@ -20,14 +20,12 @@ jobs:
       - name: Fetch latest stats from app
         id: fetch
         env:
-          STATS_ENDPOINT_URL: ${{ secrets.STATS_ENDPOINT_URL }}
+          # Same pattern as the ai-catalog-score app's daily-refresh workflow.
+          # The URL is public (open dataset positioning) so no secret needed.
+          STATS_ENDPOINT_URL: ${{ vars.STATS_ENDPOINT_URL || 'https://shopify-app-production-7e58.up.railway.app/api/public/stats' }}
         run: |
-          if [ -z "$STATS_ENDPOINT_URL" ]; then
-            echo "::warning::STATS_ENDPOINT_URL secret not set yet — skipping fetch"
-            exit 0
-          fi
-          # Fetch (5s timeout, fail on HTTP error, follow redirects)
-          curl --fail --silent --show-error --max-time 5 --location \
+          # Fetch (10s timeout, fail on HTTP error, follow redirects)
+          curl --fail --silent --show-error --max-time 10 --location \
             "$STATS_ENDPOINT_URL" \
             > stats.json.new
           # Sanity-check: must be valid JSON containing captures_total as a positive number
