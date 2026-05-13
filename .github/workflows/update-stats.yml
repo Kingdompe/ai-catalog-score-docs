@@ -1,0 +1,56 @@
+name: Update stats from app
+
+on:
+  # Run hourly
+  schedule:
+    - cron: '0 * * * *'
+  # Also allow manual trigger from the Actions tab
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  refresh-stats:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Fetch latest stats from app
+        id: fetch
+        env:
+          STATS_ENDPOINT_URL: ${{ secrets.STATS_ENDPOINT_URL }}
+        run: |
+          if [ -z "$STATS_ENDPOINT_URL" ]; then
+            echo "::warning::STATS_ENDPOINT_URL secret not set yet — skipping fetch"
+            exit 0
+          fi
+          # Fetch (5s timeout, fail on HTTP error, follow redirects)
+          curl --fail --silent --show-error --max-time 5 --location \
+            "$STATS_ENDPOINT_URL" \
+            > stats.json.new
+          # Sanity-check: must be valid JSON containing captures_total as a positive number
+          if ! jq -e '(.captures_total | type == "number") and (.captures_total > 0)' stats.json.new > /dev/null 2>&1; then
+            echo "::error::Fetched stats.json failed validation"
+            cat stats.json.new
+            rm -f stats.json.new
+            exit 1
+          fi
+          # Pretty-print, then move into place
+          jq '.' stats.json.new > stats.json
+          rm -f stats.json.new
+          echo "fetched=true" >> "$GITHUB_OUTPUT"
+
+      - name: Commit if changed
+        if: steps.fetch.outputs.fetched == 'true'
+        run: |
+          if git diff --quiet stats.json; then
+            echo "No changes to stats.json"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add stats.json
+          git commit -m "stats: hourly refresh ($(jq -r '.captures_total' stats.json) captures)"
+          git push

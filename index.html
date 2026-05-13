@@ -3148,6 +3148,37 @@ section + .cta-section{ padding-top: 64px; }
 </head>
 <body>
 
+<!-- ACS STATS BOOTSTRAP - fetch /stats.json early, expose window.acsStats,
+     override hardcoded counter targets/values before animations run -->
+<script>
+(function(){
+  // Fallback values (in case fetch fails or stats.json missing)
+  window.acsStats = { captures_total: 78527, captures_per_day: 2400, agents_count: 6, stores_benchmarked: 304 };
+  function applyStats(s){
+    if (!s || typeof s.captures_total !== 'number') return;
+    // Hero live counter element
+    var lc = document.getElementById('liveCounter');
+    if (lc) lc.textContent = s.captures_total.toLocaleString('en-US');
+    // Problem section stat tile (data-count attribute drives the count-up animation)
+    var problem = document.querySelector('[data-count][data-suffix="k+"]');
+    if (problem) problem.dataset.count = Math.round(s.captures_total / 1000);
+    // Bento Scale tile (data-target drives the count-up)
+    var bento = document.querySelector('.stat-big[data-target]');
+    if (bento) bento.dataset.target = s.captures_total;
+  }
+  // Apply fallback now (before DOM scripts at end of body), then refine when fetch resolves
+  document.addEventListener('DOMContentLoaded', function(){ applyStats(window.acsStats); });
+  fetch('/stats.json', { cache: 'no-cache' })
+    .then(function(r){ return r.ok ? r.json() : null; })
+    .then(function(data){
+      if (!data) return;
+      window.acsStats = data;
+      applyStats(data);
+    })
+    .catch(function(){ /* silent: keep fallback values */ });
+})();
+</script>
+
 <!-- ACS LOGO - reusable SVG symbol (single source of truth) -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <defs>
@@ -3241,7 +3272,7 @@ section + .cta-section{ padding-top: 64px; }
   <div class="hero-orb c"></div>
   <div class="container">
     <div class="hero-content">
-      <div class="eyebrow-hero"><span class="live-dot"></span> LIVE · <span class="live-counter" id="liveCounter">31,247</span> CAPTURES IN OUR OPEN DATASET</div>
+      <div class="eyebrow-hero"><span class="live-dot"></span> LIVE · <span class="live-counter" id="liveCounter">78,527</span> CAPTURES IN OUR OPEN DATASET</div>
       <h1>
         <span class="word" style="animation-delay:.05s">Your</span>
         <span class="word" style="animation-delay:.1s">catalog</span>
@@ -3770,7 +3801,7 @@ section + .cta-section{ padding-top: 64px; }
 
       <div class="card stat-tile">
         <span class="stat-tag"><span class="tag-dot"></span>OPEN DATASET</span>
-        <div class="big num" data-count="31" data-suffix="k+">0</div>
+        <div class="big num" data-count="79" data-suffix="k+">0</div>
         <div class="sub">Ground-truth captures across 6 AI shopping agents in our open dataset.</div>
         <div class="foot">Updated 2× daily · github.com/commerce-agentic</div>
         <div class="stat-viz">
@@ -4240,7 +4271,7 @@ section + .cta-section{ padding-top: 64px; }
       </div>
       <div class="bento-cell">
         <div class="label">SCALE</div>
-        <div class="stat-big num" data-target="31000" style="margin-top:18px">0</div>
+        <div class="stat-big num" data-target="79000" style="margin-top:18px">0</div>
         <p>captures in our open dataset, growing by <span style="color:var(--brand-deep);font-weight:700;font-family:var(--font-mono)">+2.4k/day</span>.</p>
         <div class="visual">
           <svg class="viz-spark" viewBox="0 0 200 56" preserveAspectRatio="none">
@@ -4691,7 +4722,7 @@ if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) drawCanvas()
 
 // ===== LIVE COUNTER (hero) =====
 const liveCounter = document.getElementById('liveCounter');
-let liveValue = 31247;
+let liveValue = (window.acsStats && window.acsStats.captures_total) || 78527;
 setInterval(() => {
   liveValue += Math.floor(Math.random() * 3) + 1;
   if (liveCounter) liveCounter.textContent = liveValue.toLocaleString('en-US');
@@ -5356,14 +5387,14 @@ if (terminalBody) terminalObserver.observe(terminalBody);
             const t = Math.min((now - startTime) / duration, 1);
             const eased = 1 - Math.pow(1 - t, 3);
             const val = Math.round(target * eased);
-            // Format: 31000 → "31k+", otherwise number with thousand separators
+            // Format: large numbers as "Xk+" (e.g. 79000 -> "79k+"), small as comma-separated
             if (target >= 1000){
               el.textContent = (val / 1000).toFixed(val >= target ? 0 : 1) + 'k+';
             } else {
               el.textContent = val.toLocaleString('en-US');
             }
             if (t < 1) requestAnimationFrame(tick);
-            else el.textContent = '31k+';
+            else el.textContent = Math.round(target / 1000) + 'k+';
           }
           requestAnimationFrame(tick);
         });
