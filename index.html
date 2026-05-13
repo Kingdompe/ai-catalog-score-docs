@@ -5067,12 +5067,19 @@ if (terminalBody) terminalObserver.observe(terminalBody);
     animateCounters();
   }
 
+  // Double-rAF defers the trigger until after the browser has painted the
+  // initial state (width:0, opacity:0, etc.). Without this defer, the script
+  // runs synchronously before the first paint and the browser renders
+  // directly with .in-view applied — no transition plays.
+  function deferredTrigger(){
+    requestAnimationFrame(() => requestAnimationFrame(trigger));
+  }
+
   // If any pixel of the scene is in the initial viewport on page load,
-  // trigger animations immediately. This handles the "land at top of page"
-  // case where the scene is partially below the fold but starts visible.
+  // trigger animations immediately (after the initial paint).
   const r = scene.getBoundingClientRect();
   if (r.top < window.innerHeight && r.bottom > 0){
-    trigger();
+    deferredTrigger();
   } else {
     // Otherwise wait for the user to scroll the scene into view
     const obs = new IntersectionObserver((entries) => {
