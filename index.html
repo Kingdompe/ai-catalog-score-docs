@@ -99,33 +99,40 @@ html{ scroll-behavior: smooth; scroll-padding-top: 84px; }
   letter-spacing: .12em;
 }
 
-/* === PAGE MAP / WHAT'S ON THIS PAGE === */
+/* === PAGE MAP / WHAT'S ON THIS PAGE - dark terminal aesthetic === */
 .page-map-section{
-  background: var(--bg-sunk);
-  border-top: 1px solid var(--border);
-  border-bottom: 1px solid var(--border);
-  padding: 64px 0;
+  background: var(--bg-dark);
+  border-top: 1px solid var(--border-dark);
+  border-bottom: 1px solid var(--border-dark);
+  padding: 72px 0;
   position: relative; overflow: hidden;
 }
 .page-map-section::before{
   content:''; position: absolute; inset: 0;
-  background-image: radial-gradient(rgba(0,208,132,.05) 1px, transparent 1px);
+  background-image: radial-gradient(rgba(0,208,132,.08) 1px, transparent 1px);
   background-size: 28px 28px;
   mask-image: radial-gradient(ellipse 70% 80% at 50% 50%, #000 0%, transparent 80%);
   -webkit-mask-image: radial-gradient(ellipse 70% 80% at 50% 50%, #000 0%, transparent 80%);
-  opacity: .6; pointer-events: none;
+  opacity: .5; pointer-events: none;
+}
+.page-map-section::after{
+  content:''; position: absolute; top: 20%; left: 50%; transform: translateX(-50%);
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(0,208,132,.06), transparent 70%);
+  pointer-events: none; filter: blur(40px);
 }
 .page-map-section .container{ position: relative; z-index: 1; }
 
+.page-map-section .eyebrow{ color: var(--ink-dark-3); }
 .page-map-head{
-  text-align: center; max-width: 720px; margin: 0 auto 36px;
+  text-align: center; max-width: 720px; margin: 0 auto 40px;
 }
 .page-map-head h3{
-  font-family: var(--font-display); font-size: 26px; font-weight: 500;
-  color: var(--ink-0); letter-spacing: -.022em; margin-top: 12px;
+  font-family: var(--font-display); font-size: 28px; font-weight: 500;
+  color: var(--ink-dark-0); letter-spacing: -.022em; margin-top: 14px;
 }
 .page-map-head .pm-sub{
-  font-size: 15px; color: var(--ink-2); margin-top: 10px; line-height: 1.5;
+  font-size: 15px; color: var(--ink-dark-2); margin-top: 12px; line-height: 1.5;
 }
 
 .page-map-grid{
@@ -136,10 +143,11 @@ html{ scroll-behavior: smooth; scroll-padding-top: 84px; }
 @media (max-width: 520px){ .page-map-grid{ grid-template-columns: 1fr; } }
 
 .pm-card{
-  display: flex; flex-direction: column; gap: 0;
-  padding: 18px 18px 16px;
-  background: var(--bg-raised);
-  border: 1px solid var(--border);
+  display: flex; flex-direction: column;
+  min-height: 200px;
+  padding: 18px;
+  background: linear-gradient(180deg, var(--bg-dark-raised) 0%, #0F0F0E 100%);
+  border: 1px solid var(--border-dark);
   border-radius: var(--r-lg);
   transition: transform .25s cubic-bezier(.2,.8,.2,1), border-color .25s, box-shadow .25s;
   text-decoration: none;
@@ -152,53 +160,161 @@ html{ scroll-behavior: smooth; scroll-padding-top: 84px; }
   transform: scaleX(0); transform-origin: center;
   transition: transform .35s cubic-bezier(.2,.8,.2,1);
 }
-.pm-card:hover::before{ transform: scaleX(1); }
+.pm-card:hover::before, .pm-card.is-active::before{ transform: scaleX(1); }
 .pm-card:hover{
   transform: translateY(-3px);
-  border-color: rgba(0,208,132,.35);
-  box-shadow: 0 14px 28px -10px rgba(0,208,132,.2), 0 0 0 1px rgba(0,208,132,.06);
+  border-color: rgba(0,208,132,.4);
+  box-shadow: 0 14px 28px -10px rgba(0,208,132,.25);
 }
+.pm-card.is-active{
+  border-color: rgba(0,208,132,.5);
+  box-shadow: 0 0 0 1px rgba(0,208,132,.25), 0 10px 24px -8px rgba(0,208,132,.3);
+  background: linear-gradient(180deg, #181816 0%, #0F0F0E 100%);
+}
+.pm-card.is-active .pm-num{ color: var(--brand); }
 
-.pm-card-head{ display: flex; align-items: center; justify-content: space-between; }
+.pm-card-head{
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 12px;
+}
 .pm-num{
-  font-family: var(--font-mono); font-size: 11px; font-weight: 700;
-  color: var(--ink-3); letter-spacing: .14em;
+  font-family: var(--font-mono); font-size: 10.5px; font-weight: 700;
+  color: var(--ink-dark-3); letter-spacing: .18em;
   transition: color .25s;
 }
-.pm-card:hover .pm-num{ color: var(--brand-deep); }
+.pm-card:hover .pm-num{ color: var(--brand); }
 .pm-arrow{
-  color: var(--ink-4); font-size: 14px;
+  color: var(--ink-dark-4); font-size: 12px;
   transition: transform .25s, color .25s;
 }
-.pm-card:hover .pm-arrow{ color: var(--brand-deep); transform: translate(3px, -3px); }
+.pm-card:hover .pm-arrow{ color: var(--brand); transform: translate(3px, -3px); }
 
-.pm-icon{
-  display: inline-flex; align-items: center; justify-content: center;
-  width: 34px; height: 34px;
-  background: var(--bg-sunk);
-  border: 1px solid var(--border);
-  border-radius: 9px;
-  margin-top: 12px;
-  color: var(--ink-2);
-  transition: all .25s cubic-bezier(.2,.8,.2,1);
-  flex-shrink: 0;
-}
-.pm-icon svg{ width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
-.pm-card:hover .pm-icon{
-  background: var(--brand-wash);
-  color: var(--brand-deep);
-  border-color: rgba(0,208,132,.3);
-  transform: rotate(-6deg) scale(1.08);
-}
 .pm-title{
   font-family: var(--font-display); font-size: 16px; font-weight: 600;
-  color: var(--ink-0); letter-spacing: -.012em; line-height: 1.25;
-  margin-top: 12px;
+  color: var(--ink-dark-0); letter-spacing: -.012em; line-height: 1.25;
 }
 .pm-desc{
-  font-size: 12.5px; color: var(--ink-3);
-  margin-top: 4px; line-height: 1.45;
+  font-size: 12.5px; color: var(--ink-dark-2);
+  margin-top: 4px; line-height: 1.4;
 }
+
+/* === Unique micro-visual per tile — sits at the bottom (margin-top:auto) === */
+.pm-visual{
+  margin-top: auto; padding-top: 18px;
+  display: flex; align-items: flex-end;
+  min-height: 56px;
+}
+
+/* 01 - Competition bars (you absent, dashed) */
+.pmv-bars{ display: flex; align-items: flex-end; gap: 5px; height: 44px; width: 100%; }
+.pmv-bars span{ flex: 1; background: var(--ink-dark-4); border-radius: 2px 2px 0 0; }
+.pmv-bars span.you{
+  background: transparent;
+  border: 1.5px dashed var(--ink-dark-3);
+  border-bottom: none;
+}
+
+/* 02 - Flow: scan → fix → prove (3 dots connected, last one filled green) */
+.pmv-flow{ display: flex; align-items: center; width: 100%; }
+.pmv-flow .dot{
+  width: 14px; height: 14px; border-radius: 50%;
+  border: 1.5px solid var(--ink-dark-3);
+  background: var(--bg-dark);
+  flex-shrink: 0;
+}
+.pmv-flow .dot.fill{ background: var(--brand); border-color: var(--brand); box-shadow: 0 0 10px rgba(0,208,132,.6); }
+.pmv-flow .line{ flex: 1; height: 1.5px; background: var(--ink-dark-3); margin: 0 -1px; }
+
+/* 03 - Moats grid (3x2 = 6 squares with checks) */
+.pmv-grid{ display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; width: 100%; }
+.pmv-grid .tile{
+  aspect-ratio: 1.6;
+  background: rgba(0,208,132,.08);
+  border: 1px solid rgba(0,208,132,.22);
+  border-radius: 4px;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--brand); font-size: 11px; font-weight: 800;
+}
+
+/* 04 - Pricing tags (3 tags, middle highlighted) */
+.pmv-prices{ display: flex; gap: 6px; width: 100%; }
+.pmv-prices .tag{
+  flex: 1; padding: 7px 4px;
+  background: var(--bg-dark);
+  border: 1px solid var(--border-dark);
+  border-radius: 5px;
+  font-family: var(--font-mono); font-size: 11px; font-weight: 700;
+  color: var(--ink-dark-3); text-align: center;
+}
+.pmv-prices .tag.pop{
+  background: rgba(0,208,132,.12);
+  border-color: var(--brand);
+  color: var(--brand);
+  transform: translateY(-3px);
+  box-shadow: 0 4px 10px rgba(0,208,132,.18);
+}
+
+/* 05 - Capability dots (8 dots in 4x2 grid) */
+.pmv-dots{ display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; width: 100%; }
+.pmv-dots .dot{
+  aspect-ratio: 1; border-radius: 50%;
+  background: rgba(0,208,132,.18);
+  border: 1px solid rgba(0,208,132,.35);
+}
+
+/* 06 - Terminal command line */
+.pmv-cmd{
+  width: 100%; padding: 7px 10px;
+  background: #050505;
+  border: 1px solid var(--border-dark);
+  border-radius: 5px;
+  font-family: var(--font-mono); font-size: 10.5px;
+  color: var(--ink-dark-2);
+  display: flex; align-items: center; gap: 6px;
+  white-space: nowrap; overflow: hidden;
+}
+.pmv-cmd .prompt{ color: var(--brand); font-weight: 700; flex-shrink: 0; }
+.pmv-cmd .arg{ color: var(--brand-light); }
+
+/* 07 - License badges (CC0 + MIT) */
+.pmv-badges{ display: flex; gap: 6px; width: 100%; }
+.pmv-badges .badge{
+  padding: 5px 10px; border-radius: 5px;
+  font-family: var(--font-mono); font-size: 10px; font-weight: 700;
+  letter-spacing: .04em;
+  background: rgba(0,208,132,.12);
+  border: 1px solid rgba(0,208,132,.3);
+  color: var(--brand);
+}
+.pmv-badges .badge.mit{
+  background: rgba(37,99,235,.12);
+  border-color: rgba(37,99,235,.3);
+  color: #6FA7FF;
+}
+
+/* 08 - FAQ collapsed rows */
+.pmv-rows{ display: flex; flex-direction: column; gap: 4px; width: 100%; }
+.pmv-rows .row{
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 5px 8px;
+  background: var(--bg-dark);
+  border: 1px solid var(--border-dark);
+  border-radius: 4px;
+}
+.pmv-rows .row .stub{
+  height: 4px; flex: 1; max-width: 70%;
+  background: var(--ink-dark-3); border-radius: 2px;
+  opacity: .6;
+}
+.pmv-rows .row .chev{ color: var(--ink-dark-3); font-size: 9px; }
+
+/* Footer caption */
+.page-map-foot{
+  text-align: center; margin-top: 28px;
+  font-family: var(--font-mono); font-size: 11px;
+  color: var(--ink-dark-3); letter-spacing: .14em; text-transform: uppercase;
+}
+.page-map-foot .acc{ color: var(--brand); font-weight: 700; }
 body{
   font-family: var(--font-body); font-size: 16px;
   background: var(--bg); color: var(--ink-1);
@@ -3870,94 +3986,122 @@ section + .cta-section{ padding-top: 64px; }
   </div>
 </section>
 
-<!-- PAGE MAP - what's on this page (visual overview for first-time visitors) -->
-<section class="page-map-section">
+<!-- PAGE MAP - dark/terminal aesthetic with unique micro-visuals per tile -->
+<section class="page-map-section" id="pageMap">
   <div class="container">
     <div class="page-map-head reveal">
       <div class="eyebrow" style="justify-content:center"><span class="dot"></span> ON THIS PAGE</div>
-      <h3>8 sections. Everything to know before installing.</h3>
-      <p class="pm-sub">Tap a card to jump - or scroll through in order.</p>
+      <h3>8 sections. The whole map in one glance.</h3>
+      <p class="pm-sub">Tap any tile to jump. Scroll through in order. Either way - you'll know what's coming.</p>
     </div>
+
     <div class="page-map-grid reveal-stagger">
-      <a href="#problem" class="pm-card">
-        <div class="pm-card-head">
-          <span class="pm-num">01</span>
-          <span class="pm-arrow">↗</span>
+
+      <a href="#problem" class="pm-card" data-section="problem">
+        <div class="pm-card-head"><span class="pm-num">01</span><span class="pm-arrow">↗</span></div>
+        <span class="pm-title">The problem</span>
+        <span class="pm-desc">Competitors recommended. Not you.</span>
+        <div class="pm-visual">
+          <div class="pmv-bars">
+            <span style="height:55%"></span>
+            <span style="height:80%"></span>
+            <span style="height:70%" class="you"></span>
+            <span style="height:92%"></span>
+            <span style="height:60%"></span>
+          </div>
         </div>
-        <span class="pm-icon"><svg viewBox="0 0 24 24"><path d="M12 9v4M12 17h.01M5.45 17.5h13.1c1.27 0 2.06-1.38 1.42-2.48l-6.55-11.31a1.65 1.65 0 00-2.84 0L4.03 15.02c-.64 1.1.15 2.48 1.42 2.48z"/></svg></span>
-        <span class="pm-title">The Problem</span>
-        <span class="pm-desc">AI agents recommend competitors. Not you.</span>
       </a>
 
-      <a href="#how" class="pm-card">
-        <div class="pm-card-head">
-          <span class="pm-num">02</span>
-          <span class="pm-arrow">↗</span>
+      <a href="#how" class="pm-card" data-section="how">
+        <div class="pm-card-head"><span class="pm-num">02</span><span class="pm-arrow">↗</span></div>
+        <span class="pm-title">How it works</span>
+        <span class="pm-desc">Scan, fix, prove.</span>
+        <div class="pm-visual">
+          <div class="pmv-flow">
+            <span class="dot"></span><span class="line"></span>
+            <span class="dot"></span><span class="line"></span>
+            <span class="dot fill"></span>
+          </div>
         </div>
-        <span class="pm-icon"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
-        <span class="pm-title">How It Works</span>
-        <span class="pm-desc">Scan, fix, prove. Three steps.</span>
       </a>
 
-      <a href="#features" class="pm-card">
-        <div class="pm-card-head">
-          <span class="pm-num">03</span>
-          <span class="pm-arrow">↗</span>
+      <a href="#features" class="pm-card" data-section="features">
+        <div class="pm-card-head"><span class="pm-num">03</span><span class="pm-arrow">↗</span></div>
+        <span class="pm-title">Why we win</span>
+        <span class="pm-desc">6 structural moats.</span>
+        <div class="pm-visual">
+          <div class="pmv-grid">
+            <div class="tile">✓</div><div class="tile">✓</div><div class="tile">✓</div>
+            <div class="tile">✓</div><div class="tile">✓</div><div class="tile">✓</div>
+          </div>
         </div>
-        <span class="pm-icon"><svg viewBox="0 0 24 24"><path d="M12 2L3 6v6c0 5 4 9 9 10 5-1 9-5 9-10V6l-9-4z"/><path d="M9 12l2 2 4-4"/></svg></span>
-        <span class="pm-title">Why We Win</span>
-        <span class="pm-desc">6 structural moats no one else has.</span>
       </a>
 
-      <a href="#pricing" class="pm-card">
-        <div class="pm-card-head">
-          <span class="pm-num">04</span>
-          <span class="pm-arrow">↗</span>
-        </div>
-        <span class="pm-icon"><svg viewBox="0 0 24 24"><path d="M12 2v20M17 7H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></span>
+      <a href="#pricing" class="pm-card" data-section="pricing">
+        <div class="pm-card-head"><span class="pm-num">04</span><span class="pm-arrow">↗</span></div>
         <span class="pm-title">Pricing</span>
-        <span class="pm-desc">3 plans + Score Guarantee on each.</span>
+        <span class="pm-desc">3 plans, guarantee on each.</span>
+        <div class="pm-visual">
+          <div class="pmv-prices">
+            <span class="tag">$59</span>
+            <span class="tag pop">$169</span>
+            <span class="tag">$499</span>
+          </div>
+        </div>
       </a>
 
-      <a href="#bento" class="pm-card">
-        <div class="pm-card-head">
-          <span class="pm-num">05</span>
-          <span class="pm-arrow">↗</span>
+      <a href="#bento" class="pm-card" data-section="bento">
+        <div class="pm-card-head"><span class="pm-num">05</span><span class="pm-arrow">↗</span></div>
+        <span class="pm-title">What you get</span>
+        <span class="pm-desc">8 capabilities, every plan.</span>
+        <div class="pm-visual">
+          <div class="pmv-dots">
+            <span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span>
+            <span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span>
+          </div>
         </div>
-        <span class="pm-icon"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></span>
-        <span class="pm-title">What You Get</span>
-        <span class="pm-desc">8 capabilities, every plan included.</span>
       </a>
 
-      <a href="#terminal" class="pm-card">
-        <div class="pm-card-head">
-          <span class="pm-num">06</span>
-          <span class="pm-arrow">↗</span>
+      <a href="#terminal" class="pm-card" data-section="terminal">
+        <div class="pm-card-head"><span class="pm-num">06</span><span class="pm-arrow">↗</span></div>
+        <span class="pm-title">Open skills</span>
+        <span class="pm-desc">8 MIT skills, one command.</span>
+        <div class="pm-visual">
+          <div class="pmv-cmd">
+            <span class="prompt">$</span><span>npx skills add</span>
+          </div>
         </div>
-        <span class="pm-icon"><svg viewBox="0 0 24 24"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg></span>
-        <span class="pm-title">Open Skills</span>
-        <span class="pm-desc">8 MIT skills for Claude Code, Cursor, Cline.</span>
       </a>
 
-      <a href="#ecosystem" class="pm-card">
-        <div class="pm-card-head">
-          <span class="pm-num">07</span>
-          <span class="pm-arrow">↗</span>
+      <a href="#ecosystem" class="pm-card" data-section="ecosystem">
+        <div class="pm-card-head"><span class="pm-num">07</span><span class="pm-arrow">↗</span></div>
+        <span class="pm-title">Open source</span>
+        <span class="pm-desc">CC0 spec. MIT skills.</span>
+        <div class="pm-visual">
+          <div class="pmv-badges">
+            <span class="badge">CC0</span>
+            <span class="badge mit">MIT</span>
+          </div>
         </div>
-        <span class="pm-icon"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0"/></svg></span>
-        <span class="pm-title">Open Source</span>
-        <span class="pm-desc">CC0 spec. Lock-in impossible.</span>
       </a>
 
-      <a href="#faq" class="pm-card">
-        <div class="pm-card-head">
-          <span class="pm-num">08</span>
-          <span class="pm-arrow">↗</span>
-        </div>
-        <span class="pm-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3M12 17h.01"/></svg></span>
+      <a href="#faq" class="pm-card" data-section="faq">
+        <div class="pm-card-head"><span class="pm-num">08</span><span class="pm-arrow">↗</span></div>
         <span class="pm-title">FAQ</span>
-        <span class="pm-desc">15 answered. From setup to uninstall.</span>
+        <span class="pm-desc">15 questions, answered.</span>
+        <div class="pm-visual">
+          <div class="pmv-rows">
+            <div class="row"><span class="stub"></span><span class="chev">›</span></div>
+            <div class="row"><span class="stub" style="max-width:55%"></span><span class="chev">›</span></div>
+            <div class="row"><span class="stub" style="max-width:65%"></span><span class="chev">›</span></div>
+          </div>
+        </div>
       </a>
+
+    </div>
+
+    <div class="page-map-foot reveal">
+      <span class="acc">8 sections</span> · tap any tile to jump
     </div>
   </div>
 </section>
@@ -5651,6 +5795,34 @@ if (terminalBody) terminalObserver.observe(terminalBody);
       lossEl.textContent = '$' + lossVal.toLocaleString('en-US');
     }, 2400);
   }
+})();
+
+// ===== PAGE MAP - IntersectionObserver highlights the active tile =====
+(function initPageMap(){
+  const cards = document.querySelectorAll('.pm-card[data-section]');
+  if (!cards.length) return;
+  const byId = new Map();
+  cards.forEach(c => byId.set(c.dataset.section, c));
+
+  const sections = [...byId.keys()]
+    .map(id => document.getElementById(id))
+    .filter(Boolean);
+  if (!sections.length) return;
+
+  const obs = new IntersectionObserver(entries => {
+    // Pick the most-visible intersecting section as the active one
+    let best = null;
+    entries.forEach(e => {
+      if (!e.isIntersecting) return;
+      if (!best || e.intersectionRatio > best.intersectionRatio) best = e;
+    });
+    if (!best) return;
+    const id = best.target.id;
+    byId.forEach((card, sectionId) => {
+      card.classList.toggle('is-active', sectionId === id);
+    });
+  }, { threshold: [0.2, 0.4, 0.6], rootMargin: '-80px 0px -40% 0px' });
+  sections.forEach(s => obs.observe(s));
 })();
 
 // ===== WHY WE WIN - trigger moat card animations + cursor spotlight =====
