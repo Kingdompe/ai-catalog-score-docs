@@ -206,25 +206,31 @@ section{ position: relative; }
   transition: all var(--transition);
 }
 
-.wordmark{ display: inline-flex; align-items: center; gap: 10px; }
+.wordmark{ display: inline-flex; align-items: center; gap: 12px; }
 .wordmark .mark{
-  width: 28px; height: 28px;
+  width: 38px; height: 38px;
   background: linear-gradient(135deg, var(--ink-0), var(--ink-1));
-  color: var(--brand); border-radius: 7px;
+  color: var(--brand); border-radius: 9px;
   display: grid; place-items: center;
-  font-family: var(--font-display); font-weight: 700; font-size: 15px;
   position: relative; overflow: hidden;
-  box-shadow: 0 1px 2px rgba(0,0,0,.1), inset 0 1px 0 rgba(255,255,255,.04);
+  box-shadow:
+    0 2px 4px rgba(0,0,0,.08),
+    0 8px 16px -4px rgba(0,208,132,.18),
+    inset 0 1px 0 rgba(255,255,255,.06);
 }
 .wordmark .mark::after{
   content: ''; position: absolute; inset: 0;
-  background: radial-gradient(circle at 30% 30%, rgba(0,208,132,.5), transparent 60%);
+  background: radial-gradient(circle at 25% 25%, rgba(0,208,132,.22), transparent 65%);
   pointer-events: none;
 }
 .wordmark .mark > svg, .dash-brand-mini .mark > svg{
-  width: 78%; height: 78%; display: block; position: relative; z-index: 1;
+  width: 88%; height: 88%; display: block; position: relative; z-index: 1;
+  filter: drop-shadow(0 0 4px rgba(0,208,132,.25));
 }
-.wordmark .name{ font-family: var(--font-display); font-weight: 600; color: var(--ink-0); font-size: 16px; letter-spacing: -.015em; }
+.wordmark .name{
+  font-family: var(--font-display); font-weight: 600; color: var(--ink-0);
+  font-size: 19px; letter-spacing: -.018em;
+}
 
 /* ============ NAV ============ */
 .nav{
@@ -415,13 +421,14 @@ section{ position: relative; }
 .dash-traffic span:nth-child(3){ background: #28C840; }
 .dash-brand-mini{ display: flex; align-items: center; gap: 8px; }
 .dash-brand-mini .mark{
-  width: 22px; height: 22px; border-radius: 6px;
+  width: 28px; height: 28px; border-radius: 7px;
   background: var(--ink-0); color: var(--brand);
   display: flex; align-items: center; justify-content: center;
-  font-family: var(--font-display); font-size: 13px; font-weight: 700;
+  position: relative; overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0,0,0,.1), inset 0 1px 0 rgba(255,255,255,.05);
 }
 .dash-brand-mini .name{
-  font-family: var(--font-display); font-size: 13.5px; font-weight: 600;
+  font-family: var(--font-display); font-size: 15px; font-weight: 600;
   color: var(--ink-0); letter-spacing: -.01em;
 }
 .dash-store{
@@ -3130,22 +3137,48 @@ section + .cta-section{ padding-top: 64px; }
 </head>
 <body>
 
-<!-- ACS LOGO — reusable SVG symbol (single source of truth) -->
+<!-- ACS LOGO - reusable SVG symbol (single source of truth) -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <defs>
     <linearGradient id="acsLogoGrad" x1="0%" y1="100%" x2="100%" y2="0%">
       <stop offset="0%" stop-color="#00A76A"/>
       <stop offset="100%" stop-color="#00FFA8"/>
     </linearGradient>
+    <radialGradient id="acsLogoNodeGrad" cx="35%" cy="30%" r="65%">
+      <stop offset="0%" stop-color="#00FFA8"/>
+      <stop offset="60%" stop-color="#00D084"/>
+      <stop offset="100%" stop-color="#007A4D"/>
+    </radialGradient>
+    <radialGradient id="acsLogoSparkGrad" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="40%" stop-color="#00FFA8"/>
+      <stop offset="100%" stop-color="#00D084"/>
+    </radialGradient>
   </defs>
   <symbol id="acs-logo" viewBox="0 0 32 32">
-    <!-- AI agent node, bottom-left -->
-    <circle cx="9" cy="22" r="3.5" fill="url(#acsLogoGrad)"/>
-    <!-- Scan beam dots, ascending toward growth -->
-    <circle cx="14" cy="18" r="1.1" fill="#00D084" opacity="0.6"/>
-    <circle cx="18" cy="14" r="0.9" fill="#00D084" opacity="0.4"/>
-    <!-- Trending-up arrow, top-right -->
-    <path d="M21 14 L26 9 M21 9 L26 9 L26 14" stroke="url(#acsLogoGrad)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    <!-- Outer radar orbit (subtle, large sizes only) -->
+    <circle cx="8" cy="23" r="9" stroke="#00D084" stroke-width="0.5" fill="none" opacity="0.18"/>
+    <circle cx="8" cy="23" r="6" stroke="#00D084" stroke-width="0.6" fill="none" opacity="0.32"/>
+
+    <!-- AI agent node - main element with radial depth + inner highlight -->
+    <circle cx="8" cy="23" r="4.2" fill="url(#acsLogoNodeGrad)"/>
+    <circle cx="6.6" cy="21.6" r="1.4" fill="#FFFFFF" opacity="0.6"/>
+
+    <!-- Beam wedge - filled triangle expanding up-right -->
+    <path d="M11.5 21 L19.5 14 L20 17.5 L12 23 Z" fill="url(#acsLogoGrad)" opacity="0.45"/>
+
+    <!-- Scan particles travelling along the beam -->
+    <circle cx="14" cy="19.5" r="1.1" fill="#00FFA8"/>
+    <circle cx="14" cy="19.5" r="2" fill="#00FFA8" opacity="0.3"/>
+    <circle cx="17.3" cy="16.5" r="0.85" fill="#00FFA8" opacity="0.85"/>
+
+    <!-- Trending-up arrow body + head (bolder stroke) -->
+    <path d="M19 16 L26 9" stroke="url(#acsLogoGrad)" stroke-width="3" stroke-linecap="round"/>
+    <path d="M20 8 L27 8 L27 15" stroke="url(#acsLogoGrad)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+
+    <!-- Spark glow at arrow tip -->
+    <circle cx="27" cy="8" r="2.6" fill="#00FFA8" opacity="0.28"/>
+    <circle cx="27" cy="8" r="1.6" fill="url(#acsLogoSparkGrad)"/>
   </symbol>
 </svg>
 
