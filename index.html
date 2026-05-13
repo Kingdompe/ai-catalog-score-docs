@@ -10,7 +10,7 @@
 <meta property="og:url" content="https://aicatalogscore.com"/>
 <meta property="og:type" content="website"/>
 <meta name="twitter:card" content="summary_large_image"/>
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230B0B0A'/%3E%3Ccircle cx='9' cy='22' r='3.5' fill='%2300D084'/%3E%3Ccircle cx='14' cy='18' r='1.1' fill='%2300D084' opacity='0.6'/%3E%3Ccircle cx='18' cy='14' r='0.9' fill='%2300D084' opacity='0.4'/%3E%3Cpath d='M21 14 L26 9 M21 9 L26 9 L26 14' stroke='%2300D084' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3C/svg%3E"/>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230B0B0A'/%3E%3Cpath d='M10.5 13.5 L21.5 13.5 L26 29 L6 29 Z' fill='%2300D084' opacity='0.35'/%3E%3Cellipse cx='16' cy='28' rx='8' ry='1' fill='%2300FFA8' opacity='0.5'/%3E%3Ccircle cx='16' cy='9.5' r='5.6' fill='%231A1916'/%3E%3Crect x='11' y='8' width='10' height='3.3' rx='1.6' fill='%230A0A09'/%3E%3Ccircle cx='13.6' cy='9.65' r='1.1' fill='%2300FFA8'/%3E%3Ccircle cx='18.4' cy='9.65' r='1.1' fill='%2300FFA8'/%3E%3Ccircle cx='16' cy='3' r='0.9' fill='%2300FFA8'/%3E%3C/svg%3E"/>
 
 <link rel="preconnect" href="https://api.fontshare.com"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
@@ -3144,41 +3144,62 @@ section + .cta-section{ padding-top: 64px; }
       <stop offset="0%" stop-color="#00A76A"/>
       <stop offset="100%" stop-color="#00FFA8"/>
     </linearGradient>
-    <radialGradient id="acsLogoNodeGrad" cx="35%" cy="30%" r="65%">
-      <stop offset="0%" stop-color="#00FFA8"/>
-      <stop offset="60%" stop-color="#00D084"/>
-      <stop offset="100%" stop-color="#007A4D"/>
+    <radialGradient id="acsBotGrad" cx="32%" cy="28%" r="70%">
+      <stop offset="0%" stop-color="#3A3833"/>
+      <stop offset="60%" stop-color="#1A1916"/>
+      <stop offset="100%" stop-color="#0A0A09"/>
     </radialGradient>
-    <radialGradient id="acsLogoSparkGrad" cx="50%" cy="50%" r="50%">
+    <linearGradient id="acsBeamGrad" x1="50%" y1="0%" x2="50%" y2="100%">
+      <stop offset="0%" stop-color="#00FFA8" stop-opacity="0.75"/>
+      <stop offset="50%" stop-color="#00D084" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#00D084" stop-opacity="0"/>
+    </linearGradient>
+    <radialGradient id="acsEyeGrad" cx="50%" cy="40%" r="60%">
       <stop offset="0%" stop-color="#FFFFFF"/>
-      <stop offset="40%" stop-color="#00FFA8"/>
-      <stop offset="100%" stop-color="#00D084"/>
+      <stop offset="50%" stop-color="#00FFA8"/>
+      <stop offset="100%" stop-color="#00A76A"/>
+    </radialGradient>
+    <radialGradient id="acsFloorGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#00FFA8" stop-opacity="0.8"/>
+      <stop offset="100%" stop-color="#00D084" stop-opacity="0"/>
     </radialGradient>
   </defs>
   <symbol id="acs-logo" viewBox="0 0 32 32">
-    <!-- Outer radar orbit (subtle, large sizes only) -->
-    <circle cx="8" cy="23" r="9" stroke="#00D084" stroke-width="0.5" fill="none" opacity="0.18"/>
-    <circle cx="8" cy="23" r="6" stroke="#00D084" stroke-width="0.6" fill="none" opacity="0.32"/>
+    <!-- Spotlight beam (cone descending from bot) -->
+    <path d="M10.5 13.5 L21.5 13.5 L26 29 L6 29 Z" fill="url(#acsBeamGrad)"/>
+    <!-- Beam outline rays (subtle gold-green strokes) -->
+    <line x1="10.5" y1="13.5" x2="6" y2="29" stroke="#00D084" stroke-width="0.4" opacity="0.45"/>
+    <line x1="21.5" y1="13.5" x2="26" y2="29" stroke="#00D084" stroke-width="0.4" opacity="0.45"/>
 
-    <!-- AI agent node - main element with radial depth + inner highlight -->
-    <circle cx="8" cy="23" r="4.2" fill="url(#acsLogoNodeGrad)"/>
-    <circle cx="6.6" cy="21.6" r="1.4" fill="#FFFFFF" opacity="0.6"/>
+    <!-- Floor glow where the beam lands -->
+    <ellipse cx="16" cy="28" rx="9" ry="1.2" fill="url(#acsFloorGlow)"/>
 
-    <!-- Beam wedge - filled triangle expanding up-right -->
-    <path d="M11.5 21 L19.5 14 L20 17.5 L12 23 Z" fill="url(#acsLogoGrad)" opacity="0.45"/>
+    <!-- Antenna dot on top of bot -->
+    <circle cx="16" cy="3" r="0.9" fill="#00FFA8"/>
+    <line x1="16" y1="3.8" x2="16" y2="5" stroke="#00D084" stroke-width="0.8" stroke-linecap="round"/>
 
-    <!-- Scan particles travelling along the beam -->
-    <circle cx="14" cy="19.5" r="1.1" fill="#00FFA8"/>
-    <circle cx="14" cy="19.5" r="2" fill="#00FFA8" opacity="0.3"/>
-    <circle cx="17.3" cy="16.5" r="0.85" fill="#00FFA8" opacity="0.85"/>
+    <!-- Bot head shadow (subtle, behind the head) -->
+    <ellipse cx="16" cy="10" rx="6.5" ry="6.5" fill="#000000" opacity="0.3"/>
 
-    <!-- Trending-up arrow body + head (bolder stroke) -->
-    <path d="M19 16 L26 9" stroke="url(#acsLogoGrad)" stroke-width="3" stroke-linecap="round"/>
-    <path d="M20 8 L27 8 L27 15" stroke="url(#acsLogoGrad)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    <!-- Bot head (sphere with radial gradient) -->
+    <circle cx="16" cy="9.5" r="5.6" fill="url(#acsBotGrad)"/>
+    <!-- Highlight on top-left of head -->
+    <ellipse cx="13.5" cy="6.5" rx="2.2" ry="1.5" fill="#FFFFFF" opacity="0.18" transform="rotate(-30 13.5 6.5)"/>
 
-    <!-- Spark glow at arrow tip -->
-    <circle cx="27" cy="8" r="2.6" fill="#00FFA8" opacity="0.28"/>
-    <circle cx="27" cy="8" r="1.6" fill="url(#acsLogoSparkGrad)"/>
+    <!-- Visor band (dark glossy strip) -->
+    <rect x="11" y="8" width="10" height="3.3" rx="1.6" fill="#0A0A09"/>
+    <!-- Visor inner gloss -->
+    <rect x="11.5" y="8.3" width="9" height="0.8" rx="0.4" fill="#FFFFFF" opacity="0.1"/>
+
+    <!-- Glowing eyes -->
+    <circle cx="13.6" cy="9.65" r="1.1" fill="url(#acsEyeGrad)"/>
+    <circle cx="18.4" cy="9.65" r="1.1" fill="url(#acsEyeGrad)"/>
+    <!-- Eye outer glow halos -->
+    <circle cx="13.6" cy="9.65" r="2.1" fill="#00FFA8" opacity="0.18"/>
+    <circle cx="18.4" cy="9.65" r="2.1" fill="#00FFA8" opacity="0.18"/>
+
+    <!-- Tiny mouth/speaker line under visor -->
+    <line x1="14.5" y1="13" x2="17.5" y2="13" stroke="#00D084" stroke-width="0.5" opacity="0.5" stroke-linecap="round"/>
   </symbol>
 </svg>
 
