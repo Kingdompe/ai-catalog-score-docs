@@ -5061,16 +5061,27 @@ if (terminalBody) terminalObserver.observe(terminalBody);
     });
   }
 
-  const obs = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (e.isIntersecting){
-        scene.classList.add('in-view');
-        animateCounters();
-        obs.disconnect();
-      }
-    });
-  }, { threshold: 0.15 });
-  obs.observe(scene);
+  function trigger(){
+    if (scene.classList.contains('in-view')) return;
+    scene.classList.add('in-view');
+    animateCounters();
+  }
+
+  // If any pixel of the scene is in the initial viewport on page load,
+  // trigger animations immediately. This handles the "land at top of page"
+  // case where the scene is partially below the fold but starts visible.
+  const r = scene.getBoundingClientRect();
+  if (r.top < window.innerHeight && r.bottom > 0){
+    trigger();
+  } else {
+    // Otherwise wait for the user to scroll the scene into view
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting){ trigger(); obs.disconnect(); }
+      });
+    }, { threshold: 0 });
+    obs.observe(scene);
+  }
 
   // Subtle parallax tilt on mouse move (desktop only)
   if (window.matchMedia('(min-width: 880px)').matches && !window.matchMedia('(prefers-reduced-motion: reduce)').matches){
