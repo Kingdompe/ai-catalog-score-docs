@@ -3344,171 +3344,6 @@ section{ position: relative; }
   </div>
 </section>
 
-<!-- BENTO GRID SECTION -->
-<section class="bento-section section-pad">
-  <div class="container">
-    <div class="reveal text-center" style="max-width:760px;margin:0 auto;">
-      <div class="eyebrow"><span class="dot"></span> WHAT YOU GET</div>
-      <h2 style="margin-top:18px">Everything you need to ship AI-ready catalogs at scale.</h2>
-    </div>
-    <div class="bento reveal-stagger" id="bentoGrid">
-      <div class="bento-cell wide gradient">
-        <div class="label">CROSS-AGENT</div>
-        <h3 class="big">6 AI agents,<br/>one ground truth.</h3>
-        <p>Daily capture of recommendations from ChatGPT, Gemini, Claude, Mistral, DeepSeek. Single-agent SEO is dead.</p>
-        <div class="visual">
-          <div class="viz-bars">
-            <span style="height:78%; --bar-d:.4s"></span>
-            <span style="height:62%; --bar-d:.46s"></span>
-            <span style="height:84%; --bar-d:.52s"></span>
-            <span style="height:46%; --bar-d:.58s"></span>
-            <span style="height:71%; --bar-d:.64s"></span>
-            <span style="height:24%; --bar-d:.70s"></span>
-            <span style="height:55%; --bar-d:.76s"></span>
-            <span style="height:88%; --bar-d:.82s"></span>
-            <span style="height:42%; --bar-d:.88s"></span>
-            <span style="height:67%; --bar-d:.94s"></span>
-            <span style="height:73%; --bar-d:1.0s"></span>
-            <span style="height:31%; --bar-d:1.06s"></span>
-          </div>
-        </div>
-      </div>
-      <div class="bento-cell">
-        <div class="label">SCALE</div>
-        <div class="stat-big num" data-target="31000" style="margin-top:18px">0</div>
-        <p>captures in our open dataset, growing by <span style="color:var(--brand-deep);font-weight:700;font-family:var(--font-mono)">+2.4k/day</span>.</p>
-        <div class="visual">
-          <svg class="viz-spark" viewBox="0 0 200 56" preserveAspectRatio="none">
-            <path class="sl-area" d="M0,50 L20,46 L40,42 L60,38 L80,32 L100,28 L120,22 L140,16 L160,12 L180,8 L200,4 L200,56 L0,56 Z"/>
-            <path class="sl-line" d="M0,50 L20,46 L40,42 L60,38 L80,32 L100,28 L120,22 L140,16 L160,12 L180,8 L200,4"/>
-            <circle class="sl-dot" cx="200" cy="4" r="3"/>
-          </svg>
-        </div>
-      </div>
-      <div class="bento-cell">
-        <div class="label">CAUSAL</div>
-        <h3>DiD + Welch's t-test</h3>
-        <p>Every fix runs as a real causal experiment with control group. <strong style="color:var(--ink-0)">p &lt; 0.05</strong> or it didn't happen.</p>
-        <div class="visual">
-          <div class="viz-distrib">
-            <span class="p-badge">p &lt; 0.05</span>
-            <svg viewBox="0 0 200 64" preserveAspectRatio="none">
-              <!-- Control distribution (left, lower mean) -->
-              <path class="dist-curve dist-control" style="--d:.5s"
-                d="M0,60 C20,55 30,40 50,28 C70,16 85,16 100,30 C110,40 115,55 130,60 Z"/>
-              <line class="dist-mean" x1="65" y1="14" x2="65" y2="60"/>
-              <!-- Treatment distribution (right, higher mean) -->
-              <path class="dist-curve dist-treatment" style="--d:.8s"
-                d="M70,60 C90,55 100,38 120,22 C140,8 158,10 175,26 C185,38 190,55 200,60 Z"/>
-              <line class="dist-mean treatment" x1="132" y1="6" x2="132" y2="60"/>
-            </svg>
-            <div class="dist-legend">
-              <span><span class="sw c"></span>Control</span>
-              <span><span class="sw t"></span>Treatment</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="bento-cell tall dark">
-        <div class="label">REFERENCE IMPL</div>
-        <h3 style="margin-top:16px">scoreProduct() in TypeScript.</h3>
-        <p>~400 LOC, no runtime deps. Deterministic. Runs in CI, on a Cloudflare Worker, anywhere.</p>
-        <div class="visual">
-          <div class="viz-code">
-<span class="c-comment">// scoreProduct(product) → ScoreResult</span><br/>
-<span class="c-key">const</span> result = <span class="c-brand">scoreProduct</span>({<br/>
-&nbsp;&nbsp;title: <span class="c-brand">"Wool Runner"</span>,<br/>
-&nbsp;&nbsp;description: <span class="c-brand">"Waterproof…"</span>,<br/>
-&nbsp;&nbsp;images: [{ alt: <span class="c-brand">"Side view"</span> }]<br/>
-});<br/>
-<span class="c-comment">// → { totalScore: 82, grade: "A" }</span>
-          </div>
-        </div>
-      </div>
-      <div class="bento-cell wide">
-        <div class="label">OPEN STANDARD</div>
-        <h3 class="big">CC0 spec.<br/>Anyone can adopt.</h3>
-        <p>The methodology is published as public domain. No friction for Shopify, BigCommerce, WooCommerce to ship it inside their official docs.</p>
-        <div class="visual" style="display:flex;gap:8px;flex-wrap:wrap">
-          <span class="chip" style="background:var(--brand-wash);color:var(--brand-ink);border-color:transparent">CC0 1.0</span>
-          <span class="chip" style="background:var(--accent-blue-wash);color:var(--accent-blue);border-color:transparent">MIT skills</span>
-          <span class="chip" style="background:var(--accent-purple-wash);color:var(--accent-purple);border-color:transparent">CC0 benchmarks</span>
-        </div>
-      </div>
-
-      <div class="bento-cell">
-        <div class="label">PERFORMANCE</div>
-        <div class="stat-big num" style="margin-top:18px">5%</div>
-        <p>of AI uplift — pay only when we lift your revenue. Cap $5k/mo.</p>
-        <div class="visual">
-          <div class="viz-revenue">
-            <span class="rev-callout">+$8.4k MRR</span>
-            <svg viewBox="0 0 200 64" preserveAspectRatio="none">
-              <path class="rev-area" d="M0,52 L25,50 L50,44 L75,38 L100,32 L125,24 L150,18 L175,12 L200,6 L200,64 L0,64 Z"/>
-              <path class="rev-line" d="M0,52 L25,50 L50,44 L75,38 L100,32 L125,24 L150,18 L175,12 L200,6"/>
-              <circle class="rev-dot" cx="200" cy="6" r="3"/>
-            </svg>
-          </div>
-        </div>
-      </div>
-      <div class="bento-cell">
-        <div class="label">CONTRACTUAL</div>
-        <h3>Score Guarantee</h3>
-        <p>+10 points within 30 days or your money back. Written in the ToS.</p>
-        <div class="visual">
-          <div class="viz-guarantee">
-            <div class="guar-ring">
-              <svg viewBox="0 0 80 80">
-                <defs>
-                  <linearGradient id="guarGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stop-color="var(--brand)"/>
-                    <stop offset="100%" stop-color="var(--brand-deep)"/>
-                  </linearGradient>
-                </defs>
-                <circle class="guar-track" cx="40" cy="40" r="34"/>
-                <circle class="guar-fill" cx="40" cy="40" r="34"/>
-              </svg>
-              <div class="guar-center">
-                <span class="guar-num">+10</span>
-                <span class="guar-label">PTS</span>
-              </div>
-            </div>
-            <div class="guar-meta">
-              <span class="gm-row">30-day window</span>
-              <span class="gm-row">Money-back ToS</span>
-              <span class="gm-row">No fine print</span>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="bento-cell wide">
-        <div class="label">SKILLS</div>
-        <h3 class="big">/plugin install</h3>
-        <p>8 drop-in agent skills for Claude Code, Cursor, Cline, Copilot, Gemini CLI. All mutations <code style="font-family:var(--font-mono);background:var(--bg-sunk);padding:1px 6px;border-radius:4px;font-size:12.5px">dry_run</code> by default.</p>
-        <div class="visual">
-          <div class="viz-skills">
-            <div class="skills-cmd">
-              <span class="prompt">$</span>
-              <span>npx skills add</span>
-              <span class="arg">commerce-agentic/agentic-commerce-skills</span>
-            </div>
-            <div class="skills-row">
-              <span class="skill-chip"><span class="sc-icon" style="background:linear-gradient(135deg,#CC785C,#A35538)">C</span>Claude Code</span>
-              <span class="skill-chip"><span class="sc-icon" style="background:linear-gradient(135deg,#000,#333)">C</span>Cursor</span>
-              <span class="skill-chip"><span class="sc-icon" style="background:linear-gradient(135deg,#4F8AFF,#2D5BCF)">C</span>Cline</span>
-              <span class="skill-chip"><span class="sc-icon" style="background:linear-gradient(135deg,#2DA44E,#1A6E33)">C</span>Copilot</span>
-              <span class="skill-chip"><span class="sc-icon" style="background:linear-gradient(135deg,#4285F4,#2D63D3)">G</span>Gemini CLI</span>
-              <span class="skill-chip"><span class="sc-icon" style="background:linear-gradient(135deg,#10A37F,#1A7F64)">G</span>GPT CLI</span>
-              <span class="skill-chip" style="background:var(--brand-wash);border-color:transparent;color:var(--brand-ink);font-weight:600">8 skills · MIT</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
 <!-- PROBLEM -->
 <section class="problem-section section-pad-sm">
   <div class="container">
@@ -3670,29 +3505,6 @@ section{ position: relative; }
         <div class="icon">📊</div>
         <h3>Measure causal uplift</h3>
         <p>Every fix runs as a Difference-in-Differences experiment with control group. Welch's t-test on per-product session deltas. <strong style="color:var(--ink-0)">p &lt; 0.05 or it didn't happen.</strong></p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- TERMINAL / SKILLS SECTION -->
-<section id="terminal" class="terminal-section section-pad">
-  <canvas id="auroraCanvas" class="terminal-aurora" aria-hidden="true"></canvas>
-  <div class="container">
-    <div class="text-center reveal">
-      <div class="eyebrow"><span class="dot"></span> OPEN SKILLS LIBRARY</div>
-      <div class="section-head text-center" style="margin-bottom:0">
-        <h2>Drop our skills into Claude Code, Cursor, Cline, Copilot, Gemini CLI.</h2>
-        <p style="font-size:17px;margin-top:18px">One command. 8 skills available out of the box. MIT-licensed.</p>
-      </div>
-    </div>
-    <div class="terminal-wrap reveal">
-      <div class="terminal">
-        <div class="terminal-header">
-          <div class="dots"><span></span><span></span><span></span></div>
-          <div class="title">~/shopify-store · zsh</div>
-        </div>
-        <div class="terminal-body" id="terminalBody"></div>
       </div>
     </div>
   </div>
@@ -4115,6 +3927,194 @@ section{ position: relative; }
         </div>
         <a href="#install" class="pcta secondary">Contact sales</a>
         <div class="pricing-glassy-trial">No fee if no lift</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BENTO GRID SECTION -->
+<section class="bento-section section-pad">
+  <div class="container">
+    <div class="reveal text-center" style="max-width:760px;margin:0 auto;">
+      <div class="eyebrow"><span class="dot"></span> WHAT YOU GET</div>
+      <h2 style="margin-top:18px">Everything you need to ship AI-ready catalogs at scale.</h2>
+    </div>
+    <div class="bento reveal-stagger" id="bentoGrid">
+      <div class="bento-cell wide gradient">
+        <div class="label">CROSS-AGENT</div>
+        <h3 class="big">6 AI agents,<br/>one ground truth.</h3>
+        <p>Daily capture of recommendations from ChatGPT, Gemini, Claude, Mistral, DeepSeek. Single-agent SEO is dead.</p>
+        <div class="visual">
+          <div class="viz-bars">
+            <span style="height:78%; --bar-d:.4s"></span>
+            <span style="height:62%; --bar-d:.46s"></span>
+            <span style="height:84%; --bar-d:.52s"></span>
+            <span style="height:46%; --bar-d:.58s"></span>
+            <span style="height:71%; --bar-d:.64s"></span>
+            <span style="height:24%; --bar-d:.70s"></span>
+            <span style="height:55%; --bar-d:.76s"></span>
+            <span style="height:88%; --bar-d:.82s"></span>
+            <span style="height:42%; --bar-d:.88s"></span>
+            <span style="height:67%; --bar-d:.94s"></span>
+            <span style="height:73%; --bar-d:1.0s"></span>
+            <span style="height:31%; --bar-d:1.06s"></span>
+          </div>
+        </div>
+      </div>
+      <div class="bento-cell">
+        <div class="label">SCALE</div>
+        <div class="stat-big num" data-target="31000" style="margin-top:18px">0</div>
+        <p>captures in our open dataset, growing by <span style="color:var(--brand-deep);font-weight:700;font-family:var(--font-mono)">+2.4k/day</span>.</p>
+        <div class="visual">
+          <svg class="viz-spark" viewBox="0 0 200 56" preserveAspectRatio="none">
+            <path class="sl-area" d="M0,50 L20,46 L40,42 L60,38 L80,32 L100,28 L120,22 L140,16 L160,12 L180,8 L200,4 L200,56 L0,56 Z"/>
+            <path class="sl-line" d="M0,50 L20,46 L40,42 L60,38 L80,32 L100,28 L120,22 L140,16 L160,12 L180,8 L200,4"/>
+            <circle class="sl-dot" cx="200" cy="4" r="3"/>
+          </svg>
+        </div>
+      </div>
+      <div class="bento-cell">
+        <div class="label">CAUSAL</div>
+        <h3>DiD + Welch's t-test</h3>
+        <p>Every fix runs as a real causal experiment with control group. <strong style="color:var(--ink-0)">p &lt; 0.05</strong> or it didn't happen.</p>
+        <div class="visual">
+          <div class="viz-distrib">
+            <span class="p-badge">p &lt; 0.05</span>
+            <svg viewBox="0 0 200 64" preserveAspectRatio="none">
+              <!-- Control distribution (left, lower mean) -->
+              <path class="dist-curve dist-control" style="--d:.5s"
+                d="M0,60 C20,55 30,40 50,28 C70,16 85,16 100,30 C110,40 115,55 130,60 Z"/>
+              <line class="dist-mean" x1="65" y1="14" x2="65" y2="60"/>
+              <!-- Treatment distribution (right, higher mean) -->
+              <path class="dist-curve dist-treatment" style="--d:.8s"
+                d="M70,60 C90,55 100,38 120,22 C140,8 158,10 175,26 C185,38 190,55 200,60 Z"/>
+              <line class="dist-mean treatment" x1="132" y1="6" x2="132" y2="60"/>
+            </svg>
+            <div class="dist-legend">
+              <span><span class="sw c"></span>Control</span>
+              <span><span class="sw t"></span>Treatment</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bento-cell tall dark">
+        <div class="label">REFERENCE IMPL</div>
+        <h3 style="margin-top:16px">scoreProduct() in TypeScript.</h3>
+        <p>~400 LOC, no runtime deps. Deterministic. Runs in CI, on a Cloudflare Worker, anywhere.</p>
+        <div class="visual">
+          <div class="viz-code">
+<span class="c-comment">// scoreProduct(product) → ScoreResult</span><br/>
+<span class="c-key">const</span> result = <span class="c-brand">scoreProduct</span>({<br/>
+&nbsp;&nbsp;title: <span class="c-brand">"Wool Runner"</span>,<br/>
+&nbsp;&nbsp;description: <span class="c-brand">"Waterproof…"</span>,<br/>
+&nbsp;&nbsp;images: [{ alt: <span class="c-brand">"Side view"</span> }]<br/>
+});<br/>
+<span class="c-comment">// → { totalScore: 82, grade: "A" }</span>
+          </div>
+        </div>
+      </div>
+      <div class="bento-cell wide">
+        <div class="label">OPEN STANDARD</div>
+        <h3 class="big">CC0 spec.<br/>Anyone can adopt.</h3>
+        <p>The methodology is published as public domain. No friction for Shopify, BigCommerce, WooCommerce to ship it inside their official docs.</p>
+        <div class="visual" style="display:flex;gap:8px;flex-wrap:wrap">
+          <span class="chip" style="background:var(--brand-wash);color:var(--brand-ink);border-color:transparent">CC0 1.0</span>
+          <span class="chip" style="background:var(--accent-blue-wash);color:var(--accent-blue);border-color:transparent">MIT skills</span>
+          <span class="chip" style="background:var(--accent-purple-wash);color:var(--accent-purple);border-color:transparent">CC0 benchmarks</span>
+        </div>
+      </div>
+
+      <div class="bento-cell">
+        <div class="label">PERFORMANCE</div>
+        <div class="stat-big num" style="margin-top:18px">5%</div>
+        <p>of AI uplift — pay only when we lift your revenue. Cap $5k/mo.</p>
+        <div class="visual">
+          <div class="viz-revenue">
+            <span class="rev-callout">+$8.4k MRR</span>
+            <svg viewBox="0 0 200 64" preserveAspectRatio="none">
+              <path class="rev-area" d="M0,52 L25,50 L50,44 L75,38 L100,32 L125,24 L150,18 L175,12 L200,6 L200,64 L0,64 Z"/>
+              <path class="rev-line" d="M0,52 L25,50 L50,44 L75,38 L100,32 L125,24 L150,18 L175,12 L200,6"/>
+              <circle class="rev-dot" cx="200" cy="6" r="3"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+      <div class="bento-cell">
+        <div class="label">CONTRACTUAL</div>
+        <h3>Score Guarantee</h3>
+        <p>+10 points within 30 days or your money back. Written in the ToS.</p>
+        <div class="visual">
+          <div class="viz-guarantee">
+            <div class="guar-ring">
+              <svg viewBox="0 0 80 80">
+                <defs>
+                  <linearGradient id="guarGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="var(--brand)"/>
+                    <stop offset="100%" stop-color="var(--brand-deep)"/>
+                  </linearGradient>
+                </defs>
+                <circle class="guar-track" cx="40" cy="40" r="34"/>
+                <circle class="guar-fill" cx="40" cy="40" r="34"/>
+              </svg>
+              <div class="guar-center">
+                <span class="guar-num">+10</span>
+                <span class="guar-label">PTS</span>
+              </div>
+            </div>
+            <div class="guar-meta">
+              <span class="gm-row">30-day window</span>
+              <span class="gm-row">Money-back ToS</span>
+              <span class="gm-row">No fine print</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="bento-cell wide">
+        <div class="label">SKILLS</div>
+        <h3 class="big">/plugin install</h3>
+        <p>8 drop-in agent skills for Claude Code, Cursor, Cline, Copilot, Gemini CLI. All mutations <code style="font-family:var(--font-mono);background:var(--bg-sunk);padding:1px 6px;border-radius:4px;font-size:12.5px">dry_run</code> by default.</p>
+        <div class="visual">
+          <div class="viz-skills">
+            <div class="skills-cmd">
+              <span class="prompt">$</span>
+              <span>npx skills add</span>
+              <span class="arg">commerce-agentic/agentic-commerce-skills</span>
+            </div>
+            <div class="skills-row">
+              <span class="skill-chip"><span class="sc-icon" style="background:linear-gradient(135deg,#CC785C,#A35538)">C</span>Claude Code</span>
+              <span class="skill-chip"><span class="sc-icon" style="background:linear-gradient(135deg,#000,#333)">C</span>Cursor</span>
+              <span class="skill-chip"><span class="sc-icon" style="background:linear-gradient(135deg,#4F8AFF,#2D5BCF)">C</span>Cline</span>
+              <span class="skill-chip"><span class="sc-icon" style="background:linear-gradient(135deg,#2DA44E,#1A6E33)">C</span>Copilot</span>
+              <span class="skill-chip"><span class="sc-icon" style="background:linear-gradient(135deg,#4285F4,#2D63D3)">G</span>Gemini CLI</span>
+              <span class="skill-chip"><span class="sc-icon" style="background:linear-gradient(135deg,#10A37F,#1A7F64)">G</span>GPT CLI</span>
+              <span class="skill-chip" style="background:var(--brand-wash);border-color:transparent;color:var(--brand-ink);font-weight:600">8 skills · MIT</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TERMINAL / SKILLS SECTION -->
+<section id="terminal" class="terminal-section section-pad">
+  <canvas id="auroraCanvas" class="terminal-aurora" aria-hidden="true"></canvas>
+  <div class="container">
+    <div class="text-center reveal">
+      <div class="eyebrow"><span class="dot"></span> OPEN SKILLS LIBRARY</div>
+      <div class="section-head text-center" style="margin-bottom:0">
+        <h2>Drop our skills into Claude Code, Cursor, Cline, Copilot, Gemini CLI.</h2>
+        <p style="font-size:17px;margin-top:18px">One command. 8 skills available out of the box. MIT-licensed.</p>
+      </div>
+    </div>
+    <div class="terminal-wrap reveal">
+      <div class="terminal">
+        <div class="terminal-header">
+          <div class="dots"><span></span><span></span><span></span></div>
+          <div class="title">~/shopify-store · zsh</div>
+        </div>
+        <div class="terminal-body" id="terminalBody"></div>
       </div>
     </div>
   </div>
