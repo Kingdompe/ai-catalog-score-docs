@@ -2410,7 +2410,9 @@ section{ position: relative; }
   max-height: 0; overflow: hidden;
   transition: max-height .3s var(--ease-in-out), padding .3s var(--ease-in-out);
 }
-.faq-item.open .faq-a{ padding: 4px 26px 24px; max-height: 400px; }
+.faq-item.open .faq-a{ padding: 4px 26px 24px; max-height: 600px; }
+.faq-a strong{ color: var(--ink-0); font-weight: 600; }
+.faq-a a{ color: var(--brand-deep); border-bottom: 1px solid var(--brand-deep); }
 .faq-a code{ background: var(--bg-sunk); padding: 2px 6px; border-radius: 4px; font-size: 13px; font-family: var(--font-mono); }
 
 /* ============ FINAL CTA ============ */
@@ -4425,33 +4427,86 @@ section + .cta-section{ padding-top: 64px; }
   <div class="container faq-wrap">
     <div class="faq-head reveal">
       <div class="eyebrow" style="justify-content:center"><span class="dot"></span> FAQ</div>
-      <h2>Questions merchants actually ask.</h2>
+      <h2>Frequently Asked Questions</h2>
+      <p style="font-size:17px;color:var(--ink-2);margin-top:14px;text-align:center">Everything merchants need to know before installing. Can't find your answer? <a href="mailto:hello@aicatalogscore.com" style="color:var(--brand-deep);border-bottom:1px solid var(--brand-deep)">Ask us directly</a>.</p>
     </div>
     <div class="faq-card reveal">
+
       <div class="faq-item open">
-        <button class="faq-q" type="button"><span>How is this different from generic SEO tools?</span><span class="arrow">›</span></button>
-        <div class="faq-a">SEO is for search engine crawlers. We measure what AI shopping agents (ChatGPT, Gemini, Claude, Mistral, DeepSeek) actually recommend when shoppers ask them. Different signals - they parse product structure (titles, attributes, reviews, structured data) very differently than how Google ranks pages.</div>
+        <button class="faq-q" type="button"><span>How long does setup take?</span><span class="arrow">›</span></button>
+        <div class="faq-a"><strong>90 seconds.</strong> Install from the Shopify App Store, grant Admin API scopes, and the first scan kicks off automatically. Your full catalog is scored in under 4 minutes for a 500-SKU store, ~12 minutes for 5,000 SKUs. No developer involvement, no theme code edits, no Liquid required.</div>
       </div>
+
+      <div class="faq-item">
+        <button class="faq-q" type="button"><span>How is this different from generic SEO tools?</span><span class="arrow">›</span></button>
+        <div class="faq-a">SEO tools (Yoast, Ahrefs, SurferSEO) measure how Google's search crawler ranks pages. We measure what AI shopping agents (ChatGPT, Claude, Gemini, Perplexity, Mistral, DeepSeek) actually recommend when a shopper asks them. The two systems share some signals (structured data, alt text) but weight them very differently. SEO tools also can't tell you which products are missing from agent answers - we can.</div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" type="button"><span>How is this different from Profound, Athena AI, or ShopRank?</span><span class="arrow">›</span></button>
+        <div class="faq-a">Three structural differences: (1) we capture all <strong>6 AI agents synchronously</strong> on the same query - Profound watches 2-3, Athena watches ChatGPT only, ShopRank uses 4 dimensions vs our 8; (2) we <strong>prove fixes worked causally</strong> with DiD + Welch's t-test (p &lt; 0.05) - they use observational attribution; (3) we offer a <strong>money-back Score Guarantee</strong> - none of them do. Plus our scoring methodology is CC0 open source; theirs is closed.</div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" type="button"><span>Will this slow down my store?</span><span class="arrow">›</span></button>
+        <div class="faq-a">No measurable impact on storefront speed. We use the Shopify Admin API server-side (off-thread, no shopper-facing JS). The only thing that touches your theme is an optional JSON-LD injection in product page headers - that adds ~2 KB to the HTML (smaller than a typical logo image). Tested against Core Web Vitals on 50+ stores: no LCP/FID/CLS regression.</div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" type="button"><span>What if my catalog is already AI-optimized?</span><span class="arrow">›</span></button>
+        <div class="faq-a">Run the free 60-second scan first. If your score is already <strong>A+ (90 or above)</strong> across all 8 dimensions and 6 agents, you genuinely don't need us - we'll tell you that and suggest audit-only tier ($0). In practice, the average self-reported "optimized" catalog scores <strong>B- to C+</strong> on first scan. Agentic commerce signals (JSON-LD product schema, metafield completeness, multi-agent reviews) are different enough from classic SEO that very few merchants are actually optimized for both.</div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" type="button"><span>Will this hurt my Google SEO?</span><span class="arrow">›</span></button>
+        <div class="faq-a">Opposite effect. JSON-LD structured data, alt text, richer product metadata, and consistent metafields are universally good for search engines. Google indexes the same signals AI agents use - they just weight them differently. Beta merchants observed <strong>+3-8% in organic Google traffic</strong> in the 30 days following catalog optimization, alongside the AI lift.</div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" type="button"><span>How does the 5% Performance pricing actually get billed?</span><span class="arrow">›</span></button>
+        <div class="faq-a">We measure your <strong>AI-attributed revenue</strong> (sessions and orders coming from ChatGPT, Claude, Gemini, Perplexity, Mistral, DeepSeek - identified via referrer + UTM patterns) over a 30-day baseline before activation, then monthly after. The 5% only applies to the <strong>uplift</strong> over baseline, capped at $5,000/month. If sessions don't grow, your bill is $0. The causal model is public - you can verify our math.</div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" type="button"><span>What happens after the 7-day free trial?</span><span class="arrow">›</span></button>
+        <div class="faq-a">Your card is charged the founding price ($59/$169/$499 per month depending on plan you chose). You can cancel any time directly from the Shopify admin - no email required, no retention call, no questions asked. We pause the first charge until day 8 so you have full preview access during the trial.</div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" type="button"><span>What is the "Founding price" and will it really stay locked?</span><span class="arrow">›</span></button>
+        <div class="faq-a">The first 200 stores who install get the founding pricing ($59 / $169 / $499) <strong>locked in for 12 months from sign-up</strong>. After that 12-month period or once we hit 200 stores (whichever first), new sign-ups pay standard pricing ($89 / $239 / $699). Your founding rate is written into your contract - we cannot raise it during the lock period.</div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" type="button"><span>How does the +10 pts Score Guarantee work?</span><span class="arrow">›</span></button>
+        <div class="faq-a">If your AI Catalog Score doesn't lift by at least <strong>+10 points within 30 days</strong> of activating a paid plan (and you applied at least the top 5 recommended fixes), every dollar you paid in that window is refunded. <strong>No support ticket required</strong> - we auto-refund when the threshold isn't met. The guarantee is in the Terms of Service v1.0, not the marketing copy. Performance plan gets a Double Guarantee (+20 pts).</div>
+      </div>
+
       <div class="faq-item">
         <button class="faq-q" type="button"><span>Will this break my catalog?</span><span class="arrow">›</span></button>
-        <div class="faq-a">No. Every mutation has <code>dry_run: true</code> by default. We preview the change, you approve, then we apply. Journaled audit trail per SKU with 30-day undo. We never overwrite product titles or descriptions without explicit consent.</div>
+        <div class="faq-a">No. Every mutation runs with <code>dry_run: true</code> by default. We preview the exact change, you click approve, then we apply. Every action is journaled per-SKU with a 30-day full undo. We never overwrite product titles or descriptions without explicit consent, never touch pricing or inventory, and never modify any field you've marked as locked.</div>
       </div>
+
       <div class="faq-item">
-        <button class="faq-q" type="button"><span>Is the methodology really open?</span><span class="arrow">›</span></button>
-        <div class="faq-a">Yes - the scoring spec is published under CC0 1.0 (public domain) at github.com/commerce-agentic/agentic-commerce-spec. The reference TypeScript implementation and ML uplift models are MIT. You can fork, audit, or build a competing product. We make money on the tooling around the score, not the score itself.</div>
+        <button class="faq-q" type="button"><span>How do you prove a fix actually worked?</span><span class="arrow">›</span></button>
+        <div class="faq-a">Causal A/B testing using <strong>Difference-in-Differences with Welch's t-test</strong> on per-product session deltas. We split your products 50/50 treatment/control, measure AI-attributed sessions before and after the fix, and only declare uplift when <code>p &lt; 0.05</code>. Every other tool gives you observational attribution ("correlation"). We give you statistical proof ("causation"). Full methodology in the CC0 spec.</div>
       </div>
+
       <div class="faq-item">
         <button class="faq-q" type="button"><span>What data do you access from my store?</span><span class="arrow">›</span></button>
-        <div class="faq-a">Read access to products (titles, descriptions, images, metafields, variants), order metadata (for AI traffic attribution), and theme files (for JSON-LD injection). We never store customer PII - no names, emails, phone, or addresses. Full privacy policy at <a href="/privacy.html" style="color:var(--brand-deep);border-bottom:1px solid var(--brand-deep)">privacy.html</a>.</div>
+        <div class="faq-a"><strong>Read access:</strong> products (titles, descriptions, images, metafields, variants), order metadata (for AI traffic attribution - no customer PII), and theme files (for optional JSON-LD injection). <strong>Write access:</strong> only the fields you explicitly approve in the dry-run preview. We never store customer names, emails, phone numbers, or addresses. Full privacy policy at <a href="/privacy.html" style="color:var(--brand-deep);border-bottom:1px solid var(--brand-deep)">privacy.html</a>.</div>
       </div>
+
       <div class="faq-item">
-        <button class="faq-q" type="button"><span>How do you prove the fixes actually worked?</span><span class="arrow">›</span></button>
-        <div class="faq-a">Causal A/B testing using Difference-in-Differences with Welch's t-test on per-product session deltas. We split products 50/50 treatment/control, measure AI-attributed sessions before/after the fix, and only claim uplift when p &lt; 0.05. Every other tool gives you observational attribution. We give you statistical proof.</div>
+        <button class="faq-q" type="button"><span>Is the methodology really open?</span><span class="arrow">›</span></button>
+        <div class="faq-a">Yes - the 8-dimension scoring spec is published under <strong>CC0 1.0 (public domain)</strong> at <a href="https://github.com/commerce-agentic/agentic-commerce-spec" target="_blank" rel="noopener" style="color:var(--brand-deep);border-bottom:1px solid var(--brand-deep)">commerce-agentic/agentic-commerce-spec</a>. The reference TypeScript implementation, scoring weights, and ML uplift models are MIT. You can fork it, audit it, build a competing product, or wait for Shopify/BigCommerce/WooCommerce to adopt it in their official docs. We make money on the tooling, automation, and proof - not the score itself.</div>
       </div>
+
       <div class="faq-item">
         <button class="faq-q" type="button"><span>Can I uninstall and keep my data clean?</span><span class="arrow">›</span></button>
-        <div class="faq-a">Yes. On uninstall, all data is purged from our DB within 48 hours per Shopify GDPR webhook requirements. Score metafields written to your products stay there (you own them), but you can manually delete them via the Shopify admin.</div>
+        <div class="faq-a">Yes. On uninstall, all data is purged from our database within <strong>48 hours</strong> per Shopify's GDPR webhook requirements (we honor <code>app/uninstalled</code>, <code>shop/redact</code>, and <code>customers/redact</code>). Score metafields written to your products stay there (you own them on your Shopify), but you can delete them manually via the admin or with one API call - we provide the script in our docs.</div>
       </div>
+
     </div>
   </div>
 </section>
