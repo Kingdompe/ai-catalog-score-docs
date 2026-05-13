@@ -2580,6 +2580,28 @@ section + .cta-section{ padding-top: 64px; }
 .cta-meter .meter-row .accent{ color: var(--brand-light); font-weight: 700; }
 .cta-meter.urgent .meter-row .accent{ color: #FF8B8E; }
 
+/* Guarantee variant — checklist replaces sparkline */
+.cta-meter .meter-checklist{
+  list-style: none;
+  padding: 14px 0 0;
+  margin: 16px 0 0;
+  border-top: 1px dashed rgba(255,255,255,.1);
+  display: flex; flex-direction: column; gap: 8px;
+}
+.cta-meter .meter-checklist li{
+  display: flex; align-items: center; gap: 10px;
+  font-family: var(--font-mono); font-size: 11.5px;
+  color: rgba(255,255,255,.72);
+  letter-spacing: .02em;
+}
+.cta-meter .meter-checklist li::before{
+  content: '✓';
+  color: var(--brand-light);
+  font-weight: 700;
+  font-size: 13px;
+  flex-shrink: 0;
+}
+
 /* ============ FOOTER ============ */
 .footer{ border-top: 1px solid var(--border); padding: 72px 0 48px; background: var(--bg); }
 .footer-grid{ display: grid; grid-template-columns: 1.4fr repeat(4, 1fr); gap: 48px; }
@@ -4232,27 +4254,22 @@ section + .cta-section{ padding-top: 64px; }
       <div class="cta-inner">
         <div class="cta-content">
           <h2>Ready to ship <span class="accent">AI-ready catalogs</span>?</h2>
-          <p>Join the merchants already optimizing for ChatGPT, Claude, Gemini, Perplexity, Mistral, and DeepSeek. Install in 90 seconds.</p>
+          <p>Get scored against the same 6 AI agents that already shape catalog visibility — ChatGPT, Claude, Gemini, Perplexity, Mistral, DeepSeek. Install in 90 seconds.</p>
           <div class="ctas">
             <a href="#" class="btn btn-primary">Install free on Shopify <span class="btn-arrow">→</span></a>
             <a href="https://github.com/commerce-agentic" class="btn btn-dark-outline" target="_blank" rel="noopener">View on GitHub <span class="btn-arrow">↗</span></a>
           </div>
-          <div class="micro">FREE PLAN · NO CREDIT CARD · SHOPIFY PARTNER CERTIFIED</div>
+          <div class="micro">FREE PLAN · NO CREDIT CARD · OPEN METHODOLOGY (CC0)</div>
         </div>
         <div class="cta-meter">
-          <div class="meter-label"><span class="meter-pulse"></span>Live · today</div>
-          <div class="meter-num" id="ctaInstallCounter">304</div>
-          <div class="meter-sub"><strong>Shopify stores</strong> already on AI Catalog Score · growing daily</div>
-          <div class="meter-spark">
-            <svg viewBox="0 0 200 28" preserveAspectRatio="none">
-              <path class="ms-area brand" d="M0,24 L20,22 L40,21 L60,19 L80,16 L100,14 L120,11 L140,9 L160,7 L180,4 L200,2 L200,28 L0,28 Z"/>
-              <path class="ms-line" d="M0,24 L20,22 L40,21 L60,19 L80,16 L100,14 L120,11 L140,9 L160,7 L180,4 L200,2"/>
-            </svg>
-          </div>
-          <div class="meter-row">
-            <span><span class="accent">+18</span> this week</span>
-            <span>4.8★ avg · 11 reviews</span>
-          </div>
+          <div class="meter-label"><span class="meter-pulse"></span>Score Guarantee · v1.0</div>
+          <div class="meter-num">+10 pts</div>
+          <div class="meter-sub"><strong>score lift within 30 days</strong> — or your money back. Written in the Terms of Service.</div>
+          <ul class="meter-checklist">
+            <li>30-day evaluation window</li>
+            <li>Full refund · no questions asked</li>
+            <li>Applies to every paid plan</li>
+          </ul>
         </div>
       </div>
     </div>
@@ -4972,16 +4989,6 @@ if (terminalBody) terminalObserver.observe(terminalBody);
       lossVal += Math.floor(Math.random() * 47) + 12; // +12 to +59 every tick
       lossEl.textContent = '$' + lossVal.toLocaleString('en-US');
     }, 2400);
-  }
-  const installEl = document.getElementById('ctaInstallCounter');
-  if (installEl){
-    let installVal = 304;
-    setInterval(() => {
-      if (Math.random() < 0.3){ // ~30% chance per tick = realistic install pace
-        installVal += 1;
-        installEl.textContent = installVal.toLocaleString('en-US');
-      }
-    }, 8000);
   }
 })();
 
