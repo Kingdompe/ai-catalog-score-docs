@@ -1672,56 +1672,158 @@ section{ position: relative; }
 
 /* Lock-out warning callout */
 .lockout-callout{
-  margin-top: 20px;
-  padding: 22px 26px;
-  background: linear-gradient(135deg, var(--crit-wash) 0%, var(--bg-sunk) 100%);
-  border: 1px solid rgba(229,72,77,.25);
+  margin-top: 28px;
+  padding: 28px 32px;
+  background:
+    radial-gradient(ellipse at 0% 0%, rgba(229,72,77,.22) 0%, transparent 55%),
+    radial-gradient(ellipse at 100% 100%, rgba(245,158,11,.14) 0%, transparent 55%),
+    linear-gradient(135deg, var(--crit-wash) 0%, var(--bg-raised) 100%);
+  border: 1px solid rgba(229,72,77,.32);
   border-radius: var(--r-xl);
-  display: grid; grid-template-columns: 44px 1fr auto; gap: 18px;
+  display: grid; grid-template-columns: 60px 1fr auto; gap: 24px;
   align-items: center;
   position: relative; overflow: hidden;
+  box-shadow:
+    0 1px 2px rgba(229,72,77,.06),
+    0 16px 40px -12px rgba(229,72,77,.22);
 }
 @media (max-width: 720px){
-  .lockout-callout{ grid-template-columns: 1fr; text-align: left; }
+  .lockout-callout{ grid-template-columns: 1fr; text-align: left; padding: 24px; gap: 16px; }
   .lockout-callout .lo-cta{ justify-self: stretch; }
+  .lockout-icon{ margin: 0 auto 4px; }
 }
+
+/* Animated shimmer line across the top — urgency signal */
+.lockout-callout::before{
+  content:''; position: absolute; top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent 0%, var(--crit) 40%, var(--warn) 50%, var(--crit) 60%, transparent 100%);
+  background-size: 200% 100%;
+  animation: lockoutShimmer 3.5s linear infinite;
+  z-index: 2;
+}
+@keyframes lockoutShimmer{
+  0%{ background-position: 200% 50%; }
+  100%{ background-position: -200% 50%; }
+}
+
+/* Breathing radial glow in the corner */
 .lockout-callout::after{
-  content:''; position: absolute; top: 0; right: 0;
-  width: 200px; height: 200px;
-  background: radial-gradient(circle, rgba(229,72,77,.12), transparent 70%);
+  content:''; position: absolute; top: -30%; right: -10%;
+  width: 320px; height: 320px;
+  background: radial-gradient(circle, rgba(229,72,77,.18), transparent 70%);
   border-radius: 50%; pointer-events: none;
+  animation: lockoutGlowBreathe 5s ease-in-out infinite;
+  z-index: 0;
 }
+@keyframes lockoutGlowBreathe{
+  0%, 100%{ transform: scale(0.9); opacity: 0.7; }
+  50%{ transform: scale(1.1); opacity: 1; }
+}
+
+/* Icon — animated multi-layer halo + scale pulse */
 .lockout-icon{
-  width: 44px; height: 44px;
-  background: white;
+  width: 60px; height: 60px;
+  background: linear-gradient(135deg, #ffffff 0%, #fef2f2 100%);
   border: 1.5px solid var(--crit);
-  border-radius: 12px;
+  border-radius: 14px;
   display: flex; align-items: center; justify-content: center;
-  color: var(--crit); font-size: 22px; font-weight: 700;
-  box-shadow: 0 4px 12px rgba(229,72,77,.2);
-  position: relative; z-index: 1;
+  color: var(--crit); font-size: 28px; font-weight: 700;
+  box-shadow:
+    0 0 0 4px rgba(229,72,77,.12),
+    0 0 0 8px rgba(229,72,77,.06),
+    0 10px 24px -6px rgba(229,72,77,.4),
+    inset 0 1px 0 rgba(255,255,255,.7);
+  position: relative; z-index: 2;
+  animation: lockoutIconPulse 2.4s ease-in-out infinite;
 }
-.lockout-body{ position: relative; z-index: 1; }
+@keyframes lockoutIconPulse{
+  0%, 100%{
+    transform: scale(1) rotate(0deg);
+    box-shadow:
+      0 0 0 4px rgba(229,72,77,.12),
+      0 0 0 8px rgba(229,72,77,.06),
+      0 10px 24px -6px rgba(229,72,77,.4),
+      inset 0 1px 0 rgba(255,255,255,.7);
+  }
+  50%{
+    transform: scale(1.06) rotate(-2deg);
+    box-shadow:
+      0 0 0 6px rgba(229,72,77,.18),
+      0 0 0 14px rgba(229,72,77,.08),
+      0 14px 30px -6px rgba(229,72,77,.55),
+      inset 0 1px 0 rgba(255,255,255,.8);
+  }
+}
+
+.lockout-body{ position: relative; z-index: 2; }
 .lockout-title{
-  font-family: var(--font-display); font-size: 18px; font-weight: 600;
-  color: var(--ink-0); letter-spacing: -.01em; line-height: 1.3;
+  font-family: var(--font-display); font-size: 20px; font-weight: 600;
+  color: var(--ink-0); letter-spacing: -.018em; line-height: 1.3;
 }
 .lockout-sub{
-  font-size: 14px; color: var(--ink-2); margin-top: 4px; line-height: 1.5;
+  font-size: 14.5px; color: var(--ink-2); margin-top: 6px; line-height: 1.55;
 }
 .lockout-sub strong{ color: var(--ink-0); font-weight: 600; }
+
+/* Pulsing red badge before title — urgency tag */
+.lockout-tag{
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 3px 9px; border-radius: 100px;
+  background: rgba(229,72,77,.12);
+  border: 1px solid rgba(229,72,77,.3);
+  font-family: var(--font-mono); font-size: 9.5px; font-weight: 700;
+  letter-spacing: .14em; text-transform: uppercase;
+  color: var(--crit);
+  margin-bottom: 10px;
+}
+.lockout-tag::before{
+  content: ''; width: 6px; height: 6px; border-radius: 50%;
+  background: var(--crit);
+  box-shadow: 0 0 0 0 rgba(229,72,77,.55);
+  animation: urgentPulse 1.4s ease-in-out infinite;
+}
+
+/* CTA Button — brand-green gradient, shimmer pass on hover, arrow animation */
 .lo-cta{
-  display: inline-flex; align-items: center; gap: 8px;
-  background: var(--ink-0); color: var(--bg-raised);
-  padding: 12px 18px; border-radius: 10px;
-  font-size: 14px; font-weight: 600;
+  display: inline-flex; align-items: center; gap: 10px;
+  background: linear-gradient(135deg, var(--brand) 0%, var(--brand-deep) 100%);
+  color: white;
+  padding: 14px 22px; border-radius: var(--r-md);
+  font-size: 15px; font-weight: 600;
   white-space: nowrap;
   border: none; cursor: pointer;
-  transition: transform .2s, box-shadow .2s;
-  position: relative; z-index: 1;
+  position: relative; overflow: hidden;
+  box-shadow:
+    0 1px 2px rgba(0,0,0,.06),
+    0 8px 22px -4px rgba(0,208,132,.45),
+    inset 0 1px 0 rgba(255,255,255,.25);
+  transition: transform .25s cubic-bezier(.2,.8,.2,1), box-shadow .25s ease;
+  z-index: 2;
 }
-.lo-cta:hover{ transform: translateY(-2px); box-shadow: 0 8px 18px rgba(0,0,0,.15); }
-.lo-cta::after{ content: '→'; font-size: 16px; }
+.lo-cta::before{
+  content:''; position: absolute; inset: 0;
+  background: linear-gradient(120deg, transparent 30%, rgba(255,255,255,.32) 50%, transparent 70%);
+  transform: translateX(-110%);
+  transition: transform .8s cubic-bezier(.2,.8,.2,1);
+  pointer-events: none;
+}
+.lo-cta:hover{
+  transform: translateY(-2px);
+  box-shadow:
+    0 1px 2px rgba(0,0,0,.08),
+    0 16px 32px -6px rgba(0,208,132,.55),
+    inset 0 1px 0 rgba(255,255,255,.3);
+}
+.lo-cta:hover::before{ transform: translateX(110%); }
+.lo-cta:active{ transform: translateY(0); }
+.lo-cta .lo-arrow{
+  display: inline-block; font-size: 17px;
+  transition: transform .25s cubic-bezier(.2,.8,.2,1);
+}
+.lo-cta:hover .lo-arrow{ transform: translateX(5px); }
+/* Old ::after rule replaced by .lo-arrow span — keep ::after blank for safety */
+.lo-cta::after{ content: none; }
 
 /* ============ HOW IT WORKS ============ */
 .how-section{ border-bottom: 1px solid var(--border); }
@@ -3873,10 +3975,11 @@ section + .cta-section{ padding-top: 64px; }
     <div class="lockout-callout reveal">
       <div class="lockout-icon">⚠</div>
       <div class="lockout-body">
+        <span class="lockout-tag">Compounding Disadvantage</span>
         <div class="lockout-title">The window is closing. Every week you wait, the gap gets harder to close.</div>
         <div class="lockout-sub">Once a competitor ranks for <strong>"best [your category]"</strong> in ChatGPT, they keep the mention rate. AI agents learn from past recommendations - late movers don't just lose today's sales, they lose <strong>the compounding interest of being first</strong>.</div>
       </div>
-      <a href="#install" class="lo-cta">Find out where you stand · free 60s scan</a>
+      <a href="#install" class="lo-cta"><span>Find out where you stand · free 60s scan</span><span class="lo-arrow">→</span></a>
     </div>
   </div>
 </section>
