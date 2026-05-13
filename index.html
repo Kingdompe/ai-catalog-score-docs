@@ -9,7 +9,11 @@
 <meta property="og:description" content="The open standard for AI shopping agent visibility on Shopify."/>
 <meta property="og:url" content="https://aicatalogscore.com"/>
 <meta property="og:type" content="website"/>
+<meta property="og:image" content="https://aicatalogscore.com/logo-acs.png"/>
+<meta property="og:image:width" content="1024"/>
+<meta property="og:image:height" content="1024"/>
 <meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://aicatalogscore.com/logo-acs.png"/>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230B0B0A'/%3E%3Cpath d='M10.5 13.5 L21.5 13.5 L26 29 L6 29 Z' fill='%2300D084' opacity='0.35'/%3E%3Cellipse cx='16' cy='28' rx='8' ry='1' fill='%2300FFA8' opacity='0.5'/%3E%3Ccircle cx='16' cy='9.5' r='5.6' fill='%231A1916'/%3E%3Crect x='11' y='8' width='10' height='3.3' rx='1.6' fill='%230A0A09'/%3E%3Ccircle cx='13.6' cy='9.65' r='1.1' fill='%2300FFA8'/%3E%3Ccircle cx='18.4' cy='9.65' r='1.1' fill='%2300FFA8'/%3E%3Ccircle cx='16' cy='3' r='0.9' fill='%2300FFA8'/%3E%3C/svg%3E"/>
 
 <link rel="preconnect" href="https://api.fontshare.com"/>
@@ -223,8 +227,12 @@ section{ position: relative; }
   background: radial-gradient(circle at 25% 25%, rgba(0,208,132,.22), transparent 65%);
   pointer-events: none;
 }
-.wordmark .mark > svg, .dash-brand-mini .mark > svg{
-  width: 88%; height: 88%; display: block; position: relative; z-index: 1;
+.wordmark .mark > svg, .dash-brand-mini .mark > svg,
+.wordmark .mark > img, .dash-brand-mini .mark > img{
+  width: 100%; height: 100%; display: block; position: relative; z-index: 1;
+  object-fit: cover; border-radius: inherit;
+}
+.wordmark .mark > img, .dash-brand-mini .mark > img{
   filter: drop-shadow(0 0 4px rgba(0,208,132,.25));
 }
 .wordmark .name{
@@ -3208,7 +3216,7 @@ section + .cta-section{ padding-top: 64px; }
 
 <header class="nav" id="nav">
   <div class="container">
-    <a href="/" class="wordmark"><span class="mark"><svg viewBox="0 0 32 32" aria-hidden="true"><use href="#acs-logo"/></svg></span><span class="name">AI Catalog Score</span></a>
+    <a href="/" class="wordmark"><span class="mark"><img src="logo-acs.png" alt="AI Catalog Score" loading="eager"/></span><span class="name">AI Catalog Score</span></a>
     <div style="flex:1"></div>
     <nav>
       <a href="#how">How</a>
@@ -3295,7 +3303,7 @@ section + .cta-section{ padding-top: 64px; }
           <div class="dash-header">
             <div class="dash-traffic"><span></span><span></span><span></span></div>
             <div class="dash-brand-mini">
-              <span class="mark"><svg viewBox="0 0 32 32" aria-hidden="true"><use href="#acs-logo"/></svg></span>
+              <span class="mark"><img src="logo-acs.png" alt="AI Catalog Score" loading="eager"/></span>
               <span class="name">AI Catalog Score</span>
             </div>
             <span class="dash-store">meridian-supply.myshopify.com</span>
@@ -4482,7 +4490,7 @@ section + .cta-section{ padding-top: 64px; }
   <div class="container">
     <div class="footer-grid">
       <div>
-        <span class="wordmark"><span class="mark"><svg viewBox="0 0 32 32" aria-hidden="true"><use href="#acs-logo"/></svg></span><span class="name">AI Catalog Score</span></span>
+        <span class="wordmark"><span class="mark"><img src="logo-acs.png" alt="AI Catalog Score" loading="eager"/></span><span class="name">AI Catalog Score</span></span>
         <p class="blurb">The open standard for AI shopping agent visibility on Shopify. Score, fix, and prove uplift causally - across ChatGPT, Gemini, Claude, Perplexity, Mistral, and DeepSeek.</p>
         <div class="shopify-badge">
           <div class="logo">S</div>
