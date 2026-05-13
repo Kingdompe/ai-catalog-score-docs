@@ -86,7 +86,119 @@
 /* ============ BASE ============ */
 *,*::before,*::after{ box-sizing: border-box; }
 html,body{ margin:0; padding:0; }
-html{ scroll-behavior: smooth; }
+html{ scroll-behavior: smooth; scroll-padding-top: 84px; }
+
+/* === SECTION NUMBER BADGE in eyebrows (delimitation) === */
+.eyebrow .section-num{
+  display: inline-flex; align-items: center;
+  font-family: var(--font-mono); font-size: 9.5px; font-weight: 700;
+  background: var(--bg-sunk); color: var(--ink-2);
+  border: 1px solid var(--border);
+  padding: 2px 7px; border-radius: 5px;
+  margin-right: 8px;
+  letter-spacing: .12em;
+}
+
+/* === PAGE MAP / WHAT'S ON THIS PAGE === */
+.page-map-section{
+  background: var(--bg-sunk);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: 64px 0;
+  position: relative; overflow: hidden;
+}
+.page-map-section::before{
+  content:''; position: absolute; inset: 0;
+  background-image: radial-gradient(rgba(0,208,132,.05) 1px, transparent 1px);
+  background-size: 28px 28px;
+  mask-image: radial-gradient(ellipse 70% 80% at 50% 50%, #000 0%, transparent 80%);
+  -webkit-mask-image: radial-gradient(ellipse 70% 80% at 50% 50%, #000 0%, transparent 80%);
+  opacity: .6; pointer-events: none;
+}
+.page-map-section .container{ position: relative; z-index: 1; }
+
+.page-map-head{
+  text-align: center; max-width: 720px; margin: 0 auto 36px;
+}
+.page-map-head h3{
+  font-family: var(--font-display); font-size: 26px; font-weight: 500;
+  color: var(--ink-0); letter-spacing: -.022em; margin-top: 12px;
+}
+.page-map-head .pm-sub{
+  font-size: 15px; color: var(--ink-2); margin-top: 10px; line-height: 1.5;
+}
+
+.page-map-grid{
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px;
+  max-width: 1180px; margin: 0 auto;
+}
+@media (max-width: 960px){ .page-map-grid{ grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 520px){ .page-map-grid{ grid-template-columns: 1fr; } }
+
+.pm-card{
+  display: flex; flex-direction: column; gap: 0;
+  padding: 18px 18px 16px;
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  transition: transform .25s cubic-bezier(.2,.8,.2,1), border-color .25s, box-shadow .25s;
+  text-decoration: none;
+  position: relative; overflow: hidden;
+  cursor: pointer;
+}
+.pm-card::before{
+  content:''; position: absolute; top: 0; left: 0; width: 100%; height: 2px;
+  background: linear-gradient(90deg, transparent, var(--brand), transparent);
+  transform: scaleX(0); transform-origin: center;
+  transition: transform .35s cubic-bezier(.2,.8,.2,1);
+}
+.pm-card:hover::before{ transform: scaleX(1); }
+.pm-card:hover{
+  transform: translateY(-3px);
+  border-color: rgba(0,208,132,.35);
+  box-shadow: 0 14px 28px -10px rgba(0,208,132,.2), 0 0 0 1px rgba(0,208,132,.06);
+}
+
+.pm-card-head{ display: flex; align-items: center; justify-content: space-between; }
+.pm-num{
+  font-family: var(--font-mono); font-size: 11px; font-weight: 700;
+  color: var(--ink-3); letter-spacing: .14em;
+  transition: color .25s;
+}
+.pm-card:hover .pm-num{ color: var(--brand-deep); }
+.pm-arrow{
+  color: var(--ink-4); font-size: 14px;
+  transition: transform .25s, color .25s;
+}
+.pm-card:hover .pm-arrow{ color: var(--brand-deep); transform: translate(3px, -3px); }
+
+.pm-icon{
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 34px; height: 34px;
+  background: var(--bg-sunk);
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  margin-top: 12px;
+  color: var(--ink-2);
+  transition: all .25s cubic-bezier(.2,.8,.2,1);
+  flex-shrink: 0;
+}
+.pm-icon svg{ width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.pm-card:hover .pm-icon{
+  background: var(--brand-wash);
+  color: var(--brand-deep);
+  border-color: rgba(0,208,132,.3);
+  transform: rotate(-6deg) scale(1.08);
+}
+.pm-title{
+  font-family: var(--font-display); font-size: 16px; font-weight: 600;
+  color: var(--ink-0); letter-spacing: -.012em; line-height: 1.25;
+  margin-top: 12px;
+}
+.pm-desc{
+  font-size: 12.5px; color: var(--ink-3);
+  margin-top: 4px; line-height: 1.45;
+}
 body{
   font-family: var(--font-body); font-size: 16px;
   background: var(--bg); color: var(--ink-1);
@@ -3758,6 +3870,98 @@ section + .cta-section{ padding-top: 64px; }
   </div>
 </section>
 
+<!-- PAGE MAP - what's on this page (visual overview for first-time visitors) -->
+<section class="page-map-section">
+  <div class="container">
+    <div class="page-map-head reveal">
+      <div class="eyebrow" style="justify-content:center"><span class="dot"></span> ON THIS PAGE</div>
+      <h3>8 sections. Everything to know before installing.</h3>
+      <p class="pm-sub">Tap a card to jump - or scroll through in order.</p>
+    </div>
+    <div class="page-map-grid reveal-stagger">
+      <a href="#problem" class="pm-card">
+        <div class="pm-card-head">
+          <span class="pm-num">01</span>
+          <span class="pm-arrow">↗</span>
+        </div>
+        <span class="pm-icon"><svg viewBox="0 0 24 24"><path d="M12 9v4M12 17h.01M5.45 17.5h13.1c1.27 0 2.06-1.38 1.42-2.48l-6.55-11.31a1.65 1.65 0 00-2.84 0L4.03 15.02c-.64 1.1.15 2.48 1.42 2.48z"/></svg></span>
+        <span class="pm-title">The Problem</span>
+        <span class="pm-desc">AI agents recommend competitors. Not you.</span>
+      </a>
+
+      <a href="#how" class="pm-card">
+        <div class="pm-card-head">
+          <span class="pm-num">02</span>
+          <span class="pm-arrow">↗</span>
+        </div>
+        <span class="pm-icon"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+        <span class="pm-title">How It Works</span>
+        <span class="pm-desc">Scan, fix, prove. Three steps.</span>
+      </a>
+
+      <a href="#features" class="pm-card">
+        <div class="pm-card-head">
+          <span class="pm-num">03</span>
+          <span class="pm-arrow">↗</span>
+        </div>
+        <span class="pm-icon"><svg viewBox="0 0 24 24"><path d="M12 2L3 6v6c0 5 4 9 9 10 5-1 9-5 9-10V6l-9-4z"/><path d="M9 12l2 2 4-4"/></svg></span>
+        <span class="pm-title">Why We Win</span>
+        <span class="pm-desc">6 structural moats no one else has.</span>
+      </a>
+
+      <a href="#pricing" class="pm-card">
+        <div class="pm-card-head">
+          <span class="pm-num">04</span>
+          <span class="pm-arrow">↗</span>
+        </div>
+        <span class="pm-icon"><svg viewBox="0 0 24 24"><path d="M12 2v20M17 7H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></span>
+        <span class="pm-title">Pricing</span>
+        <span class="pm-desc">3 plans + Score Guarantee on each.</span>
+      </a>
+
+      <a href="#bento" class="pm-card">
+        <div class="pm-card-head">
+          <span class="pm-num">05</span>
+          <span class="pm-arrow">↗</span>
+        </div>
+        <span class="pm-icon"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></span>
+        <span class="pm-title">What You Get</span>
+        <span class="pm-desc">8 capabilities, every plan included.</span>
+      </a>
+
+      <a href="#terminal" class="pm-card">
+        <div class="pm-card-head">
+          <span class="pm-num">06</span>
+          <span class="pm-arrow">↗</span>
+        </div>
+        <span class="pm-icon"><svg viewBox="0 0 24 24"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg></span>
+        <span class="pm-title">Open Skills</span>
+        <span class="pm-desc">8 MIT skills for Claude Code, Cursor, Cline.</span>
+      </a>
+
+      <a href="#ecosystem" class="pm-card">
+        <div class="pm-card-head">
+          <span class="pm-num">07</span>
+          <span class="pm-arrow">↗</span>
+        </div>
+        <span class="pm-icon"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0"/></svg></span>
+        <span class="pm-title">Open Source</span>
+        <span class="pm-desc">CC0 spec. Lock-in impossible.</span>
+      </a>
+
+      <a href="#faq" class="pm-card">
+        <div class="pm-card-head">
+          <span class="pm-num">08</span>
+          <span class="pm-arrow">↗</span>
+        </div>
+        <span class="pm-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3M12 17h.01"/></svg></span>
+        <span class="pm-title">FAQ</span>
+        <span class="pm-desc">15 answered. From setup to uninstall.</span>
+      </a>
+    </div>
+  </div>
+</section>
+
 <!-- INTERACTIVE 3D SECTION -->
 <section class="interactive-3d-section section-pad">
   <div class="container">
@@ -3851,10 +4055,10 @@ section + .cta-section{ padding-top: 64px; }
 </section>
 
 <!-- PROBLEM -->
-<section class="problem-section section-pad-sm">
+<section id="problem" class="problem-section section-pad-sm">
   <div class="container">
     <div class="reveal">
-      <div class="eyebrow urgent"><span class="dot"></span> HAPPENING RIGHT NOW</div>
+      <div class="eyebrow urgent"><span class="section-num">01</span><span class="dot"></span> HAPPENING RIGHT NOW</div>
       <div class="problem-grid">
         <div>
           <h2>Your competitors are being recommended by AI agents. You're not even in the conversation.</h2>
@@ -3988,7 +4192,7 @@ section + .cta-section{ padding-top: 64px; }
 <section id="how" class="how-section section-pad">
   <div class="container">
     <div class="text-center reveal">
-      <div class="eyebrow"><span class="dot"></span> HOW IT WORKS</div>
+      <div class="eyebrow"><span class="section-num">02</span><span class="dot"></span> HOW IT WORKS</div>
       <div class="section-head text-center" style="margin-bottom:0">
         <h2>From "invisible" to A+ in three steps.</h2>
         <p style="font-size:17px;color:var(--ink-2);margin-top:18px">Install, scan, fix. The tool does the work. You approve before anything ships.</p>
@@ -4021,7 +4225,7 @@ section + .cta-section{ padding-top: 64px; }
 <section id="features" class="why-section section-pad">
   <div class="container">
     <div class="reveal text-center" style="max-width:760px;margin:0 auto">
-      <div class="eyebrow"><span class="dot"></span> WHY WE WIN</div>
+      <div class="eyebrow"><span class="section-num">03</span><span class="dot"></span> WHY WE WIN</div>
       <div class="section-head text-center" style="margin-top:14px;margin-bottom:56px">
         <h2>Six reasons no one else can do this.</h2>
         <p style="font-size:17px;color:var(--ink-2);margin-top:18px">The hard moats - in plain English, no jargon.</p>
@@ -4262,6 +4466,7 @@ section + .cta-section{ padding-top: 64px; }
   <div class="pricing-shader-fallback" id="pricingShaderFallback" style="display:none"></div>
   <div class="container">
     <div class="pricing-glassy-head reveal">
+      <div class="eyebrow" style="justify-content:center;margin-bottom:16px"><span class="section-num">04</span><span class="dot"></span> PRICING</div>
       <h2>Plans for every <span class="accent">Shopify catalog</span>.</h2>
       <p>7-day free trial on every plan. Cancel any time. Score Guarantee on every paid tier.</p>
     </div>
@@ -4354,10 +4559,10 @@ section + .cta-section{ padding-top: 64px; }
 </section>
 
 <!-- BENTO GRID SECTION -->
-<section class="bento-section section-pad">
+<section id="bento" class="bento-section section-pad">
   <div class="container">
     <div class="reveal text-center" style="max-width:760px;margin:0 auto;">
-      <div class="eyebrow"><span class="dot"></span> WHAT YOU GET</div>
+      <div class="eyebrow"><span class="section-num">05</span><span class="dot"></span> WHAT YOU GET</div>
       <h2 style="margin-top:18px">Everything you need to ship AI-ready catalogs at scale.</h2>
     </div>
     <div class="bento reveal-stagger" id="bentoGrid">
@@ -4523,7 +4728,7 @@ section + .cta-section{ padding-top: 64px; }
   <canvas id="auroraCanvas" class="terminal-aurora" aria-hidden="true"></canvas>
   <div class="container">
     <div class="text-center reveal">
-      <div class="eyebrow"><span class="dot"></span> OPEN SKILLS LIBRARY</div>
+      <div class="eyebrow"><span class="section-num">06</span><span class="dot"></span> OPEN SKILLS LIBRARY</div>
       <div class="section-head text-center" style="margin-bottom:0">
         <h2>Drop our skills into Claude Code, Cursor, Cline, Copilot, Gemini CLI.</h2>
         <p style="font-size:17px;margin-top:18px">One command. 8 skills available out of the box. MIT-licensed.</p>
@@ -4545,7 +4750,7 @@ section + .cta-section{ padding-top: 64px; }
 <section id="ecosystem" class="eco-section section-pad">
   <div class="container">
     <div class="text-center reveal" style="max-width:760px;margin:0 auto 40px">
-      <div class="eyebrow"><span class="dot"></span> OPEN SOURCE</div>
+      <div class="eyebrow"><span class="section-num">07</span><span class="dot"></span> OPEN SOURCE</div>
       <h2 style="margin-top:16px">Methodology open. Reference impl open. Skills open.</h2>
       <p style="font-size:17px;color:var(--ink-2);margin-top:18px">
         The scoring methodology is a vendor-neutral spec under CC0. Skills library is MIT. Anyone can build on it - including competitors. That's the point.
@@ -4570,7 +4775,7 @@ section + .cta-section{ padding-top: 64px; }
 <section id="faq" class="faq-section section-pad">
   <div class="container faq-wrap">
     <div class="faq-head reveal">
-      <div class="eyebrow" style="justify-content:center"><span class="dot"></span> FAQ</div>
+      <div class="eyebrow" style="justify-content:center"><span class="section-num">08</span><span class="dot"></span> FAQ</div>
       <h2>Frequently Asked Questions</h2>
       <p style="font-size:17px;color:var(--ink-2);margin-top:14px;text-align:center">Everything merchants need to know before installing. Can't find your answer? <a href="mailto:hello@aicatalogscore.com" style="color:var(--brand-deep);border-bottom:1px solid var(--brand-deep)">Ask us directly</a>.</p>
     </div>
