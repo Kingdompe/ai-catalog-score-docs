@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Privacy Policy — AI Catalog Score</title>
+  <title>Privacy Policy - AI Catalog Score</title>
   <style>
     body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; max-width: 800px; margin: 0 auto; padding: 40px 20px; line-height: 1.7; color: #333; }
     h1 { font-size: 2rem; margin-bottom: 8px; }
@@ -25,38 +25,38 @@
   <p>When you install the app, Shopify will prompt you to grant the following scopes. Each is justified below.</p>
 
   <h3>read_products</h3>
-  <p>To read your product titles, descriptions, images, variants, metafields, tags, vendor, type, and pricing — the inputs to the AI Catalog Score audit. We do not read product data outside of audit operations triggered by you (manual audit run, scheduled re-audit, or webhook-driven re-audit on product update).</p>
+  <p>To read your product titles, descriptions, images, variants, metafields, tags, vendor, type, and pricing - the inputs to the AI Catalog Score audit. We do not read product data outside of audit operations triggered by you (manual audit run, scheduled re-audit, or webhook-driven re-audit on product update).</p>
 
   <h3>write_products</h3>
-  <p>To apply fixes (title, description, SEO, tags, metafields, category) when you click "Apply Fix" or "Apply All Fixes". We never modify products without explicit merchant action — there is always a button click with a confirmation. Every write is logged in the <code>AppliedFix</code> table for audit and the contractual Score Guarantee.</p>
+  <p>To apply fixes (title, description, SEO, tags, metafields, category) when you click "Apply Fix" or "Apply All Fixes". We never modify products without explicit merchant action - there is always a button click with a confirmation. Every write is logged in the <code>AppliedFix</code> table for audit and the contractual Score Guarantee.</p>
 
   <h3>read_orders</h3>
   <p>Required <strong>only</strong> for the per-agent AI Traffic Attribution dashboard (<code>/app/agent-traffic</code>). When an order arrives, we read three Shopify-provided fields to determine if the buyer came from an AI shopping agent:</p>
   <ul>
-    <li><code>landing_site</code> — the URL on your store the buyer first hit</li>
-    <li><code>referring_site</code> — the previous URL (where applicable)</li>
-    <li><code>client_details.user_agent</code> — to detect AI agent fingerprints (e.g. ChatGPT Crawler, GPTBot, ClaudeBot)</li>
+    <li><code>landing_site</code> - the URL on your store the buyer first hit</li>
+    <li><code>referring_site</code> - the previous URL (where applicable)</li>
+    <li><code>client_details.user_agent</code> - to detect AI agent fingerprints (e.g. ChatGPT Crawler, GPTBot, ClaudeBot)</li>
   </ul>
   <p>We <strong>do not</strong> read or store: customer name, email, phone number, billing/shipping address, or any payment information. The order is referenced only by Shopify's internal order ID and the AI agent attribution it generated.</p>
 
   <h2>2. Webhook Subscriptions</h2>
   <p>The app subscribes to the following webhook topics for real-time monitoring and lifecycle management. All webhooks are HMAC-signed and verified before processing.</p>
   <ul>
-    <li><code>app/uninstalled</code> — to trigger automatic deletion of all merchant data within 48 hours of uninstall.</li>
-    <li><code>app/scopes_update</code> — to re-prompt for consent if Shopify scope requirements change.</li>
-    <li><code>products/update</code> — to re-audit a product when it changes, so your score stays current without manual re-runs (Catalog Guardrails feature).</li>
-    <li><code>orders/create</code> — to capture AI-attributed sessions for the per-agent traffic dashboard and Performance pricing tier uplift computation. Only metadata fields listed under <code>read_orders</code> are extracted.</li>
+    <li><code>app/uninstalled</code> - to trigger automatic deletion of all merchant data within 48 hours of uninstall.</li>
+    <li><code>app/scopes_update</code> - to re-prompt for consent if Shopify scope requirements change.</li>
+    <li><code>products/update</code> - to re-audit a product when it changes, so your score stays current without manual re-runs (Catalog Guardrails feature).</li>
+    <li><code>orders/create</code> - to capture AI-attributed sessions for the per-agent traffic dashboard and Performance pricing tier uplift computation. Only metadata fields listed under <code>read_orders</code> are extracted.</li>
   </ul>
 
   <h2>3. Data We Store</h2>
   <ul>
-    <li><strong>Audit results</strong> — product scores per dimension, issues found, audit timestamps, and history (so you can see your improvement over time and the Score Guarantee can verify pre/post-fix deltas).</li>
-    <li><strong>Applied fixes</strong> — what was changed, when, by which fixer, and the resulting score delta. Required for the contractual Score Guarantee refund mechanic.</li>
-    <li><strong>AI Sessions</strong> — for orders attributed to an AI agent: agent identifier, landing path, order ID, order revenue, and order timestamp. Used by the per-agent Traffic dashboard, the Causal A/B experiment engine, and the Performance pricing tier billing.</li>
-    <li><strong>Causal experiment data</strong> — when you run an A/B experiment via the Experiments page, we store the treatment/control assignment, pre-window and post-window AI-session snapshots, and the computed Difference-in-Differences result with p-values. Aggregated, anonymized results may be published in our public A/B sharing community (opt-in only, k-anonymity ≥10 enforced).</li>
-    <li><strong>Score Guarantee consent</strong> — version of the Terms accepted, timestamp, and shop identifier (required for contractual enforceability).</li>
-    <li><strong>Performance pricing baseline</strong> — for shops on the Performance tier, the 30-day pre-switch AI-attributed revenue baseline used to compute monthly uplift charges.</li>
-    <li><strong>Session data</strong> — Shopify session tokens for embedded-app authentication.</li>
+    <li><strong>Audit results</strong> - product scores per dimension, issues found, audit timestamps, and history (so you can see your improvement over time and the Score Guarantee can verify pre/post-fix deltas).</li>
+    <li><strong>Applied fixes</strong> - what was changed, when, by which fixer, and the resulting score delta. Required for the contractual Score Guarantee refund mechanic.</li>
+    <li><strong>AI Sessions</strong> - for orders attributed to an AI agent: agent identifier, landing path, order ID, order revenue, and order timestamp. Used by the per-agent Traffic dashboard, the Causal A/B experiment engine, and the Performance pricing tier billing.</li>
+    <li><strong>Causal experiment data</strong> - when you run an A/B experiment via the Experiments page, we store the treatment/control assignment, pre-window and post-window AI-session snapshots, and the computed Difference-in-Differences result with p-values. Aggregated, anonymized results may be published in our public A/B sharing community (opt-in only, k-anonymity ≥10 enforced).</li>
+    <li><strong>Score Guarantee consent</strong> - version of the Terms accepted, timestamp, and shop identifier (required for contractual enforceability).</li>
+    <li><strong>Performance pricing baseline</strong> - for shops on the Performance tier, the 30-day pre-switch AI-attributed revenue baseline used to compute monthly uplift charges.</li>
+    <li><strong>Session data</strong> - Shopify session tokens for embedded-app authentication.</li>
   </ul>
 
   <h2>4. Data We Do NOT Collect</h2>
@@ -71,10 +71,10 @@
   <h2>5. Third-Party Services</h2>
   <p>The app relies on the following sub-processors, all bound by their own privacy policies:</p>
   <ul>
-    <li><strong>Anthropic (Claude API)</strong> — when you click "Generate with AI" or "Apply AI Fixes", product metadata (titles, descriptions, current scores) is sent to Anthropic's Claude API for optimization suggestion generation. Anthropic does not store or train on this data per their <a href="https://www.anthropic.com/privacy">privacy policy</a>. Customer information is never sent.</li>
-    <li><strong>Google Gemini API, OpenAI API</strong> — used by our internal Ground Truth pipeline to capture how AI agents respond to public shopping queries (e.g. "best running shoes under $100"). This pipeline does <strong>not</strong> send your products, your customer data, or any merchant-specific information to these APIs. It only sends generic public queries.</li>
-    <li><strong>Railway (hosting)</strong> — application server and Postgres database, hosted in the EU region.</li>
-    <li><strong>Shopify Billing API</strong> — for subscription management, refund issuance via the Score Guarantee, and Performance pricing tier usage charges.</li>
+    <li><strong>Anthropic (Claude API)</strong> - when you click "Generate with AI" or "Apply AI Fixes", product metadata (titles, descriptions, current scores) is sent to Anthropic's Claude API for optimization suggestion generation. Anthropic does not store or train on this data per their <a href="https://www.anthropic.com/privacy">privacy policy</a>. Customer information is never sent.</li>
+    <li><strong>Google Gemini API, OpenAI API</strong> - used by our internal Ground Truth pipeline to capture how AI agents respond to public shopping queries (e.g. "best running shoes under $100"). This pipeline does <strong>not</strong> send your products, your customer data, or any merchant-specific information to these APIs. It only sends generic public queries.</li>
+    <li><strong>Railway (hosting)</strong> - application server and Postgres database, hosted in the EU region.</li>
+    <li><strong>Shopify Billing API</strong> - for subscription management, refund issuance via the Score Guarantee, and Performance pricing tier usage charges.</li>
   </ul>
 
   <h2>6. Competitor Comparison Feature</h2>
@@ -94,17 +94,17 @@
   <ul>
     <li>The <code>app/uninstalled</code> webhook fires immediately.</li>
     <li>All data tied to your shop (audits, applied fixes, AI sessions, experiments, consent records, baseline computations) is permanently deleted within <strong>48 hours</strong>.</li>
-    <li>You can also request immediate deletion at any time by emailing <a href="mailto:support@aicatalogscore.com">support@aicatalogscore.com</a> with your <code>myshopify.com</code> domain — we will confirm deletion within 7 business days as required under Shopify's Privacy mandatory webhooks (<code>shop/redact</code>, <code>customers/redact</code>, <code>customers/data_request</code>).</li>
+    <li>You can also request immediate deletion at any time by emailing <a href="mailto:support@aicatalogscore.com">support@aicatalogscore.com</a> with your <code>myshopify.com</code> domain - we will confirm deletion within 7 business days as required under Shopify's Privacy mandatory webhooks (<code>shop/redact</code>, <code>customers/redact</code>, <code>customers/data_request</code>).</li>
   </ul>
 
   <h2>9. GDPR &amp; EU Compliance</h2>
   <p>For merchants and customers in the European Economic Area, the United Kingdom, and Switzerland:</p>
   <ul>
-    <li><strong>Legal basis for processing</strong> — performance of contract (the merchant's installation agreement) for all merchant data; legitimate interest (AI traffic attribution, fraud prevention) for derived analytics on order metadata.</li>
-    <li><strong>Data Processing Agreement (DPA)</strong> — available on request at <a href="mailto:support@aicatalogscore.com">support@aicatalogscore.com</a>. Required for merchants accepting EU customers.</li>
-    <li><strong>Right of access, rectification, erasure, and portability</strong> — exercise via the email above. Response within 30 days as required under GDPR Articles 15-20.</li>
-    <li><strong>Data residency</strong> — Railway EU region (Frankfurt). Anthropic and OpenAI sub-processors operate in the US under Standard Contractual Clauses.</li>
-    <li><strong>Right to lodge a complaint</strong> — with your national supervisory authority (e.g. CNIL in France, ICO in the UK, Garante in Italy).</li>
+    <li><strong>Legal basis for processing</strong> - performance of contract (the merchant's installation agreement) for all merchant data; legitimate interest (AI traffic attribution, fraud prevention) for derived analytics on order metadata.</li>
+    <li><strong>Data Processing Agreement (DPA)</strong> - available on request at <a href="mailto:support@aicatalogscore.com">support@aicatalogscore.com</a>. Required for merchants accepting EU customers.</li>
+    <li><strong>Right of access, rectification, erasure, and portability</strong> - exercise via the email above. Response within 30 days as required under GDPR Articles 15-20.</li>
+    <li><strong>Data residency</strong> - Railway EU region (Frankfurt). Anthropic and OpenAI sub-processors operate in the US under Standard Contractual Clauses.</li>
+    <li><strong>Right to lodge a complaint</strong> - with your national supervisory authority (e.g. CNIL in France, ICO in the UK, Garante in Italy).</li>
   </ul>
 
   <h2>10. Your Rights as a Merchant</h2>
@@ -129,7 +129,7 @@
   <ul>
     <li>Bump the <em>Version</em> number at the top.</li>
     <li>Be announced in-app on next load with a prompt to review.</li>
-    <li>Apply prospectively only — historical data continues to be governed by the policy in force at the time of collection.</li>
+    <li>Apply prospectively only - historical data continues to be governed by the policy in force at the time of collection.</li>
   </ul>
   <p>The current version is recorded above. The previous version (1.0, effective April 21, 2026) is available on request.</p>
 </body>
