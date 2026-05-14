@@ -371,22 +371,19 @@ section{ position: relative; }
 /* === FULL-SCREEN SECTIONS === Major content sections fill ≥ 1 viewport
    so each one feels like a complete "chapter" of the page.
    Content is vertically centered when shorter than 100vh.
-   Long sections (FAQ, bento) naturally overflow — that's fine,
-   scroll continues normally. Sticky-nav padding handled via scroll-padding-top. */
+   Naturally-compact sections (How, Eco) keep their natural height — forcing
+   100vh on a 3-step list creates dead space + pushes the next CTA too low. */
 .problem-section,
-.how-section,
 .why-section,
 .pricing-glassy,
 .bento-section,
 .terminal-section,
-.eco-section,
 .faq-section{
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
 }
-/* Page map kept compact (transition, not content) */
 @media (max-width: 720px){ .section-pad{ padding: 88px 0; } .section-pad-sm{ padding: 56px 0; } }
 
 /* ============ BUTTONS ============ */
