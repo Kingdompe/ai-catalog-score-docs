@@ -148,7 +148,7 @@ html{ scroll-behavior: smooth; scroll-padding-top: 84px; }
 
 .pm-card{
   display: flex; flex-direction: column;
-  min-height: 296px;
+  min-height: 326px;
   padding: 22px 22px 20px;
   background:
     linear-gradient(180deg, var(--bg-raised) 0%, var(--bg-sunk) 100%);
@@ -264,22 +264,22 @@ html{ scroll-behavior: smooth; scroll-padding-top: 84px; }
 }
 
 .pm-title{
-  font-family: var(--font-display); font-size: 20px; font-weight: 600;
-  color: var(--ink-0); letter-spacing: -.018em; line-height: 1.18;
+  font-family: var(--font-display); font-size: 21px; font-weight: 600;
+  color: var(--ink-0); letter-spacing: -.02em; line-height: 1.14;
   transition: color .3s;
 }
 .pm-card:hover .pm-title{ color: var(--brand-ink); }
 .pm-desc{
   font-size: 13.5px; color: var(--ink-2);
-  margin-top: 6px; line-height: 1.45;
+  margin-top: 8px; line-height: 1.4;
 }
 
 /* === Unique micro-visual per tile — sits at the bottom (margin-top:auto) === */
 .pm-visual{
-  margin-top: auto; padding-top: 22px;
-  display: flex; flex-direction: column; gap: 6px;
+  margin-top: auto; padding-top: 18px;
+  display: flex; flex-direction: column; gap: 7px;
   align-items: stretch; justify-content: flex-end;
-  min-height: 104px;
+  min-height: 148px;
   transition: transform .45s cubic-bezier(.2,.8,.2,1);
 }
 .pm-card:hover .pm-visual{ transform: translateY(-2px); }
@@ -341,17 +341,26 @@ html{ scroll-behavior: smooth; scroll-padding-top: 84px; }
 }
 .pmc-result strong{ color: #C44; font-weight: 800; }
 .pmc-stat{
-  display: flex; align-items: center; gap: 8px;
+  display: flex; align-items: center; gap: 6px;
   font-family: var(--font-mono); font-size: 10px; font-weight: 800;
   letter-spacing: .08em;
   color: var(--ink-2);
+  padding: 6px 9px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
 }
 .pmc-stat .pmc-num{
   color: var(--brand-deep);
-  font-size: 14px;
+  font-size: 13px;
   letter-spacing: -.02em;
 }
 .pmc-stat .pmc-sep{ color: var(--ink-4); }
+.pmc-agent.gpt{ background: linear-gradient(135deg, #10A37F, #1A7F64); }
+.pmc-agent.cld{ background: linear-gradient(135deg, #CC785C, #A35538); }
+.pmc-agent.gem{ background: linear-gradient(135deg, #4285F4, #2D63D3); }
+.pmc-agent.mst{ background: linear-gradient(135deg, #FF6B35, #C44514); }
+.pmc-agent.dsk{ background: linear-gradient(135deg, #4F46E5, #312E81); }
 
 /* ===========================================================
    02 - HOW teaser: 3 step pills (Scan → Fix → Prove)
@@ -397,6 +406,45 @@ html{ scroll-behavior: smooth; scroll-padding-top: 84px; }
 .pm-card:hover .pms.is-active,
 .pm-card.is-active .pms.is-active{ transform: translateY(-2px); }
 
+/* score uplift visualization (53 → 81) */
+.pmv-uplift{
+  display: flex; align-items: center; gap: 8px;
+  padding: 6px 9px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+}
+.pmu-from{
+  font-family: var(--font-mono); font-size: 13px; font-weight: 800;
+  color: var(--ink-3);
+}
+.pmu-arrow{
+  flex: 1;
+  color: var(--brand-deep);
+  display: flex; align-items: center;
+}
+.pmu-arrow svg{ width: 100%; height: 10px; display: block; }
+.pmu-to{
+  display: inline-flex; align-items: baseline; gap: 4px;
+  font-family: var(--font-mono); font-size: 16px; font-weight: 800;
+  color: var(--brand-deep); letter-spacing: -.02em;
+}
+.pmu-grade{
+  font-size: 9.5px; font-weight: 800;
+  padding: 1px 5px;
+  background: var(--brand); color: var(--brand-ink);
+  border-radius: 4px;
+  letter-spacing: .04em;
+}
+.pmu-delta{
+  margin-left: auto;
+  font-family: var(--font-mono); font-size: 11px; font-weight: 800;
+  color: var(--brand-deep);
+  padding: 2px 7px;
+  background: var(--brand-wash);
+  border-radius: 999px;
+}
+
 /* ===========================================================
    03 - WHY teaser: real moat chips + counter
    =========================================================== */
@@ -415,9 +463,11 @@ html{ scroll-behavior: smooth; scroll-padding-top: 84px; }
   animation: pmmIn .6s cubic-bezier(.34,1.56,.64,1) forwards;
 }
 .pmm:nth-child(1){ animation-delay: .05s; }
-.pmm:nth-child(2){ animation-delay: .15s; }
-.pmm:nth-child(3){ animation-delay: .25s; }
-.pmm:nth-child(4){ animation-delay: .35s; }
+.pmm:nth-child(2){ animation-delay: .12s; }
+.pmm:nth-child(3){ animation-delay: .19s; }
+.pmm:nth-child(4){ animation-delay: .26s; }
+.pmm:nth-child(5){ animation-delay: .33s; }
+.pmm:nth-child(6){ animation-delay: .40s; }
 @keyframes pmmIn{
   to{ transform: translateY(0); opacity: 1; }
 }
@@ -483,6 +533,22 @@ html{ scroll-behavior: smooth; scroll-padding-top: 84px; }
 .pm-card:hover .pmp .pmp-name,
 .pm-card:hover .pmp .pmp-price{ color: var(--brand-deep); }
 .pm-card:hover .pmp.pop{ transform: translateY(-12px); animation: none; box-shadow: 0 12px 22px rgba(0,208,132,.32); }
+.pmp-unit{
+  display: block;
+  font-family: var(--font-mono); font-size: 8px; font-weight: 700;
+  color: var(--ink-3);
+  margin-top: 1px;
+}
+.pmp.pop .pmp-unit{ color: var(--brand-deep); opacity: .75; }
+
+/* pricing perks row */
+.pmv-perks{
+  display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px;
+  font-family: var(--font-mono); font-size: 9px; font-weight: 700;
+  color: var(--ink-2); letter-spacing: .04em;
+  padding: 5px 0 0;
+}
+.pmperk{ white-space: nowrap; }
 
 /* ===========================================================
    05 - CAPABILITIES teaser: 5 real AI agent badges + label
@@ -525,6 +591,57 @@ html{ scroll-behavior: smooth; scroll-padding-top: 84px; }
 }
 .pm-card:hover .pma{ transform: translateY(-3px); }
 
+/* Stacked agent rows: badge + name + bar + percentage */
+.pmv-agents-stack{
+  display: flex; flex-direction: column; gap: 6px; width: 100%;
+}
+.pmas-row{
+  display: flex; align-items: center; gap: 8px;
+  font-family: var(--font-mono); font-size: 10px; font-weight: 700;
+}
+.pmas-row .pma{
+  width: 20px; height: 20px; aspect-ratio: 1;
+  border-radius: 5px; font-size: 10px;
+  animation: none;
+  flex-shrink: 0;
+}
+.pmas-name{
+  color: var(--ink-1);
+  width: 52px;
+}
+.pmas-bar{
+  flex: 1; height: 6px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  overflow: hidden;
+  position: relative;
+}
+.pmas-bar span{
+  display: block; height: 100%;
+  background: linear-gradient(90deg, var(--brand), var(--brand-deep));
+  border-radius: 999px;
+  transform-origin: left;
+  animation: pmasBarGrow .9s cubic-bezier(.2,.8,.2,1) forwards;
+  transform: scaleX(0);
+}
+.pmas-row:nth-child(1) .pmas-bar span{ animation-delay: .1s; }
+.pmas-row:nth-child(2) .pmas-bar span{ animation-delay: .22s; }
+.pmas-row:nth-child(3) .pmas-bar span{ animation-delay: .34s; }
+@keyframes pmasBarGrow{
+  to{ transform: scaleX(1); }
+}
+.pmas-pct{
+  color: var(--brand-deep); font-weight: 800;
+  width: 26px; text-align: right;
+}
+.pmas-row.muted{
+  font-size: 9.5px; color: var(--ink-3);
+  padding-left: 28px; padding-top: 2px;
+  letter-spacing: .04em;
+}
+.pmas-rest{ font-weight: 600; }
+
 /* ===========================================================
    06 - TERMINAL teaser: real command + result line
    =========================================================== */
@@ -561,6 +678,23 @@ html{ scroll-behavior: smooth; scroll-padding-top: 84px; }
 }
 .pmv-cmd .pmcmd-out .ok{ color: var(--brand); font-weight: 800; }
 .pmv-cmd .pmcmd-out .num{ color: #fff; font-weight: 800; }
+.pmv-cmd .pmcmd-skills{
+  display: flex; flex-wrap: wrap; gap: 4px;
+  margin-top: 4px; padding-top: 6px;
+  border-top: 1px dashed rgba(255,255,255,.08);
+}
+.pmv-cmd .pmcmd-skills span{
+  padding: 2px 6px;
+  background: rgba(0,208,132,.12);
+  color: var(--brand-light);
+  border-radius: 4px;
+  font-size: 9.5px; font-weight: 700;
+  letter-spacing: .02em;
+}
+.pmv-cmd .pmcmd-skills span:last-child{
+  background: transparent;
+  color: rgba(255,255,255,.45);
+}
 @keyframes pmCaret{ 50%{ opacity: 0; } }
 
 /* ===========================================================
@@ -632,7 +766,8 @@ html{ scroll-behavior: smooth; scroll-padding-top: 84px; }
 .pmv-faq{ display: flex; flex-direction: column; gap: 4px; width: 100%; }
 .pmf{
   display: flex; align-items: center; justify-content: space-between;
-  gap: 6px;
+  flex-wrap: wrap;
+  gap: 4px;
   padding: 7px 9px;
   background: var(--bg);
   border: 1px solid var(--border);
@@ -641,6 +776,19 @@ html{ scroll-behavior: smooth; scroll-padding-top: 84px; }
   color: var(--ink-1); line-height: 1.25;
   transition: background .35s, border-color .35s, color .35s, transform .35s;
 }
+.pmf-q{
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 6px;
+  width: 100%;
+}
+.pmf-a{
+  width: 100%;
+  margin-top: 5px; padding-top: 5px;
+  border-top: 1px dashed rgba(0,208,132,.25);
+  font-family: var(--font-body); font-size: 10.5px; font-weight: 500;
+  color: var(--ink-2); line-height: 1.35;
+}
+.pmf-a strong{ color: var(--brand-deep); font-weight: 700; }
 .pmf .plus{
   flex-shrink: 0;
   width: 16px; height: 16px; border-radius: 50%;
@@ -673,11 +821,13 @@ html{ scroll-behavior: smooth; scroll-padding-top: 84px; }
   .pmm,
   .pmp.pop,
   .pma,
+  .pmas-bar span,
   .pmv-cmd .pmcmd-line .caret,
   .pmr-lic::after,
   .pmv-meta .pmm-dot,
   .pm-card:hover .pm-num::before,
   .pm-card.is-active .pm-num::before{ animation: none !important; }
+  .pmas-bar span{ transform: scaleX(1); }
 }
 
 /* Footer caption */
@@ -4399,15 +4549,20 @@ section + .cta-section{ padding-top: 64px; }
         <div class="pm-visual">
           <div class="pmv-capture">
             <div class="pmc-row">
-              <span class="pmc-agent">C</span>
+              <span class="pmc-agent gpt">C</span>
               <span class="pmc-q">"best wool runners"</span>
               <span class="pmc-result">→ <strong>not you</strong></span>
             </div>
-            <div class="pmc-stat">
-              <span class="pmc-num">41%</span><span>catalogs invisible</span>
-              <span class="pmc-sep">·</span>
-              <span class="pmc-num">+700%</span><span>AI traffic</span>
+            <div class="pmc-row">
+              <span class="pmc-agent gem">G</span>
+              <span class="pmc-q">"sustainable sneakers"</span>
+              <span class="pmc-result">→ <strong>competitor</strong></span>
             </div>
+          </div>
+          <div class="pmc-stat">
+            <span class="pmc-num">41%</span><span>invisible</span>
+            <span class="pmc-sep">·</span>
+            <span class="pmc-num">+700%</span><span>AI traffic</span>
           </div>
         </div>
       </a>
@@ -4424,6 +4579,17 @@ section + .cta-section{ padding-top: 64px; }
             <span class="pms-arr">›</span>
             <span class="pms is-active"><span class="pms-i">📊</span>PROVE</span>
           </div>
+          <div class="pmv-uplift">
+            <span class="pmu-from">53</span>
+            <span class="pmu-arrow">
+              <svg viewBox="0 0 60 10" preserveAspectRatio="none">
+                <line x1="0" y1="5" x2="50" y2="5" stroke="currentColor" stroke-width="1.4" stroke-dasharray="3 3"/>
+                <polyline points="46,1 52,5 46,9" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
+            <span class="pmu-to">81<span class="pmu-grade">A</span></span>
+            <span class="pmu-delta">+28</span>
+          </div>
           <div class="pmv-meta"><span class="pmm-dot"></span>DiD · Welch's t · p &lt; 0.05</div>
         </div>
       </a>
@@ -4437,9 +4603,11 @@ section + .cta-section{ padding-top: 64px; }
             <span class="pmm">Multi-agent</span>
             <span class="pmm">Causal proof</span>
             <span class="pmm">Score Guarantee</span>
-            <span class="pmm faded">+3 more</span>
+            <span class="pmm">Open standard</span>
+            <span class="pmm">Perf pricing</span>
+            <span class="pmm">Network effect</span>
           </div>
-          <div class="pmv-meta"><span class="pmm-dot"></span>Open spec · Network effect · Perf pricing</div>
+          <div class="pmv-meta"><span class="pmm-dot"></span>6 / 6 unmatched by competitors</div>
         </div>
       </a>
 
@@ -4452,16 +4620,24 @@ section + .cta-section{ padding-top: 64px; }
             <div class="pmp">
               <span class="pmp-name">Growth</span>
               <span class="pmp-price">$59</span>
+              <span class="pmp-unit">/mo</span>
             </div>
             <div class="pmp pop">
               <span class="pmp-badge">POPULAR</span>
               <span class="pmp-name">Pro</span>
               <span class="pmp-price">$169</span>
+              <span class="pmp-unit">/mo</span>
             </div>
             <div class="pmp">
               <span class="pmp-name">Perf</span>
               <span class="pmp-price">$499</span>
+              <span class="pmp-unit">/mo</span>
             </div>
+          </div>
+          <div class="pmv-perks">
+            <span class="pmperk">✓ 7-day trial</span>
+            <span class="pmperk">✓ +10 pts or refund</span>
+            <span class="pmperk">✓ Cancel any time</span>
           </div>
         </div>
       </a>
@@ -4471,15 +4647,29 @@ section + .cta-section{ padding-top: 64px; }
         <span class="pm-title">What you get</span>
         <span class="pm-desc">5 AI agents, daily. One ground truth.</span>
         <div class="pm-visual">
-          <div class="pmv-agents">
-            <span class="pma gpt" title="ChatGPT">C</span>
-            <span class="pma cld" title="Claude">A</span>
-            <span class="pma gem" title="Gemini">G</span>
-            <span class="pma mst" title="Mistral">M</span>
-            <span class="pma dsk" title="DeepSeek">D</span>
-            <span class="pma plx" title="Perplexity (Q3)">P</span>
+          <div class="pmv-agents-stack">
+            <div class="pmas-row">
+              <span class="pma gpt" title="ChatGPT">C</span>
+              <span class="pmas-name">ChatGPT</span>
+              <span class="pmas-bar"><span style="width:88%"></span></span>
+              <span class="pmas-pct">88%</span>
+            </div>
+            <div class="pmas-row">
+              <span class="pma cld" title="Claude">A</span>
+              <span class="pmas-name">Claude</span>
+              <span class="pmas-bar"><span style="width:72%"></span></span>
+              <span class="pmas-pct">72%</span>
+            </div>
+            <div class="pmas-row">
+              <span class="pma gem" title="Gemini">G</span>
+              <span class="pmas-name">Gemini</span>
+              <span class="pmas-bar"><span style="width:64%"></span></span>
+              <span class="pmas-pct">64%</span>
+            </div>
+            <div class="pmas-row muted">
+              <span class="pmas-rest">+ Mistral · DeepSeek · Perplexity (Q3)</span>
+            </div>
           </div>
-          <div class="pmv-meta"><span class="pmm-dot"></span>+2,400 captures / day · CC0 dataset</div>
         </div>
       </a>
 
@@ -4496,6 +4686,10 @@ section + .cta-section{ padding-top: 64px; }
               <span class="caret">▎</span>
             </div>
             <div class="pmcmd-out">→ <span class="num">8 skills</span> installed <span class="ok">✓</span></div>
+            <div class="pmcmd-skills">
+              <span>audit</span><span>fix-titles</span><span>cross-agent</span>
+              <span>alt-text</span><span>bulk-fix</span><span>+3</span>
+            </div>
           </div>
         </div>
       </a>
@@ -4515,6 +4709,7 @@ section + .cta-section{ padding-top: 64px; }
               <span class="pmr-lic mit">MIT</span>
             </div>
           </div>
+          <div class="pmv-meta"><span class="pmm-dot"></span>TypeScript · v1.0 · 0 runtime deps</div>
         </div>
       </a>
 
@@ -4524,7 +4719,10 @@ section + .cta-section{ padding-top: 64px; }
         <span class="pm-desc">15 questions merchants actually ask.</span>
         <div class="pm-visual">
           <div class="pmv-faq">
-            <div class="pmf is-open">How long does setup take?<span class="plus">+</span></div>
+            <div class="pmf is-open">
+              <div class="pmf-q">How long does setup take?<span class="plus">+</span></div>
+              <div class="pmf-a">→ <strong>90s install</strong>. First scan in 4 min.</div>
+            </div>
             <div class="pmf">Different from generic SEO tools?<span class="plus">+</span></div>
             <div class="pmf">Will it slow my Shopify store?<span class="plus">+</span></div>
           </div>
