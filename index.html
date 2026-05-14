@@ -101,40 +101,37 @@ html{ scroll-behavior: smooth; scroll-padding-top: 84px; }
   letter-spacing: .12em;
 }
 
-/* === PAGE MAP / WHAT'S ON THIS PAGE - dark terminal aesthetic === */
+/* === PAGE MAP / WHAT'S ON THIS PAGE - light theme matching the rest === */
 .page-map-section{
-  background: var(--bg-dark);
-  border-top: 1px solid var(--border-dark);
-  border-bottom: 1px solid var(--border-dark);
+  background: var(--bg);
   padding: 72px 0;
   position: relative; overflow: hidden;
 }
 .page-map-section::before{
   content:''; position: absolute; inset: 0;
-  background-image: radial-gradient(rgba(0,208,132,.08) 1px, transparent 1px);
+  background-image: radial-gradient(rgba(0,208,132,.06) 1px, transparent 1px);
   background-size: 28px 28px;
   mask-image: radial-gradient(ellipse 70% 80% at 50% 50%, #000 0%, transparent 80%);
   -webkit-mask-image: radial-gradient(ellipse 70% 80% at 50% 50%, #000 0%, transparent 80%);
-  opacity: .5; pointer-events: none;
+  opacity: .55; pointer-events: none;
 }
 .page-map-section::after{
   content:''; position: absolute; top: 20%; left: 50%; transform: translateX(-50%);
   width: 600px; height: 600px;
-  background: radial-gradient(circle, rgba(0,208,132,.06), transparent 70%);
+  background: radial-gradient(circle, rgba(0,208,132,.08), transparent 70%);
   pointer-events: none; filter: blur(40px);
 }
 .page-map-section .container{ position: relative; z-index: 1; }
 
-.page-map-section .eyebrow{ color: var(--ink-dark-3); }
 .page-map-head{
   text-align: center; max-width: 720px; margin: 0 auto 40px;
 }
 .page-map-head h3{
   font-family: var(--font-display); font-size: 28px; font-weight: 500;
-  color: var(--ink-dark-0); letter-spacing: -.022em; margin-top: 14px;
+  color: var(--ink-0); letter-spacing: -.022em; margin-top: 14px;
 }
 .page-map-head .pm-sub{
-  font-size: 15px; color: var(--ink-dark-2); margin-top: 12px; line-height: 1.5;
+  font-size: 15px; color: var(--ink-2); margin-top: 12px; line-height: 1.5;
 }
 
 .page-map-grid{
@@ -148,8 +145,8 @@ html{ scroll-behavior: smooth; scroll-padding-top: 84px; }
   display: flex; flex-direction: column;
   min-height: 200px;
   padding: 18px;
-  background: linear-gradient(180deg, var(--bg-dark-raised) 0%, #0F0F0E 100%);
-  border: 1px solid var(--border-dark);
+  background: linear-gradient(180deg, var(--bg-raised) 0%, var(--bg-sunk) 100%);
+  border: 1px solid var(--border);
   border-radius: var(--r-lg);
   transition: transform .25s cubic-bezier(.2,.8,.2,1), border-color .25s, box-shadow .25s;
   text-decoration: none;
@@ -165,15 +162,15 @@ html{ scroll-behavior: smooth; scroll-padding-top: 84px; }
 .pm-card:hover::before, .pm-card.is-active::before{ transform: scaleX(1); }
 .pm-card:hover{
   transform: translateY(-3px);
-  border-color: rgba(0,208,132,.4);
-  box-shadow: 0 14px 28px -10px rgba(0,208,132,.25);
+  border-color: rgba(0,208,132,.45);
+  box-shadow: 0 14px 28px -10px rgba(0,208,132,.2);
 }
 .pm-card.is-active{
-  border-color: rgba(0,208,132,.5);
-  box-shadow: 0 0 0 1px rgba(0,208,132,.25), 0 10px 24px -8px rgba(0,208,132,.3);
-  background: linear-gradient(180deg, #181816 0%, #0F0F0E 100%);
+  border-color: rgba(0,208,132,.55);
+  box-shadow: 0 0 0 1px rgba(0,208,132,.3), 0 10px 24px -8px rgba(0,208,132,.25);
+  background: linear-gradient(180deg, var(--bg-raised) 0%, #E5DFCF 100%);
 }
-.pm-card.is-active .pm-num{ color: var(--brand); }
+.pm-card.is-active .pm-num{ color: var(--brand-deep); }
 
 .pm-card-head{
   display: flex; align-items: center; justify-content: space-between;
@@ -181,22 +178,22 @@ html{ scroll-behavior: smooth; scroll-padding-top: 84px; }
 }
 .pm-num{
   font-family: var(--font-mono); font-size: 10.5px; font-weight: 700;
-  color: var(--ink-dark-3); letter-spacing: .18em;
+  color: var(--ink-3); letter-spacing: .18em;
   transition: color .25s;
 }
-.pm-card:hover .pm-num{ color: var(--brand); }
+.pm-card:hover .pm-num{ color: var(--brand-deep); }
 .pm-arrow{
-  color: var(--ink-dark-4); font-size: 12px;
+  color: var(--ink-4); font-size: 12px;
   transition: transform .25s, color .25s;
 }
-.pm-card:hover .pm-arrow{ color: var(--brand); transform: translate(3px, -3px); }
+.pm-card:hover .pm-arrow{ color: var(--brand-deep); transform: translate(3px, -3px); }
 
 .pm-title{
   font-family: var(--font-display); font-size: 16px; font-weight: 600;
-  color: var(--ink-dark-0); letter-spacing: -.012em; line-height: 1.25;
+  color: var(--ink-0); letter-spacing: -.012em; line-height: 1.25;
 }
 .pm-desc{
-  font-size: 12.5px; color: var(--ink-dark-2);
+  font-size: 12.5px; color: var(--ink-2);
   margin-top: 4px; line-height: 1.4;
 }
 
@@ -209,49 +206,50 @@ html{ scroll-behavior: smooth; scroll-padding-top: 84px; }
 
 /* 01 - Competition bars (you absent, dashed) */
 .pmv-bars{ display: flex; align-items: flex-end; gap: 5px; height: 44px; width: 100%; }
-.pmv-bars span{ flex: 1; background: var(--ink-dark-4); border-radius: 2px 2px 0 0; }
+.pmv-bars span{ flex: 1; background: var(--ink-4); border-radius: 2px 2px 0 0; opacity: .55; }
 .pmv-bars span.you{
   background: transparent;
-  border: 1.5px dashed var(--ink-dark-3);
+  border: 1.5px dashed var(--ink-3);
   border-bottom: none;
+  opacity: 1;
 }
 
 /* 02 - Flow: scan → fix → prove (3 dots connected, last one filled green) */
 .pmv-flow{ display: flex; align-items: center; width: 100%; }
 .pmv-flow .dot{
   width: 14px; height: 14px; border-radius: 50%;
-  border: 1.5px solid var(--ink-dark-3);
-  background: var(--bg-dark);
+  border: 1.5px solid var(--ink-4);
+  background: var(--bg);
   flex-shrink: 0;
 }
-.pmv-flow .dot.fill{ background: var(--brand); border-color: var(--brand); box-shadow: 0 0 10px rgba(0,208,132,.6); }
-.pmv-flow .line{ flex: 1; height: 1.5px; background: var(--ink-dark-3); margin: 0 -1px; }
+.pmv-flow .dot.fill{ background: var(--brand); border-color: var(--brand-deep); box-shadow: 0 0 10px rgba(0,208,132,.45); }
+.pmv-flow .line{ flex: 1; height: 1.5px; background: var(--ink-4); margin: 0 -1px; opacity: .6; }
 
 /* 03 - Moats grid (3x2 = 6 squares with checks) */
 .pmv-grid{ display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; width: 100%; }
 .pmv-grid .tile{
   aspect-ratio: 1.6;
-  background: rgba(0,208,132,.08);
-  border: 1px solid rgba(0,208,132,.22);
+  background: var(--brand-wash);
+  border: 1px solid rgba(0,208,132,.32);
   border-radius: 4px;
   display: flex; align-items: center; justify-content: center;
-  color: var(--brand); font-size: 11px; font-weight: 800;
+  color: var(--brand-deep); font-size: 11px; font-weight: 800;
 }
 
 /* 04 - Pricing tags (3 tags, middle highlighted) */
 .pmv-prices{ display: flex; gap: 6px; width: 100%; }
 .pmv-prices .tag{
   flex: 1; padding: 7px 4px;
-  background: var(--bg-dark);
-  border: 1px solid var(--border-dark);
+  background: var(--bg);
+  border: 1px solid var(--border);
   border-radius: 5px;
   font-family: var(--font-mono); font-size: 11px; font-weight: 700;
-  color: var(--ink-dark-3); text-align: center;
+  color: var(--ink-3); text-align: center;
 }
 .pmv-prices .tag.pop{
-  background: rgba(0,208,132,.12);
+  background: var(--brand-wash);
   border-color: var(--brand);
-  color: var(--brand);
+  color: var(--brand-deep);
   transform: translateY(-3px);
   box-shadow: 0 4px 10px rgba(0,208,132,.18);
 }
@@ -260,15 +258,15 @@ html{ scroll-behavior: smooth; scroll-padding-top: 84px; }
 .pmv-dots{ display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; width: 100%; }
 .pmv-dots .dot{
   aspect-ratio: 1; border-radius: 50%;
-  background: rgba(0,208,132,.18);
-  border: 1px solid rgba(0,208,132,.35);
+  background: var(--brand-wash);
+  border: 1px solid rgba(0,208,132,.4);
 }
 
-/* 06 - Terminal command line */
+/* 06 - Terminal command line (intentionally kept dark for terminal aesthetic) */
 .pmv-cmd{
   width: 100%; padding: 7px 10px;
-  background: #050505;
-  border: 1px solid var(--border-dark);
+  background: #0A0A09;
+  border: 1px solid #1A1916;
   border-radius: 5px;
   font-family: var(--font-mono); font-size: 10.5px;
   color: var(--ink-dark-2);
@@ -284,14 +282,14 @@ html{ scroll-behavior: smooth; scroll-padding-top: 84px; }
   padding: 5px 10px; border-radius: 5px;
   font-family: var(--font-mono); font-size: 10px; font-weight: 700;
   letter-spacing: .04em;
-  background: rgba(0,208,132,.12);
-  border: 1px solid rgba(0,208,132,.3);
-  color: var(--brand);
+  background: var(--brand-wash);
+  border: 1px solid rgba(0,208,132,.35);
+  color: var(--brand-deep);
 }
 .pmv-badges .badge.mit{
   background: rgba(37,99,235,.12);
-  border-color: rgba(37,99,235,.3);
-  color: #6FA7FF;
+  border-color: rgba(37,99,235,.35);
+  color: #2563EB;
 }
 
 /* 08 - FAQ collapsed rows */
@@ -299,24 +297,24 @@ html{ scroll-behavior: smooth; scroll-padding-top: 84px; }
 .pmv-rows .row{
   display: flex; align-items: center; justify-content: space-between;
   padding: 5px 8px;
-  background: var(--bg-dark);
-  border: 1px solid var(--border-dark);
+  background: var(--bg);
+  border: 1px solid var(--border);
   border-radius: 4px;
 }
 .pmv-rows .row .stub{
   height: 4px; flex: 1; max-width: 70%;
-  background: var(--ink-dark-3); border-radius: 2px;
-  opacity: .6;
+  background: var(--ink-4); border-radius: 2px;
+  opacity: .55;
 }
-.pmv-rows .row .chev{ color: var(--ink-dark-3); font-size: 9px; }
+.pmv-rows .row .chev{ color: var(--ink-3); font-size: 9px; }
 
 /* Footer caption */
 .page-map-foot{
   text-align: center; margin-top: 28px;
   font-family: var(--font-mono); font-size: 11px;
-  color: var(--ink-dark-3); letter-spacing: .14em; text-transform: uppercase;
+  color: var(--ink-3); letter-spacing: .14em; text-transform: uppercase;
 }
-.page-map-foot .acc{ color: var(--brand); font-weight: 700; }
+.page-map-foot .acc{ color: var(--brand-deep); font-weight: 700; }
 body{
   font-family: var(--font-body); font-size: 16px;
   background: var(--bg); color: var(--ink-1);
@@ -3992,22 +3990,7 @@ section + .cta-section{ padding-top: 64px; }
   </div>
 </section>
 
-<section class="live-status">
-  <div class="container">
-    <div class="live-label"><span class="live-dot"></span> LIVE PIPELINE</div>
-    <div class="agent-list">
-      <div class="agent-pill"><span class="agent-status-dot"></span>ChatGPT</div>
-      <div class="agent-pill"><span class="agent-status-dot"></span>Gemini</div>
-      <div class="agent-pill"><span class="agent-status-dot"></span>Claude</div>
-      <div class="agent-pill"><span class="agent-status-dot"></span>Mistral</div>
-      <div class="agent-pill"><span class="agent-status-dot"></span>DeepSeek</div>
-      <div class="agent-pill"><span class="agent-status-dot inactive"></span>Perplexity <span class="agent-count">(soon)</span></div>
-    </div>
-    <div class="agent-count">2,400 captures/day · open dataset</div>
-  </div>
-</section>
-
-<!-- PAGE MAP - dark/terminal aesthetic with unique micro-visuals per tile -->
+<!-- PAGE MAP - light theme matching the rest, unique micro-visuals per tile -->
 <section class="page-map-section" id="pageMap">
   <div class="container">
     <div class="page-map-head reveal">
