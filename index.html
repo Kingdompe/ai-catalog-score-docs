@@ -478,6 +478,58 @@ html{ scroll-behavior: smooth; scroll-padding-top: 84px; }
 .pm-card:hover .pmm{ transform: translateY(-2px); box-shadow: 0 4px 10px rgba(0,208,132,.18); }
 .pm-card:hover .pmm.faded{ box-shadow: none; }
 
+/* Uniform 3x2 moat grid - replaces the ragged chip-flow layout */
+.pmv-moats-grid{
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px;
+  width: 100%;
+}
+.pmmt{
+  display: flex; align-items: center; gap: 6px;
+  padding: 7px 8px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  transition: background .35s, border-color .35s, transform .35s, box-shadow .35s;
+  transform: translateY(4px); opacity: 0;
+  animation: pmmIn .6s cubic-bezier(.34,1.56,.64,1) forwards;
+  min-width: 0;
+}
+.pmmt:nth-child(1){ animation-delay: .05s; }
+.pmmt:nth-child(2){ animation-delay: .12s; }
+.pmmt:nth-child(3){ animation-delay: .19s; }
+.pmmt:nth-child(4){ animation-delay: .26s; }
+.pmmt:nth-child(5){ animation-delay: .33s; }
+.pmmt:nth-child(6){ animation-delay: .40s; }
+.pmmt-n{
+  flex-shrink: 0;
+  width: 18px; height: 18px;
+  border-radius: 5px;
+  background: var(--brand-wash);
+  color: var(--brand-deep);
+  display: inline-flex; align-items: center; justify-content: center;
+  font-family: var(--font-mono); font-size: 10px; font-weight: 800;
+  border: 1px solid rgba(0,208,132,.3);
+}
+.pmmt-l{
+  font-size: 11px; font-weight: 700;
+  color: var(--ink-1); letter-spacing: -.005em;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  min-width: 0;
+}
+.pm-card:hover .pmmt,
+.pm-card.is-active .pmmt{
+  background: var(--brand-wash);
+  border-color: rgba(0,208,132,.32);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0,208,132,.15);
+}
+.pm-card:hover .pmmt .pmmt-n,
+.pm-card.is-active .pmmt .pmmt-n{
+  background: var(--brand);
+  color: var(--brand-ink);
+  border-color: var(--brand-deep);
+}
+
 /* ===========================================================
    04 - PRICING teaser: 3 mini plan cards with names + prices
    =========================================================== */
@@ -599,24 +651,25 @@ html{ scroll-behavior: smooth; scroll-padding-top: 84px; }
 
 /* Stacked agent rows: badge + name + bar + percentage */
 .pmv-agents-stack{
-  display: flex; flex-direction: column; gap: 6px; width: 100%;
+  display: flex; flex-direction: column; gap: 4px; width: 100%;
 }
 .pmas-row{
-  display: flex; align-items: center; gap: 8px;
+  display: flex; align-items: center; gap: 7px;
   font-family: var(--font-mono); font-size: 10px; font-weight: 700;
 }
 .pmas-row .pma{
-  width: 20px; height: 20px; aspect-ratio: 1;
-  border-radius: 5px; font-size: 10px;
+  width: 18px; height: 18px; aspect-ratio: 1;
+  border-radius: 4px; font-size: 9px;
   animation: none;
   flex-shrink: 0;
 }
 .pmas-name{
   color: var(--ink-1);
-  width: 52px;
+  width: 50px;
+  font-size: 10px;
 }
 .pmas-bar{
-  flex: 1; height: 6px;
+  flex: 1; height: 5px;
   background: var(--bg);
   border: 1px solid var(--border);
   border-radius: 999px;
@@ -632,21 +685,18 @@ html{ scroll-behavior: smooth; scroll-padding-top: 84px; }
   transform: scaleX(0);
 }
 .pmas-row:nth-child(1) .pmas-bar span{ animation-delay: .1s; }
-.pmas-row:nth-child(2) .pmas-bar span{ animation-delay: .22s; }
-.pmas-row:nth-child(3) .pmas-bar span{ animation-delay: .34s; }
+.pmas-row:nth-child(2) .pmas-bar span{ animation-delay: .2s; }
+.pmas-row:nth-child(3) .pmas-bar span{ animation-delay: .3s; }
+.pmas-row:nth-child(4) .pmas-bar span{ animation-delay: .4s; }
+.pmas-row:nth-child(5) .pmas-bar span{ animation-delay: .5s; }
 @keyframes pmasBarGrow{
   to{ transform: scaleX(1); }
 }
 .pmas-pct{
   color: var(--brand-deep); font-weight: 800;
   width: 26px; text-align: right;
+  font-size: 10px;
 }
-.pmas-row.muted{
-  font-size: 9.5px; color: var(--ink-3);
-  padding-left: 28px; padding-top: 2px;
-  letter-spacing: .04em;
-}
-.pmas-rest{ font-weight: 600; }
 
 /* ===========================================================
    06 - TERMINAL teaser: real command + result line
@@ -842,6 +892,7 @@ html{ scroll-behavior: smooth; scroll-padding-top: 84px; }
   .pmc-row::before,
   .pms-arr::after,
   .pmm,
+  .pmmt,
   .pmp.pop,
   .pma,
   .pmas-bar span,
@@ -851,6 +902,7 @@ html{ scroll-behavior: smooth; scroll-padding-top: 84px; }
   .pm-card:hover .pm-num::before,
   .pm-card.is-active .pm-num::before{ animation: none !important; }
   .pmas-bar span{ transform: scaleX(1); }
+  .pmmt{ transform: translateY(0); opacity: 1; }
 }
 
 /* Footer caption */
@@ -4625,13 +4677,13 @@ section + .cta-section{ padding-top: 64px; }
         <span class="pm-title">Why we win</span>
         <span class="pm-desc">6 structural moats, plain English.</span>
         <div class="pm-visual">
-          <div class="pmv-moats">
-            <span class="pmm">Multi-agent</span>
-            <span class="pmm">Causal proof</span>
-            <span class="pmm">Score Guarantee</span>
-            <span class="pmm">Open standard</span>
-            <span class="pmm">Perf pricing</span>
-            <span class="pmm">Network effect</span>
+          <div class="pmv-moats-grid">
+            <div class="pmmt"><span class="pmmt-n">1</span><span class="pmmt-l">Multi-agent</span></div>
+            <div class="pmmt"><span class="pmmt-n">2</span><span class="pmmt-l">Causal proof</span></div>
+            <div class="pmmt"><span class="pmmt-n">3</span><span class="pmmt-l">Guarantee</span></div>
+            <div class="pmmt"><span class="pmmt-n">4</span><span class="pmmt-l">Open spec</span></div>
+            <div class="pmmt"><span class="pmmt-n">5</span><span class="pmmt-l">Perf pricing</span></div>
+            <div class="pmmt"><span class="pmmt-n">6</span><span class="pmmt-l">Network</span></div>
           </div>
           <div class="pmv-meta"><span class="pmm-dot"></span>6 / 6 unmatched by competitors</div>
         </div>
@@ -4692,8 +4744,17 @@ section + .cta-section{ padding-top: 64px; }
               <span class="pmas-bar"><span style="width:64%"></span></span>
               <span class="pmas-pct">64%</span>
             </div>
-            <div class="pmas-row muted">
-              <span class="pmas-rest">+ Mistral · DeepSeek · Perplexity (Q3)</span>
+            <div class="pmas-row">
+              <span class="pma mst" title="Mistral">M</span>
+              <span class="pmas-name">Mistral</span>
+              <span class="pmas-bar"><span style="width:51%"></span></span>
+              <span class="pmas-pct">51%</span>
+            </div>
+            <div class="pmas-row">
+              <span class="pma dsk" title="DeepSeek">D</span>
+              <span class="pmas-name">DeepSeek</span>
+              <span class="pmas-bar"><span style="width:38%"></span></span>
+              <span class="pmas-pct">38%</span>
             </div>
           </div>
         </div>
