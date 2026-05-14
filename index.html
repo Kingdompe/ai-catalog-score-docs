@@ -71,9 +71,10 @@
   --shadow-md: 0 2px 4px rgba(20,18,10,.04), 0 8px 24px rgba(20,18,10,.06);
   --shadow-lg: 0 10px 30px rgba(20,18,10,.08), 0 30px 80px rgba(20,18,10,.10);
   --shadow-glow: 0 0 0 1px var(--brand), 0 0 40px rgba(0,208,132,.25);
-  --fs-display: clamp(48px, 7vw, 96px);
-  --fs-h1: clamp(36px, 4.4vw, 60px);
-  --fs-h2: clamp(28px, 2.8vw, 40px);
+  --fs-display: clamp(52px, 7.4vw, 104px);
+  /* Section h2 bumped to feel like 'chapter headings' - you immediately know what section you're in */
+  --fs-h1: clamp(48px, 5.6vw, 84px);
+  --fs-h2: clamp(30px, 3vw, 44px);
   --font-display: 'General Sans', 'Inter', ui-sans-serif, system-ui, sans-serif;
   --font-body: 'Inter', ui-sans-serif, system-ui, sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
@@ -124,19 +125,22 @@ html{ scroll-behavior: smooth; scroll-padding-top: 84px; }
 .page-map-section .container{ position: relative; z-index: 1; }
 
 .page-map-head{
-  text-align: center; max-width: 720px; margin: 0 auto 40px;
+  text-align: center; max-width: 960px; margin: 0 auto 48px;
 }
 .page-map-head h3{
-  font-family: var(--font-display); font-size: 28px; font-weight: 500;
-  color: var(--ink-0); letter-spacing: -.022em; margin-top: 14px;
+  font-family: var(--font-display);
+  font-size: clamp(36px, 4.2vw, 60px);
+  font-weight: 500;
+  color: var(--ink-0); letter-spacing: -.025em; margin-top: 16px; line-height: 1.08;
 }
 .page-map-head .pm-sub{
-  font-size: 15px; color: var(--ink-2); margin-top: 12px; line-height: 1.5;
+  font-size: 17px; color: var(--ink-2); margin-top: 14px; line-height: 1.5;
+  max-width: 680px; margin-left: auto; margin-right: auto;
 }
 
 .page-map-grid{
-  display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px;
-  max-width: 1180px; margin: 0 auto;
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;
+  max-width: 1380px; margin: 0 auto;
 }
 @media (max-width: 960px){ .page-map-grid{ grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 520px){ .page-map-grid{ grid-template-columns: 1fr; } }
@@ -352,7 +356,8 @@ button{ font-family: inherit; cursor: pointer; }
 ::-webkit-scrollbar-thumb:hover{ background: var(--ink-4); }
 
 /* ============ LAYOUT ============ */
-.container{ max-width: 1280px; margin: 0 auto; padding: 0 32px; position: relative; }
+.container{ max-width: 1480px; margin: 0 auto; padding: 0 48px; position: relative; }
+@media (max-width: 1200px){ .container{ padding: 0 32px; } }
 @media (max-width: 720px){ .container{ padding: 0 20px; } }
 .row{ display: flex; align-items: center; gap: 12px; }
 .row-sb{ display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
@@ -626,7 +631,7 @@ section{ position: relative; }
   position: relative;
   padding: 32px 0 28px;
   perspective: 1800px;
-  max-width: 1240px; margin: 0 auto;
+  max-width: 1400px; margin: 0 auto;
 }
 
 /* MAIN DASHBOARD */
@@ -2404,7 +2409,7 @@ section{ position: relative; }
 .compare-wrap{
   position: relative;
   margin-top: 72px;
-  max-width: 1180px; margin-left: auto; margin-right: auto;
+  max-width: 1380px; margin-left: auto; margin-right: auto;
 }
 
 /* Floating WINNER badge over our column */
@@ -2727,7 +2732,7 @@ section{ position: relative; }
 
 /* ============ FAQ ============ */
 .faq-section{ background: var(--bg); }
-.faq-wrap{ max-width: 880px; }
+.faq-wrap{ max-width: 1080px; }
 .faq-head{ text-align: center; margin-bottom: 56px; }
 .faq-head h2{ margin-top: 16px; }
 .faq-card{
@@ -3012,8 +3017,11 @@ section + .cta-section{ padding-top: 64px; }
 .reveal-stagger.visible > *:nth-child(6){ opacity: 1; transform: translateY(0); transition-delay: .4s; }
 .reveal-stagger.visible > *:nth-child(7){ opacity: 1; transform: translateY(0); transition-delay: .48s; }
 
-.section-head{ max-width: 720px; margin-bottom: 64px; }
-.section-head h2{ margin-top: 16px; }
+.section-head{ max-width: 1000px; margin-bottom: 72px; }
+.section-head h2{ margin-top: 18px; line-height: 1.05; }
+/* Sub-paragraph below section h2 keeps a readable measure */
+.section-head > p{ max-width: 720px; }
+.text-center .section-head > p{ margin-left: auto; margin-right: auto; }
 .text-center{ text-align: center; }
 .text-center .eyebrow{ justify-content: center; }
 .text-center .section-head{ margin-left: auto; margin-right: auto; }
@@ -3086,12 +3094,12 @@ section + .cta-section{ padding-top: 64px; }
 .pricing-glassy-grid{
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
+  gap: 24px;
   align-items: stretch;
-  max-width: 1100px;
+  max-width: 1320px;
   margin: 0 auto;
 }
-@media (max-width: 1100px){ .pricing-glassy-grid{ grid-template-columns: 1fr; max-width: 480px; } }
+@media (max-width: 1100px){ .pricing-glassy-grid{ grid-template-columns: 1fr; max-width: 520px; } }
 
 /* Monthly / Yearly toggle */
 .pricing-toggle{
@@ -4113,7 +4121,7 @@ section + .cta-section{ padding-top: 64px; }
 <!-- INTERACTIVE 3D SECTION -->
 <section class="interactive-3d-section section-pad">
   <div class="container">
-    <div class="text-center reveal" style="max-width:760px;margin:0 auto">
+    <div class="text-center reveal" style="max-width:1000px;margin:0 auto">
       <div class="eyebrow"><span class="dot"></span> SEE IT IN ACTION</div>
       <h2 style="margin-top:18px">An AI agent inspecting your catalog. Live.</h2>
       <p style="font-size:17px;margin-top:18px">
@@ -4376,7 +4384,7 @@ section + .cta-section{ padding-top: 64px; }
 <!-- WHY -->
 <section id="features" class="why-section section-pad">
   <div class="container">
-    <div class="reveal text-center" style="max-width:760px;margin:0 auto">
+    <div class="reveal text-center" style="max-width:1000px;margin:0 auto">
       <div class="eyebrow"><span class="section-num">03</span><span class="dot"></span> WHY WE WIN</div>
       <div class="section-head text-center" style="margin-top:14px;margin-bottom:56px">
         <h2>Six reasons no one else can do this.</h2>
@@ -4713,7 +4721,7 @@ section + .cta-section{ padding-top: 64px; }
 <!-- BENTO GRID SECTION -->
 <section id="bento" class="bento-section section-pad">
   <div class="container">
-    <div class="reveal text-center" style="max-width:760px;margin:0 auto;">
+    <div class="reveal text-center" style="max-width:1000px;margin:0 auto;">
       <div class="eyebrow"><span class="section-num">05</span><span class="dot"></span> WHAT YOU GET</div>
       <h2 style="margin-top:18px">Everything you need to ship AI-ready catalogs at scale.</h2>
     </div>
@@ -4901,7 +4909,7 @@ section + .cta-section{ padding-top: 64px; }
 <!-- ECOSYSTEM -->
 <section id="ecosystem" class="eco-section section-pad">
   <div class="container">
-    <div class="text-center reveal" style="max-width:760px;margin:0 auto 40px">
+    <div class="text-center reveal" style="max-width:1000px;margin:0 auto 48px">
       <div class="eyebrow"><span class="section-num">07</span><span class="dot"></span> OPEN SOURCE</div>
       <h2 style="margin-top:16px">Methodology open. Reference impl open. Skills open.</h2>
       <p style="font-size:17px;color:var(--ink-2);margin-top:18px">
