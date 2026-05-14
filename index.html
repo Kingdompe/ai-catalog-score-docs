@@ -28,13 +28,15 @@
 <style>
 /* ============ DESIGN TOKENS ============ */
 :root{
-  --bg: #FAFAF7;
-  --bg-raised: #FFFFFF;
-  --bg-sunk: #F4F3EE;
+  /* Warm-beige base (replaced harsh white #FAFAF7).
+     Cream tone reduces eye fatigue and creates a unified canvas across sections. */
+  --bg: #F2EEE5;
+  --bg-raised: #F8F5ED;
+  --bg-sunk: #EBE7DC;
   --bg-dark: #0A0A09;
   --bg-dark-raised: #121210;
-  --border: #E6E4DC;
-  --border-strong: #D5D2C7;
+  --border: #DDD8CB;
+  --border-strong: #C8C3B4;
   --border-dark: #222220;
   --ink-0: #0B0B0A;
   --ink-1: #1A1916;
@@ -362,6 +364,26 @@ button{ font-family: inherit; cursor: pointer; }
 section{ position: relative; }
 .section-pad{ padding: 140px 0; }
 .section-pad-sm{ padding: 88px 0; }
+
+/* === FULL-SCREEN SECTIONS === Major content sections fill ≥ 1 viewport
+   so each one feels like a complete "chapter" of the page.
+   Content is vertically centered when shorter than 100vh.
+   Long sections (FAQ, bento) naturally overflow — that's fine,
+   scroll continues normally. Sticky-nav padding handled via scroll-padding-top. */
+.problem-section,
+.how-section,
+.why-section,
+.pricing-glassy,
+.bento-section,
+.terminal-section,
+.eco-section,
+.faq-section{
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+/* Page map kept compact (transition, not content) */
 @media (max-width: 720px){ .section-pad{ padding: 88px 0; } .section-pad-sm{ padding: 56px 0; } }
 
 /* ============ BUTTONS ============ */
@@ -1257,7 +1279,7 @@ section{ position: relative; }
 .agent-count{ color: var(--ink-dark-3); font-size: 11px; font-family: var(--font-mono); letter-spacing: .04em; }
 
 /* ============ BENTO GRID ============ */
-.bento-section{ border-bottom: 1px solid var(--border); position: relative; overflow: hidden; }
+.bento-section{ background: var(--bg); position: relative; overflow: hidden; }
 .bento-section::before{
   content:''; position: absolute; top: 10%; right: -100px;
   width: 400px; height: 400px;
@@ -1602,8 +1624,7 @@ section{ position: relative; }
 
 /* ============ PROBLEM ============ */
 .problem-section{
-  background: var(--bg-sunk);
-  border-bottom: 1px solid var(--border);
+  background: var(--bg);
   position: relative; overflow: hidden;
 }
 /* Decorative red wash behind 41% card */
@@ -2054,7 +2075,7 @@ section{ position: relative; }
 .lo-cta::after{ content: none; }
 
 /* ============ HOW IT WORKS ============ */
-.how-section{ border-bottom: 1px solid var(--border); }
+.how-section{ background: var(--bg); }
 .how-grid{
   display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
   margin-top: 60px; position: relative;
@@ -2092,7 +2113,7 @@ section{ position: relative; }
 
 /* ============ WHY WE WIN (moats) ============ */
 .why-section{
-  background: var(--bg-sunk); border-top: 1px solid var(--border);
+  background: var(--bg);
   position: relative; overflow: hidden;
 }
 .why-section::before{
@@ -2619,7 +2640,7 @@ section{ position: relative; }
 
 /* ============ ECOSYSTEM ============ */
 .eco-section{
-  border-top: 1px solid var(--border); background: var(--bg);
+  background: var(--bg);
   position: relative; overflow: hidden;
 }
 .eco-section::before{
@@ -2707,7 +2728,7 @@ section{ position: relative; }
 .pricing-card .sep{ height: 1px; background: var(--border); margin: 22px 0; }
 
 /* ============ FAQ ============ */
-.faq-section{ border-top: 1px solid var(--border); background: var(--bg-sunk); }
+.faq-section{ background: var(--bg); }
 .faq-wrap{ max-width: 880px; }
 .faq-head{ text-align: center; margin-bottom: 56px; }
 .faq-head h2{ margin-top: 16px; }
@@ -4170,7 +4191,7 @@ section + .cta-section{ padding-top: 64px; }
   </div>
 </section>
 
-<section style="padding:48px 0;border-bottom:1px solid var(--border)">
+<section style="padding:48px 0;background:var(--bg)">
   <div class="container text-center">
     <div class="mono" style="font-size:11px;color:var(--ink-4);letter-spacing:.18em;text-transform:uppercase;margin-bottom:28px">
       10 DTC verticals modeled · per-category baselines &amp; benchmarks
