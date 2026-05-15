@@ -108,6 +108,7 @@ html{ scroll-behavior: smooth; scroll-padding-top: 96px; }
   padding: 72px 0;
   position: relative; overflow: hidden;
 }
+/* Dot pattern (unchanged) — adds page texture for the glass to refract */
 .page-map-section::before{
   content:''; position: absolute; inset: 0;
   background-image: radial-gradient(rgba(0,208,132,.06) 1px, transparent 1px);
@@ -116,6 +117,7 @@ html{ scroll-behavior: smooth; scroll-padding-top: 96px; }
   -webkit-mask-image: radial-gradient(ellipse 70% 80% at 50% 50%, #000 0%, transparent 80%);
   opacity: .55; pointer-events: none;
 }
+/* Section glow (now wider + softer) */
 .page-map-section::after{
   content:''; position: absolute; top: 20%; left: 50%; transform: translateX(-50%);
   width: 600px; height: 600px;
@@ -123,6 +125,59 @@ html{ scroll-behavior: smooth; scroll-padding-top: 96px; }
   pointer-events: none; filter: blur(40px);
 }
 .page-map-section .container{ position: relative; z-index: 1; }
+
+/* Floating colored blobs underneath the card grid — give the glass
+   backdrop-filter something to actually blur. Without them the
+   liquid-glass effect is invisible on uniform beige. Three blobs in
+   brand-green / soft-amber / cool-teal, animated on slow loops so
+   they drift behind the cards. Sit BELOW the cards (z-index 0) and
+   above the section pseudo-elements. */
+.page-map-blobs{
+  position: absolute;
+  inset: 12% 0 12% 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+.pm-blob{
+  position: absolute; border-radius: 50%;
+  filter: blur(70px);
+  opacity: .65;
+  will-change: transform;
+}
+.pm-blob.b1{
+  width: 480px; height: 480px;
+  background: radial-gradient(circle, rgba(0,208,132,.55), rgba(0,208,132,0) 70%);
+  top: -8%; left: 4%;
+  animation: pmBlobDrift1 22s ease-in-out infinite;
+}
+.pm-blob.b2{
+  width: 520px; height: 520px;
+  background: radial-gradient(circle, rgba(255,182,72,.42), rgba(255,182,72,0) 70%);
+  top: 30%; right: -6%;
+  animation: pmBlobDrift2 28s ease-in-out infinite;
+}
+.pm-blob.b3{
+  width: 440px; height: 440px;
+  background: radial-gradient(circle, rgba(64,180,200,.40), rgba(64,180,200,0) 70%);
+  bottom: -10%; left: 35%;
+  animation: pmBlobDrift3 32s ease-in-out infinite;
+}
+@keyframes pmBlobDrift1{
+  0%,100% { transform: translate3d(0,0,0) scale(1); }
+  50%     { transform: translate3d(80px,40px,0) scale(1.15); }
+}
+@keyframes pmBlobDrift2{
+  0%,100% { transform: translate3d(0,0,0) scale(1); }
+  50%     { transform: translate3d(-90px,60px,0) scale(.9); }
+}
+@keyframes pmBlobDrift3{
+  0%,100% { transform: translate3d(0,0,0) scale(1); }
+  50%     { transform: translate3d(40px,-50px,0) scale(1.1); }
+}
+@media (prefers-reduced-motion: reduce){
+  .pm-blob{ animation: none !important; }
+}
 
 .page-map-head{
   text-align: center; max-width: 960px; margin: 0 auto 48px;
@@ -196,18 +251,48 @@ html{ scroll-behavior: smooth; scroll-padding-top: 96px; }
 }
 
 /* Inner top highlight — the "lit edge" that sells the glass illusion.
-   Pure CSS, no extra DOM. Sits above the background but below content. */
+   Pure CSS, no extra DOM. Sits above the background but below content.
+   Boosted opacity so it reads even without backdrop content. */
 .pm-card::before{
   content:''; position: absolute; top: 0; left: 0; right: 0; height: 50%;
   background: linear-gradient(180deg,
-    rgba(255,255,255,.65) 0%,
-    rgba(255,255,255,.18) 35%,
+    rgba(255,255,255,.85) 0%,
+    rgba(255,255,255,.32) 35%,
     transparent 100%);
   pointer-events: none;
   border-radius: 20px 20px 0 0;
   z-index: 0;
   mix-blend-mode: overlay;
 }
+
+/* Diagonal sheen — a thin angled highlight that GLIDES across the card
+   on hover. Pure CSS, animated via the .sheen extra element so we can
+   independently animate its position without clobbering the card's
+   transform. Mimics light striking real polished glass. */
+.pm-card .pm-sheen{
+  position: absolute; inset: -2px;
+  pointer-events: none;
+  border-radius: inherit;
+  overflow: hidden;
+  z-index: 1;
+  opacity: 0;
+  transition: opacity .35s ease;
+}
+.pm-card .pm-sheen::before{
+  content:''; position: absolute;
+  top: 0; bottom: 0; width: 50%;
+  left: -60%;
+  background: linear-gradient(115deg,
+    transparent 0%,
+    rgba(255,255,255,.0) 40%,
+    rgba(255,255,255,.55) 50%,
+    rgba(255,255,255,.0) 60%,
+    transparent 100%);
+  transform: skewX(-18deg);
+  transition: left .9s cubic-bezier(.2,.8,.2,1);
+}
+.pm-card:hover .pm-sheen{ opacity: 1; }
+.pm-card:hover .pm-sheen::before{ left: 120%; }
 
 /* Cursor-following soft brand glow underneath content. Opacity is
    driven by hover/active state — invisible at rest so the glass looks
@@ -4751,6 +4836,14 @@ section + .cta-section{ padding-top: 64px; }
 
 <!-- PAGE MAP - light theme matching the rest, unique micro-visuals per tile -->
 <section class="page-map-section" id="pageMap">
+  <!-- Floating colored blobs — sit behind the card grid so the glass
+       backdrop-filter has something to refract. Without them the
+       blur(18px) on the cards looks identical to the page background.  -->
+  <div class="page-map-blobs" aria-hidden="true">
+    <div class="pm-blob b1"></div>
+    <div class="pm-blob b2"></div>
+    <div class="pm-blob b3"></div>
+  </div>
   <div class="container">
     <div class="page-map-head reveal">
       <div class="eyebrow" style="justify-content:center"><span class="dot"></span> ON THIS PAGE</div>
@@ -6720,8 +6813,18 @@ if (terminalBody) terminalObserver.observe(terminalBody);
   //   trackpads that spam mousemove (Chrome can fire 100+/sec).
   //
   // Skip the tilt entirely when the user has prefers-reduced-motion set.
-  const MAX_TILT = 7; // degrees
+  const MAX_TILT = 12; // degrees — dialled up so the 3D effect reads at a glance
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // Inject one sheen element into each card. Keeps the HTML clean and
+  // lets us drop / reposition the sheen by just touching this loop.
+  cards.forEach(card => {
+    if (!card.querySelector('.pm-sheen')){
+      const sheen = document.createElement('span');
+      sheen.className = 'pm-sheen';
+      sheen.setAttribute('aria-hidden', 'true');
+      card.appendChild(sheen);
+    }
+  });
   cards.forEach(card => {
     let pendingEvent = null;
     let rafId = 0;
