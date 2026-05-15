@@ -239,17 +239,21 @@ html{ scroll-behavior: smooth; scroll-padding-top: 96px; }
   /* Layered glass: outer is a warm translucent wash on the beige page
      background, inner is a top→bottom soft gradient that mimics how
      light hits real frosted glass (brighter at the top edge). The
-     middle layer is a subtle tint of the per-card accent — gives each
-     card a recognizable colour at rest without breaking the glass. */
+     middle layer is a strong tint of the per-card accent — boosted
+     from the original 10%/4% to 32%/18% so the colour is unmistakable
+     at rest, no hover needed. Glass aesthetic preserved because the
+     white wash + backdrop-blur still dominate visually. */
   background:
-    linear-gradient(180deg, rgba(255,255,255,.55) 0%, rgba(255,255,255,.22) 100%),
+    linear-gradient(180deg, rgba(255,255,255,.42) 0%, rgba(255,255,255,.18) 100%),
     linear-gradient(180deg,
-      rgba(var(--card-accent-rgb), .10) 0%,
-      rgba(var(--card-accent-rgb), .04) 100%),
-    linear-gradient(180deg, rgba(248,243,228,.35) 0%, rgba(248,243,228,.55) 100%);
+      rgba(var(--card-accent-rgb), .32) 0%,
+      rgba(var(--card-accent-rgb), .18) 100%),
+    linear-gradient(180deg, rgba(248,243,228,.30) 0%, rgba(248,243,228,.50) 100%);
   -webkit-backdrop-filter: blur(18px) saturate(180%);
   backdrop-filter: blur(18px) saturate(180%);
-  border: 1px solid rgba(255,255,255,.55);
+  /* Border tinted with the accent at low alpha so the card "frames"
+     in its own colour even at rest. Hover bumps the alpha to .55. */
+  border: 1px solid rgba(var(--card-accent-rgb), .32);
   border-radius: 20px;
   text-decoration: none;
   position: relative; overflow: hidden;
@@ -385,20 +389,22 @@ html{ scroll-behavior: smooth; scroll-padding-top: 96px; }
   margin-bottom: 14px;
 }
 
-/* Number badge - pill, bigger, with brand tint on hover */
+/* Number badge - pill, picks up the card accent immediately at rest so
+   the colour-by-card identity reads without hover. Hover/active just
+   intensifies the same colour (already wired in the next selector). */
 .pm-num{
   font-family: var(--font-mono); font-size: 13px; font-weight: 800;
-  color: var(--ink-3); letter-spacing: .22em;
+  color: var(--card-accent); letter-spacing: .22em;
   padding: 6px 13px;
-  background: var(--bg);
-  border: 1px solid var(--border);
+  background: rgba(var(--card-accent-rgb), .08);
+  border: 1px solid rgba(var(--card-accent-rgb), .25);
   border-radius: 999px;
   display: inline-flex; align-items: center; gap: 7px;
   transition: color .3s, background .3s, border-color .3s, transform .3s;
 }
 .pm-num::before{
   content:''; width: 5px; height: 5px; border-radius: 50%;
-  background: var(--ink-4);
+  background: rgba(var(--card-accent-rgb), .55);
   transition: background .3s, box-shadow .3s;
 }
 .pm-card:hover .pm-num, .pm-card.is-active .pm-num{
