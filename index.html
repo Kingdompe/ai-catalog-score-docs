@@ -146,67 +146,119 @@ html{ scroll-behavior: smooth; scroll-padding-top: 96px; }
 @media (max-width: 960px){ .page-map-grid{ grid-template-columns: repeat(2, 1fr); gap: 16px; } }
 @media (max-width: 520px){ .page-map-grid{ grid-template-columns: 1fr; } }
 
+/* ---------------------------------------------------------------------
+   Page-map cards — liquid-glass + 3D tilt treatment (May 15 upgrade)
+
+   Building blocks (read in this order):
+     1. Translucent base with backdrop-filter blur+saturate → "frosted" look
+     2. ::before = inner top highlight (the "lit edge" of glass)
+     3. ::after  = cursor-tracked soft brand glow underneath the content
+     4. Hover/active state lifts the card on Z + tilts by --rx/--ry
+        (set in JS from mouse position, defaults 0/0)
+   --------------------------------------------------------------------- */
 .pm-card{
   display: flex; flex-direction: column;
   min-height: 326px;
   padding: 22px 22px 20px;
+  /* Layered glass: outer is a warm translucent wash on the beige page
+     background, inner is a top→bottom soft gradient that mimics how
+     light hits real frosted glass (brighter at the top edge). */
   background:
-    linear-gradient(180deg, var(--bg-raised) 0%, var(--bg-sunk) 100%);
-  border: 1px solid var(--border);
-  border-radius: 18px;
-  transition:
-    transform .5s cubic-bezier(.2,.8,.2,1),
-    border-color .35s,
-    box-shadow .45s,
-    background .45s;
+    linear-gradient(180deg, rgba(255,255,255,.62) 0%, rgba(255,255,255,.28) 100%),
+    linear-gradient(180deg, rgba(248,243,228,.35) 0%, rgba(248,243,228,.55) 100%);
+  -webkit-backdrop-filter: blur(18px) saturate(180%);
+  backdrop-filter: blur(18px) saturate(180%);
+  border: 1px solid rgba(255,255,255,.55);
+  border-radius: 20px;
   text-decoration: none;
   position: relative; overflow: hidden;
   cursor: pointer;
   isolation: isolate;
   transform-style: preserve-3d;
-  --mx: 50%; --my: 50%;
+  /* CSS vars the JS sets: cursor position (--mx/--my for the inner
+     glow) AND tilt angles (--rx/--ry for the 3D effect). Defaults are
+     no-tilt so the card looks fine before any mouse interaction. */
+  --mx: 50%; --my: 50%; --rx: 0deg; --ry: 0deg;
   will-change: transform;
+  /* Multi-layer shadow gives real depth (close + mid + far) instead of
+     one flat drop. Tuned so the card "floats" even at rest. */
+  box-shadow:
+    0 1px 0 rgba(255,255,255,.7) inset,
+    0 -1px 0 rgba(0,0,0,.03) inset,
+    0 6px 20px -8px rgba(36,32,18,.10),
+    0 1px 2px rgba(36,32,18,.05);
+  transform: perspective(900px) rotateX(var(--rx)) rotateY(var(--ry)) translateZ(0);
+  transition:
+    transform .35s cubic-bezier(.2,.8,.2,1),
+    border-color .35s,
+    box-shadow .45s,
+    background .45s;
 }
 
-/* Cursor-following soft brand glow inside the card */
+/* Inner top highlight — the "lit edge" that sells the glass illusion.
+   Pure CSS, no extra DOM. Sits above the background but below content. */
+.pm-card::before{
+  content:''; position: absolute; top: 0; left: 0; right: 0; height: 50%;
+  background: linear-gradient(180deg,
+    rgba(255,255,255,.65) 0%,
+    rgba(255,255,255,.18) 35%,
+    transparent 100%);
+  pointer-events: none;
+  border-radius: 20px 20px 0 0;
+  z-index: 0;
+  mix-blend-mode: overlay;
+}
+
+/* Cursor-following soft brand glow underneath content. Opacity is
+   driven by hover/active state — invisible at rest so the glass looks
+   pure, lights up under the cursor. */
 .pm-card::after{
   content:''; position: absolute; inset: 0;
-  background: radial-gradient(320px circle at var(--mx) var(--my), rgba(0,208,132,.18), transparent 60%);
+  background: radial-gradient(320px circle at var(--mx) var(--my),
+    rgba(0,208,132,.22) 0%,
+    rgba(0,208,132,.10) 30%,
+    transparent 60%);
   opacity: 0; transition: opacity .45s;
   pointer-events: none;
   z-index: 0;
+  border-radius: 20px;
 }
 .pm-card:hover::after, .pm-card.is-active::after{ opacity: 1; }
 
-/* Top accent line - now glowing gradient */
-.pm-card::before{
-  content:''; position: absolute; top: 0; left: 0; width: 100%; height: 3px;
-  background: linear-gradient(90deg,
-    transparent 0%,
-    rgba(0,208,132,.5) 20%,
-    var(--brand) 50%,
-    rgba(0,208,132,.5) 80%,
-    transparent 100%);
-  transform: scaleX(0); transform-origin: center;
-  transition: transform .55s cubic-bezier(.2,.8,.2,1);
-  z-index: 2;
-  box-shadow: 0 0 18px rgba(0,208,132,.45);
-}
-.pm-card:hover::before, .pm-card.is-active::before{ transform: scaleX(1); }
-
 .pm-card:hover{
-  transform: translateY(-10px) scale(1.025);
-  border-color: rgba(0,208,132,.5);
+  transform:
+    perspective(900px)
+    rotateX(var(--rx))
+    rotateY(var(--ry))
+    translateZ(22px);
+  border-color: rgba(0,208,132,.55);
   box-shadow:
-    0 24px 60px -18px rgba(0,208,132,.32),
-    0 6px 14px -6px rgba(0,0,0,.08);
+    0 1px 0 rgba(255,255,255,.85) inset,
+    0 -1px 0 rgba(0,0,0,.04) inset,
+    0 30px 70px -20px rgba(0,208,132,.35),
+    0 12px 28px -10px rgba(36,32,18,.18),
+    0 4px 10px -4px rgba(0,0,0,.08);
 }
 .pm-card.is-active{
-  border-color: rgba(0,208,132,.6);
+  border-color: rgba(0,208,132,.65);
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.78) 0%, rgba(231,247,239,.55) 100%),
+    linear-gradient(180deg, rgba(248,243,228,.4) 0%, rgba(248,243,228,.6) 100%);
   box-shadow:
+    0 1px 0 rgba(255,255,255,.9) inset,
     0 0 0 1px rgba(0,208,132,.35),
-    0 16px 40px -14px rgba(0,208,132,.32);
-  background: linear-gradient(180deg, var(--bg-raised) 0%, #EFE9D8 100%);
+    0 0 36px -6px rgba(0,208,132,.32),
+    0 18px 40px -16px rgba(0,208,132,.30);
+}
+
+/* Respect user motion preference — kill the tilt + transition snap
+   for anyone who's opted out of motion in their OS. */
+@media (prefers-reduced-motion: reduce){
+  .pm-card{
+    --rx: 0deg !important; --ry: 0deg !important;
+    transition: border-color .25s, box-shadow .25s, background .25s;
+  }
+  .pm-card:hover{ transform: none; }
 }
 
 /* All content above the ::after overlay */
@@ -6656,18 +6708,55 @@ if (terminalBody) terminalObserver.observe(terminalBody);
   const byId = new Map();
   cards.forEach(c => byId.set(c.dataset.section, c));
 
-  // Cursor-follow inner glow (sets --mx / --my on each card)
+  // Cursor-follow effects:
+  //   1. Inner glow position (--mx / --my): % of card width/height under
+  //      the cursor. Drives the radial-gradient in ::after.
+  //   2. 3D tilt (--rx / --ry): rotateX/rotateY angles based on how far
+  //      the cursor is from card center. Cursor at top-left tilts the
+  //      card so its bottom-right edge comes toward you. Max ±MAX_TILT
+  //      degrees on each axis — subtle enough to feel "premium glass",
+  //      not gimmicky.
+  //   rAF + last-known-event coalescing keeps this at 60fps even on
+  //   trackpads that spam mousemove (Chrome can fire 100+/sec).
+  //
+  // Skip the tilt entirely when the user has prefers-reduced-motion set.
+  const MAX_TILT = 7; // degrees
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   cards.forEach(card => {
-    card.addEventListener('mousemove', e => {
+    let pendingEvent = null;
+    let rafId = 0;
+    const applyMove = () => {
+      rafId = 0;
+      const e = pendingEvent; if (!e) return;
       const r = card.getBoundingClientRect();
-      const x = ((e.clientX - r.left) / r.width) * 100;
-      const y = ((e.clientY - r.top) / r.height) * 100;
-      card.style.setProperty('--mx', x + '%');
-      card.style.setProperty('--my', y + '%');
+      const xPct = ((e.clientX - r.left) / r.width) * 100;
+      const yPct = ((e.clientY - r.top) / r.height) * 100;
+      card.style.setProperty('--mx', xPct + '%');
+      card.style.setProperty('--my', yPct + '%');
+      if (!prefersReducedMotion){
+        // Normalize to -1..+1 around the center, then scale to MAX_TILT.
+        // Sign flip on Y: cursor at the TOP of card should make the top
+        // edge tilt AWAY (negative rotateX), which feels natural.
+        const nx = (xPct - 50) / 50;
+        const ny = (yPct - 50) / 50;
+        card.style.setProperty('--ry', (nx * MAX_TILT).toFixed(2) + 'deg');
+        card.style.setProperty('--rx', (-ny * MAX_TILT).toFixed(2) + 'deg');
+      }
+    };
+    card.addEventListener('mousemove', e => {
+      pendingEvent = e;
+      if (!rafId) rafId = requestAnimationFrame(applyMove);
     });
     card.addEventListener('mouseleave', () => {
+      pendingEvent = null;
+      if (rafId){ cancelAnimationFrame(rafId); rafId = 0; }
+      // Reset to "at rest" state — center glow + zero tilt — with a
+      // smoother return because we override the CSS transition with
+      // willful spring-like easing in the inline transform.
       card.style.setProperty('--mx', '50%');
       card.style.setProperty('--my', '50%');
+      card.style.setProperty('--rx', '0deg');
+      card.style.setProperty('--ry', '0deg');
     });
   });
 
