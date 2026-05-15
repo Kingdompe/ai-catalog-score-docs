@@ -274,54 +274,89 @@ html{ scroll-behavior: smooth; scroll-padding-top: 96px; }
   mix-blend-mode: overlay;
 }
 
-/* Holographic shimmer overlay — the premium iridescent finish.
-   A conic-gradient cycling through cyan / pink / gold / lilac / mint
-   sits on top of the glass at low opacity (always visible — that's
-   what gives every card its "rainbow foil" identity at rest). The
-   --holo-angle CSS var is updated in JS from the cursor X position,
-   so as you sweep your mouse across the card the colours rotate —
-   exactly how a real holographic sticker behaves under a moving light.
-   At rest --holo-angle drifts via a slow CSS animation so the cards
-   shimmer subtly even without interaction.
-   The conic centre is also pushed off-card so the gradient bands
-   read as sweeping reflections, not a colour wheel. */
+/* Premium holographic shimmer — version 2.
+   Previous attempt used mix-blend-mode: screen at low opacity, which on
+   a near-white glass background washed out to invisible. Real
+   holographic foils have SHARP saturated colour bands, not blurry
+   pastels. This version:
+     - Stack TWO overlays: a base conic-gradient with vivid spectral
+       colour bands (the iridescent foil) and a top linear-gradient
+       sweep (the moving reflection on the foil).
+     - mix-blend-mode: hard-light → preserves vivid colour on light
+       backgrounds without bleaching. (screen is for dark surfaces.)
+     - Reduced blur (6px instead of 18px) so the colour bands stay
+       defined like real holographic film, not a wash.
+     - --holo-angle wraps from 0 to 360deg, driven by cursor on hover
+       and by a slow rest-state CSS drift. */
 @property --holo-angle {
   syntax: '<angle>';
   inherits: false;
-  initial-value: 120deg;
+  initial-value: 0deg;
 }
 .pm-card .pm-sheen{
-  position: absolute; inset: -15%;
+  position: absolute; inset: 0;
   pointer-events: none;
   z-index: 1;
-  --holo-angle: 120deg;
-  background: conic-gradient(
-    from var(--holo-angle) at 30% 40%,
-    rgba(120, 220, 255, 0)    0deg,
-    rgba(120, 220, 255, .28)  40deg,
-    rgba(255, 170, 230, .32) 100deg,
-    rgba(255, 220, 140, .26) 160deg,
-    rgba(180, 200, 255, .30) 220deg,
-    rgba(170, 240, 215, .28) 280deg,
-    rgba(120, 220, 255, 0)   360deg
-  );
-  filter: blur(18px) saturate(160%);
-  mix-blend-mode: screen;
-  opacity: .55;
-  border-radius: 32px;
-  /* Drift slowly at rest so the foil "breathes" even without cursor */
-  animation: pmHoloDrift 14s linear infinite;
+  border-radius: inherit;
+  overflow: hidden;
+  /* Foil base — bright spectral bands at full saturation. The
+     transparent stops between bands give the impression of light
+     refracting through prism striations rather than a continuous
+     rainbow wheel. */
+  background:
+    conic-gradient(
+      from var(--holo-angle) at 50% 50%,
+      rgba(120, 230, 255, .55)   0deg,
+      rgba(255, 130, 220, .60)  60deg,
+      rgba(255, 215, 110, .55) 120deg,
+      rgba(140, 255, 200, .55) 180deg,
+      rgba(170, 180, 255, .60) 240deg,
+      rgba(255, 130, 220, .55) 300deg,
+      rgba(120, 230, 255, .55) 360deg
+    );
+  filter: blur(6px) saturate(180%);
+  mix-blend-mode: hard-light;
+  opacity: .75;
+  animation: pmHoloDrift 16s linear infinite;
   transition: opacity .45s ease;
 }
+/* Second overlay — moving reflective band that sweeps left→right with
+   the cursor. Adds the "shine" you see on real holographic stickers
+   when you tilt them. */
+.pm-card .pm-sheen::after{
+  content:''; position: absolute; inset: 0;
+  background: linear-gradient(
+    115deg,
+    transparent 30%,
+    rgba(255,255,255,.45) 50%,
+    transparent 70%
+  );
+  mix-blend-mode: overlay;
+  transform: translateX(var(--shine-x, -100%));
+  transition: transform .8s cubic-bezier(.2,.8,.2,1), opacity .4s;
+  opacity: 0;
+}
+.pm-card:hover .pm-sheen::after{
+  opacity: 1;
+  transform: translateX(var(--shine-x, 100%));
+}
 @keyframes pmHoloDrift {
-  to { --holo-angle: 480deg; } /* 120 + 360, one full rotation */
+  to { --holo-angle: 360deg; }
 }
 .pm-card:hover .pm-sheen{
-  opacity: .85;
-  animation-play-state: paused; /* let the cursor drive the angle when hovered */
+  opacity: 1;
+  animation-play-state: paused;
 }
 @media (prefers-reduced-motion: reduce){
   .pm-card .pm-sheen{ animation: none; }
+  .pm-card .pm-sheen::after{ display: none; }
+}
+
+/* Content sits above the holo overlay (z-index 1 on .pm-sheen). The
+   inner top highlight (.pm-card::before, z-index 0) is below the
+   shimmer; the children of .pm-card need to be lifted above z=1. */
+.pm-card > *:not(.pm-sheen){
+  position: relative; z-index: 2;
 }
 
 /* Cursor-following soft white spotlight underneath content — adds a
@@ -431,9 +466,12 @@ html{ scroll-behavior: smooth; scroll-padding-top: 96px; }
 }
 
 .pm-title{
-  font-family: var(--font-display); font-size: 24px; font-weight: 600;
-  color: var(--ink-0); letter-spacing: -.022em; line-height: 1.1;
+  font-family: var(--font-display); font-size: 32px; font-weight: 600;
+  color: var(--ink-0); letter-spacing: -.025em; line-height: 1.05;
   transition: color .3s;
+}
+@media (max-width: 960px){
+  .pm-title{ font-size: 28px; }
 }
 .pm-card:hover .pm-title{ color: var(--brand-ink); }
 .pm-desc{
