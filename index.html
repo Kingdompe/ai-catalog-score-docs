@@ -188,6 +188,14 @@ html{ scroll-behavior: smooth; scroll-padding-top: 96px; }
   font-weight: 500;
   color: var(--ink-0); letter-spacing: -.025em; margin-top: 16px; line-height: 1.08;
 }
+.page-map-head h3 em{
+  font-style: normal;
+  color: var(--brand-deep);
+  background: linear-gradient(180deg, var(--brand) 0%, var(--brand-deep) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
 .page-map-head .pm-sub{
   font-size: 17px; color: var(--ink-2); margin-top: 14px; line-height: 1.5;
   max-width: 680px; margin-left: auto; margin-right: auto;
@@ -416,6 +424,13 @@ html{ scroll-behavior: smooth; scroll-padding-top: 96px; }
   display: flex; align-items: center; justify-content: space-between;
   margin-bottom: 14px;
 }
+/* Left side: number badge + section name (small grey label). The
+   section name is the "this card represents the X section" identifier,
+   shown next to the number for quick orientation. */
+.pm-head-group{
+  display: inline-flex; align-items: center; gap: 10px;
+  min-width: 0;
+}
 
 /* Number badge — neutral pill at rest, intensifies on hover/active.
    The card identity comes from the holographic shimmer overlay now,
@@ -474,6 +489,167 @@ html{ scroll-behavior: smooth; scroll-padding-top: 96px; }
   .pm-title{ font-size: 28px; }
 }
 .pm-card:hover .pm-title{ color: var(--brand-ink); }
+
+/* ============================================================
+   RICH CARD 01 — dashboard mock with score gauge + traffic
+   chart + 3 metric tiles + CTA footer. Same visual language
+   as the other cards (glass + holo overlay handled at parent)
+   but denser content sells the problem in numbers.
+   ============================================================ */
+
+/* Section-name pill next to the number badge */
+.pm-section-name{
+  font-family: var(--font-display); font-size: 14px; font-weight: 600;
+  color: var(--ink-1); letter-spacing: -.015em;
+  margin-left: 6px;
+}
+
+/* Two-col split: bold tagline left, score gauge right */
+.pm-rich-head{
+  display: grid; grid-template-columns: 1fr auto; gap: 18px;
+  align-items: start; margin-top: 4px;
+}
+.pm-rich-tagline{
+  font-family: var(--font-display);
+  font-size: 22px; font-weight: 600; line-height: 1.12;
+  letter-spacing: -.02em; color: var(--ink-0);
+  margin: 0;
+}
+.pm-rich-tagline em{
+  font-style: normal;
+  background: linear-gradient(180deg, var(--brand) 0%, var(--brand-deep) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.pm-rich-sub{
+  font-size: 12.5px; color: var(--ink-2);
+  line-height: 1.4; margin: 8px 0 0;
+}
+
+/* Score gauge — SVG donut with the score number stacked inside */
+.pm-gauge{
+  position: relative; width: 80px; height: 80px;
+  display: grid; place-items: center;
+  flex-shrink: 0;
+}
+.pm-gauge svg{
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  transform: rotate(-90deg);
+}
+.pm-gauge .pmg-track{
+  fill: none; stroke: rgba(36,32,18,.08); stroke-width: 7;
+}
+.pm-gauge .pmg-fill{
+  fill: none; stroke: url(#pmgGrad); stroke-width: 7;
+  stroke-linecap: round;
+  stroke-dasharray: 251.3;
+  stroke-dashoffset: calc(251.3 * (1 - var(--gauge-pct, .23)));
+  transition: stroke-dashoffset 1.2s cubic-bezier(.2,.8,.2,1);
+}
+.pm-gauge-num{
+  position: relative; z-index: 1;
+  font-family: var(--font-display); font-weight: 600;
+  font-size: 22px; color: var(--ink-0);
+  display: flex; align-items: baseline; gap: 1px;
+}
+.pm-gauge-num small{
+  font-size: 10px; font-weight: 500; color: var(--ink-3);
+}
+.pm-gauge-label{
+  position: absolute; top: -16px; left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--font-mono); font-size: 8.5px; font-weight: 700;
+  color: var(--ink-3); letter-spacing: .14em;
+  white-space: nowrap;
+}
+
+/* Chart card — "Estimated traffic you're losing" with line chart */
+.pm-rich-chart{
+  margin-top: 14px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: rgba(255,255,255,.45);
+  border: 1px solid rgba(36,32,18,.06);
+}
+.pm-rich-chart-head{
+  font-family: var(--font-mono); font-size: 9.5px; font-weight: 700;
+  color: var(--ink-3); letter-spacing: .14em;
+  text-transform: uppercase;
+}
+.pm-rich-chart-body{
+  display: grid; grid-template-columns: auto 1fr;
+  gap: 10px; align-items: center; margin-top: 6px;
+}
+.pm-rich-chart-num{
+  font-family: var(--font-display);
+  font-size: 28px; font-weight: 600; color: var(--ink-0);
+  line-height: 1;
+  letter-spacing: -.02em;
+}
+.pm-rich-chart-num small{
+  display: block; font-size: 11px; font-weight: 500;
+  color: var(--ink-3); margin-top: 4px; letter-spacing: 0;
+}
+.pm-rich-chart-svg{
+  height: 36px; width: 100%;
+  overflow: visible;
+}
+.pm-rich-chart-svg .prc-line{
+  fill: none; stroke: var(--brand); stroke-width: 1.6;
+  stroke-linecap: round; stroke-linejoin: round;
+}
+.pm-rich-chart-svg .prc-area{
+  fill: url(#prcGrad);
+}
+
+/* 3 metric tiles row */
+.pm-rich-tiles{
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;
+  margin-top: 10px;
+}
+.prt{
+  padding: 10px 10px 9px;
+  border-radius: 12px;
+  background: rgba(255,255,255,.5);
+  border: 1px solid rgba(36,32,18,.06);
+  display: flex; flex-direction: column;
+  min-width: 0;
+}
+.prt-label{
+  font-size: 10px; font-weight: 600; color: var(--ink-3);
+  letter-spacing: -.005em; line-height: 1.2;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.prt-num{
+  font-family: var(--font-display);
+  font-size: 18px; font-weight: 600; color: var(--ink-0);
+  letter-spacing: -.02em; margin-top: 3px;
+}
+.prt-num.critical{ color: #c63d2f; }
+
+/* Footer "See X →" link — used by ALL cards, not just card 01 */
+.pm-cta{
+  margin-top: auto;
+  padding-top: 14px;
+  font-family: var(--font-display);
+  font-size: 13.5px; font-weight: 600;
+  color: var(--ink-2);
+  display: inline-flex; align-items: center; gap: 6px;
+  transition: color .25s ease, gap .25s ease;
+}
+.pm-cta::after{
+  content: '→';
+  display: inline-block;
+  transition: transform .25s cubic-bezier(.2,.8,.2,1);
+}
+.pm-card:hover .pm-cta{
+  color: var(--brand-deep);
+  gap: 9px;
+}
+.pm-card:hover .pm-cta::after{
+  transform: translateX(3px);
+}
 .pm-desc{
   font-size: 13.5px; color: var(--ink-2);
   margin-top: 10px; line-height: 1.4;
@@ -4914,42 +5090,85 @@ section + .cta-section{ padding-top: 64px; }
   </div>
   <div class="container">
     <div class="page-map-head reveal">
-      <div class="eyebrow" style="justify-content:center"><span class="dot"></span> ON THIS PAGE</div>
-      <h3>8 sections. The whole map in one glance.</h3>
-      <p class="pm-sub">Tap any tile to jump. Scroll through in order. Either way - you'll know what's coming.</p>
+      <div class="eyebrow" style="justify-content:center"><span class="dot"></span> 8 SECTIONS · 1 COMPLETE ADVANTAGE</div>
+      <h3>The entire AI catalog engine, in <em>one map.</em></h3>
+      <p class="pm-sub">Tap any section to explore. Scroll through in order or jump to what matters.</p>
     </div>
 
     <div class="page-map-grid reveal-stagger">
 
-      <a href="#problem" class="pm-card" data-section="problem">
-        <div class="pm-card-head"><span class="pm-num">01</span><span class="pm-arrow">↗</span></div>
-        <span class="pm-title">The problem</span>
-        <span class="pm-desc">Competitors recommended. Not you.</span>
-        <div class="pm-visual">
-          <div class="pmv-capture">
-            <div class="pmc-row">
-              <span class="pmc-agent gpt">C</span>
-              <span class="pmc-q">"best wool runners"</span>
-              <span class="pmc-result">→ <strong>not you</strong></span>
-            </div>
-            <div class="pmc-row">
-              <span class="pmc-agent gem">G</span>
-              <span class="pmc-q">"sustainable sneakers"</span>
-              <span class="pmc-result">→ <strong>competitor</strong></span>
-            </div>
+      <!-- CARD 01 — rich dashboard mock (the showcase card) -->
+      <a href="#problem" class="pm-card pm-card-rich" data-section="problem">
+        <div class="pm-card-head">
+          <span class="pm-head-group">
+            <span class="pm-num">01</span>
+            <span class="pm-section-name">The problem</span>
+          </span>
+          <span class="pm-arrow">↗</span>
+        </div>
+        <div class="pm-rich-head">
+          <div>
+            <h3 class="pm-rich-tagline">Your products are <em>invisible to AI.</em></h3>
+            <p class="pm-rich-sub">Competitors get recommended. You lose traffic, sales and market share.</p>
           </div>
-          <div class="pmc-stat">
-            <span class="pmc-num">41%</span><span>invisible</span>
-            <span class="pmc-sep">·</span>
-            <span class="pmc-num">+700%</span><span>AI traffic</span>
+          <div class="pm-gauge" aria-label="AI Visibility Score: 23 out of 100">
+            <span class="pm-gauge-label">AI VISIBILITY SCORE</span>
+            <svg viewBox="0 0 90 90" aria-hidden="true">
+              <defs>
+                <linearGradient id="pmgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#00d084"/>
+                  <stop offset="100%" stop-color="#06955f"/>
+                </linearGradient>
+              </defs>
+              <circle class="pmg-track" cx="45" cy="45" r="40"/>
+              <circle class="pmg-fill"  cx="45" cy="45" r="40" style="--gauge-pct: .23"/>
+            </svg>
+            <span class="pm-gauge-num">23<small>/100</small></span>
           </div>
         </div>
+        <div class="pm-rich-chart">
+          <div class="pm-rich-chart-head">Estimated traffic you're losing</div>
+          <div class="pm-rich-chart-body">
+            <div class="pm-rich-chart-num">12.4K<small>visits / month</small></div>
+            <svg class="pm-rich-chart-svg" viewBox="0 0 200 36" preserveAspectRatio="none" aria-hidden="true">
+              <defs>
+                <linearGradient id="prcGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stop-color="#00d084" stop-opacity=".25"/>
+                  <stop offset="100%" stop-color="#00d084" stop-opacity="0"/>
+                </linearGradient>
+              </defs>
+              <path class="prc-area" d="M0,30 L20,24 L45,18 L70,22 L95,14 L120,16 L150,8 L180,6 L200,5 L200,36 L0,36 Z"/>
+              <polyline class="prc-line" points="0,30 20,24 45,18 70,22 95,14 120,16 150,8 180,6 200,5"/>
+            </svg>
+          </div>
+        </div>
+        <div class="pm-rich-tiles">
+          <div class="prt">
+            <span class="prt-label">Invisible products</span>
+            <span class="prt-num">842</span>
+          </div>
+          <div class="prt">
+            <span class="prt-label">Competitors winning</span>
+            <span class="prt-num">136</span>
+          </div>
+          <div class="prt">
+            <span class="prt-label">Revenue at risk</span>
+            <span class="prt-num critical">$28,340</span>
+          </div>
+        </div>
+        <span class="pm-cta">See full analysis</span>
       </a>
 
+      <!-- CARD 02 — How it works (4 steps) -->
       <a href="#how" class="pm-card" data-section="how">
-        <div class="pm-card-head"><span class="pm-num">02</span><span class="pm-arrow">↗</span></div>
-        <span class="pm-title">How it works</span>
-        <span class="pm-desc">Scan, fix, prove. 4 min first run.</span>
+        <div class="pm-card-head">
+          <span class="pm-head-group">
+            <span class="pm-num">02</span>
+            <span class="pm-section-name">How it works</span>
+          </span>
+          <span class="pm-arrow">↗</span>
+        </div>
+        <span class="pm-title">4 steps to dominate AI search.</span>
         <div class="pm-visual">
           <div class="pmv-steps">
             <span class="pms"><span class="pms-i">🔍</span>SCAN</span>
@@ -4971,12 +5190,19 @@ section + .cta-section{ padding-top: 64px; }
           </div>
           <div class="pmv-meta"><span class="pmm-dot"></span>DiD · Welch's t · p &lt; 0.05</div>
         </div>
+        <span class="pm-cta">See the full process</span>
       </a>
 
+      <!-- CARD 03 — Why we win (6 moats) -->
       <a href="#features" class="pm-card" data-section="features">
-        <div class="pm-card-head"><span class="pm-num">03</span><span class="pm-arrow">↗</span></div>
-        <span class="pm-title">Why we win</span>
-        <span class="pm-desc">6 structural moats, plain English.</span>
+        <div class="pm-card-head">
+          <span class="pm-head-group">
+            <span class="pm-num">03</span>
+            <span class="pm-section-name">Why we win</span>
+          </span>
+          <span class="pm-arrow">↗</span>
+        </div>
+        <span class="pm-title">Built specifically for AI search.</span>
         <div class="pm-visual">
           <div class="pmv-moats-grid">
             <div class="pmmt"><span class="pmmt-n">1</span><span class="pmmt-l">Multi-agent</span></div>
@@ -4988,12 +5214,19 @@ section + .cta-section{ padding-top: 64px; }
           </div>
           <div class="pmv-meta"><span class="pmm-dot"></span>6 / 6 unmatched by competitors</div>
         </div>
+        <span class="pm-cta">Learn our advantage</span>
       </a>
 
+      <!-- CARD 04 — Pricing (3 plans) -->
       <a href="#pricing" class="pm-card" data-section="pricing">
-        <div class="pm-card-head"><span class="pm-num">04</span><span class="pm-arrow">↗</span></div>
-        <span class="pm-title">Pricing</span>
-        <span class="pm-desc">3 plans · 7-day free trial · score guarantee.</span>
+        <div class="pm-card-head">
+          <span class="pm-head-group">
+            <span class="pm-num">04</span>
+            <span class="pm-section-name">Pricing</span>
+          </span>
+          <span class="pm-arrow">↗</span>
+        </div>
+        <span class="pm-title">Simple, transparent, performance based.</span>
         <div class="pm-visual">
           <div class="pmv-plans">
             <div class="pmp">
@@ -5017,14 +5250,22 @@ section + .cta-section{ padding-top: 64px; }
             <span class="pmperk">7-day trial, no card required</span>
             <span class="pmperk">+10 pts in 30 days or refund</span>
             <span class="pmperk">Cancel any time, no fine print</span>
+            <span class="pmperk">Score guarantee</span>
           </div>
         </div>
+        <span class="pm-cta">Compare plans</span>
       </a>
 
+      <!-- CARD 05 — What you get (5 agents) -->
       <a href="#bento" class="pm-card" data-section="bento">
-        <div class="pm-card-head"><span class="pm-num">05</span><span class="pm-arrow">↗</span></div>
-        <span class="pm-title">What you get</span>
-        <span class="pm-desc">5 AI agents, daily. One ground truth.</span>
+        <div class="pm-card-head">
+          <span class="pm-head-group">
+            <span class="pm-num">05</span>
+            <span class="pm-section-name">What you get</span>
+          </span>
+          <span class="pm-arrow">↗</span>
+        </div>
+        <span class="pm-title">Everything you need to win.</span>
         <div class="pm-visual">
           <div class="pmv-agents-stack">
             <div class="pmas-row">
@@ -5059,12 +5300,19 @@ section + .cta-section{ padding-top: 64px; }
             </div>
           </div>
         </div>
+        <span class="pm-cta">See all AI coverage</span>
       </a>
 
+      <!-- CARD 06 — Open skills (terminal snippet) -->
       <a href="#terminal" class="pm-card" data-section="terminal">
-        <div class="pm-card-head"><span class="pm-num">06</span><span class="pm-arrow">↗</span></div>
-        <span class="pm-title">Open skills</span>
-        <span class="pm-desc">8 MIT skills · Claude · Cursor · Cline.</span>
+        <div class="pm-card-head">
+          <span class="pm-head-group">
+            <span class="pm-num">06</span>
+            <span class="pm-section-name">Open skills</span>
+          </span>
+          <span class="pm-arrow">↗</span>
+        </div>
+        <span class="pm-title">We use the best AI stack.</span>
         <div class="pm-visual">
           <div class="pmv-cmd">
             <div class="pmcmd-line">
@@ -5080,12 +5328,19 @@ section + .cta-section{ padding-top: 64px; }
             </div>
           </div>
         </div>
+        <span class="pm-cta">Tech stack</span>
       </a>
 
+      <!-- CARD 07 — Open source (repos + GitHub stats) -->
       <a href="#ecosystem" class="pm-card" data-section="ecosystem">
-        <div class="pm-card-head"><span class="pm-num">07</span><span class="pm-arrow">↗</span></div>
-        <span class="pm-title">Open source</span>
-        <span class="pm-desc">CC0 spec + MIT skills. Fork it all.</span>
+        <div class="pm-card-head">
+          <span class="pm-head-group">
+            <span class="pm-num">07</span>
+            <span class="pm-section-name">Open source</span>
+          </span>
+          <span class="pm-arrow">↗</span>
+        </div>
+        <span class="pm-title">Built in public. Backed by the best.</span>
         <div class="pm-visual">
           <div class="pmv-repos">
             <div class="pmr">
@@ -5104,12 +5359,19 @@ section + .cta-section{ padding-top: 64px; }
             <span class="pmgh"><span class="pmgh-icon">⌥</span>10 commits/wk</span>
           </div>
         </div>
+        <span class="pm-cta">View on GitHub</span>
       </a>
 
+      <!-- CARD 08 — FAQ (4 collapsibles) -->
       <a href="#faq" class="pm-card" data-section="faq">
-        <div class="pm-card-head"><span class="pm-num">08</span><span class="pm-arrow">↗</span></div>
-        <span class="pm-title">FAQ</span>
-        <span class="pm-desc">15 questions merchants actually ask.</span>
+        <div class="pm-card-head">
+          <span class="pm-head-group">
+            <span class="pm-num">08</span>
+            <span class="pm-section-name">FAQ</span>
+          </span>
+          <span class="pm-arrow">↗</span>
+        </div>
+        <span class="pm-title">Straight answers. No fluff.</span>
         <div class="pm-visual">
           <div class="pmv-faq">
             <div class="pmf is-open">
@@ -5118,8 +5380,10 @@ section + .cta-section{ padding-top: 64px; }
             </div>
             <div class="pmf">Different from generic SEO tools?<span class="plus">+</span></div>
             <div class="pmf">Will it slow my Shopify store?<span class="plus">+</span></div>
+            <div class="pmf">What AI platforms do you cover?<span class="plus">+</span></div>
           </div>
         </div>
+        <span class="pm-cta">See all questions</span>
       </a>
 
     </div>
