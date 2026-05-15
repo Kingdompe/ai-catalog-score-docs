@@ -211,15 +211,41 @@ html{ scroll-behavior: smooth; scroll-padding-top: 96px; }
      4. Hover/active state lifts the card on Z + tilts by --rx/--ry
         (set in JS from mouse position, defaults 0/0)
    --------------------------------------------------------------------- */
+/* Per-card accent palette — each section gets a distinct hue that
+   tints the glass at rest and saturates on hover. Brand-green is
+   reserved for Pricing (the conversion CTA) so the eye is naturally
+   drawn to it. The other 7 sit in a low-saturation pastel band that
+   reads cohesive next to the warm beige page background.
+   Two formats per accent: the resolved color (--card-accent) for
+   straightforward properties, and the raw RGB triplet
+   (--card-accent-rgb) so we can dial alpha inside rgba() expressions. */
+.pm-card{
+  --card-accent: rgb(0,208,132);
+  --card-accent-rgb: 0,208,132;
+}
+.pm-card[data-section="problem"]   { --card-accent: hsl(8,72%,58%);    --card-accent-rgb: 218,93,72; }
+.pm-card[data-section="how"]       { --card-accent: hsl(198,72%,52%);  --card-accent-rgb: 38,148,205; }
+.pm-card[data-section="features"]  { --card-accent: hsl(264,58%,62%);  --card-accent-rgb: 144,108,200; }
+.pm-card[data-section="pricing"]   { --card-accent: rgb(0,208,132);    --card-accent-rgb: 0,208,132; }
+.pm-card[data-section="bento"]     { --card-accent: hsl(36,90%,52%);   --card-accent-rgb: 240,156,18; }
+.pm-card[data-section="terminal"]  { --card-accent: hsl(330,72%,60%);  --card-accent-rgb: 220,87,154; }
+.pm-card[data-section="ecosystem"] { --card-accent: hsl(225,68%,62%);  --card-accent-rgb: 88,123,222; }
+.pm-card[data-section="faq"]       { --card-accent: hsl(175,58%,46%);  --card-accent-rgb: 50,188,174; }
+
 .pm-card{
   display: flex; flex-direction: column;
   min-height: 326px;
   padding: 22px 22px 20px;
   /* Layered glass: outer is a warm translucent wash on the beige page
      background, inner is a top→bottom soft gradient that mimics how
-     light hits real frosted glass (brighter at the top edge). */
+     light hits real frosted glass (brighter at the top edge). The
+     middle layer is a subtle tint of the per-card accent — gives each
+     card a recognizable colour at rest without breaking the glass. */
   background:
-    linear-gradient(180deg, rgba(255,255,255,.62) 0%, rgba(255,255,255,.28) 100%),
+    linear-gradient(180deg, rgba(255,255,255,.55) 0%, rgba(255,255,255,.22) 100%),
+    linear-gradient(180deg,
+      rgba(var(--card-accent-rgb), .10) 0%,
+      rgba(var(--card-accent-rgb), .04) 100%),
     linear-gradient(180deg, rgba(248,243,228,.35) 0%, rgba(248,243,228,.55) 100%);
   -webkit-backdrop-filter: blur(18px) saturate(180%);
   backdrop-filter: blur(18px) saturate(180%);
@@ -294,14 +320,14 @@ html{ scroll-behavior: smooth; scroll-padding-top: 96px; }
 .pm-card:hover .pm-sheen{ opacity: 1; }
 .pm-card:hover .pm-sheen::before{ left: 120%; }
 
-/* Cursor-following soft brand glow underneath content. Opacity is
-   driven by hover/active state — invisible at rest so the glass looks
-   pure, lights up under the cursor. */
+/* Cursor-following accent glow underneath content. Tinted with the
+   per-card accent so each card "lights up" in its own colour. Invisible
+   at rest so the glass reads clean; opacity 1 on hover/active. */
 .pm-card::after{
   content:''; position: absolute; inset: 0;
   background: radial-gradient(320px circle at var(--mx) var(--my),
-    rgba(0,208,132,.22) 0%,
-    rgba(0,208,132,.10) 30%,
+    rgba(var(--card-accent-rgb), .28) 0%,
+    rgba(var(--card-accent-rgb), .12) 30%,
     transparent 60%);
   opacity: 0; transition: opacity .45s;
   pointer-events: none;
@@ -316,24 +342,29 @@ html{ scroll-behavior: smooth; scroll-padding-top: 96px; }
     rotateX(var(--rx))
     rotateY(var(--ry))
     translateZ(22px);
-  border-color: rgba(0,208,132,.55);
+  border-color: rgba(var(--card-accent-rgb), .55);
+  /* Drop shadow picks up the per-card accent so the lift looks like a
+     coloured floodlight cast onto the page. */
   box-shadow:
     0 1px 0 rgba(255,255,255,.85) inset,
     0 -1px 0 rgba(0,0,0,.04) inset,
-    0 30px 70px -20px rgba(0,208,132,.35),
+    0 30px 70px -20px rgba(var(--card-accent-rgb), .42),
     0 12px 28px -10px rgba(36,32,18,.18),
     0 4px 10px -4px rgba(0,0,0,.08);
 }
 .pm-card.is-active{
-  border-color: rgba(0,208,132,.65);
+  border-color: rgba(var(--card-accent-rgb), .65);
   background:
-    linear-gradient(180deg, rgba(255,255,255,.78) 0%, rgba(231,247,239,.55) 100%),
+    linear-gradient(180deg, rgba(255,255,255,.72) 0%, rgba(255,255,255,.30) 100%),
+    linear-gradient(180deg,
+      rgba(var(--card-accent-rgb), .22) 0%,
+      rgba(var(--card-accent-rgb), .10) 100%),
     linear-gradient(180deg, rgba(248,243,228,.4) 0%, rgba(248,243,228,.6) 100%);
   box-shadow:
     0 1px 0 rgba(255,255,255,.9) inset,
-    0 0 0 1px rgba(0,208,132,.35),
-    0 0 36px -6px rgba(0,208,132,.32),
-    0 18px 40px -16px rgba(0,208,132,.30);
+    0 0 0 1px rgba(var(--card-accent-rgb), .35),
+    0 0 36px -6px rgba(var(--card-accent-rgb), .35),
+    0 18px 40px -16px rgba(var(--card-accent-rgb), .32);
 }
 
 /* Respect user motion preference — kill the tilt + transition snap
@@ -371,14 +402,14 @@ html{ scroll-behavior: smooth; scroll-padding-top: 96px; }
   transition: background .3s, box-shadow .3s;
 }
 .pm-card:hover .pm-num, .pm-card.is-active .pm-num{
-  color: var(--brand-deep);
-  background: var(--brand-wash);
-  border-color: rgba(0,208,132,.42);
+  color: var(--card-accent);
+  background: rgba(var(--card-accent-rgb), .12);
+  border-color: rgba(var(--card-accent-rgb), .42);
   transform: translateY(-1px);
 }
 .pm-card:hover .pm-num::before, .pm-card.is-active .pm-num::before{
-  background: var(--brand);
-  box-shadow: 0 0 8px rgba(0,208,132,.7);
+  background: var(--card-accent);
+  box-shadow: 0 0 8px rgba(var(--card-accent-rgb), .7);
   animation: pmNumPulse 1.6s ease-in-out infinite;
 }
 @keyframes pmNumPulse{
@@ -395,9 +426,9 @@ html{ scroll-behavior: smooth; scroll-padding-top: 96px; }
   transition: transform .35s cubic-bezier(.2,.8,.2,1), color .3s, background .3s;
 }
 .pm-card:hover .pm-arrow{
-  color: #fff; background: var(--brand);
+  color: #fff; background: var(--card-accent);
   transform: translate(4px, -4px) rotate(8deg) scale(1.06);
-  box-shadow: 0 6px 18px rgba(0,208,132,.45);
+  box-shadow: 0 6px 18px rgba(var(--card-accent-rgb), .45);
 }
 
 .pm-title{
