@@ -3363,6 +3363,15 @@ section{ position: relative; }
   grid-template-columns: 1fr 28px 1fr 28px 1fr;
   gap: 0;
   align-items: stretch;
+  /* Break out of the standard container's 1480px cap. The 3 mockup
+     cards need every pixel of horizontal room they can get to avoid
+     wrapping signals / cropping tile content. Falls back to the
+     container width on narrow screens. */
+  max-width: min(1760px, calc(100vw - 64px));
+  margin-left: auto; margin-right: auto;
+}
+@media (max-width: 1760px){
+  .hiw-grid{ max-width: 100%; }
 }
 @media (max-width: 1280px){
   .hiw-grid{ grid-template-columns: 1fr; gap: 28px; margin-top: 48px; }
@@ -3389,7 +3398,9 @@ section{ position: relative; }
   border-radius: 20px;
   padding: 24px;
   display: flex; flex-direction: column;
-  min-height: 640px;
+  /* No fixed min-height: align-items: stretch on the parent grid keeps
+     all 3 cards at the same height naturally, set by the tallest card's
+     content. Avoids the awkward empty band at the bottom of Prove. */
   box-shadow:
     0 1px 0 rgba(255,255,255,.95) inset,
     0 8px 24px -10px rgba(36,32,18,.10),
@@ -3473,8 +3484,8 @@ section{ position: relative; }
 /* ============== SCAN card mockup ============== */
 .hiw-scan-body{
   display: grid;
-  grid-template-columns: 50px 130px 1fr;
-  gap: 14px;
+  grid-template-columns: 56px 160px 1fr;
+  gap: 16px;
   align-items: start;
   flex: 1;
 }
@@ -3521,17 +3532,16 @@ section{ position: relative; }
 .scan-product{
   background: linear-gradient(180deg, #f3ede0 0%, #e8dec8 100%);
   border-radius: 12px;
-  padding: 14px 10px 16px;
-  display: flex; flex-direction: column; align-items: center; gap: 10px;
+  padding: 14px 12px 18px;
+  display: flex; flex-direction: column; align-items: center; gap: 12px;
   border: 1px solid rgba(36,32,18,.06);
-  height: 100%;
-  justify-content: space-between;
+  /* No more height:100% / flex:1 stretch — let the image dictate
+     intrinsic height so the card doesn't grow indefinitely tall. */
 }
 .scan-product-img{
   width: 100%; aspect-ratio: 3/4;
   border-radius: 10px;
   overflow: hidden;
-  flex: 1;
 }
 .scan-product-label{
   font-family: var(--font-mono); font-size: 10px;
@@ -3585,22 +3595,20 @@ section{ position: relative; }
   font-size: 10px; color: var(--ink-3); margin-top: 1px;
 }
 
-/* Signals — 2-column compact grid with shorter labels so nothing wraps */
+/* Signals — single column, full labels, no truncation */
 .scan-signals{
   list-style: none; padding: 0; margin: 0;
-  font-size: 11.5px; line-height: 1.5;
-  display: grid; grid-template-columns: 1fr 1fr;
-  gap: 2px 10px;
+  font-size: 12px; line-height: 1.55;
+  display: flex; flex-direction: column;
+  gap: 3px;
 }
 .scan-signals .scan-sig-head{
-  grid-column: 1 / -1;
-  font-weight: 700; color: var(--ink-0); margin-bottom: 4px;
-  font-size: 11.5px;
+  font-weight: 700; color: var(--ink-0); margin-bottom: 6px;
+  font-size: 12px;
 }
 .scan-signals li{
-  display: flex; align-items: center; gap: 5px;
+  display: flex; align-items: center; gap: 6px;
   color: var(--ink-2);
-  white-space: nowrap;
 }
 .sig-tick{
   color: var(--brand); font-weight: 700;
@@ -3803,16 +3811,16 @@ section{ position: relative; }
 }
 
 .prove-tiles{
-  display: grid; grid-template-columns: repeat(2, 1fr);
-  gap: 10px;
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
   margin-top: 4px;
 }
 .prove-tile{
-  display: flex; flex-direction: column; gap: 4px;
-  padding: 14px 14px;
+  display: flex; flex-direction: column; gap: 3px;
+  padding: 12px 12px;
   background: #fafaf7;
   border: 1px solid rgba(36,32,18,.06);
-  border-radius: 12px;
+  border-radius: 10px;
   min-width: 0;
   transition: transform .25s ease, box-shadow .25s ease;
 }
@@ -3821,18 +3829,21 @@ section{ position: relative; }
   box-shadow: 0 6px 16px -8px rgba(36,32,18,.12);
 }
 .pt-label{
-  font-size: 11px; color: var(--ink-3); font-weight: 600;
+  font-size: 10.5px; color: var(--ink-3); font-weight: 600;
   line-height: 1.2;
   letter-spacing: -.005em;
 }
 .pt-val{
-  font-family: var(--font-display); font-size: 16px; font-weight: 700;
-  color: var(--ink-0); line-height: 1.2; margin-top: 4px;
-  display: inline-flex; align-items: center; gap: 5px;
+  font-family: var(--font-display); font-size: 13.5px; font-weight: 700;
+  color: var(--ink-0); line-height: 1.2; margin-top: 3px;
+  display: inline-flex; align-items: center; gap: 4px;
 }
-.pt-val-num{ font-variant-numeric: tabular-nums; white-space: nowrap; }
-.pt-shield{ font-size: 13px; color: var(--brand-deep); }
-.pt-sub{ font-size: 11px; color: var(--ink-3); margin-top: 2px; }
+.pt-val-num{
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.pt-shield{ font-size: 12px; color: var(--brand-deep); }
+.pt-sub{ font-size: 10.5px; color: var(--ink-3); margin-top: 1px; }
 
 @media (max-width: 1100px){
   .hiw-fix-body{ grid-template-columns: 1fr; gap: 16px; }
@@ -6451,13 +6462,13 @@ section + .cta-section{ padding-top: 64px; }
               <ul class="scan-signals">
                 <li class="scan-sig-head">8 AI-readiness signals</li>
                 <li><span class="sig-tick">✓</span>Title clarity</li>
-                <li><span class="sig-tick">✓</span>Description</li>
+                <li><span class="sig-tick">✓</span>Description depth</li>
                 <li><span class="sig-tick">✓</span>Alt text</li>
                 <li><span class="sig-tick">✓</span>JSON-LD</li>
-                <li><span class="sig-tick">✓</span>Category</li>
+                <li><span class="sig-tick">✓</span>Category alignment</li>
                 <li><span class="sig-tick">✓</span>Metafields</li>
-                <li><span class="sig-tick">✓</span>Reviews</li>
-                <li><span class="sig-tick">✓</span>Pricing</li>
+                <li><span class="sig-tick">✓</span>Reviews &amp; social proof</li>
+                <li><span class="sig-tick">✓</span>Price &amp; availability</li>
               </ul>
             </div>
             <div class="scan-issues">
@@ -6606,7 +6617,7 @@ section + .cta-section{ padding-top: 64px; }
             </div>
             <div class="prove-tile">
               <span class="pt-label">Test window</span>
-              <span class="pt-val pt-val-num">May 1 – May 31</span>
+              <span class="pt-val pt-val-num">May 1–31</span>
               <span class="pt-sub">30 days</span>
             </div>
             <div class="prove-tile">
