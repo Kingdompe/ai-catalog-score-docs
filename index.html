@@ -2196,280 +2196,874 @@ section{ position: relative; }
 
 
 /* ============================================================
-   HERO LOOP v5 — phase-driven storytelling overlay
+   HERO CINEMATIC STAGE — multi-scene product demo
    ============================================================
-   The .dash-scene's data-phase attribute is rotated by a JS controller
-   on a 16s loop:
-     phase=1 (0–2s)  SCAN     scanbar fills, dashboard desaturated
-     phase=2 (2–4s)  BEFORE   score=36, red KPIs, "BEFORE" banner
-     phase=3 (4–7s)  MAXIMIZE cursor clicks, +pts floaters cascade
-     phase=4 (7–11s) AFTER    score climbs to 94, "AFTER" banner
-     phase=5 (11–15s) PROOF   +27.3% lift causal-proof tile reveal
-   Transitions between phases use 0.6s easing on key properties. */
+   6 bespoke scenes slide horizontally through one window frame.
+   data-scene on .cine-stage selects which scene is visible;
+   transitions are 600ms cubic-bezier slides driven by JS.
 
-.hero-overlay{
-  position: absolute; inset: 0;
-  pointer-events: none;
-  z-index: 5;
-  border-radius: inherit;
-}
+   Layout:  hero-visual → cine-stage → cine-window → cine-frame
+                                          ↘ cine-caption
+   ============================================================ */
 
-/* ---- Maximize CTA inside dash-header — only really styled, not interactive */
-.dash-maximize{
-  appearance: none; border: 0;
-  background: linear-gradient(135deg, var(--brand) 0%, var(--brand-deep) 100%);
-  color: #fff;
-  font-family: var(--font-display); font-size: 12.5px; font-weight: 700;
-  letter-spacing: -.01em;
-  padding: 7px 13px;
-  border-radius: 8px;
-  margin-left: auto;
-  display: inline-flex; align-items: center; gap: 6px;
-  cursor: default;
+.cine-stage{
   position: relative;
-  box-shadow:
-    0 1px 0 rgba(255,255,255,.3) inset,
-    0 4px 12px -4px rgba(0,168,106,.45);
-  transition: transform .25s cubic-bezier(.2,.8,.2,1), box-shadow .25s ease, filter .3s ease;
-}
-.dash-maximize .dm-spark{ font-size: 13px; filter: drop-shadow(0 0 4px rgba(255,255,255,.5)); }
-/* The button glows + scales when the cursor is "over" it (phase 3 mid) */
-.dash-scene[data-phase="3"] .dash-maximize{
-  animation: dmGlow 1.2s ease-in-out infinite;
-}
-.dash-scene[data-phase="3"] .dash-maximize.is-clicked{
-  transform: scale(.94);
-  filter: brightness(1.18);
-  box-shadow:
-    0 1px 0 rgba(255,255,255,.3) inset,
-    0 0 0 4px rgba(0,208,132,.30),
-    0 6px 18px -4px rgba(0,168,106,.65);
-}
-@keyframes dmGlow{
-  0%, 100% { box-shadow: 0 1px 0 rgba(255,255,255,.3) inset, 0 4px 12px -4px rgba(0,168,106,.45); }
-  50%      { box-shadow: 0 1px 0 rgba(255,255,255,.3) inset, 0 0 0 5px rgba(0,208,132,.18), 0 8px 22px -4px rgba(0,168,106,.70); }
+  max-width: 1400px; margin: 0 auto;
+  padding: 28px 0 12px;
+  perspective: 1800px;
 }
 
-/* ---- Scan progress bar between header and body, ONLY visible in phases 1+3 */
-.dash-scanbar{
+/* Browser/app window chrome — same wrapper for every scene */
+.cine-window{
   position: relative;
-  height: 22px;
-  margin: 0 16px;
-  background: rgba(36,32,18,.04);
-  border-radius: 6px;
+  border-radius: 18px;
+  background: #fff;
+  border: 1px solid rgba(36,32,18,.08);
   overflow: hidden;
-  display: flex; align-items: center;
-  font-family: var(--font-mono); font-size: 10px; font-weight: 700;
-  color: var(--ink-3);
-  letter-spacing: .08em;
-  opacity: 0;
-  transform: translateY(-2px);
-  transition: opacity .4s ease, transform .4s ease;
-}
-.dash-scene[data-phase="1"] .dash-scanbar,
-.dash-scene[data-phase="3"] .dash-scanbar{
-  opacity: 1; transform: translateY(0);
-}
-.dsb-fill{
-  position: absolute; inset: 0 100% 0 0;
-  border-radius: inherit;
-  background: linear-gradient(90deg,
-    rgba(0,208,132,.20) 0%,
-    rgba(0,208,132,.45) 50%,
-    rgba(0,208,132,.20) 100%);
-  transition: right 1.8s cubic-bezier(.4,.0,.2,1);
-}
-.dash-scene[data-phase="1"] .dsb-fill,
-.dash-scene[data-phase="3"] .dsb-fill{ right: 0; }
-/* Phase 3 fill: brighter green + a shimmer overlay */
-.dash-scene[data-phase="3"] .dsb-fill{
-  background: linear-gradient(90deg, var(--brand) 0%, var(--brand-deep) 100%);
-  box-shadow: 0 0 12px rgba(0,208,132,.55);
-}
-.dsb-text{
-  position: relative; z-index: 1; padding: 0 12px;
-  text-transform: uppercase;
-}
-.dash-scene[data-phase="3"] .dsb-text::before{ content: 'Optimizing 263 products…'; }
-.dash-scene[data-phase="3"] .dsb-text{ font-size: 0; color: var(--brand-deep); }
-.dash-scene[data-phase="3"] .dsb-text::before{ font-size: 10px; }
-
-/* ---- Animated cursor — sits offscreen, animates to button during phase 3 */
-.hero-cursor{
-  position: absolute;
-  left: 30%; top: 50%;
-  filter: drop-shadow(0 4px 6px rgba(36,32,18,.30));
-  opacity: 0;
-  transition: opacity .3s ease;
-  z-index: 9;
-  pointer-events: none;
-}
-.dash-scene[data-phase="3"] .hero-cursor{
-  opacity: 1;
-  animation: heroCursorMove 1.8s cubic-bezier(.5,.0,.25,1) forwards;
-}
-@keyframes heroCursorMove{
-  0%   { left: 28%; top: 65%; transform: scale(1); }
-  60%  { left: 76%; top: 7%;  transform: scale(1); }
-  72%  { left: 76%; top: 7%;  transform: scale(.85); }    /* click compress */
-  80%  { left: 76%; top: 7%;  transform: scale(1); }
-  100% { left: 76%; top: 7%;  transform: scale(1); }
-}
-
-/* ---- +N pts floaters — five anchored positions, each with its own rise */
-.hero-pts{
-  position: absolute;
-  font-family: var(--font-mono); font-weight: 800; font-size: 13px;
-  color: #fff;
-  background: linear-gradient(135deg, var(--brand) 0%, var(--brand-deep) 100%);
-  padding: 5px 10px;
-  border-radius: 8px;
-  letter-spacing: .04em;
-  opacity: 0;
-  pointer-events: none;
-  box-shadow: 0 6px 18px -4px rgba(0,168,106,.55),
-              0 1px 0 rgba(255,255,255,.30) inset;
-  z-index: 8;
-  transform: translateY(0) scale(.6);
-}
-.hp-1{ left: 18%; top: 45%; }
-.hp-2{ left: 38%; top: 60%; }
-.hp-3{ left: 58%; top: 50%; }
-.hp-4{ left: 30%; top: 70%; }
-.hp-5{ left: 70%; top: 65%; }
-.dash-scene[data-phase="3"] .hero-pts{
-  animation: heroPtsRise 1.6s cubic-bezier(.2,.8,.2,1) forwards;
-}
-.dash-scene[data-phase="3"] .hp-1{ animation-delay: 1.0s; }
-.dash-scene[data-phase="3"] .hp-2{ animation-delay: 1.15s; }
-.dash-scene[data-phase="3"] .hp-3{ animation-delay: 1.30s; }
-.dash-scene[data-phase="3"] .hp-4{ animation-delay: 1.45s; }
-.dash-scene[data-phase="3"] .hp-5{ animation-delay: 1.60s; }
-@keyframes heroPtsRise{
-  0%   { opacity: 0; transform: translateY(20px) scale(.6); }
-  15%  { opacity: 1; transform: translateY(0)    scale(1.08); }
-  20%  { transform: translateY(-4px) scale(1); }
-  85%  { opacity: 1; transform: translateY(-50px) scale(1); }
-  100% { opacity: 0; transform: translateY(-66px) scale(.9); }
-}
-
-/* ---- BEFORE / AFTER stage banners — bottom-center placards */
-.hero-banner{
-  position: absolute;
-  top: 14px; left: 50%;
-  transform: translateX(-50%) translateY(-12px);
-  display: inline-flex; flex-direction: column; align-items: center;
-  padding: 10px 22px;
-  border-radius: 12px;
-  font-family: var(--font-display);
-  z-index: 10;
-  opacity: 0;
-  transition: opacity .55s ease, transform .55s cubic-bezier(.2,.8,.2,1);
-  pointer-events: none;
   box-shadow:
-    0 1px 0 rgba(255,255,255,.4) inset,
-    0 12px 32px -10px rgba(36,32,18,.25);
+    0 1px 2px rgba(20,18,10,.04),
+    0 24px 60px -16px rgba(20,18,10,.22),
+    0 60px 120px -40px rgba(0,208,132,.18);
+  transform: rotateX(1.5deg) rotateY(-2deg);
+  transform-style: preserve-3d;
+  transition: transform .6s cubic-bezier(.2,.8,.2,1);
+}
+.cine-window:hover{ transform: rotateX(.5deg) rotateY(-1deg); }
+
+.cine-chrome{
+  display: flex; align-items: center; gap: 14px;
+  padding: 10px 14px;
+  background: #f4efe1;
+  border-bottom: 1px solid rgba(36,32,18,.06);
+  font-family: var(--font-mono); font-size: 11px; color: var(--ink-3);
+}
+.cw-traffic{ display: flex; gap: 6px; }
+.cw-traffic span{ width: 11px; height: 11px; border-radius: 50%; }
+.cw-traffic span:nth-child(1){ background: #FF5F57; }
+.cw-traffic span:nth-child(2){ background: #FEBC2E; }
+.cw-traffic span:nth-child(3){ background: #28C840; }
+.cw-url{
+  flex: 1;
+  background: #fff;
+  border: 1px solid rgba(36,32,18,.06);
+  border-radius: 100px;
+  padding: 5px 12px;
+  font-size: 11px;
+  color: var(--ink-2);
+  letter-spacing: 0;
+  font-family: var(--font-mono);
+  text-align: center;
+  transition: background .4s ease, color .4s ease;
+}
+.cw-actions{ display: flex; gap: 5px; }
+.cw-pad{ width: 16px; height: 16px; background: rgba(36,32,18,.10); border-radius: 4px; }
+
+/* Frame that holds the scenes — fixed aspect ratio, hides overflow */
+.cine-frame{
+  position: relative;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  background: #fcfbf6;
+}
+@media (max-width: 880px){
+  .cine-frame{ aspect-ratio: 4 / 3; }
+}
+
+/* Each scene fills the frame, absolutely positioned, transitions on data-scene */
+.cine-scene{
+  position: absolute; inset: 0;
+  opacity: 0;
+  transform: translateX(40px) scale(.98);
+  pointer-events: none;
+  transition:
+    opacity .55s cubic-bezier(.4,.0,.2,1),
+    transform .65s cubic-bezier(.2,.8,.2,1);
+  background: #fcfbf6;
+  overflow: hidden;
+}
+.cine-stage[data-scene="1"] .cs-1,
+.cine-stage[data-scene="2"] .cs-2,
+.cine-stage[data-scene="3"] .cs-3,
+.cine-stage[data-scene="4"] .cs-4,
+.cine-stage[data-scene="5"] .cs-5,
+.cine-stage[data-scene="6"] .cs-6{
+  opacity: 1; transform: translateX(0) scale(1);
+}
+/* Scenes that came before slide further LEFT to clear the frame */
+.cine-stage[data-scene="2"] .cs-1,
+.cine-stage[data-scene="3"] .cs-1, .cine-stage[data-scene="3"] .cs-2,
+.cine-stage[data-scene="4"] .cs-1, .cine-stage[data-scene="4"] .cs-2, .cine-stage[data-scene="4"] .cs-3,
+.cine-stage[data-scene="5"] .cs-1, .cine-stage[data-scene="5"] .cs-2, .cine-stage[data-scene="5"] .cs-3, .cine-stage[data-scene="5"] .cs-4,
+.cine-stage[data-scene="6"] .cs-1, .cine-stage[data-scene="6"] .cs-2, .cine-stage[data-scene="6"] .cs-3, .cine-stage[data-scene="6"] .cs-4, .cine-stage[data-scene="6"] .cs-5{
+  transform: translateX(-50px) scale(.98);
+}
+
+/* Caption strip — text + step counter + pip indicators */
+.cine-caption{
+  display: flex; align-items: center; gap: 16px;
+  padding: 14px 6px 6px;
+  font-family: var(--font-mono); font-size: 12px;
+}
+.cc-step{
+  font-size: 10px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--brand-deep);
+  background: rgba(0,208,132,.12);
+  padding: 5px 10px; border-radius: 7px;
+  white-space: nowrap;
+}
+.cc-text{
+  flex: 1;
+  font-family: var(--font-display); font-size: 14px; color: var(--ink-1);
+  font-weight: 500;
+  letter-spacing: -.005em;
+}
+.cc-text strong{ color: var(--ink-0); font-weight: 700; }
+.cc-pips{
+  display: inline-flex; gap: 5px;
+}
+.cc-pips span{
+  width: 22px; height: 3px; border-radius: 2px;
+  background: rgba(36,32,18,.10);
+  transition: background .3s ease, width .3s ease;
+}
+.cc-pips span.is-on{ background: var(--brand-deep); width: 28px; }
+
+@media (prefers-reduced-motion: reduce){
+  .cine-scene{ transition: none !important; }
+  .cine-window{ transform: none; }
+}
+
+/* ============================================================
+   SCENE 1 · STOREFRONT (invisible to AI)
+   ============================================================ */
+.cs1-shop{ position: relative; height: 100%; background: #faf7ef; padding: 28px 36px; display: flex; flex-direction: column; gap: 22px; }
+.cs1-shopnav{
+  display: flex; align-items: center; gap: 28px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(36,32,18,.07);
+}
+.cs1-logo{
+  font-family: var(--font-display); font-size: 22px; font-weight: 700;
+  letter-spacing: .14em; color: #2c3e25;
+}
+.cs1-nav{ display: flex; gap: 22px; flex: 1; }
+.cs1-nav span{
+  font-size: 12px; font-weight: 600; color: var(--ink-2);
+  letter-spacing: -.005em;
+}
+.cs1-cart{
+  font-family: var(--font-mono); font-size: 11px; color: var(--ink-3);
+  padding: 5px 10px; border: 1px solid rgba(36,32,18,.10); border-radius: 100px;
+}
+.cs1-grid{
+  display: grid; grid-template-columns: 1.1fr 1fr;
+  gap: 28px; flex: 1; min-height: 0;
+}
+.cs1-img{
+  background: linear-gradient(180deg, #ebe5d4 0%, #ddd4be 100%);
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid rgba(36,32,18,.06);
+  position: relative;
+}
+.cs1-img .thumb-serum{ position: absolute; inset: 0; }
+.cs1-info{ display: flex; flex-direction: column; gap: 11px; padding-top: 4px; }
+.cs1-breadcrumb{
+  font-family: var(--font-mono); font-size: 10px; color: var(--ink-3);
+  letter-spacing: .14em; text-transform: uppercase;
+}
+.cs1-title{
+  font-family: var(--font-display); font-size: 30px; font-weight: 700;
+  color: var(--ink-0); letter-spacing: -.02em; line-height: 1.1; margin: 0;
+}
+.cs1-meta{ display: flex; align-items: center; gap: 14px; }
+.cs1-stars{ font-size: 13px; color: #f59e0b; letter-spacing: -.05em; }
+.cs1-stars em{ font-style: normal; color: var(--ink-3); font-size: 11px; margin-left: 4px; }
+.cs1-price{ font-family: var(--font-display); font-size: 22px; font-weight: 700; color: var(--ink-0); }
+.cs1-desc{ font-size: 13px; color: var(--ink-2); line-height: 1.5; margin: 0; }
+.cs1-swatches{ display: flex; gap: 8px; margin-top: 4px; }
+.cs1-swatches span{
+  width: 22px; height: 22px; border-radius: 50%;
+  border: 2px solid #fff;
+  box-shadow: 0 0 0 1px rgba(36,32,18,.10);
+}
+.cs1-swatches span:nth-child(1){ background: #2c3e25; }
+.cs1-swatches span:nth-child(2){ background: #b8a37e; }
+.cs1-swatches span:nth-child(3){ background: #d4d0c5; }
+.cs1-swatches .is-on{ box-shadow: 0 0 0 2px var(--ink-0); }
+.cs1-cta{
+  appearance: none; border: 0;
+  background: var(--ink-0); color: #fff;
+  font-family: var(--font-display); font-size: 14px; font-weight: 600;
+  padding: 12px 22px; border-radius: 10px;
+  margin-top: 6px;
+  align-self: flex-start; cursor: default;
+}
+.cs1-bullets{ list-style: none; padding: 0; margin: 8px 0 0; display: flex; flex-direction: column; gap: 4px; }
+.cs1-bullets li{ font-family: var(--font-mono); font-size: 10px; color: var(--ink-3); letter-spacing: .04em; }
+
+/* Stamp overlay — appears at ~1s with rotate + scale punch */
+.cs1-stamp{
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 8px;
+  background: radial-gradient(ellipse at center, rgba(20,18,10,.78) 0%, rgba(20,18,10,.92) 100%);
+  opacity: 0;
+  z-index: 4;
+  pointer-events: none;
+  backdrop-filter: blur(2px);
+}
+.cine-stage[data-scene="1"] .cs1-stamp{
+  animation: cs1StampIn .55s cubic-bezier(.2,.8,.2,1) 1.0s forwards;
+}
+@keyframes cs1StampIn{
+  from{ opacity: 0; transform: scale(1.05); }
+  to  { opacity: 1; transform: scale(1); }
+}
+.cs1-stamp-line1, .cs1-stamp-line2{
+  font-family: var(--font-display); font-weight: 800;
+  color: #fff; letter-spacing: -.02em; line-height: 1;
+  text-shadow: 0 4px 16px rgba(198,61,47,.30);
+}
+.cs1-stamp-line1{ font-size: 30px; opacity: .78; }
+.cs1-stamp-line2{
+  font-size: 52px;
+  background: linear-gradient(180deg, #ff7a6b 0%, #c63d2f 100%);
+  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+}
+.cs1-stamp-agents{ display: flex; gap: 8px; margin-top: 8px; }
+.cs1a{
+  width: 32px; height: 32px; border-radius: 9px;
+  display: inline-flex; align-items: center; justify-content: center;
+  color: #fff; font-weight: 700; font-size: 13px;
+  filter: grayscale(1) brightness(.55);
+  position: relative;
+}
+.cs1a::after{
+  content: '✕';
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  color: #c63d2f; font-size: 22px; font-weight: 900;
+  text-shadow: 0 0 6px rgba(0,0,0,.4);
+}
+.cs1a.chatgpt{ background: #10A37F; }
+.cs1a.claude{ background: #D97757; }
+.cs1a.gemini{ background: #4285F4; }
+.cs1a.mistral{ background: #FA520F; }
+.cs1a.deepseek{ background: #4D6BFE; }
+.cs1-stamp-sub{
+  font-family: var(--font-mono); font-size: 11px;
+  color: rgba(255,255,255,.70); letter-spacing: .04em;
+  margin-top: 4px; text-align: center; max-width: 360px;
+}
+
+/* ============================================================
+   SCENE 2 · SHOPIFY INSTALL
+   ============================================================ */
+.cs2-admin{ height: 100%; display: flex; flex-direction: column; background: #f6f6f7; }
+.cs2-topbar{
+  display: flex; align-items: center; gap: 14px;
+  padding: 10px 18px;
+  background: #fff;
+  border-bottom: 1px solid rgba(36,32,18,.07);
+}
+.cs2-logo-sh{ display: inline-flex; align-items: center; }
+.cs2-search{
+  flex: 1; max-width: 520px;
+  display: inline-flex; align-items: center; gap: 8px;
+  background: #f6f6f7; padding: 7px 14px; border-radius: 8px;
+  font-family: var(--font-mono); font-size: 12px; color: var(--ink-3);
+}
+.cs2-search-ic{ font-size: 11px; opacity: .6; }
+.cs2-avatar{
+  margin-left: auto;
+  width: 30px; height: 30px; border-radius: 50%;
+  background: linear-gradient(135deg, #6b6f76, #2c3e25);
+  display: inline-flex; align-items: center; justify-content: center;
+  color: #fff; font-size: 11px; font-weight: 700;
+}
+.cs2-body{ flex: 1; display: grid; grid-template-columns: 200px 1fr; min-height: 0; }
+.cs2-sidebar{
+  background: #f6f6f7;
+  border-right: 1px solid rgba(36,32,18,.07);
+  padding: 16px 12px;
+  display: flex; flex-direction: column; gap: 2px;
+}
+.cs2-side{
+  font-family: var(--font-display); font-size: 13.5px; font-weight: 500;
+  color: var(--ink-2); padding: 8px 12px; border-radius: 7px;
+}
+.cs2-side-active{ background: rgba(0,208,132,.10); color: var(--brand-deep); font-weight: 700; }
+.cs2-main{ padding: 36px 48px; position: relative; }
+.cs2-card{
+  background: #fff;
+  border: 1px solid rgba(36,32,18,.08);
+  border-radius: 14px;
+  padding: 28px 32px;
+  max-width: 540px;
+  box-shadow:
+    0 1px 2px rgba(20,18,10,.04),
+    0 12px 28px -12px rgba(20,18,10,.10);
+}
+.cs2-app-head{ display: flex; align-items: center; gap: 14px; }
+.cs2-app-icon{
+  width: 56px; height: 56px; border-radius: 14px;
+  background: var(--ink-0); padding: 8px;
+  display: inline-flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.cs2-app-icon img{ width: 100%; height: 100%; object-fit: contain; }
+.cs2-app-meta h4{ font-family: var(--font-display); font-size: 18px; font-weight: 700; margin: 0 0 3px; letter-spacing: -.015em; }
+.cs2-app-meta p{ margin: 0; font-size: 12px; color: var(--ink-3); }
+.cs2-app-desc{
+  margin: 16px 0 20px; padding: 14px 16px;
+  background: #f6f6f7; border-radius: 9px;
+  font-size: 13px; line-height: 1.5; color: var(--ink-1);
+}
+.cs2-perms{ margin-bottom: 22px; }
+.cs2-perms-label{
+  display: block;
+  font-family: var(--font-mono); font-size: 10px; font-weight: 800;
+  letter-spacing: .14em; text-transform: uppercase;
+  color: var(--ink-3); margin-bottom: 10px;
+}
+.cs2-perms ul{ list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 7px; }
+.cs2-perms li{
+  display: flex; align-items: center; gap: 9px;
+  font-size: 12.5px; color: var(--ink-1);
+}
+.cs2-tick{
+  width: 16px; height: 16px; border-radius: 50%;
+  background: rgba(0,208,132,.16); color: var(--brand-deep);
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: 9px; font-weight: 800; flex-shrink: 0;
+}
+.cs2-install{
+  position: relative; appearance: none; border: 0;
+  background: #5E8E3E; color: #fff;
+  font-family: var(--font-display); font-size: 14px; font-weight: 600;
+  padding: 12px 22px; border-radius: 8px;
+  width: 100%; cursor: default;
+  overflow: hidden;
+  transition: transform .25s cubic-bezier(.2,.8,.2,1), filter .3s ease;
+}
+.cs2-install-label{ position: relative; z-index: 2; }
+.cs2-install-progress{
+  position: absolute; inset: 0 100% 0 0;
+  background: rgba(255,255,255,.18);
+  transition: right 1.4s cubic-bezier(.4,0,.2,1);
+}
+/* Cursor flies in, hovers button, clicks, button "installs" */
+.cs2-cursor{
+  position: absolute;
+  left: 10%; top: 30%;
+  filter: drop-shadow(0 4px 6px rgba(20,18,10,.30));
+  opacity: 0; z-index: 9; pointer-events: none;
+}
+.cine-stage[data-scene="2"] .cs2-cursor{
+  opacity: 1;
+  animation: cs2CursorMove 2.0s cubic-bezier(.5,.0,.25,1) .3s forwards;
+}
+@keyframes cs2CursorMove{
+  0%   { left: 8%;  top: 25%; transform: scale(1); }
+  55%  { left: 55%; top: 92%; transform: scale(1); }
+  68%  { left: 55%; top: 92%; transform: scale(.85); }
+  78%  { left: 55%; top: 92%; transform: scale(1); }
+  100% { left: 55%; top: 92%; transform: scale(1); }
+}
+.cine-stage[data-scene="2"] .cs2-install{
+  animation: cs2InstallClick .25s ease-out 1.6s forwards;
+}
+.cine-stage[data-scene="2"] .cs2-install-progress{
+  animation: cs2Progress 1.4s cubic-bezier(.4,0,.2,1) 1.85s forwards;
+}
+@keyframes cs2InstallClick{
+  0%{ transform: scale(1); }
+  50%{ transform: scale(.96); filter: brightness(1.18); }
+  100%{ transform: scale(1); filter: brightness(1); }
+}
+@keyframes cs2Progress{ to{ right: 0; } }
+.cine-stage[data-scene="2"] .cs2-install-label{
+  animation: cs2LabelSwap 0s ease 1.85s forwards;
+}
+@keyframes cs2LabelSwap{
+  to{ content: 'Installing…'; }
+}
+
+/* ============================================================
+   SCENE 3 · PRODUCT LIST (scanning)
+   ============================================================ */
+.cs3-app{ height: 100%; display: flex; flex-direction: column; background: #fcfbf6; }
+.cs3-topbar{
+  display: flex; align-items: center; gap: 18px;
+  padding: 11px 22px;
+  background: #fff;
+  border-bottom: 1px solid rgba(36,32,18,.06);
+}
+.cs3-brand{
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--font-display); font-size: 14px; font-weight: 700;
+}
+.cs3-brand img{ width: 22px; height: 22px; object-fit: contain; }
+.cs3-tab{
+  font-size: 12.5px; color: var(--ink-3); font-weight: 500;
+  padding: 5px 0;
+}
+.cs3-tab-active{ color: var(--ink-0); font-weight: 700; border-bottom: 2px solid var(--brand); padding-bottom: 3px; }
+.cs3-store{
+  margin-left: auto;
+  font-family: var(--font-mono); font-size: 10.5px; color: var(--ink-3);
+  padding: 4px 10px; border: 1px solid rgba(36,32,18,.08); border-radius: 100px;
+}
+.cs3-head{
+  padding: 18px 22px 12px;
+  background: linear-gradient(180deg, #fff, #fcfbf6);
+  border-bottom: 1px solid rgba(36,32,18,.05);
+}
+.cs3-head-row{ display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+.cs3-head h4{ font-family: var(--font-display); font-size: 17px; font-weight: 700; margin: 0; }
+.cs3-head h4 em{ font-style: normal; color: var(--ink-3); font-size: 12px; font-weight: 500; margin-left: 6px; }
+.cs3-scan-pill{
+  display: inline-flex; align-items: center; gap: 6px;
+  font-family: var(--font-mono); font-size: 10px; font-weight: 800;
+  letter-spacing: .14em; color: var(--brand-deep);
+  background: rgba(0,208,132,.12); padding: 5px 10px; border-radius: 7px;
+}
+.cs3-scan-pill em{ font-style: normal; }
+.cs3-scan-dot{
+  width: 7px; height: 7px; border-radius: 50%; background: var(--brand);
+  box-shadow: 0 0 0 0 rgba(0,208,132,.55);
+  animation: cs3PulseDot 1.4s ease-out infinite;
+}
+@keyframes cs3PulseDot{
+  0%   { box-shadow: 0 0 0 0 rgba(0,208,132,.55); }
+  70%  { box-shadow: 0 0 0 7px rgba(0,208,132,0); }
+  100% { box-shadow: 0 0 0 0 rgba(0,208,132,0); }
+}
+.cs3-bar{ height: 4px; background: rgba(36,32,18,.06); border-radius: 2px; overflow: hidden; }
+.cs3-bar-fill{
+  display: block; height: 100%; width: 0;
+  background: linear-gradient(90deg, var(--brand), var(--brand-deep));
+}
+.cine-stage[data-scene="3"] .cs3-bar-fill{ animation: cs3BarFill 2.4s cubic-bezier(.4,0,.2,1) .2s forwards; }
+@keyframes cs3BarFill{ to{ width: 67%; } }
+
+.cs3-table{ flex: 1; padding: 6px 14px; overflow: hidden; }
+.cs3-thead{
+  display: grid; grid-template-columns: 2.4fr .7fr 1.6fr 1fr 30px;
+  gap: 14px;
+  padding: 10px 12px;
+  font-family: var(--font-mono); font-size: 9.5px; font-weight: 800;
+  letter-spacing: .14em; color: var(--ink-3); text-transform: uppercase;
+  border-bottom: 1px solid rgba(36,32,18,.06);
+}
+.cs3-rows{ display: flex; flex-direction: column; }
+.cs3-row{
+  display: grid; grid-template-columns: 2.4fr .7fr 1.6fr 1fr 30px;
+  gap: 14px;
+  align-items: center;
+  padding: 10px 12px;
+  border-bottom: 1px solid rgba(36,32,18,.04);
+  font-size: 13px;
+  opacity: 0; transform: translateY(6px);
+}
+.cine-stage[data-scene="3"] .cs3-row{
+  animation: cs3RowIn .45s cubic-bezier(.2,.8,.2,1) forwards;
+  animation-delay: var(--d, 0s);
+}
+@keyframes cs3RowIn{ to{ opacity: 1; transform: translateY(0); } }
+.cs3-prod{ display: inline-flex; align-items: center; gap: 10px; font-weight: 600; color: var(--ink-0); }
+.cs3-th{
+  width: 30px; height: 30px; border-radius: 7px; overflow: hidden;
+  background: #f3ede0; flex-shrink: 0;
+}
+.cs3-th > div{ width: 100%; height: 100%; background-size: cover; background-position: center; }
+.cs3-score{
+  font-family: var(--font-display); font-size: 18px; font-weight: 700;
+  letter-spacing: -.025em; font-variant-numeric: tabular-nums;
+}
+.cs3-score-fail{ color: #c63d2f; }
+.cs3-score-warn{ color: #b66f00; }
+.cs3-score-good{ color: var(--brand-deep); }
+.cs3-issues{ font-family: var(--font-mono); font-size: 11px; color: var(--ink-3); }
+.cs3-status{
+  font-family: var(--font-mono); font-size: 10px; font-weight: 800;
+  letter-spacing: .12em; text-transform: uppercase;
+  padding: 3px 8px; border-radius: 6px;
+  justify-self: start;
+}
+.cs3-status-fail{ background: rgba(198,61,47,.12); color: #c63d2f; }
+.cs3-status-warn{ background: rgba(245,158,11,.16); color: #b66f00; }
+.cs3-act{ color: var(--ink-3); text-align: right; font-size: 18px; line-height: 1; }
+.cs3-foot{
+  padding: 12px 22px;
+  border-top: 1px solid rgba(36,32,18,.06);
+  background: #fcfbf6;
+  font-family: var(--font-mono); font-size: 11px; color: var(--ink-2);
+}
+.cs3-foot-bad{ color: #c63d2f; }
+.cs3-foot-warn{ color: #b66f00; }
+.cs3-foot-good{ color: var(--brand-deep); }
+
+/* ============================================================
+   SCENE 4 · BEFORE / AFTER
+   ============================================================ */
+.cs4-app{ height: 100%; display: flex; flex-direction: column; background: #fcfbf6; }
+.cs4-topbar{
+  display: flex; align-items: center; gap: 14px;
+  padding: 12px 22px;
+  background: #fff;
+  border-bottom: 1px solid rgba(36,32,18,.06);
+}
+.cs4-back{
+  width: 28px; height: 28px; border-radius: 8px;
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: 18px; line-height: 1;
+  background: #f6f6f7; color: var(--ink-1);
+}
+.cs4-title{
+  font-family: var(--font-display); font-size: 15px; font-weight: 700;
   letter-spacing: -.01em;
 }
-.hero-banner span{
-  font-size: 11px; font-weight: 800; letter-spacing: .22em; line-height: 1;
-}
-.hero-banner em{
-  font-style: normal; font-size: 13px; font-weight: 500; margin-top: 3px; line-height: 1.2;
-}
-.hero-banner-before{
-  background: linear-gradient(135deg, rgba(198,61,47,.95), rgba(160,40,30,.95));
-  color: #ffe9e4;
-  border: 1px solid rgba(198,61,47,.40);
-}
-.hero-banner-after{
-  background: linear-gradient(135deg, rgba(0,208,132,.96), rgba(0,140,90,.96));
-  color: #eaffe7;
-  border: 1px solid rgba(0,208,132,.40);
-}
-.dash-scene[data-phase="2"] .hero-banner-before,
-.dash-scene[data-phase="4"] .hero-banner-after{
-  opacity: 1; transform: translateX(-50%) translateY(0);
-}
-
-/* ---- Hero proof tile — fades in over the dashboard in phase 5 */
-.hero-proof{
-  position: absolute;
-  inset: auto 0 0 0;
-  margin: 0 auto;
-  bottom: 8%;
-  left: 50%;
-  transform: translateX(-50%) translateY(20px);
-  width: clamp(280px, 50%, 460px);
-  padding: 18px 22px;
-  background: linear-gradient(135deg, rgba(255,255,255,.97), rgba(252,250,243,.97));
-  border: 1px solid rgba(0,208,132,.35);
-  border-radius: 16px;
-  display: flex; flex-direction: column; align-items: center; gap: 4px;
-  z-index: 11;
-  opacity: 0;
-  transition: opacity .6s ease, transform .6s cubic-bezier(.2,.8,.2,1);
-  box-shadow:
-    0 1px 0 rgba(255,255,255,1) inset,
-    0 18px 50px -10px rgba(0,168,106,.30),
-    0 30px 70px -20px rgba(36,32,18,.18);
-  backdrop-filter: blur(8px);
-}
-.dash-scene[data-phase="5"] .hero-proof{
-  opacity: 1; transform: translateX(-50%) translateY(0);
-}
-.hp-eyebrow{
+.cs4-stat{
+  margin-left: auto;
   font-family: var(--font-mono); font-size: 10px; font-weight: 800;
-  color: var(--brand-deep); letter-spacing: .14em; text-transform: uppercase;
+  letter-spacing: .14em; text-transform: uppercase;
+  padding: 5px 10px; border-radius: 7px;
   display: inline-flex; align-items: center; gap: 6px;
 }
-.hp-shield{ font-size: 12px; }
-.hp-num{
-  font-family: var(--font-display); font-size: 44px; font-weight: 700;
-  letter-spacing: -.025em; line-height: 1;
+.cs4-stat-on{ background: rgba(0,208,132,.12); color: var(--brand-deep); }
+.cs4-stat-on span{
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--brand);
+  box-shadow: 0 0 0 0 rgba(0,208,132,.55);
+  animation: cs3PulseDot 1.4s ease-out infinite;
+}
+.cs4-split{
+  flex: 1;
+  display: grid; grid-template-columns: 1fr 56px 1fr;
+  gap: 14px; padding: 22px 26px;
+  align-items: stretch;
+}
+.cs4-col{
+  display: flex; flex-direction: column; gap: 10px;
+  padding: 16px 18px;
+  border-radius: 14px;
+  position: relative;
+}
+.cs4-col-before{
+  background: linear-gradient(180deg, #fff5f3 0%, #fae8e3 100%);
+  border: 1px solid rgba(198,61,47,.18);
+}
+.cs4-col-after{
+  background: linear-gradient(180deg, #f3fbf6 0%, #e3f4ea 100%);
+  border: 1px solid rgba(0,208,132,.22);
+  box-shadow: 0 8px 22px -10px rgba(0,168,106,.18);
+}
+.cs4-badge{
+  align-self: flex-start;
+  font-family: var(--font-mono); font-size: 9.5px; font-weight: 800;
+  letter-spacing: .14em; padding: 4px 9px; border-radius: 6px;
+}
+.cs4-badge-before{ background: #c63d2f; color: #fff; }
+.cs4-badge-after{
+  background: linear-gradient(135deg, var(--brand), var(--brand-deep));
+  color: #fff;
+}
+.cs4-score{ display: flex; align-items: baseline; gap: 4px; }
+.cs4-score-num{
+  font-family: var(--font-display); font-size: 38px; font-weight: 700;
+  letter-spacing: -.025em; line-height: 1; font-variant-numeric: tabular-nums;
+}
+.cs4-score-out{
+  font-family: var(--font-mono); font-size: 12px; color: var(--ink-3);
+  font-weight: 600;
+}
+.cs4-score-before .cs4-score-num{ color: #c63d2f; opacity: .85; }
+.cs4-score-after .cs4-score-num{
+  background: linear-gradient(180deg, var(--brand), var(--brand-deep));
+  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+}
+.cs4-prod{ display: flex; flex-direction: column; gap: 8px; margin-top: 4px; }
+.cs4-prod-img{
+  width: 100%; aspect-ratio: 16/9;
+  border-radius: 10px; overflow: hidden;
+  background: #f3ede0;
+}
+.cs4-prod-img .thumb-serum{ width: 100%; height: 100%; }
+.cs4-prod-title{
+  font-family: var(--font-display); font-size: 14px; font-weight: 700;
+  color: var(--ink-0); line-height: 1.25;
+}
+.cs4-prod-desc{ font-size: 12px; color: var(--ink-2); line-height: 1.5; }
+.cs4-col-after .cs4-prod-title,
+.cs4-col-after .cs4-prod-desc{
+  opacity: 0; transform: translateY(4px);
+}
+.cine-stage[data-scene="4"] .cs4-col-after .cs4-prod-title{
+  animation: cs4FadeIn .5s ease-out 1.0s forwards;
+}
+.cine-stage[data-scene="4"] .cs4-col-after .cs4-prod-desc{
+  animation: cs4FadeIn .5s ease-out 1.4s forwards;
+}
+@keyframes cs4FadeIn{ to{ opacity: 1; transform: translateY(0); } }
+
+.cs4-checks{ list-style: none; padding: 0; margin: 6px 0 0; display: flex; flex-direction: column; gap: 6px; }
+.cs4-checks li{
+  display: flex; align-items: center; gap: 8px;
+  font-size: 11.5px; color: var(--ink-1);
+}
+.cs4-checks li.bad{ color: rgba(36,32,18,.6); }
+.cs4-checks li span{
+  width: 16px; height: 16px; border-radius: 50%;
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: 9px; font-weight: 800; color: #fff; flex-shrink: 0;
+}
+.cs4-checks li.bad span{ background: #c63d2f; }
+.cs4-checks li.ok span{ background: var(--brand); }
+
+.cs4-arrow{
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+  justify-content: center;
+  position: relative;
+}
+.cs4-arrow-line{
+  flex: 1; width: 2px;
+  background: linear-gradient(180deg, transparent, var(--brand) 50%, transparent);
+}
+.cs4-arrow-chip{
+  font-family: var(--font-mono); font-size: 10px; font-weight: 800;
+  background: linear-gradient(135deg, var(--brand), var(--brand-deep));
+  color: #fff; padding: 6px 10px; border-radius: 7px;
+  white-space: nowrap; letter-spacing: .04em;
+  box-shadow: 0 6px 14px -6px rgba(0,168,106,.55);
+}
+.cs4-arrow-head{
+  position: absolute; right: -8px; top: 50%;
+  transform: translateY(-50%);
+  font-size: 22px; color: var(--brand-deep); font-weight: 700;
+  opacity: 0;
+}
+.cine-stage[data-scene="4"] .cs4-arrow-head{
+  animation: cs4ArrowIn .4s cubic-bezier(.34,1.56,.64,1) .8s forwards;
+}
+@keyframes cs4ArrowIn{ to{ opacity: 1; transform: translateY(-50%) translateX(0); } }
+
+/* ============================================================
+   SCENE 5 · CAUSAL PROOF
+   ============================================================ */
+.cs5-app{ height: 100%; display: flex; flex-direction: column; background: #fcfbf6; }
+.cs5-topbar{
+  display: flex; align-items: center; gap: 18px;
+  padding: 11px 22px;
+  background: #fff;
+  border-bottom: 1px solid rgba(36,32,18,.06);
+}
+.cs5-brand{
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--font-display); font-size: 14px; font-weight: 700;
+}
+.cs5-brand img{ width: 22px; height: 22px; }
+.cs5-tab{
+  font-size: 12.5px; color: var(--ink-3); font-weight: 500;
+  padding: 5px 0;
+}
+.cs5-tab-active{ color: var(--ink-0); font-weight: 700; border-bottom: 2px solid var(--brand); padding-bottom: 3px; }
+.cs5-period{
+  margin-left: auto;
+  font-family: var(--font-mono); font-size: 10.5px; color: var(--ink-3);
+  padding: 4px 10px; border: 1px solid rgba(36,32,18,.08); border-radius: 100px;
+}
+.cs5-body{
+  flex: 1;
+  display: grid; grid-template-columns: 1fr 1.4fr;
+  gap: 28px; padding: 28px 32px;
+  align-items: center;
+}
+.cs5-stats{ display: flex; flex-direction: column; gap: 8px; }
+.cs5-eyebrow{
+  display: inline-flex; align-items: center; gap: 6px;
+  font-family: var(--font-mono); font-size: 10px; font-weight: 800;
+  letter-spacing: .14em; color: var(--brand-deep); text-transform: uppercase;
+}
+.cs5-shield{ font-size: 12px; }
+.cs5-big{
+  font-family: var(--font-display); font-size: 56px; font-weight: 700;
+  letter-spacing: -.028em; line-height: 1; margin-top: 4px;
   background: linear-gradient(180deg, var(--brand) 0%, var(--brand-deep) 100%);
   -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
 }
-.hp-sub{
-  font-size: 11.5px; color: var(--ink-3); letter-spacing: -.005em;
-  font-family: var(--font-mono);
+.cs5-big-label{
+  font-family: var(--font-mono); font-size: 11px; color: var(--ink-3);
+  letter-spacing: .14em; text-transform: uppercase; margin-top: 6px;
+}
+.cs5-tags{ display: flex; gap: 6px; flex-wrap: wrap; margin: 10px 0 12px; }
+.cs5-tag{
+  font-family: var(--font-mono); font-size: 10px; font-weight: 700;
+  padding: 4px 8px; border-radius: 6px;
+  background: rgba(36,32,18,.06); color: var(--ink-2);
+}
+.cs5-tag-strong{ background: rgba(0,208,132,.14); color: var(--brand-deep); }
+.cs5-row{ display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.cs5-cell{
+  display: flex; flex-direction: column; gap: 2px;
+  padding: 10px 12px; background: #fff; border: 1px solid rgba(36,32,18,.07);
+  border-radius: 10px;
+}
+.cs5-cell-num{ font-family: var(--font-display); font-size: 18px; font-weight: 700; color: var(--ink-0); font-variant-numeric: tabular-nums; }
+.cs5-cell-label{ font-family: var(--font-mono); font-size: 9.5px; color: var(--ink-3); letter-spacing: .08em; text-transform: uppercase; }
+
+.cs5-chart-wrap{
+  background: #fff;
+  border: 1px solid rgba(36,32,18,.07);
+  border-radius: 14px;
+  padding: 18px 22px;
+  display: flex; flex-direction: column; gap: 8px;
+  box-shadow: 0 1px 2px rgba(20,18,10,.04), 0 14px 30px -16px rgba(20,18,10,.10);
+}
+.cs5-chart-head{ display: flex; gap: 16px; font-family: var(--font-mono); font-size: 11px; }
+.cs5-leg{ display: inline-flex; align-items: center; gap: 6px; color: var(--ink-2); }
+.cs5-leg span{ width: 18px; height: 2.5px; border-radius: 2px; }
+.cs5-leg-opt span{ background: var(--brand); }
+.cs5-leg-ctrl span{ background: rgba(36,32,18,.32); }
+.cs5-chart{ width: 100%; height: 180px; }
+.cs5-line-opt{
+  stroke-dasharray: 360; stroke-dashoffset: 360;
+  animation: cs5Draw 1.6s cubic-bezier(.4,0,.2,1) .4s forwards;
+  filter: drop-shadow(0 2px 6px rgba(0,208,132,.35));
+}
+.cs5-line-ctrl{
+  stroke-dasharray: 360; stroke-dashoffset: 360;
+  animation: cs5Draw 1.6s cubic-bezier(.4,0,.2,1) .7s forwards;
+}
+.cs5-area{ opacity: 0; animation: cs5Fade 1.0s ease-out 1.6s forwards; }
+.cs5-end-halo{
+  opacity: 0; transform-origin: 320px 14px; transform: scale(0);
+  animation: cs5Pop .4s cubic-bezier(.34,1.56,.64,1) 2.1s forwards,
+             cs5HaloPulse 2.4s ease-in-out 2.5s infinite;
+}
+.cs5-end-dot{ opacity: 0; transform-origin: 320px 14px; transform: scale(0); animation: cs5Pop .4s cubic-bezier(.34,1.56,.64,1) 2.0s forwards; }
+@keyframes cs5Draw{ to{ stroke-dashoffset: 0; } }
+@keyframes cs5Fade{ to{ opacity: 1; } }
+@keyframes cs5Pop{ to{ opacity: 1; transform: scale(1); } }
+@keyframes cs5HaloPulse{ 0%,100%{ opacity: .55; transform: scale(1); } 50%{ opacity: 1; transform: scale(1.3); } }
+.cs5-x-axis{
+  display: flex; justify-content: space-between;
+  font-family: var(--font-mono); font-size: 9.5px; color: var(--ink-3);
 }
 
-/* ---- Phase-driven adjustments on existing elements ----
-   Score gauge color band: red in p2, green in p4/p5.
-   KPI numbers desaturated in p1 (scan).
-   Heatmap cells dim in p1. */
-.dash-scene .dash-main{
-  transition: filter .5s ease;
+/* ============================================================
+   SCENE 6 · CELEBRATION (revenue notification)
+   ============================================================ */
+.cs6-celebrate{
+  position: relative; height: 100%;
+  display: flex; align-items: center; justify-content: center;
+  background:
+    radial-gradient(80% 60% at 50% 50%, rgba(0,208,132,.10), transparent 65%),
+    linear-gradient(180deg, #fcfbf6 0%, #f0ebdb 100%);
+  padding: 28px;
+  overflow: hidden;
 }
-.dash-scene[data-phase="1"] .dash-main{ filter: grayscale(.30) brightness(.97); }
-.dash-scene[data-phase="2"] .dash-main{ filter: saturate(.85); }
-
-.dash-scene .gauge-fill{
-  transition: stroke .6s ease;
+.cs6-confetti{ position: absolute; inset: 0; pointer-events: none; }
+.cs6-confetti span{
+  position: absolute;
+  left: var(--x); top: -20px;
+  width: 8px; height: 12px; border-radius: 2px;
+  background: var(--c, var(--brand));
+  opacity: 0;
 }
-.dash-scene[data-phase="2"] .gauge-fill{ stroke: #c63d2f; }
-.dash-scene[data-phase="2"] .gauge-center .gauge-grade{ color: #c63d2f; }
-.dash-scene[data-phase="2"] .gauge-center .gauge-score{ color: #c63d2f; }
-.dash-scene[data-phase="2"] .gauge-trend{ color: #c63d2f; opacity: .8; }
-.dash-scene[data-phase="2"] .gauge-trend::before{ content: 'BEFORE · '; opacity: .7; font-weight: 700; }
+.cine-stage[data-scene="6"] .cs6-confetti span{
+  animation: cs6Fall 2.4s cubic-bezier(.4,0,.4,1) var(--d, 0s) forwards;
+}
+@keyframes cs6Fall{
+  0%   { opacity: 0; transform: translateY(0) rotate(0); }
+  10%  { opacity: 1; }
+  90%  { opacity: 1; }
+  100% { opacity: 0; transform: translateY(380px) rotate(360deg); }
+}
+.cs6-card{
+  position: relative;
+  background:
+    radial-gradient(120% 100% at 0% 0%, rgba(0,208,132,.12), transparent 60%),
+    linear-gradient(180deg, #ffffff, #fcfbf6);
+  border: 1px solid rgba(0,208,132,.30);
+  border-radius: 22px;
+  padding: 36px 44px 30px;
+  width: clamp(360px, 60%, 540px);
+  text-align: center;
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  box-shadow:
+    0 1px 0 rgba(255,255,255,1) inset,
+    0 -1px 0 rgba(36,32,18,.04) inset,
+    0 20px 50px -20px rgba(0,168,106,.35),
+    0 30px 80px -30px rgba(36,32,18,.20);
+  opacity: 0; transform: translateY(16px) scale(.98);
+  animation: cs6CardIn .55s cubic-bezier(.2,.8,.2,1) .15s forwards;
+}
+.cine-stage[data-scene="6"] .cs6-card{ animation-delay: .15s; }
+@keyframes cs6CardIn{ to{ opacity: 1; transform: translateY(0) scale(1); } }
 
-/* Floating cards (toast/agent/DiD) hide during phase 1 to keep the scene calm,
-   then come back from phase 2 onwards. The DiD card stays hidden until phase 4
-   (it's literally the causal proof, which is the punchline). */
-.dash-scene[data-phase="1"] .float-card,
-.dash-scene[data-phase="2"] .float-toast,
-.dash-scene[data-phase="2"] .float-did{ opacity: 0; transform: translateY(10px) scale(.95); transition: opacity .4s ease, transform .4s ease; }
-.dash-scene[data-phase="3"] .float-did{ opacity: 0; }
-.dash-scene[data-phase="4"] .float-did,
-.dash-scene[data-phase="5"] .float-did{ opacity: 1; transform: translateY(0) scale(1); }
+.cs6-icon{
+  width: 56px; height: 56px; border-radius: 16px;
+  background: var(--ink-0); padding: 9px;
+  display: inline-flex; align-items: center; justify-content: center;
+  box-shadow: 0 8px 22px -8px rgba(36,32,18,.40);
+  margin-bottom: 6px;
+}
+.cs6-icon img{ width: 100%; height: 100%; object-fit: contain; }
+.cs6-eyebrow{
+  font-family: var(--font-mono); font-size: 10px; font-weight: 800;
+  letter-spacing: .18em; color: var(--ink-3); text-transform: uppercase;
+}
+.cs6-big{
+  font-family: var(--font-display); font-size: 68px; font-weight: 700;
+  letter-spacing: -.030em; line-height: 1;
+  background: linear-gradient(180deg, var(--brand) 0%, var(--brand-deep) 100%);
+  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+  margin-top: 2px;
+}
+.cs6-sub{
+  font-family: var(--font-display); font-size: 15px; color: var(--ink-2);
+  font-weight: 500;
+}
+.cs6-detail{
+  display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+  margin: 16px 0 4px;
+  width: 100%;
+}
+.cs6-pill{
+  display: flex; flex-direction: column; gap: 2px;
+  padding: 10px 14px;
+  background: rgba(0,208,132,.10);
+  border: 1px solid rgba(0,208,132,.18);
+  border-radius: 10px;
+  text-align: center;
+}
+.cs6-pill-alt{ background: rgba(36,32,18,.04); border-color: rgba(36,32,18,.10); }
+.cs6-pill-num{
+  font-family: var(--font-display); font-size: 19px; font-weight: 700;
+  color: var(--brand-deep); letter-spacing: -.02em;
+}
+.cs6-pill-alt .cs6-pill-num{ color: var(--ink-0); }
+.cs6-pill-label{
+  font-family: var(--font-mono); font-size: 9.5px;
+  color: var(--ink-3); letter-spacing: .08em; text-transform: uppercase;
+}
+.cs6-foot{
+  font-family: var(--font-mono); font-size: 10.5px; color: var(--ink-3);
+  margin-top: 6px; letter-spacing: .04em;
+}
+.cs6-foot strong{ color: var(--brand-deep); font-weight: 800; }
 
 @media (prefers-reduced-motion: reduce){
-  .hero-cursor, .hero-pts, .hero-banner, .hero-proof,
-  .dash-scanbar, .dsb-fill,
-  .dash-maximize{ animation: none !important; transition: none !important; }
+  .cs1-stamp, .cs2-cursor, .cs2-install, .cs2-install-progress,
+  .cs3-bar-fill, .cs3-row, .cs4-arrow-head, .cs4-col-after .cs4-prod-title, .cs4-col-after .cs4-prod-desc,
+  .cs5-line-opt, .cs5-line-ctrl, .cs5-area, .cs5-end-dot, .cs5-end-halo,
+  .cs6-confetti span, .cs6-card{
+    animation: none !important; transition: none !important;
+    opacity: 1 !important; transform: none !important;
+  }
 }
-
 /* ============ TICKER ============ */
 .ticker-wrap{
   overflow: hidden;
@@ -6423,375 +7017,376 @@ section + .cta-section{ padding-top: 64px; }
     </div>
 
     <div class="hero-visual" id="heroVisual">
-      <div class="dash-scene" id="dashScene" data-phase="1">
+      <!-- ============================================================
+           HERO CINEMATIC STAGE — multi-scene product demo loop
+           ============================================================
+           Six bespoke scenes slide horizontally through a single frame.
+           Each scene mimics a real product surface (storefront, app
+           install, product list, before/after, causal proof, revenue),
+           not the same dashboard re-skinned. JS controller swaps the
+           data-scene attribute every 2.5–3.5s with a 600ms slide.
+           ============================================================ -->
+      <div class="cine-stage" id="cineStage" data-scene="1">
 
-        <!-- ===== HERO ANIMATION OVERLAY (v5 — looping demo) =====
-             Cursor, +pts floaters, scan progress bar, and the BEFORE/AFTER
-             stage banner are absolute-positioned over the dash-main. The
-             phase controller (JS) drives a 15s loop by switching the
-             data-phase attribute on .dash-scene.  =================== -->
-        <div class="hero-overlay" aria-hidden="true">
-          <!-- Animated cursor that flies in during phase 3 and clicks Maximize -->
-          <svg class="hero-cursor" viewBox="0 0 24 24" width="24" height="24">
-            <path d="M3 3 L3 18 L7.5 14 L10 21 L13 19.5 L10.5 13 L17 13 Z"
-              fill="#1f1d12" stroke="#fff" stroke-width="1.4" stroke-linejoin="round"/>
-          </svg>
-          <!-- Floating "+N pts" pills spawn during the fix cascade. Five fixed
-               anchor positions, each with its own delay + travel.  -->
-          <span class="hero-pts hp-1">+12 pts</span>
-          <span class="hero-pts hp-2">+8 pts</span>
-          <span class="hero-pts hp-3">+15 pts</span>
-          <span class="hero-pts hp-4">+22 pts</span>
-          <span class="hero-pts hp-5">+9 pts</span>
-          <!-- BEFORE / AFTER stage banner — fades in over the dashboard during
-               the corresponding phases so the viewer reads the narrative -->
-          <div class="hero-banner hero-banner-before"><span>BEFORE</span><em>your catalog is invisible</em></div>
-          <div class="hero-banner hero-banner-after"><span>AFTER</span><em>one click · 15 seconds</em></div>
-          <!-- "+27.3% lift" hero-proof tile slides in during phase 5 -->
-          <div class="hero-proof">
-            <span class="hp-eyebrow"><span class="hp-shield">🛡</span>CAUSAL PROOF</span>
-            <span class="hp-num">+27.3%</span>
-            <span class="hp-sub">attributable revenue lift · p &lt; 0.05</span>
-          </div>
-        </div>
-
-        <!-- Floating toast top-right -->
-        <div class="float-card float-toast">
-          <div class="ft-icon">✓</div>
-          <div class="ft-content">
-            <div class="ft-title">Fix applied</div>
-            <div class="ft-body"><span class="ft-pts">+12 pts</span> · Alt text generated for 4 images</div>
-          </div>
-        </div>
-
-        <!-- Floating agent badge top-left -->
-        <div class="float-card float-agent">
-          <div class="fa-icon">C</div>
-          <div class="fa-content">
-            <div class="fa-name">ChatGPT</div>
-            <div class="fa-status">+147 sessions today</div>
-          </div>
-        </div>
-
-        <!-- Floating DiD card bottom-left -->
-        <div class="float-card float-did">
-          <div class="fd-head">
-            <span class="fd-tag">CAUSAL A/B</span>
-            <span class="fd-pval">p &lt; 0.05</span>
-          </div>
-          <div class="fd-metric">
-            <span class="fd-num">+9.2%</span>
-            <span class="fd-label">AI sessions</span>
-          </div>
-          <div class="fd-sub">DiD + Welch's t-test · n=263</div>
-        </div>
-
-        <!-- MAIN DASHBOARD -->
-        <div class="dash-main">
-          <div class="dash-header">
-            <div class="dash-traffic"><span></span><span></span><span></span></div>
-            <div class="dash-brand-mini">
-              <span class="mark"><img src="logo-acs.png" alt="AI Catalog Score" loading="eager"/></span>
-              <span class="name">AI Catalog Score</span>
-            </div>
-            <span class="dash-store">meridian-supply.myshopify.com</span>
-            <span class="dash-live"><span class="live-dot"></span>LIVE</span>
-            <!-- "Maximize all" CTA — cursor clicks this during phase 3 to
-                 trigger the cascade.  Stays inert (decorative) afterwards. -->
-            <button class="dash-maximize" type="button" aria-hidden="true">
-              <span class="dm-spark">✨</span>Maximize all
-            </button>
-          </div>
-          <!-- Top scan progress bar — phase 1 (scan) and phase 3 (fix) fills.
-               Re-uses one element for both passes, color swaps per phase. -->
-          <div class="dash-scanbar" aria-hidden="true">
-            <span class="dsb-fill"></span>
-            <span class="dsb-text">Scanning 263 products…</span>
+        <!-- Browser/app chrome wrapper — same frame for every scene so
+             the cinema feels like "different screens of the same app". -->
+        <div class="cine-window">
+          <div class="cine-chrome">
+            <div class="cw-traffic"><span></span><span></span><span></span></div>
+            <div class="cw-url" id="cwUrl">verde-skin.com/products/botanical-serum</div>
+            <div class="cw-actions"><span class="cw-pad"></span><span class="cw-pad"></span></div>
           </div>
 
-          <div class="dash-body">
-            <!-- Top: gauge + KPIs -->
-            <div class="dash-top">
-              <div class="score-gauge">
-                <svg viewBox="0 0 200 200">
-                  <defs>
-                    <linearGradient id="gaugeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                      <stop offset="0%" stop-color="var(--brand)"/>
-                      <stop offset="100%" stop-color="var(--brand-deep)"/>
-                    </linearGradient>
-                  </defs>
-                  <!-- 10 tick marks around the gauge (every 36° = 10% of full circle) -->
-                  <g transform="translate(100 100)">
-                    <line class="gauge-tick major" x1="0" y1="-94" x2="0" y2="-88"/>
-                    <line class="gauge-tick" x1="0" y1="-94" x2="0" y2="-89" transform="rotate(36)"/>
-                    <line class="gauge-tick" x1="0" y1="-94" x2="0" y2="-89" transform="rotate(72)"/>
-                    <line class="gauge-tick major" x1="0" y1="-94" x2="0" y2="-88" transform="rotate(108)"/>
-                    <line class="gauge-tick" x1="0" y1="-94" x2="0" y2="-89" transform="rotate(144)"/>
-                    <line class="gauge-tick" x1="0" y1="-94" x2="0" y2="-89" transform="rotate(180)"/>
-                    <line class="gauge-tick" x1="0" y1="-94" x2="0" y2="-89" transform="rotate(216)"/>
-                    <line class="gauge-tick major" x1="0" y1="-94" x2="0" y2="-88" transform="rotate(252)"/>
-                    <line class="gauge-tick" x1="0" y1="-94" x2="0" y2="-89" transform="rotate(288)"/>
-                    <line class="gauge-tick" x1="0" y1="-94" x2="0" y2="-89" transform="rotate(324)"/>
-                    <!-- Target marker at 90% - position: -90deg + 90% × 360deg = 234deg from top → use rotate(324) for visual right -->
-                    <circle class="gauge-target" cx="0" cy="-94" r="2.5" transform="rotate(324)"/>
-                    <text class="gauge-target-label" x="36" y="-78" text-anchor="middle">90</text>
-                  </g>
-                  <!-- Inner dashed ring -->
-                  <circle class="gauge-inner-ring" cx="100" cy="100" r="62"/>
-                  <circle class="gauge-track" cx="100" cy="100" r="80" transform="rotate(-90 100 100)"/>
-                  <circle class="gauge-fill" cx="100" cy="100" r="80" transform="rotate(-90 100 100)" stroke="url(#gaugeGrad)"/>
-                </svg>
-                <div class="gauge-center">
-                  <div class="gauge-grade">B+</div>
-                  <div class="gauge-score"><span class="n" data-target="78">78</span>/100</div>
-                  <div class="gauge-trend">↑ +14 pts this week</div>
+          <div class="cine-frame" id="cineFrame">
+
+            <!-- ===================================================
+                 SCENE 1 · STOREFRONT (invisible to AI)
+                 =================================================== -->
+            <section class="cine-scene cs-1" data-scene="1">
+              <div class="cs1-shop">
+                <header class="cs1-shopnav">
+                  <span class="cs1-logo">VERDE</span>
+                  <nav class="cs1-nav"><span>Shop</span><span>Routine</span><span>About</span><span>Journal</span></nav>
+                  <span class="cs1-cart">Cart · 0</span>
+                </header>
+                <div class="cs1-grid">
+                  <div class="cs1-img"><div class="thumb-serum thumb-serum-lg"></div></div>
+                  <div class="cs1-info">
+                    <span class="cs1-breadcrumb">Skincare · Serums</span>
+                    <h3 class="cs1-title">Botanical Serum</h3>
+                    <div class="cs1-meta"><span class="cs1-stars">★★★★★ <em>(86)</em></span><span class="cs1-price">$48.00</span></div>
+                    <p class="cs1-desc">Hydrating serum for the skin. Helps improve skin look.</p>
+                    <div class="cs1-swatches"><span></span><span></span><span class="is-on"></span></div>
+                    <button class="cs1-cta" aria-hidden="true">Add to cart</button>
+                    <ul class="cs1-bullets">
+                      <li>Free shipping · 30-day returns</li>
+                      <li>Cruelty-free · vegan formula</li>
+                    </ul>
+                  </div>
+                </div>
+                <!-- Stamp overlay — fades + scales in at ~1s -->
+                <div class="cs1-stamp" aria-hidden="true">
+                  <div class="cs1-stamp-line1">INVISIBLE TO</div>
+                  <div class="cs1-stamp-line2">AI AGENTS</div>
+                  <div class="cs1-stamp-agents">
+                    <span class="cs1a chatgpt">C</span>
+                    <span class="cs1a claude">A</span>
+                    <span class="cs1a gemini">G</span>
+                    <span class="cs1a mistral">M</span>
+                    <span class="cs1a deepseek">D</span>
+                  </div>
+                  <div class="cs1-stamp-sub">0 of 5 AI agents return this product for relevant queries</div>
                 </div>
               </div>
+            </section>
 
-              <div class="kpi-grid">
-                <div class="kpi">
-                  <div class="kpi-label">Total SKUs</div>
-                  <div class="kpi-value" data-target="263">263</div>
-                  <div class="kpi-trend neutral">↑ +14</div>
-                  <svg class="kpi-spark" viewBox="0 0 60 20" preserveAspectRatio="none">
-                    <path class="spark-area" d="M0,16 L8,15 L16,14 L24,12 L32,11 L40,10 L48,8 L60,7 L60,20 L0,20 Z"/>
-                    <path class="spark-line" d="M0,16 L8,15 L16,14 L24,12 L32,11 L40,10 L48,8 L60,7"/>
-                    <circle class="spark-dot" cx="60" cy="7" r="1.8"/>
-                  </svg>
+            <!-- ===================================================
+                 SCENE 2 · SHOPIFY APP INSTALL
+                 =================================================== -->
+            <section class="cine-scene cs-2" data-scene="2">
+              <div class="cs2-admin">
+                <div class="cs2-topbar">
+                  <span class="cs2-logo-sh"><svg viewBox="0 0 24 24" width="22" height="22"><path d="M14.5 4c-.4 0-1.2.1-1.7.7-.6.7-.9 1.6-1 2.4-.6.2-1.5.4-2.5.7-.4-1-1.1-2-2.4-2-1.2 0-2 .5-2.6 1.2L2 21l11 3 3.5-19c-.6-.4-1.4-1-2-1zm-2 2.5c-.2.4-.3.9-.4 1.4-.7.2-1.6.5-2.5.7.3-.7.7-1.4 1.3-1.7.5-.2 1.1-.3 1.6-.4z" fill="#5E8E3E"/></svg></span>
+                  <div class="cs2-search"><span class="cs2-search-ic">🔍</span><span>Search</span></div>
+                  <span class="cs2-avatar">JD</span>
                 </div>
-                <div class="kpi is-brand">
-                  <div class="kpi-label">AI Ready</div>
-                  <div class="kpi-value brand-text" data-target="142">142</div>
-                  <div class="kpi-trend up">↑ +47 this week</div>
-                  <svg class="kpi-spark" viewBox="0 0 60 20" preserveAspectRatio="none">
-                    <path class="spark-area" d="M0,17 L8,17 L16,15 L24,13 L32,10 L40,7 L48,5 L60,3 L60,20 L0,20 Z"/>
-                    <path class="spark-line" d="M0,17 L8,17 L16,15 L24,13 L32,10 L40,7 L48,5 L60,3"/>
-                    <circle class="spark-dot" cx="60" cy="3" r="2"/>
-                  </svg>
-                </div>
-                <div class="kpi">
-                  <div class="kpi-label">Needs work</div>
-                  <div class="kpi-value warn-text" data-target="87">87</div>
-                  <div class="kpi-trend up">↓ -33</div>
-                  <svg class="kpi-spark" viewBox="0 0 60 20" preserveAspectRatio="none">
-                    <path class="spark-area" d="M0,4 L8,5 L16,7 L24,8 L32,10 L40,12 L48,15 L60,17 L60,20 L0,20 Z"/>
-                    <path class="spark-line" d="M0,4 L8,5 L16,7 L24,8 L32,10 L40,12 L48,15 L60,17"/>
-                    <circle class="spark-dot" cx="60" cy="17" r="1.8"/>
-                  </svg>
-                </div>
-                <div class="kpi">
-                  <div class="kpi-label">Critical</div>
-                  <div class="kpi-value crit-text" data-target="12">12</div>
-                  <div class="kpi-trend up">↓ -8</div>
-                  <svg class="kpi-spark" viewBox="0 0 60 20" preserveAspectRatio="none">
-                    <path class="spark-area" d="M0,4 L8,5 L16,7 L24,9 L32,11 L40,14 L48,16 L60,18 L60,20 L0,20 Z"/>
-                    <path class="spark-line" d="M0,4 L8,5 L16,7 L24,9 L32,11 L40,14 L48,16 L60,18"/>
-                    <circle class="spark-dot" cx="60" cy="18" r="1.8"/>
-                  </svg>
-                </div>
-              </div>
-            </div>
-
-            <!-- Bottom: agents + fixes -->
-            <div class="dash-bottom">
-              <div class="agent-viz">
-                <div class="dash-section-label">
-                  <span>Agent visibility</span>
-                  <span class="badge">5 agents live</span>
-                </div>
-                <div class="agent-bars">
-                  <div class="ab-row" style="--w:87%; --d:.5s; --pd:1.5s">
-                    <span class="ab-icon chatgpt">C</span>
-                    <span class="ab-name">ChatGPT</span>
-                    <span class="ab-bar"><span></span></span>
-                    <span class="ab-sess">+147</span>
-                    <span class="ab-pct">87%</span>
+                <div class="cs2-body">
+                  <div class="cs2-sidebar">
+                    <span class="cs2-side">Home</span>
+                    <span class="cs2-side">Orders</span>
+                    <span class="cs2-side">Products</span>
+                    <span class="cs2-side cs2-side-active">Apps</span>
+                    <span class="cs2-side">Analytics</span>
+                    <span class="cs2-side">Marketing</span>
                   </div>
-                  <div class="ab-row" style="--w:81%; --d:.6s; --pd:1.6s">
-                    <span class="ab-icon claude">A</span>
-                    <span class="ab-name">Claude</span>
-                    <span class="ab-bar"><span></span></span>
-                    <span class="ab-sess">+92</span>
-                    <span class="ab-pct">81%</span>
-                  </div>
-                  <div class="ab-row" style="--w:74%; --d:.7s; --pd:1.7s">
-                    <span class="ab-icon gemini">G</span>
-                    <span class="ab-name">Gemini</span>
-                    <span class="ab-bar"><span></span></span>
-                    <span class="ab-sess">+58</span>
-                    <span class="ab-pct">74%</span>
-                  </div>
-                  <div class="ab-row is-low" style="--w:68%; --d:.8s; --pd:1.8s">
-                    <span class="ab-icon mistral">M</span>
-                    <span class="ab-name">Mistral</span>
-                    <span class="ab-bar"><span></span></span>
-                    <span class="ab-sess">+31</span>
-                    <span class="ab-pct">68%</span>
-                  </div>
-                  <div class="ab-row is-low" style="--w:56%; --d:.9s; --pd:1.9s">
-                    <span class="ab-icon deepseek">D</span>
-                    <span class="ab-name">DeepSeek</span>
-                    <span class="ab-bar"><span></span></span>
-                    <span class="ab-sess">+12</span>
-                    <span class="ab-pct">56%</span>
+                  <div class="cs2-main">
+                    <div class="cs2-card">
+                      <div class="cs2-app-head">
+                        <div class="cs2-app-icon"><img src="logo-acs.png" alt="" loading="lazy"/></div>
+                        <div class="cs2-app-meta">
+                          <h4>AI Catalog Score</h4>
+                          <p>by AI Catalog Score · 4.9 ★ (1,200+ stores)</p>
+                        </div>
+                      </div>
+                      <p class="cs2-app-desc">Make every product discoverable by ChatGPT, Claude, Gemini, Mistral &amp; DeepSeek. Auto-fix the 8 signals AI agents read.</p>
+                      <div class="cs2-perms">
+                        <span class="cs2-perms-label">This app needs to:</span>
+                        <ul>
+                          <li><span class="cs2-tick">✓</span>Read products, variants &amp; metafields</li>
+                          <li><span class="cs2-tick">✓</span>Write product copy &amp; alt text (with preview)</li>
+                          <li><span class="cs2-tick">✓</span>Emit JSON-LD on product pages</li>
+                          <li><span class="cs2-tick">✓</span>Read order &amp; revenue data (causal proof)</li>
+                        </ul>
+                      </div>
+                      <button class="cs2-install" aria-hidden="true">
+                        <span class="cs2-install-label">Install</span>
+                        <span class="cs2-install-progress"></span>
+                      </button>
+                    </div>
+                    <!-- Animated cursor flies in and clicks Install -->
+                    <svg class="cs2-cursor" viewBox="0 0 24 24" width="22" height="22"><path d="M3 3 L3 18 L7.5 14 L10 21 L13 19.5 L10.5 13 L17 13 Z" fill="#1f1d12" stroke="#fff" stroke-width="1.4" stroke-linejoin="round"/></svg>
                   </div>
                 </div>
               </div>
+            </section>
 
-              <div class="top-fixes">
-                <div class="dash-section-label">
-                  <span>Top fixes</span>
-                  <span class="badge">+43 pts pending</span>
+            <!-- ===================================================
+                 SCENE 3 · PRODUCT LIST (scanning catalog)
+                 =================================================== -->
+            <section class="cine-scene cs-3" data-scene="3">
+              <div class="cs3-app">
+                <div class="cs3-topbar">
+                  <span class="cs3-brand"><img src="logo-acs.png" alt=""/>AI Catalog Score</span>
+                  <span class="cs3-tab">Products</span>
+                  <span class="cs3-tab">Audits</span>
+                  <span class="cs3-tab cs3-tab-active">Catalog</span>
+                  <span class="cs3-tab">Reports</span>
+                  <span class="cs3-store">meridian-supply.myshopify.com</span>
                 </div>
-                <ul class="fix-list">
-                  <li class="fix-li"><span class="fix-dot crit"></span><span class="fix-text">Alt text missing on 47 SKUs</span><span class="fix-pts">+18</span></li>
-                  <li class="fix-li"><span class="fix-dot warn"></span><span class="fix-text">JSON-LD not emitted (67%)</span><span class="fix-pts">+12</span></li>
-                  <li class="fix-li"><span class="fix-dot warn"></span><span class="fix-text">Material metafield empty</span><span class="fix-pts">+8</span></li>
-                  <li class="fix-li"><span class="fix-dot info"></span><span class="fix-text">Taxonomy unclear (23 SKUs)</span><span class="fix-pts">+5</span></li>
-                </ul>
-              </div>
-
-              <!-- HEATMAP: agent × dimension -->
-              <div class="dash-heatmap">
-                <div class="dash-section-label">
-                  <span>Visibility heatmap</span>
-                  <span class="badge">5 agents × 8 signals</span>
+                <div class="cs3-head">
+                  <div class="cs3-head-row">
+                    <h4>Catalog · <em>263 products</em></h4>
+                    <span class="cs3-scan-pill"><span class="cs3-scan-dot"></span>SCANNING · <em id="cs3Percent">67%</em></span>
+                  </div>
+                  <div class="cs3-bar"><span class="cs3-bar-fill"></span></div>
                 </div>
-                <div class="hm-subtitle">
-                  How each AI agent scores your catalog on every signal · <span class="accent">higher = better</span>
-                </div>
-                <div class="hm-table">
-                  <!-- Header row: dimension labels -->
-                  <div class="hm-header">
+                <div class="cs3-table">
+                  <div class="cs3-thead">
+                    <span>Product</span>
+                    <span>Score</span>
+                    <span>Issues</span>
+                    <span>Status</span>
                     <span></span>
-                    <span class="hm-dim">Title</span>
-                    <span class="hm-dim">Desc</span>
-                    <span class="hm-dim">Alt</span>
-                    <span class="hm-dim">JSON</span>
-                    <span class="hm-dim">Meta</span>
-                    <span class="hm-dim">Tax</span>
-                    <span class="hm-dim">Rev</span>
-                    <span class="hm-dim">Img</span>
                   </div>
-                  <!-- ChatGPT -->
-                  <div class="hm-row">
-                    <span class="hm-agent"><span class="ab-icon chatgpt">C</span>GPT</span>
-                    <span class="hm-cell s95" style="--cd:.55s" title="Title · 95">95</span>
-                    <span class="hm-cell s95" style="--cd:.58s" title="Desc · 92">92</span>
-                    <span class="hm-cell s75" style="--cd:.61s" title="Alt · 78">78</span>
-                    <span class="hm-cell s85" style="--cd:.64s" title="JSON · 87">87</span>
-                    <span class="hm-cell s75" style="--cd:.67s" title="Meta · 72">72</span>
-                    <span class="hm-cell s85" style="--cd:.70s" title="Tax · 81">81</span>
-                    <span class="hm-cell s85" style="--cd:.73s" title="Rev · 85">85</span>
-                    <span class="hm-cell s95" style="--cd:.76s" title="Img · 90">90</span>
-                  </div>
-                  <!-- Claude -->
-                  <div class="hm-row">
-                    <span class="hm-agent"><span class="ab-icon claude">A</span>Cld</span>
-                    <span class="hm-cell s85" style="--cd:.60s" title="Title · 88">88</span>
-                    <span class="hm-cell s95" style="--cd:.63s" title="Desc · 91">91</span>
-                    <span class="hm-cell s75" style="--cd:.66s" title="Alt · 72">72</span>
-                    <span class="hm-cell s85" style="--cd:.69s" title="JSON · 82">82</span>
-                    <span class="hm-cell s65" style="--cd:.72s" title="Meta · 68">68</span>
-                    <span class="hm-cell s75" style="--cd:.75s" title="Tax · 77">77</span>
-                    <span class="hm-cell s85" style="--cd:.78s" title="Rev · 80">80</span>
-                    <span class="hm-cell s85" style="--cd:.81s" title="Img · 85">85</span>
-                  </div>
-                  <!-- Gemini -->
-                  <div class="hm-row">
-                    <span class="hm-agent"><span class="ab-icon gemini">G</span>Gem</span>
-                    <span class="hm-cell s85" style="--cd:.65s" title="Title · 85">85</span>
-                    <span class="hm-cell s85" style="--cd:.68s" title="Desc · 83">83</span>
-                    <span class="hm-cell s75" style="--cd:.71s" title="Alt · 70">70</span>
-                    <span class="hm-cell s75" style="--cd:.74s" title="JSON · 75">75</span>
-                    <span class="hm-cell s65" style="--cd:.77s" title="Meta · 65">65</span>
-                    <span class="hm-cell s75" style="--cd:.80s" title="Tax · 72">72</span>
-                    <span class="hm-cell s75" style="--cd:.83s" title="Rev · 75">75</span>
-                    <span class="hm-cell s85" style="--cd:.86s" title="Img · 82">82</span>
-                  </div>
-                  <!-- Mistral -->
-                  <div class="hm-row">
-                    <span class="hm-agent"><span class="ab-icon mistral">M</span>Mst</span>
-                    <span class="hm-cell s75" style="--cd:.70s" title="Title · 72">72</span>
-                    <span class="hm-cell s75" style="--cd:.73s" title="Desc · 78">78</span>
-                    <span class="hm-cell s65" style="--cd:.76s" title="Alt · 62">62</span>
-                    <span class="hm-cell s65" style="--cd:.79s" title="JSON · 65">65</span>
-                    <span class="hm-cell s55" style="--cd:.82s" title="Meta · 58">58</span>
-                    <span class="hm-cell s65" style="--cd:.85s" title="Tax · 68">68</span>
-                    <span class="hm-cell s75" style="--cd:.88s" title="Rev · 70">70</span>
-                    <span class="hm-cell s75" style="--cd:.91s" title="Img · 74">74</span>
-                  </div>
-                  <!-- DeepSeek -->
-                  <div class="hm-row">
-                    <span class="hm-agent"><span class="ab-icon deepseek">D</span>DSk</span>
-                    <span class="hm-cell s65" style="--cd:.75s" title="Title · 62">62</span>
-                    <span class="hm-cell s65" style="--cd:.78s" title="Desc · 65">65</span>
-                    <span class="hm-cell s45" style="--cd:.81s" title="Alt · 48">48</span>
-                    <span class="hm-cell s55" style="--cd:.84s" title="JSON · 50">50</span>
-                    <span class="hm-cell s45" style="--cd:.87s" title="Meta · 42">42</span>
-                    <span class="hm-cell s55" style="--cd:.90s" title="Tax · 55">55</span>
-                    <span class="hm-cell s55" style="--cd:.93s" title="Rev · 58">58</span>
-                    <span class="hm-cell s65" style="--cd:.96s" title="Img · 65">65</span>
+                  <div class="cs3-rows">
+                    <div class="cs3-row" style="--d:.10s">
+                      <span class="cs3-prod"><span class="cs3-th"><div class="thumb-serum"></div></span>Botanical Serum</span>
+                      <span class="cs3-score cs3-score-fail">36</span>
+                      <span class="cs3-issues">Alt · Desc · JSON-LD</span>
+                      <span class="cs3-status cs3-status-fail">Needs fix</span>
+                      <span class="cs3-act">›</span>
+                    </div>
+                    <div class="cs3-row" style="--d:.20s">
+                      <span class="cs3-prod"><span class="cs3-th"><div class="thumb-bag"></div></span>Canvas Field Tote</span>
+                      <span class="cs3-score cs3-score-fail">28</span>
+                      <span class="cs3-issues">Alt · Material · Meta</span>
+                      <span class="cs3-status cs3-status-fail">Critical</span>
+                      <span class="cs3-act">›</span>
+                    </div>
+                    <div class="cs3-row" style="--d:.30s">
+                      <span class="cs3-prod"><span class="cs3-th"><div class="thumb-lamp"></div></span>Brass Reading Lamp</span>
+                      <span class="cs3-score cs3-score-warn">42</span>
+                      <span class="cs3-issues">JSON-LD · Reviews</span>
+                      <span class="cs3-status cs3-status-warn">Needs work</span>
+                      <span class="cs3-act">›</span>
+                    </div>
+                    <div class="cs3-row" style="--d:.40s">
+                      <span class="cs3-prod"><span class="cs3-th"><div class="thumb-serum"></div></span>Repair Mask</span>
+                      <span class="cs3-score cs3-score-fail">18</span>
+                      <span class="cs3-issues">All signals failing</span>
+                      <span class="cs3-status cs3-status-fail">Critical</span>
+                      <span class="cs3-act">›</span>
+                    </div>
+                    <div class="cs3-row" style="--d:.50s">
+                      <span class="cs3-prod"><span class="cs3-th"><div class="thumb-bag"></div></span>Linen Throw Blanket</span>
+                      <span class="cs3-score cs3-score-warn">52</span>
+                      <span class="cs3-issues">Tax · Material</span>
+                      <span class="cs3-status cs3-status-warn">Improvable</span>
+                      <span class="cs3-act">›</span>
+                    </div>
+                    <div class="cs3-row" style="--d:.60s">
+                      <span class="cs3-prod"><span class="cs3-th"><div class="thumb-lamp"></div></span>Ceramic Vase</span>
+                      <span class="cs3-score cs3-score-fail">25</span>
+                      <span class="cs3-issues">Alt · JSON-LD · Reviews</span>
+                      <span class="cs3-status cs3-status-fail">Critical</span>
+                      <span class="cs3-act">›</span>
+                    </div>
                   </div>
                 </div>
-                <div class="hm-legend">
-                  <span>Poor</span>
-                  <span class="hm-bar"></span>
-                  <span>Excellent</span>
+                <div class="cs3-foot">
+                  <span><strong>263</strong> products · <strong class="cs3-foot-bad">87 critical</strong> · <strong class="cs3-foot-warn">47 need work</strong> · <strong class="cs3-foot-good">129 AI-ready</strong></span>
                 </div>
               </div>
-            </div>
+            </section>
 
-            <!-- Score distribution histogram -->
-            <div class="dash-distribution">
-              <span class="dd-label">Score distribution</span>
-              <div class="dd-bars">
-                <div class="dd-bar grade-a" style="--d:.7s">
-                  <span class="dd-count">142</span>
-                  <span class="dd-fill" style="height:100%"></span>
-                  <span class="dd-grade">A</span>
+            <!-- ===================================================
+                 SCENE 4 · BEFORE / AFTER (per-product diff)
+                 =================================================== -->
+            <section class="cine-scene cs-4" data-scene="4">
+              <div class="cs4-app">
+                <div class="cs4-topbar">
+                  <span class="cs4-back">‹</span>
+                  <span class="cs4-title">VERDE · Botanical Serum</span>
+                  <span class="cs4-stat cs4-stat-on"><span></span>Optimization complete</span>
                 </div>
-                <div class="dd-bar grade-b" style="--d:.8s">
-                  <span class="dd-count">67</span>
-                  <span class="dd-fill" style="height:48%"></span>
-                  <span class="dd-grade">B</span>
-                </div>
-                <div class="dd-bar grade-c" style="--d:.9s">
-                  <span class="dd-count">42</span>
-                  <span class="dd-fill" style="height:30%"></span>
-                  <span class="dd-grade">C</span>
-                </div>
-                <div class="dd-bar grade-d" style="--d:1.0s">
-                  <span class="dd-count">8</span>
-                  <span class="dd-fill" style="height:14%"></span>
-                  <span class="dd-grade">D</span>
-                </div>
-                <div class="dd-bar grade-f" style="--d:1.1s">
-                  <span class="dd-count">4</span>
-                  <span class="dd-fill" style="height:10%"></span>
-                  <span class="dd-grade">F</span>
+                <div class="cs4-split">
+                  <!-- BEFORE column -->
+                  <div class="cs4-col cs4-col-before">
+                    <span class="cs4-badge cs4-badge-before">BEFORE</span>
+                    <div class="cs4-score cs4-score-before">
+                      <span class="cs4-score-num">36</span><span class="cs4-score-out">/100</span>
+                    </div>
+                    <div class="cs4-prod">
+                      <div class="cs4-prod-img"><div class="thumb-serum thumb-serum-lg"></div></div>
+                      <div class="cs4-prod-title">Botanical Serum</div>
+                      <div class="cs4-prod-desc">Hydrating serum for the skin. Helps improve skin look.</div>
+                    </div>
+                    <ul class="cs4-checks">
+                      <li class="bad"><span>✕</span>No alt text on 4 images</li>
+                      <li class="bad"><span>✕</span>9-word description</li>
+                      <li class="bad"><span>✕</span>Missing ingredients metafield</li>
+                      <li class="bad"><span>✕</span>No JSON-LD emitted</li>
+                    </ul>
+                  </div>
+                  <!-- Center arrow + Maximize badge -->
+                  <div class="cs4-arrow" aria-hidden="true">
+                    <span class="cs4-arrow-line"></span>
+                    <span class="cs4-arrow-chip">✨ Maximize</span>
+                    <span class="cs4-arrow-line"></span>
+                    <span class="cs4-arrow-head">→</span>
+                  </div>
+                  <!-- AFTER column -->
+                  <div class="cs4-col cs4-col-after">
+                    <span class="cs4-badge cs4-badge-after">AFTER · +43 pts</span>
+                    <div class="cs4-score cs4-score-after">
+                      <span class="cs4-score-num" id="cs4ScoreNum">79</span><span class="cs4-score-out">/100</span>
+                    </div>
+                    <div class="cs4-prod">
+                      <div class="cs4-prod-img"><div class="thumb-serum thumb-serum-lg"></div></div>
+                      <div class="cs4-prod-title" id="cs4Title">Botanical Renewal Serum — Barrier Repair for Sensitive Skin</div>
+                      <div class="cs4-prod-desc" id="cs4Desc">A lightweight, plant-powered serum with centella, squalane &amp; niacinamide to strengthen the skin barrier, calm redness and hydrate deeply. For sensitive, dry &amp; combination skin.</div>
+                    </div>
+                    <ul class="cs4-checks">
+                      <li class="ok"><span>✓</span>Alt text generated for 4 images</li>
+                      <li class="ok"><span>✓</span>42-word, AI-readable description</li>
+                      <li class="ok"><span>✓</span>Ingredients · Skin type · Routine step</li>
+                      <li class="ok"><span>✓</span>JSON-LD emitted (Product schema)</li>
+                    </ul>
+                  </div>
                 </div>
               </div>
-              <span class="dd-total">263 SKUs · 54% A-grade</span>
-            </div>
+            </section>
 
-            <!-- Activity ticker footer -->
-            <div class="dash-foot">
-              <div class="activity-ticker">
-                <div class="activity-feed">
-                  <div><span class="ts">now</span><span class="act">Alt text</span> generated for SKU-4823</div>
-                  <div><span class="ts">3s</span>ChatGPT captured <span class="act">"chelsea boots"</span> query</div>
-                  <div><span class="ts">12s</span><span class="act">JSON-LD</span> emitted for 14 products</div>
-                  <div><span class="ts">28s</span>Claude visibility <span class="act">+2.1%</span> vs yesterday</div>
-                  <div><span class="ts">now</span><span class="act">Alt text</span> generated for SKU-4823</div>
+            <!-- ===================================================
+                 SCENE 5 · CAUSAL PROOF (chart + stats)
+                 =================================================== -->
+            <section class="cine-scene cs-5" data-scene="5">
+              <div class="cs5-app">
+                <div class="cs5-topbar">
+                  <span class="cs5-brand"><img src="logo-acs.png" alt=""/>AI Catalog Score</span>
+                  <span class="cs5-tab">Catalog</span>
+                  <span class="cs5-tab cs5-tab-active">Causal proof</span>
+                  <span class="cs5-tab">Settings</span>
+                  <span class="cs5-period">May 1 – May 31</span>
+                </div>
+                <div class="cs5-body">
+                  <div class="cs5-stats">
+                    <span class="cs5-eyebrow"><span class="cs5-shield">🛡</span>CAUSAL UPLIFT REPORT</span>
+                    <div class="cs5-big">+27.3%</div>
+                    <div class="cs5-big-label">attributable revenue lift</div>
+                    <div class="cs5-tags">
+                      <span class="cs5-tag cs5-tag-strong">p &lt; 0.05</span>
+                      <span class="cs5-tag">95% CI</span>
+                      <span class="cs5-tag">DiD + Welch's t-test</span>
+                    </div>
+                    <div class="cs5-row">
+                      <div class="cs5-cell">
+                        <span class="cs5-cell-num" data-cs5-target="18642" data-cs5-prefix="$">$18,642</span>
+                        <span class="cs5-cell-label">Incremental revenue · 30d</span>
+                      </div>
+                      <div class="cs5-cell">
+                        <span class="cs5-cell-num" data-cs5-target="143">143</span>
+                        <span class="cs5-cell-label">Products tested · auto-DiD</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="cs5-chart-wrap">
+                    <div class="cs5-chart-head">
+                      <span class="cs5-leg cs5-leg-opt"><span></span>Optimized · n=72</span>
+                      <span class="cs5-leg cs5-leg-ctrl"><span></span>Control · n=71</span>
+                    </div>
+                    <svg class="cs5-chart" viewBox="0 0 320 180" preserveAspectRatio="none" aria-hidden="true">
+                      <defs>
+                        <linearGradient id="cs5OptArea" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="0%" stop-color="#00d084" stop-opacity=".32"/>
+                          <stop offset="100%" stop-color="#00d084" stop-opacity="0"/>
+                        </linearGradient>
+                      </defs>
+                      <g stroke="rgba(36,32,18,.06)" stroke-dasharray="2 4">
+                        <line x1="0" y1="36"  x2="320" y2="36"/>
+                        <line x1="0" y1="82"  x2="320" y2="82"/>
+                        <line x1="0" y1="128" x2="320" y2="128"/>
+                      </g>
+                      <g fill="rgba(36,32,18,.35)" font-size="8" font-family="ui-monospace,monospace">
+                        <text x="2" y="34">+40%</text>
+                        <text x="2" y="80">+20%</text>
+                        <text x="2" y="126">0%</text>
+                      </g>
+                      <polyline class="cs5-line-ctrl" points="0,118 40,120 80,116 120,118 160,115 200,117 240,114 280,118 320,116" fill="none" stroke="rgba(36,32,18,.32)" stroke-width="1.8" stroke-linecap="round"/>
+                      <path class="cs5-area" d="M0,118 L40,108 L80,94 L120,80 L160,68 L200,56 L240,42 L280,28 L320,14 L320,180 L0,180 Z" fill="url(#cs5OptArea)"/>
+                      <polyline class="cs5-line-opt" points="0,118 40,108 80,94 120,80 160,68 200,56 240,42 280,28 320,14" fill="none" stroke="#00d084" stroke-width="2.6" stroke-linecap="round"/>
+                      <circle class="cs5-end-halo" cx="320" cy="14" r="9" fill="rgba(0,208,132,.20)"/>
+                      <circle class="cs5-end-dot" cx="320" cy="14" r="4.5" fill="#00d084" stroke="#fff" stroke-width="2"/>
+                    </svg>
+                    <div class="cs5-x-axis">
+                      <span>May 1</span><span>May 8</span><span>May 15</span><span>May 22</span><span>May 31</span>
+                    </div>
+                  </div>
                 </div>
               </div>
-              <span>commerce-agentic <span class="accent">spec v1.0</span></span>
+            </section>
+
+            <!-- ===================================================
+                 SCENE 6 · REVENUE NOTIFICATION (celebration)
+                 =================================================== -->
+            <section class="cine-scene cs-6" data-scene="6">
+              <div class="cs6-celebrate">
+                <!-- Subtle confetti particles -->
+                <div class="cs6-confetti" aria-hidden="true">
+                  <span style="--x:8%;  --d:.0s;  --c:#00d084"></span>
+                  <span style="--x:22%; --d:.15s; --c:#f59e0b"></span>
+                  <span style="--x:38%; --d:.30s; --c:#00a86a"></span>
+                  <span style="--x:55%; --d:.10s; --c:#c63d2f"></span>
+                  <span style="--x:72%; --d:.25s; --c:#00d084"></span>
+                  <span style="--x:88%; --d:.05s; --c:#f59e0b"></span>
+                  <span style="--x:14%; --d:.40s; --c:#00d084"></span>
+                  <span style="--x:46%; --d:.35s; --c:#00a86a"></span>
+                  <span style="--x:64%; --d:.50s; --c:#f59e0b"></span>
+                  <span style="--x:80%; --d:.20s; --c:#00d084"></span>
+                </div>
+                <div class="cs6-card">
+                  <div class="cs6-icon"><img src="logo-acs.png" alt=""/></div>
+                  <div class="cs6-eyebrow">SHOPIFY · ANALYTICS</div>
+                  <div class="cs6-big">+$18,642</div>
+                  <div class="cs6-sub">incremental revenue · last 30 days</div>
+                  <div class="cs6-detail">
+                    <div class="cs6-pill"><span class="cs6-pill-num">+27.3%</span><span class="cs6-pill-label">vs. control catalog</span></div>
+                    <div class="cs6-pill cs6-pill-alt"><span class="cs6-pill-num">+147</span><span class="cs6-pill-label">AI sessions this week</span></div>
+                  </div>
+                  <div class="cs6-foot">Powered by <strong>AI Catalog Score</strong> · 90-second install</div>
+                </div>
+              </div>
+            </section>
+
+          </div><!-- /.cine-frame -->
+
+          <!-- Caption strip — text + step pip + progress, swaps per scene -->
+          <div class="cine-caption">
+            <span class="cc-step" id="ccStep">Step 1 of 6</span>
+            <span class="cc-text" id="ccText">Your products are <strong>invisible to AI agents</strong>.</span>
+            <div class="cc-pips" id="ccPips">
+              <span data-i="1" class="is-on"></span>
+              <span data-i="2"></span>
+              <span data-i="3"></span>
+              <span data-i="4"></span>
+              <span data-i="5"></span>
+              <span data-i="6"></span>
             </div>
           </div>
-        </div>
 
-      </div>
+        </div><!-- /.cine-window -->
+
+      </div><!-- /.cine-stage -->
     </div>
   </div>
 </section>
@@ -9137,218 +9732,132 @@ if (terminalBody) terminalObserver.observe(terminalBody);
   }
 })();
 
-// ===== HERO DASHBOARD - counter animations + in-view trigger =====
-(function initDashScene(){
-  const scene = document.getElementById('dashScene');
-  if (!scene) return;
+// ===== HERO CINEMATIC STAGE — 6-scene product demo loop =====
+(function initCineStage(){
+  const stage = document.getElementById('cineStage');
+  if (!stage) return;
 
-  function animateCounters(){
-    const targets = scene.querySelectorAll('[data-target]');
-    targets.forEach(el => {
-      const target = parseInt(el.dataset.target, 10);
-      if (isNaN(target)) return;
-      const duration = 1400; // ms
-      const startTime = performance.now();
-      const startVal = 0;
+  // Scene definitions: number, duration (ms), URL chrome bar, caption text
+  // Total loop = ~17.5s. Scene 1 longest (lets the stamp sink in).
+  const SCENES = [
+    { i: 1, ms: 3200, url: 'verde-skin.com/products/botanical-serum',
+      step: 'Step 1 of 6', text: 'Your products are <strong>invisible to AI agents</strong>.' },
+    { i: 2, ms: 2800, url: 'admin.shopify.com/apps/ai-catalog-score',
+      step: 'Step 2 of 6', text: 'Install in <strong>90 seconds</strong>.  Read-only by default.' },
+    { i: 3, ms: 3000, url: 'app.aicatalogscore.com/catalog',
+      step: 'Step 3 of 6', text: 'We <strong>scan every product</strong> against the 8 signals AI agents read.' },
+    { i: 4, ms: 3000, url: 'app.aicatalogscore.com/product/verde-serum',
+      step: 'Step 4 of 6', text: '<strong>One click</strong> rewrites copy, metafields and JSON-LD — with preview.' },
+    { i: 5, ms: 3000, url: 'app.aicatalogscore.com/reports/causal',
+      step: 'Step 5 of 6', text: '<strong>Causal proof</strong> · DiD A/B confirms the lift is real.' },
+    { i: 6, ms: 2500, url: 'admin.shopify.com/store/analytics',
+      step: 'Step 6 of 6', text: '<strong>+$18,642</strong> incremental revenue · 30 days.' },
+  ];
+
+  const urlEl  = document.getElementById('cwUrl');
+  const stepEl = document.getElementById('ccStep');
+  const textEl = document.getElementById('ccText');
+  const pips   = document.querySelectorAll('#ccPips span');
+
+  // Number tweens for Scene 5 stat cells. Re-runs each loop pass.
+  function tweenCs5(){
+    stage.querySelectorAll('[data-cs5-target]').forEach(el => {
+      const target = parseFloat(el.dataset.cs5Target);
+      const prefix = el.dataset.cs5Prefix || '';
+      const start  = performance.now();
+      const dur    = 1400;
       function tick(now){
-        const elapsed = now - startTime;
-        const progress = Math.min(elapsed / duration, 1);
-        // ease-out cubic
-        const eased = 1 - Math.pow(1 - progress, 3);
-        const value = Math.round(startVal + (target - startVal) * eased);
-        el.textContent = value.toLocaleString('en-US');
-        if (progress < 1) requestAnimationFrame(tick);
-      }
-      requestAnimationFrame(tick);
-    });
-  }
-
-  function trigger(){
-    if (scene.classList.contains('in-view')) return;
-    scene.classList.add('in-view');
-    animateCounters();
-  }
-
-  // Double-rAF defers the trigger until after the browser has painted the
-  // initial state (width:0, opacity:0, etc.). Without this defer, the script
-  // runs synchronously before the first paint and the browser renders
-  // directly with .in-view applied — no transition plays.
-  function deferredTrigger(){
-    requestAnimationFrame(() => requestAnimationFrame(trigger));
-  }
-
-  // If any pixel of the scene is in the initial viewport on page load,
-  // trigger animations immediately (after the initial paint).
-  const r = scene.getBoundingClientRect();
-  if (r.top < window.innerHeight && r.bottom > 0){
-    deferredTrigger();
-  } else {
-    // Otherwise wait for the user to scroll the scene into view
-    const obs = new IntersectionObserver((entries) => {
-      entries.forEach(e => {
-        if (e.isIntersecting){ trigger(); obs.disconnect(); }
-      });
-    }, { threshold: 0 });
-    obs.observe(scene);
-  }
-
-  // ===== HERO LOOP v5: phase controller =====
-  // Cycles the data-phase attribute across the 5 storytelling phases on a
-  // 15s loop. Pauses when offscreen + when the tab is hidden so we don't
-  // waste cycles. Also tweens the gauge score number (36→94) and KPI
-  // numbers between phases so the "before/after" reads as a real change.
-  (function initHeroLoop(){
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    // Phase timeline (seconds since loop start):
-    //   1 SCAN   (0)
-    //   2 BEFORE (2)
-    //   3 MAX    (4)
-    //   4 AFTER  (7)
-    //   5 PROOF  (11)
-    // Loop back at 15.
-    const PHASES = [
-      { phase: 1, at: 0     },
-      { phase: 2, at: 2000  },
-      { phase: 3, at: 4000  },
-      { phase: 4, at: 7000  },
-      { phase: 5, at: 11000 },
-    ];
-    const LOOP_MS = 15000;
-    let timer = null;
-    let started = false;
-    let paused = false;
-
-    // Numbers that should swap between phase 2 (BEFORE) and phase 4 (AFTER).
-    // We tween in/out by directly setting textContent on phase transitions.
-    const swapTargets = [
-      { sel: '.gauge-score .n', before: 36,  after: 78 },
-      { sel: '.kpi.is-brand .kpi-value', before: 28, after: 142 },
-    ];
-    function setText(sel, value){
-      const el = scene.querySelector(sel);
-      if (el) el.textContent = value;
-    }
-    function tweenText(sel, from, to, duration){
-      const el = scene.querySelector(sel);
-      if (!el) return;
-      const start = performance.now();
-      function tick(now){
-        const t = Math.min((now - start) / duration, 1);
+        const t = Math.min((now - start) / dur, 1);
         const eased = 1 - Math.pow(1 - t, 3);
-        el.textContent = Math.round(from + (to - from) * eased).toLocaleString('en-US');
+        const v = Math.round(target * eased);
+        el.textContent = prefix + v.toLocaleString('en-US');
         if (t < 1) requestAnimationFrame(tick);
       }
       requestAnimationFrame(tick);
-    }
-
-    function applyPhase(p){
-      scene.setAttribute('data-phase', String(p));
-      // Tween numbers on key transitions
-      if (p === 2){
-        swapTargets.forEach(s => setText(s.sel, s.before));
-        // Score gauge fill back to BEFORE state (36% of 100 → adjust dashoffset)
-        // The existing gauge-fill stroke is animated by the .in-view class. We
-        // re-apply via inline style on the .gauge-fill element. r=80 → 502.65.
-        const gFill = scene.querySelector('.gauge-fill');
-        if (gFill){
-          const len = 2 * Math.PI * 80;
-          gFill.style.strokeDashoffset = String(len * (1 - 0.36));
-        }
-      } else if (p === 4){
-        swapTargets.forEach(s => tweenText(s.sel, s.before, s.after, 1100));
-        const gFill = scene.querySelector('.gauge-fill');
-        if (gFill){
-          const len = 2 * Math.PI * 80;
-          gFill.style.transition = 'stroke-dashoffset 1.2s cubic-bezier(.2,.8,.2,1)';
-          gFill.style.strokeDashoffset = String(len * (1 - 0.78));
-        }
-      } else if (p === 3){
-        // Click pulse on the maximize button mid-phase (~1.65s in)
-        const btn = scene.querySelector('.dash-maximize');
-        if (btn){
-          setTimeout(() => btn.classList.add('is-clicked'), 1650);
-          setTimeout(() => btn.classList.remove('is-clicked'), 1950);
-        }
-      }
-    }
-
-    function runLoop(startedAt){
-      // Schedule each phase transition relative to loop start
-      PHASES.forEach(p => {
-        timer = setTimeout(() => applyPhase(p.phase), p.at);
-      });
-      // Loop back
-      timer = setTimeout(() => { if (!paused) runLoop(performance.now()); }, LOOP_MS);
-    }
-
-    function start(){
-      if (started) return;
-      started = true;
-      // Keep .in-view so the existing reveal animations (gauge fill, agent
-      // bars, distribution bars, heatmap) play once on first paint. The
-      // phase controller layers the storytelling overlay on top.
-      if (!scene.classList.contains('in-view')) scene.classList.add('in-view');
-      // Start at phase 1 after a short delay so the initial reveal completes
-      // before we wipe values back down to the BEFORE state.
-      setTimeout(() => applyPhase(1), 100);
-      runLoop(performance.now());
-    }
-    function stop(){
-      paused = true;
-      if (timer) clearTimeout(timer);
-    }
-
-    // Visibility-aware: pause when tab is hidden
-    document.addEventListener('visibilitychange', () => {
-      if (document.hidden) stop();
-      else if (started){ paused = false; runLoop(performance.now()); }
-    });
-
-    // Start when scene is in viewport (or immediately if it already is)
-    const r0 = scene.getBoundingClientRect();
-    if (r0.top < window.innerHeight && r0.bottom > 0){
-      requestAnimationFrame(() => requestAnimationFrame(start));
-    } else {
-      const obs2 = new IntersectionObserver((entries) => {
-        entries.forEach(e => {
-          if (e.isIntersecting){ start(); obs2.disconnect(); }
-        });
-      }, { threshold: 0 });
-      obs2.observe(scene);
-    }
-  })();
-
-  // Subtle parallax tilt on mouse move (desktop only)
-  if (window.matchMedia('(min-width: 880px)').matches && !window.matchMedia('(prefers-reduced-motion: reduce)').matches){
-    const main = scene.querySelector('.dash-main');
-    const toast = scene.querySelector('.float-toast');
-    const did = scene.querySelector('.float-did');
-    const agent = scene.querySelector('.float-agent');
-    scene.addEventListener('mousemove', (e) => {
-      const r = scene.getBoundingClientRect();
-      const mx = (e.clientX - r.left) / r.width - 0.5;   // -0.5..0.5
-      const my = (e.clientY - r.top) / r.height - 0.5;
-      if (main) main.style.transform = `rotateX(${2 - my * 3}deg) rotateY(${-2.5 + mx * 4}deg)`;
-      if (toast) toast.style.transform = `translate(${mx * -10}px, ${my * -10}px)`;
-      if (did)   did.style.transform   = `translate(${mx * 12}px, ${my * 12}px)`;
-      if (agent) agent.style.transform = `translate(${mx * -14}px, ${my * 8}px)`;
-    });
-    scene.addEventListener('mouseleave', () => {
-      if (main) main.style.transform = '';
-      if (toast) toast.style.transform = '';
-      if (did)   did.style.transform = '';
-      if (agent) agent.style.transform = '';
     });
   }
 
-  // KPI tile spotlight follow
-  scene.querySelectorAll('.kpi').forEach(kpi => {
-    kpi.addEventListener('mousemove', (e) => {
-      const r = kpi.getBoundingClientRect();
-      kpi.style.setProperty('--mx', `${e.clientX - r.left}px`);
-      kpi.style.setProperty('--my', `${e.clientY - r.top}px`);
-    });
+  function applyScene(scene){
+    stage.setAttribute('data-scene', String(scene.i));
+    if (urlEl)  urlEl.textContent  = scene.url;
+    if (stepEl) stepEl.textContent = scene.step;
+    if (textEl) textEl.innerHTML   = scene.text;
+    pips.forEach((p, idx) => p.classList.toggle('is-on', idx + 1 === scene.i));
+    // Scene-specific JS-driven animations
+    if (scene.i === 5) tweenCs5();
+  }
+
+  // Loop driver
+  let idx = 0;
+  let timer = null;
+  let started = false;
+  let paused  = false;
+
+  function tick(){
+    const scene = SCENES[idx];
+    applyScene(scene);
+    timer = setTimeout(() => {
+      if (paused) return;
+      idx = (idx + 1) % SCENES.length;
+      tick();
+    }, scene.ms);
+  }
+
+  function start(){
+    if (started) return;
+    started = true;
+    tick();
+  }
+  function pause(){
+    paused = true;
+    if (timer) clearTimeout(timer);
+  }
+  function resume(){
+    if (!started) return;
+    paused = false;
+    tick();
+  }
+
+  // Visibility-aware: pause when tab is hidden
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) pause();
+    else resume();
   });
+
+  // Reduced motion: just show scene 1 statically.
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+    applyScene(SCENES[0]);
+    return;
+  }
+
+  // Start when the stage enters the viewport (or immediately if it already is)
+  const r0 = stage.getBoundingClientRect();
+  if (r0.top < window.innerHeight && r0.bottom > 0){
+    requestAnimationFrame(() => requestAnimationFrame(start));
+  } else {
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting){ start(); obs.disconnect(); }
+      });
+    }, { threshold: 0 });
+    obs.observe(stage);
+  }
+
+  // Subtle parallax tilt on mouse move (desktop only)
+  if (window.matchMedia('(min-width: 880px)').matches){
+    const win = stage.querySelector('.cine-window');
+    if (win){
+      stage.addEventListener('mousemove', (e) => {
+        const r = stage.getBoundingClientRect();
+        const mx = (e.clientX - r.left) / r.width - 0.5;
+        const my = (e.clientY - r.top) / r.height - 0.5;
+        win.style.transform = `rotateX(${1.5 - my * 2.5}deg) rotateY(${-2 + mx * 3.5}deg)`;
+      });
+      stage.addEventListener('mouseleave', () => {
+        win.style.transform = '';
+      });
+    }
+  }
 })();
 
 // ===== PRICING MONTHLY/YEARLY TOGGLE =====
