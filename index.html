@@ -4006,6 +4006,307 @@ section{ position: relative; }
   .prove-chart-row{ grid-template-columns: 1fr; }
   .hiw-card{ min-height: auto; }
 }
+
+/* ============================================================
+   v4.1 — sophistication layer: scan-beam, sig-bars+scores,
+   live activity feed, fix score delta + char-count meters,
+   prove sparklines + progress bar + treat/ctrl pills,
+   chart data-point sequential pop, endpoint halo pulse.
+   ============================================================ */
+
+/* ---- SCAN card extras ---- */
+.scan-product-img{ position: relative; overflow: hidden; }
+.scan-beam{
+  position: absolute; left: 0; right: 0; top: 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, var(--brand) 50%, transparent);
+  box-shadow: 0 0 12px var(--brand);
+  animation: scanBeam 3.5s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 2;
+  opacity: 0;
+}
+.scan-beam-glow{
+  position: absolute; left: 0; right: 0;
+  height: 40px;
+  background: linear-gradient(180deg, rgba(0,208,132,.30), transparent);
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0;
+  animation: scanBeamGlow 3.5s ease-in-out infinite;
+}
+@keyframes scanBeam{
+  0%   { transform: translateY(0); opacity: 0; }
+  10%  { opacity: 1; }
+  90%  { opacity: 1; }
+  100% { transform: translateY(calc(100% - 3px)); opacity: 0; }
+}
+@keyframes scanBeamGlow{
+  0%   { transform: translateY(0); opacity: 0; }
+  10%  { opacity: 1; }
+  90%  { opacity: 1; }
+  100% { transform: translateY(calc(100% - 40px)); opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce){
+  .scan-beam, .scan-beam-glow{ animation: none; opacity: 0; }
+}
+
+.scan-thumb{ position: relative; }
+.scan-thumb-mark{
+  position: absolute; top: -4px; right: -4px;
+  width: 16px; height: 16px; border-radius: 50%;
+  background: var(--brand);
+  color: #fff;
+  font-size: 10px; font-weight: 800;
+  display: inline-flex; align-items: center; justify-content: center;
+  box-shadow: 0 2px 6px rgba(0,208,132,.45);
+}
+.scan-thumb-more{ line-height: 1.15; }
+.scan-thumb-more span{ font-size: 9px; opacity: .8; }
+
+.scan-product-tags{
+  display: inline-flex; gap: 5px; flex-wrap: wrap;
+  justify-content: center;
+}
+.spt{
+  font-family: var(--font-mono); font-size: 9px; font-weight: 700;
+  padding: 2px 7px; border-radius: 6px;
+  background: rgba(36,32,18,.06);
+  color: var(--ink-1);
+  letter-spacing: .04em;
+}
+.spt-warn{
+  background: rgba(0,208,132,.12);
+  color: var(--brand-deep);
+}
+
+/* Signal scores + mini bars — replaces the bare ✓ label list */
+.scan-signals li{
+  display: grid !important;
+  grid-template-columns: 16px 1fr 56px 14px;
+  gap: 8px;
+  align-items: center;
+}
+.scan-signals .scan-sig-head{
+  display: block !important;
+  grid-template-columns: none;
+}
+.sig-name{ color: var(--ink-1); font-weight: 500; }
+.sig-bar{
+  position: relative;
+  height: 4px;
+  border-radius: 2px;
+  background: rgba(36,32,18,.06);
+  overflow: hidden;
+}
+.sig-bar span{
+  position: absolute; left: 0; top: 0; bottom: 0;
+  width: 0;
+  background: linear-gradient(90deg, var(--brand), var(--brand-deep));
+  border-radius: inherit;
+  animation: sigBarFill 1.4s cubic-bezier(.2,.8,.2,1) forwards;
+  animation-delay: inherit;
+}
+@keyframes sigBarFill{ to { width: var(--w, 0%); } }
+.sig-score{
+  font-family: var(--font-mono); font-size: 11px; font-weight: 700;
+  color: var(--ink-1);
+  text-align: right;
+}
+@media (prefers-reduced-motion: reduce){
+  .sig-bar span{ animation: none; width: var(--w, 0%); }
+}
+
+/* Live activity feed — fills the bottom space below Top issues */
+.scan-activity{
+  margin-top: 14px;
+  padding: 12px;
+  background: linear-gradient(180deg, #fafaf6 0%, #f4f0e3 100%);
+  border: 1px solid rgba(36,32,18,.07);
+  border-radius: 12px;
+}
+.scan-activity-head{
+  display: inline-flex; align-items: center; gap: 7px;
+  font-family: var(--font-mono); font-size: 10px; font-weight: 700;
+  letter-spacing: .12em; text-transform: uppercase;
+  color: var(--brand-deep);
+}
+.sah-pulse{
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--brand);
+  box-shadow: 0 0 0 0 rgba(0,208,132,.55);
+  animation: sahPulse 1.6s ease-in-out infinite;
+}
+@keyframes sahPulse{
+  0%   { box-shadow: 0 0 0 0 rgba(0,208,132,.55); }
+  70%  { box-shadow: 0 0 0 6px rgba(0,208,132,0); }
+  100% { box-shadow: 0 0 0 0 rgba(0,208,132,0); }
+}
+.scan-activity-feed{
+  margin-top: 8px;
+  display: flex; flex-direction: column; gap: 5px;
+}
+.saf-row{
+  display: grid; grid-template-columns: 28px 1fr; gap: 8px;
+  align-items: center;
+  font-size: 11.5px; line-height: 1.4;
+  color: var(--ink-2);
+  opacity: 0;
+  transform: translateY(4px);
+  animation: safRowIn .35s ease-out forwards;
+}
+.saf-row:nth-of-type(1){ animation-delay: 1.3s; }
+.saf-row:nth-of-type(2){ animation-delay: 1.55s; }
+.saf-row:nth-of-type(3){ animation-delay: 1.80s; }
+.saf-ts{
+  font-family: var(--font-mono); font-size: 10px; font-weight: 700;
+  color: var(--ink-4);
+}
+.saf-text strong{ color: var(--ink-0); font-weight: 700; }
+@keyframes safRowIn{ to { opacity: 1; transform: translateY(0); } }
+@media (prefers-reduced-motion: reduce){
+  .saf-row{ animation: none; opacity: 1; transform: none; }
+  .sah-pulse{ animation: none; }
+}
+
+/* ---- FIX card extras: score delta strip + char-count meters ---- */
+.fix-delta-strip{
+  display: grid; grid-template-columns: 1fr auto 1fr auto;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  margin-bottom: 16px;
+  background: linear-gradient(135deg, #fafaf6 0%, #f4f0e3 100%);
+  border: 1px solid rgba(36,32,18,.07);
+  border-radius: 12px;
+}
+.fix-delta-side{
+  display: flex; flex-direction: column; gap: 1px;
+  text-align: center;
+}
+.fds-label{
+  font-family: var(--font-mono); font-size: 9.5px; font-weight: 700;
+  letter-spacing: .12em; text-transform: uppercase;
+  color: var(--ink-3);
+}
+.fds-num{
+  font-family: var(--font-display); font-size: 26px; font-weight: 700;
+  letter-spacing: -.025em; line-height: 1;
+}
+.fds-before{ color: #c63d2f; }
+.fds-after{
+  background: linear-gradient(180deg, var(--brand), var(--brand-deep));
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.fix-delta-arrow{
+  color: rgba(36,32,18,.30);
+  width: 60px;
+}
+.fix-delta-arrow svg{ width: 100%; display: block; }
+.fix-delta-badge{
+  font-family: var(--font-mono); font-size: 11px; font-weight: 800;
+  letter-spacing: .06em;
+  padding: 6px 10px;
+  background: rgba(0,208,132,.14);
+  color: var(--brand-deep);
+  border-radius: 8px;
+  border: 1px solid rgba(0,208,132,.30);
+  white-space: nowrap;
+}
+
+.fix-meter{
+  display: grid; grid-template-columns: auto 1fr auto;
+  gap: 8px; align-items: center;
+  font-size: 10.5px;
+  margin-top: 2px;
+}
+.fix-meter-label{
+  font-family: var(--font-mono); font-size: 9.5px; font-weight: 700;
+  letter-spacing: .08em; text-transform: uppercase;
+  color: var(--ink-3);
+}
+.fix-meter-bar{
+  position: relative;
+  height: 4px;
+  border-radius: 2px;
+  background: rgba(36,32,18,.06);
+  overflow: hidden;
+}
+.fix-meter-bar span{
+  position: absolute; left: 0; top: 0; bottom: 0;
+  border-radius: inherit;
+  transition: width 1.2s cubic-bezier(.2,.8,.2,1);
+}
+.fix-meter-bar-low span{ background: #c63d2f; }
+.fix-meter-bar-high span{
+  background: linear-gradient(90deg, var(--brand), var(--brand-deep));
+}
+.fix-meter-val{
+  font-family: var(--font-mono); font-weight: 700;
+  color: var(--ink-1);
+}
+
+/* ---- PROVE card extras: chart enlarged, dots, sparklines, pills ---- */
+.prove-chart{ height: 170px; }
+.prove-dots .pdot{
+  opacity: 0;
+  transform-origin: center;
+  transform: scale(0);
+  animation: pdotPop .35s cubic-bezier(.34,1.56,.64,1) var(--d, 1.7s) forwards;
+}
+@keyframes pdotPop{ to { opacity: 1; transform: scale(1); } }
+.prove-end-dot-halo{
+  opacity: 0; transform-origin: 320px 15px; transform: scale(0);
+  animation: pdotPop .4s cubic-bezier(.34,1.56,.64,1) 2.25s forwards,
+             pdotHaloPulse 2.4s ease-in-out 2.6s infinite;
+}
+@keyframes pdotHaloPulse{
+  0%, 100% { opacity: .6; transform: scale(1); }
+  50%      { opacity: 1; transform: scale(1.4); }
+}
+@media (prefers-reduced-motion: reduce){
+  .prove-dots .pdot,
+  .prove-end-dot-halo{ animation: none; opacity: 1; transform: scale(1); }
+}
+
+.prove-tile{ position: relative; overflow: hidden; }
+.pt-spark{
+  width: 60px; height: 16px;
+  margin-top: 6px;
+  display: block;
+}
+.pt-bar{
+  display: block; height: 4px; border-radius: 2px;
+  background: rgba(36,32,18,.06);
+  margin-top: 8px;
+  overflow: hidden;
+}
+.pt-bar span{
+  display: block; height: 100%;
+  background: linear-gradient(90deg, var(--brand), var(--brand-deep));
+  border-radius: inherit;
+  animation: ptBarFill 1.4s cubic-bezier(.2,.8,.2,1) 1s forwards;
+  width: 0;
+}
+@keyframes ptBarFill{ to { width: 96%; } }
+.pt-pills{
+  display: inline-flex; gap: 4px; margin-top: 7px; flex-wrap: wrap;
+}
+.pt-pill{
+  font-family: var(--font-mono); font-size: 9px; font-weight: 700;
+  letter-spacing: .04em;
+  padding: 2px 6px; border-radius: 5px;
+  background: rgba(0,208,132,.12);
+  color: var(--brand-deep);
+}
+.pt-pill-ctrl{
+  background: rgba(36,32,18,.06);
+  color: var(--ink-2);
+}
+@media (prefers-reduced-motion: reduce){
+  .pt-bar span{ animation: none; width: 96%; }
+}
 .how-grid{
   display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
   margin-top: 60px; position: relative;
@@ -6582,16 +6883,24 @@ section + .cta-section{ padding-top: 64px; }
           <!-- Left: product thumbnails column -->
           <div class="scan-thumbs">
             <div class="scan-thumb"><div class="thumb-bag"></div></div>
-            <div class="scan-thumb is-current"><div class="thumb-serum"></div></div>
+            <div class="scan-thumb is-current"><div class="thumb-serum"></div><span class="scan-thumb-mark">✓</span></div>
             <div class="scan-thumb"><div class="thumb-lamp"></div></div>
-            <div class="scan-thumb-more">+24 more</div>
+            <div class="scan-thumb-more">+24<br/><span>more</span></div>
           </div>
-          <!-- Middle: featured product card -->
+          <!-- Middle: featured product card with scan-beam overlay -->
           <div class="scan-product">
-            <div class="scan-product-img"><div class="thumb-serum thumb-serum-lg"></div></div>
-            <div class="scan-product-label">VERDE<br/><span>BOTANICAL<br/>RENEWAL<br/>SERUM</span></div>
+            <div class="scan-product-img">
+              <div class="thumb-serum thumb-serum-lg"></div>
+              <span class="scan-beam" aria-hidden="true"></span>
+              <span class="scan-beam-glow" aria-hidden="true"></span>
+            </div>
+            <div class="scan-product-tags">
+              <span class="spt">Skincare</span>
+              <span class="spt spt-warn">$48</span>
+            </div>
+            <div class="scan-product-label">VERDE<br/><span>BOTANICAL RENEWAL SERUM</span></div>
           </div>
-          <!-- Right: score gauge + signals + top issues -->
+          <!-- Right: score gauge + signals (with scores) + top issues -->
           <div class="scan-meta">
             <div class="scan-meta-head">
               <span class="scan-meta-label">AI Readiness Score</span>
@@ -6612,14 +6921,14 @@ section + .cta-section{ padding-top: 64px; }
               </div>
               <ul class="scan-signals">
                 <li class="scan-sig-head">8 AI-readiness signals</li>
-                <li><span class="sig-tick">✓</span>Title clarity</li>
-                <li><span class="sig-tick">✓</span>Description depth</li>
-                <li><span class="sig-tick">✓</span>Alt text</li>
-                <li><span class="sig-tick">✓</span>JSON-LD</li>
-                <li><span class="sig-tick">✓</span>Category alignment</li>
-                <li><span class="sig-tick">✓</span>Metafields</li>
-                <li><span class="sig-tick">✓</span>Reviews &amp; social proof</li>
-                <li><span class="sig-tick">✓</span>Price &amp; availability</li>
+                <li><span class="sig-tick">✓</span><span class="sig-name">Title clarity</span><span class="sig-bar"><span style="--w:90%"></span></span><span class="sig-score">9</span></li>
+                <li><span class="sig-tick">✓</span><span class="sig-name">Description</span><span class="sig-bar"><span style="--w:70%"></span></span><span class="sig-score">7</span></li>
+                <li><span class="sig-tick">✓</span><span class="sig-name">Alt text</span><span class="sig-bar"><span style="--w:40%"></span></span><span class="sig-score">4</span></li>
+                <li><span class="sig-tick">✓</span><span class="sig-name">JSON-LD</span><span class="sig-bar"><span style="--w:50%"></span></span><span class="sig-score">5</span></li>
+                <li><span class="sig-tick">✓</span><span class="sig-name">Category</span><span class="sig-bar"><span style="--w:80%"></span></span><span class="sig-score">8</span></li>
+                <li><span class="sig-tick">✓</span><span class="sig-name">Metafields</span><span class="sig-bar"><span style="--w:60%"></span></span><span class="sig-score">6</span></li>
+                <li><span class="sig-tick">✓</span><span class="sig-name">Reviews</span><span class="sig-bar"><span style="--w:75%"></span></span><span class="sig-score">7</span></li>
+                <li><span class="sig-tick">✓</span><span class="sig-name">Pricing</span><span class="sig-bar"><span style="--w:85%"></span></span><span class="sig-score">8</span></li>
               </ul>
             </div>
             <div class="scan-issues">
@@ -6630,6 +6939,15 @@ section + .cta-section{ padding-top: 64px; }
                 <li><span class="iss-dot warn"></span><span class="iss-name">Missing JSON-LD</span><span class="iss-count">287</span></li>
                 <li><span class="iss-dot warn"></span><span class="iss-name">Incomplete ingredients / metafields</span><span class="iss-count">156</span></li>
               </ul>
+            </div>
+            <!-- Live activity feed — fills the empty bottom of the card -->
+            <div class="scan-activity">
+              <span class="scan-activity-head"><span class="sah-pulse"></span>Live scan</span>
+              <div class="scan-activity-feed">
+                <div class="saf-row"><span class="saf-ts">2s</span><span class="saf-text">Scanning <strong>VERDE Serum</strong> · 8/8 signals</span></div>
+                <div class="saf-row"><span class="saf-ts">4s</span><span class="saf-text"><strong>+12 pts</strong> potential from JSON-LD</span></div>
+                <div class="saf-row"><span class="saf-ts">6s</span><span class="saf-text">Queueing alt-text fix · <strong>423 SKUs</strong></span></div>
+              </div>
             </div>
           </div>
         </div>
@@ -6655,6 +6973,22 @@ section + .cta-section{ padding-top: 64px; }
           </span>
         </header>
 
+        <!-- Score delta strip above the before/after columns — sells the punchline at a glance -->
+        <div class="fix-delta-strip">
+          <div class="fix-delta-side">
+            <span class="fds-label">Score</span>
+            <span class="fds-num fds-before">36</span>
+          </div>
+          <div class="fix-delta-arrow" aria-hidden="true">
+            <svg viewBox="0 0 60 12" preserveAspectRatio="none"><path d="M2 6 L52 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-dasharray="3 4"/><polyline points="46 1 56 6 46 11" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div class="fix-delta-side">
+            <span class="fds-label">After</span>
+            <span class="fds-num fds-after">79</span>
+          </div>
+          <span class="fix-delta-badge">+43 pts</span>
+        </div>
+
         <div class="hiw-fix-body">
           <!-- BEFORE -->
           <div class="fix-col">
@@ -6662,6 +6996,11 @@ section + .cta-section{ padding-top: 64px; }
             <div class="fix-prod-img"><div class="thumb-serum thumb-serum-lg"></div></div>
             <div class="fix-prod-title">Botanical Serum</div>
             <p class="fix-prod-desc">Hydrating serum for the skin. Helps improve skin look.</p>
+            <div class="fix-meter">
+              <span class="fix-meter-label">Description</span>
+              <span class="fix-meter-bar fix-meter-bar-low"><span style="width:14%"></span></span>
+              <span class="fix-meter-val">9 words</span>
+            </div>
             <ul class="fix-issues">
               <li><span class="fix-x">✕</span>No alt text</li>
               <li><span class="fix-x">✕</span>Thin description</li>
@@ -6675,6 +7014,11 @@ section + .cta-section{ padding-top: 64px; }
             <div class="fix-prod-img"><div class="thumb-serum thumb-serum-lg"></div></div>
             <div class="fix-prod-title">Botanical Renewal Serum — Barrier Repair for Sensitive Skin</div>
             <p class="fix-prod-desc">A lightweight, plant-powered serum with centella, squalane &amp; niacinamide to strengthen the skin barrier, calm redness and hydrate deeply. For sensitive, dry &amp; combination skin.</p>
+            <div class="fix-meter">
+              <span class="fix-meter-label">Description</span>
+              <span class="fix-meter-bar fix-meter-bar-high"><span style="width:88%"></span></span>
+              <span class="fix-meter-val">42 words</span>
+            </div>
             <ul class="fix-issues fix-issues-good">
               <li><span class="fix-ok">✓</span>Alt text added</li>
               <li><span class="fix-ok">✓</span>Rich description</li>
@@ -6725,29 +7069,45 @@ section + .cta-section{ padding-top: 64px; }
               <div class="prove-bigstat-label">ATTRIBUTABLE REVENUE LIFT</div>
               <div class="prove-bigstat-conf">95% confidence</div>
             </div>
-            <svg class="prove-chart" viewBox="0 0 320 160" preserveAspectRatio="none" aria-hidden="true">
+            <svg class="prove-chart" viewBox="0 0 320 200" preserveAspectRatio="none" aria-hidden="true">
               <defs>
                 <linearGradient id="proveOptArea" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stop-color="#00d084" stop-opacity=".22"/>
+                  <stop offset="0%" stop-color="#00d084" stop-opacity=".28"/>
                   <stop offset="100%" stop-color="#00d084" stop-opacity="0"/>
                 </linearGradient>
               </defs>
-              <!-- Horizontal grid lines -->
-              <g stroke="rgba(36,32,18,.10)" stroke-width="1" stroke-dasharray="2 4">
+              <!-- Horizontal grid lines + Y-axis labels -->
+              <g stroke="rgba(36,32,18,.08)" stroke-width="1" stroke-dasharray="2 4">
                 <line x1="0" y1="40"  x2="320" y2="40"/>
-                <line x1="0" y1="80"  x2="320" y2="80"/>
-                <line x1="0" y1="120" x2="320" y2="120"/>
+                <line x1="0" y1="90"  x2="320" y2="90"/>
+                <line x1="0" y1="140" x2="320" y2="140"/>
+              </g>
+              <g fill="rgba(36,32,18,.36)" font-size="8.5" font-family="ui-monospace, monospace">
+                <text x="2" y="38">+40%</text>
+                <text x="2" y="88">+20%</text>
+                <text x="2" y="138">0%</text>
               </g>
               <!-- Control (grey, flat-ish) — drawn second so it animates after -->
-              <polyline class="prove-line-ctrl" points="0,90 40,92 80,88 120,90 160,87 200,89 240,86 280,90 320,88"
+              <polyline class="prove-line-ctrl" points="0,115 40,117 80,113 120,115 160,112 200,114 240,111 280,115 320,113"
                 fill="none" stroke="rgba(36,32,18,.32)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
               <!-- Optimized (green, climbing) — area + line -->
-              <path class="prove-area-opt" d="M0,90 L40,82 L80,72 L120,60 L160,52 L200,44 L240,32 L280,22 L320,12 L320,160 L0,160 Z"
+              <path class="prove-area-opt" d="M0,115 L40,105 L80,90 L120,76 L160,65 L200,55 L240,40 L280,28 L320,15 L320,200 L0,200 Z"
                 fill="url(#proveOptArea)"/>
-              <polyline class="prove-line-opt" points="0,90 40,82 80,72 120,60 160,52 200,44 240,32 280,22 320,12"
-                fill="none" stroke="#00d084" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
-              <!-- Endpoint dot on the optimized line — pops in last -->
-              <circle class="prove-end-dot" cx="320" cy="12" r="4" fill="#00d084" stroke="#fff" stroke-width="1.8"/>
+              <polyline class="prove-line-opt" points="0,115 40,105 80,90 120,76 160,65 200,55 240,40 280,28 320,15"
+                fill="none" stroke="#00d084" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+              <!-- Data points on the optimized line — pop in sequence after the line draws -->
+              <g class="prove-dots">
+                <circle class="pdot" style="--d:1.7s" cx="40"  cy="105" r="3" fill="#00d084" stroke="#fff" stroke-width="1.4"/>
+                <circle class="pdot" style="--d:1.78s" cx="80"  cy="90"  r="3" fill="#00d084" stroke="#fff" stroke-width="1.4"/>
+                <circle class="pdot" style="--d:1.86s" cx="120" cy="76"  r="3" fill="#00d084" stroke="#fff" stroke-width="1.4"/>
+                <circle class="pdot" style="--d:1.94s" cx="160" cy="65"  r="3" fill="#00d084" stroke="#fff" stroke-width="1.4"/>
+                <circle class="pdot" style="--d:2.02s" cx="200" cy="55"  r="3" fill="#00d084" stroke="#fff" stroke-width="1.4"/>
+                <circle class="pdot" style="--d:2.10s" cx="240" cy="40"  r="3" fill="#00d084" stroke="#fff" stroke-width="1.4"/>
+                <circle class="pdot" style="--d:2.18s" cx="280" cy="28"  r="3" fill="#00d084" stroke="#fff" stroke-width="1.4"/>
+              </g>
+              <!-- Endpoint dot — bigger, with halo, pops last -->
+              <circle class="prove-end-dot-halo" cx="320" cy="15" r="9" fill="rgba(0,208,132,.20)"/>
+              <circle class="prove-end-dot" cx="320" cy="15" r="4.5" fill="#00d084" stroke="#fff" stroke-width="2"/>
             </svg>
           </div>
           <div class="prove-chart-legend">
@@ -6760,21 +7120,32 @@ section + .cta-section{ padding-top: 64px; }
               <span class="pt-label">Lift is real</span>
               <span class="pt-val"><span class="pt-shield">🛡</span>p &lt; 0.05</span>
               <span class="pt-sub">Statistically significant</span>
+              <svg class="pt-spark" viewBox="0 0 60 16" preserveAspectRatio="none" aria-hidden="true">
+                <polyline points="0,12 10,10 20,8 30,9 40,6 50,4 60,3" fill="none" stroke="var(--brand)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
             </div>
             <div class="prove-tile">
               <span class="pt-label">Incremental revenue</span>
               <span class="pt-val pt-val-num">$18,642</span>
-              <span class="pt-sub">Last 30 days</span>
+              <span class="pt-sub">Last 30 days · +12% w/w</span>
+              <svg class="pt-spark" viewBox="0 0 60 16" preserveAspectRatio="none" aria-hidden="true">
+                <polyline points="0,13 10,11 20,10 30,7 40,9 50,5 60,2" fill="none" stroke="var(--brand)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
             </div>
             <div class="prove-tile">
               <span class="pt-label">Test window</span>
               <span class="pt-val pt-val-num">May 1–31</span>
-              <span class="pt-sub">30 days</span>
+              <span class="pt-sub">30 days · ongoing</span>
+              <span class="pt-bar" aria-hidden="true"><span style="width:96%"></span></span>
             </div>
             <div class="prove-tile">
               <span class="pt-label">Products tested</span>
               <span class="pt-val pt-val-num">143</span>
-              <span class="pt-sub">Auto-selected</span>
+              <span class="pt-sub">Auto-selected · DiD</span>
+              <div class="pt-pills" aria-hidden="true">
+                <span class="pt-pill">Treat 72</span>
+                <span class="pt-pill pt-pill-ctrl">Ctrl 71</span>
+              </div>
             </div>
           </div>
         </div>
