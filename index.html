@@ -2195,6 +2195,281 @@ section{ position: relative; }
 .fa-content .fa-status{ font-family: var(--font-mono); font-size: 10px; color: var(--brand-deep); font-weight: 600; margin-top: 1px; }
 
 
+/* ============================================================
+   HERO LOOP v5 — phase-driven storytelling overlay
+   ============================================================
+   The .dash-scene's data-phase attribute is rotated by a JS controller
+   on a 16s loop:
+     phase=1 (0–2s)  SCAN     scanbar fills, dashboard desaturated
+     phase=2 (2–4s)  BEFORE   score=36, red KPIs, "BEFORE" banner
+     phase=3 (4–7s)  MAXIMIZE cursor clicks, +pts floaters cascade
+     phase=4 (7–11s) AFTER    score climbs to 94, "AFTER" banner
+     phase=5 (11–15s) PROOF   +27.3% lift causal-proof tile reveal
+   Transitions between phases use 0.6s easing on key properties. */
+
+.hero-overlay{
+  position: absolute; inset: 0;
+  pointer-events: none;
+  z-index: 5;
+  border-radius: inherit;
+}
+
+/* ---- Maximize CTA inside dash-header — only really styled, not interactive */
+.dash-maximize{
+  appearance: none; border: 0;
+  background: linear-gradient(135deg, var(--brand) 0%, var(--brand-deep) 100%);
+  color: #fff;
+  font-family: var(--font-display); font-size: 12.5px; font-weight: 700;
+  letter-spacing: -.01em;
+  padding: 7px 13px;
+  border-radius: 8px;
+  margin-left: auto;
+  display: inline-flex; align-items: center; gap: 6px;
+  cursor: default;
+  position: relative;
+  box-shadow:
+    0 1px 0 rgba(255,255,255,.3) inset,
+    0 4px 12px -4px rgba(0,168,106,.45);
+  transition: transform .25s cubic-bezier(.2,.8,.2,1), box-shadow .25s ease, filter .3s ease;
+}
+.dash-maximize .dm-spark{ font-size: 13px; filter: drop-shadow(0 0 4px rgba(255,255,255,.5)); }
+/* The button glows + scales when the cursor is "over" it (phase 3 mid) */
+.dash-scene[data-phase="3"] .dash-maximize{
+  animation: dmGlow 1.2s ease-in-out infinite;
+}
+.dash-scene[data-phase="3"] .dash-maximize.is-clicked{
+  transform: scale(.94);
+  filter: brightness(1.18);
+  box-shadow:
+    0 1px 0 rgba(255,255,255,.3) inset,
+    0 0 0 4px rgba(0,208,132,.30),
+    0 6px 18px -4px rgba(0,168,106,.65);
+}
+@keyframes dmGlow{
+  0%, 100% { box-shadow: 0 1px 0 rgba(255,255,255,.3) inset, 0 4px 12px -4px rgba(0,168,106,.45); }
+  50%      { box-shadow: 0 1px 0 rgba(255,255,255,.3) inset, 0 0 0 5px rgba(0,208,132,.18), 0 8px 22px -4px rgba(0,168,106,.70); }
+}
+
+/* ---- Scan progress bar between header and body, ONLY visible in phases 1+3 */
+.dash-scanbar{
+  position: relative;
+  height: 22px;
+  margin: 0 16px;
+  background: rgba(36,32,18,.04);
+  border-radius: 6px;
+  overflow: hidden;
+  display: flex; align-items: center;
+  font-family: var(--font-mono); font-size: 10px; font-weight: 700;
+  color: var(--ink-3);
+  letter-spacing: .08em;
+  opacity: 0;
+  transform: translateY(-2px);
+  transition: opacity .4s ease, transform .4s ease;
+}
+.dash-scene[data-phase="1"] .dash-scanbar,
+.dash-scene[data-phase="3"] .dash-scanbar{
+  opacity: 1; transform: translateY(0);
+}
+.dsb-fill{
+  position: absolute; inset: 0 100% 0 0;
+  border-radius: inherit;
+  background: linear-gradient(90deg,
+    rgba(0,208,132,.20) 0%,
+    rgba(0,208,132,.45) 50%,
+    rgba(0,208,132,.20) 100%);
+  transition: right 1.8s cubic-bezier(.4,.0,.2,1);
+}
+.dash-scene[data-phase="1"] .dsb-fill,
+.dash-scene[data-phase="3"] .dsb-fill{ right: 0; }
+/* Phase 3 fill: brighter green + a shimmer overlay */
+.dash-scene[data-phase="3"] .dsb-fill{
+  background: linear-gradient(90deg, var(--brand) 0%, var(--brand-deep) 100%);
+  box-shadow: 0 0 12px rgba(0,208,132,.55);
+}
+.dsb-text{
+  position: relative; z-index: 1; padding: 0 12px;
+  text-transform: uppercase;
+}
+.dash-scene[data-phase="3"] .dsb-text::before{ content: 'Optimizing 263 products…'; }
+.dash-scene[data-phase="3"] .dsb-text{ font-size: 0; color: var(--brand-deep); }
+.dash-scene[data-phase="3"] .dsb-text::before{ font-size: 10px; }
+
+/* ---- Animated cursor — sits offscreen, animates to button during phase 3 */
+.hero-cursor{
+  position: absolute;
+  left: 30%; top: 50%;
+  filter: drop-shadow(0 4px 6px rgba(36,32,18,.30));
+  opacity: 0;
+  transition: opacity .3s ease;
+  z-index: 9;
+  pointer-events: none;
+}
+.dash-scene[data-phase="3"] .hero-cursor{
+  opacity: 1;
+  animation: heroCursorMove 1.8s cubic-bezier(.5,.0,.25,1) forwards;
+}
+@keyframes heroCursorMove{
+  0%   { left: 28%; top: 65%; transform: scale(1); }
+  60%  { left: 76%; top: 7%;  transform: scale(1); }
+  72%  { left: 76%; top: 7%;  transform: scale(.85); }    /* click compress */
+  80%  { left: 76%; top: 7%;  transform: scale(1); }
+  100% { left: 76%; top: 7%;  transform: scale(1); }
+}
+
+/* ---- +N pts floaters — five anchored positions, each with its own rise */
+.hero-pts{
+  position: absolute;
+  font-family: var(--font-mono); font-weight: 800; font-size: 13px;
+  color: #fff;
+  background: linear-gradient(135deg, var(--brand) 0%, var(--brand-deep) 100%);
+  padding: 5px 10px;
+  border-radius: 8px;
+  letter-spacing: .04em;
+  opacity: 0;
+  pointer-events: none;
+  box-shadow: 0 6px 18px -4px rgba(0,168,106,.55),
+              0 1px 0 rgba(255,255,255,.30) inset;
+  z-index: 8;
+  transform: translateY(0) scale(.6);
+}
+.hp-1{ left: 18%; top: 45%; }
+.hp-2{ left: 38%; top: 60%; }
+.hp-3{ left: 58%; top: 50%; }
+.hp-4{ left: 30%; top: 70%; }
+.hp-5{ left: 70%; top: 65%; }
+.dash-scene[data-phase="3"] .hero-pts{
+  animation: heroPtsRise 1.6s cubic-bezier(.2,.8,.2,1) forwards;
+}
+.dash-scene[data-phase="3"] .hp-1{ animation-delay: 1.0s; }
+.dash-scene[data-phase="3"] .hp-2{ animation-delay: 1.15s; }
+.dash-scene[data-phase="3"] .hp-3{ animation-delay: 1.30s; }
+.dash-scene[data-phase="3"] .hp-4{ animation-delay: 1.45s; }
+.dash-scene[data-phase="3"] .hp-5{ animation-delay: 1.60s; }
+@keyframes heroPtsRise{
+  0%   { opacity: 0; transform: translateY(20px) scale(.6); }
+  15%  { opacity: 1; transform: translateY(0)    scale(1.08); }
+  20%  { transform: translateY(-4px) scale(1); }
+  85%  { opacity: 1; transform: translateY(-50px) scale(1); }
+  100% { opacity: 0; transform: translateY(-66px) scale(.9); }
+}
+
+/* ---- BEFORE / AFTER stage banners — bottom-center placards */
+.hero-banner{
+  position: absolute;
+  top: 14px; left: 50%;
+  transform: translateX(-50%) translateY(-12px);
+  display: inline-flex; flex-direction: column; align-items: center;
+  padding: 10px 22px;
+  border-radius: 12px;
+  font-family: var(--font-display);
+  z-index: 10;
+  opacity: 0;
+  transition: opacity .55s ease, transform .55s cubic-bezier(.2,.8,.2,1);
+  pointer-events: none;
+  box-shadow:
+    0 1px 0 rgba(255,255,255,.4) inset,
+    0 12px 32px -10px rgba(36,32,18,.25);
+  letter-spacing: -.01em;
+}
+.hero-banner span{
+  font-size: 11px; font-weight: 800; letter-spacing: .22em; line-height: 1;
+}
+.hero-banner em{
+  font-style: normal; font-size: 13px; font-weight: 500; margin-top: 3px; line-height: 1.2;
+}
+.hero-banner-before{
+  background: linear-gradient(135deg, rgba(198,61,47,.95), rgba(160,40,30,.95));
+  color: #ffe9e4;
+  border: 1px solid rgba(198,61,47,.40);
+}
+.hero-banner-after{
+  background: linear-gradient(135deg, rgba(0,208,132,.96), rgba(0,140,90,.96));
+  color: #eaffe7;
+  border: 1px solid rgba(0,208,132,.40);
+}
+.dash-scene[data-phase="2"] .hero-banner-before,
+.dash-scene[data-phase="4"] .hero-banner-after{
+  opacity: 1; transform: translateX(-50%) translateY(0);
+}
+
+/* ---- Hero proof tile — fades in over the dashboard in phase 5 */
+.hero-proof{
+  position: absolute;
+  inset: auto 0 0 0;
+  margin: 0 auto;
+  bottom: 8%;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  width: clamp(280px, 50%, 460px);
+  padding: 18px 22px;
+  background: linear-gradient(135deg, rgba(255,255,255,.97), rgba(252,250,243,.97));
+  border: 1px solid rgba(0,208,132,.35);
+  border-radius: 16px;
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+  z-index: 11;
+  opacity: 0;
+  transition: opacity .6s ease, transform .6s cubic-bezier(.2,.8,.2,1);
+  box-shadow:
+    0 1px 0 rgba(255,255,255,1) inset,
+    0 18px 50px -10px rgba(0,168,106,.30),
+    0 30px 70px -20px rgba(36,32,18,.18);
+  backdrop-filter: blur(8px);
+}
+.dash-scene[data-phase="5"] .hero-proof{
+  opacity: 1; transform: translateX(-50%) translateY(0);
+}
+.hp-eyebrow{
+  font-family: var(--font-mono); font-size: 10px; font-weight: 800;
+  color: var(--brand-deep); letter-spacing: .14em; text-transform: uppercase;
+  display: inline-flex; align-items: center; gap: 6px;
+}
+.hp-shield{ font-size: 12px; }
+.hp-num{
+  font-family: var(--font-display); font-size: 44px; font-weight: 700;
+  letter-spacing: -.025em; line-height: 1;
+  background: linear-gradient(180deg, var(--brand) 0%, var(--brand-deep) 100%);
+  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+}
+.hp-sub{
+  font-size: 11.5px; color: var(--ink-3); letter-spacing: -.005em;
+  font-family: var(--font-mono);
+}
+
+/* ---- Phase-driven adjustments on existing elements ----
+   Score gauge color band: red in p2, green in p4/p5.
+   KPI numbers desaturated in p1 (scan).
+   Heatmap cells dim in p1. */
+.dash-scene .dash-main{
+  transition: filter .5s ease;
+}
+.dash-scene[data-phase="1"] .dash-main{ filter: grayscale(.30) brightness(.97); }
+.dash-scene[data-phase="2"] .dash-main{ filter: saturate(.85); }
+
+.dash-scene .gauge-fill{
+  transition: stroke .6s ease;
+}
+.dash-scene[data-phase="2"] .gauge-fill{ stroke: #c63d2f; }
+.dash-scene[data-phase="2"] .gauge-center .gauge-grade{ color: #c63d2f; }
+.dash-scene[data-phase="2"] .gauge-center .gauge-score{ color: #c63d2f; }
+.dash-scene[data-phase="2"] .gauge-trend{ color: #c63d2f; opacity: .8; }
+.dash-scene[data-phase="2"] .gauge-trend::before{ content: 'BEFORE · '; opacity: .7; font-weight: 700; }
+
+/* Floating cards (toast/agent/DiD) hide during phase 1 to keep the scene calm,
+   then come back from phase 2 onwards. The DiD card stays hidden until phase 4
+   (it's literally the causal proof, which is the punchline). */
+.dash-scene[data-phase="1"] .float-card,
+.dash-scene[data-phase="2"] .float-toast,
+.dash-scene[data-phase="2"] .float-did{ opacity: 0; transform: translateY(10px) scale(.95); transition: opacity .4s ease, transform .4s ease; }
+.dash-scene[data-phase="3"] .float-did{ opacity: 0; }
+.dash-scene[data-phase="4"] .float-did,
+.dash-scene[data-phase="5"] .float-did{ opacity: 1; transform: translateY(0) scale(1); }
+
+@media (prefers-reduced-motion: reduce){
+  .hero-cursor, .hero-pts, .hero-banner, .hero-proof,
+  .dash-scanbar, .dsb-fill,
+  .dash-maximize{ animation: none !important; transition: none !important; }
+}
+
 /* ============ TICKER ============ */
 .ticker-wrap{
   overflow: hidden;
@@ -6148,7 +6423,37 @@ section + .cta-section{ padding-top: 64px; }
     </div>
 
     <div class="hero-visual" id="heroVisual">
-      <div class="dash-scene" id="dashScene">
+      <div class="dash-scene" id="dashScene" data-phase="1">
+
+        <!-- ===== HERO ANIMATION OVERLAY (v5 — looping demo) =====
+             Cursor, +pts floaters, scan progress bar, and the BEFORE/AFTER
+             stage banner are absolute-positioned over the dash-main. The
+             phase controller (JS) drives a 15s loop by switching the
+             data-phase attribute on .dash-scene.  =================== -->
+        <div class="hero-overlay" aria-hidden="true">
+          <!-- Animated cursor that flies in during phase 3 and clicks Maximize -->
+          <svg class="hero-cursor" viewBox="0 0 24 24" width="24" height="24">
+            <path d="M3 3 L3 18 L7.5 14 L10 21 L13 19.5 L10.5 13 L17 13 Z"
+              fill="#1f1d12" stroke="#fff" stroke-width="1.4" stroke-linejoin="round"/>
+          </svg>
+          <!-- Floating "+N pts" pills spawn during the fix cascade. Five fixed
+               anchor positions, each with its own delay + travel.  -->
+          <span class="hero-pts hp-1">+12 pts</span>
+          <span class="hero-pts hp-2">+8 pts</span>
+          <span class="hero-pts hp-3">+15 pts</span>
+          <span class="hero-pts hp-4">+22 pts</span>
+          <span class="hero-pts hp-5">+9 pts</span>
+          <!-- BEFORE / AFTER stage banner — fades in over the dashboard during
+               the corresponding phases so the viewer reads the narrative -->
+          <div class="hero-banner hero-banner-before"><span>BEFORE</span><em>your catalog is invisible</em></div>
+          <div class="hero-banner hero-banner-after"><span>AFTER</span><em>one click · 15 seconds</em></div>
+          <!-- "+27.3% lift" hero-proof tile slides in during phase 5 -->
+          <div class="hero-proof">
+            <span class="hp-eyebrow"><span class="hp-shield">🛡</span>CAUSAL PROOF</span>
+            <span class="hp-num">+27.3%</span>
+            <span class="hp-sub">attributable revenue lift · p &lt; 0.05</span>
+          </div>
+        </div>
 
         <!-- Floating toast top-right -->
         <div class="float-card float-toast">
@@ -6191,6 +6496,17 @@ section + .cta-section{ padding-top: 64px; }
             </div>
             <span class="dash-store">meridian-supply.myshopify.com</span>
             <span class="dash-live"><span class="live-dot"></span>LIVE</span>
+            <!-- "Maximize all" CTA — cursor clicks this during phase 3 to
+                 trigger the cascade.  Stays inert (decorative) afterwards. -->
+            <button class="dash-maximize" type="button" aria-hidden="true">
+              <span class="dm-spark">✨</span>Maximize all
+            </button>
+          </div>
+          <!-- Top scan progress bar — phase 1 (scan) and phase 3 (fix) fills.
+               Re-uses one element for both passes, color swaps per phase. -->
+          <div class="dash-scanbar" aria-hidden="true">
+            <span class="dsb-fill"></span>
+            <span class="dsb-text">Scanning 263 products…</span>
           </div>
 
           <div class="dash-body">
@@ -8875,6 +9191,132 @@ if (terminalBody) terminalObserver.observe(terminalBody);
     }, { threshold: 0 });
     obs.observe(scene);
   }
+
+  // ===== HERO LOOP v5: phase controller =====
+  // Cycles the data-phase attribute across the 5 storytelling phases on a
+  // 15s loop. Pauses when offscreen + when the tab is hidden so we don't
+  // waste cycles. Also tweens the gauge score number (36→94) and KPI
+  // numbers between phases so the "before/after" reads as a real change.
+  (function initHeroLoop(){
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    // Phase timeline (seconds since loop start):
+    //   1 SCAN   (0)
+    //   2 BEFORE (2)
+    //   3 MAX    (4)
+    //   4 AFTER  (7)
+    //   5 PROOF  (11)
+    // Loop back at 15.
+    const PHASES = [
+      { phase: 1, at: 0     },
+      { phase: 2, at: 2000  },
+      { phase: 3, at: 4000  },
+      { phase: 4, at: 7000  },
+      { phase: 5, at: 11000 },
+    ];
+    const LOOP_MS = 15000;
+    let timer = null;
+    let started = false;
+    let paused = false;
+
+    // Numbers that should swap between phase 2 (BEFORE) and phase 4 (AFTER).
+    // We tween in/out by directly setting textContent on phase transitions.
+    const swapTargets = [
+      { sel: '.gauge-score .n', before: 36,  after: 78 },
+      { sel: '.kpi.is-brand .kpi-value', before: 28, after: 142 },
+    ];
+    function setText(sel, value){
+      const el = scene.querySelector(sel);
+      if (el) el.textContent = value;
+    }
+    function tweenText(sel, from, to, duration){
+      const el = scene.querySelector(sel);
+      if (!el) return;
+      const start = performance.now();
+      function tick(now){
+        const t = Math.min((now - start) / duration, 1);
+        const eased = 1 - Math.pow(1 - t, 3);
+        el.textContent = Math.round(from + (to - from) * eased).toLocaleString('en-US');
+        if (t < 1) requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+    }
+
+    function applyPhase(p){
+      scene.setAttribute('data-phase', String(p));
+      // Tween numbers on key transitions
+      if (p === 2){
+        swapTargets.forEach(s => setText(s.sel, s.before));
+        // Score gauge fill back to BEFORE state (36% of 100 → adjust dashoffset)
+        // The existing gauge-fill stroke is animated by the .in-view class. We
+        // re-apply via inline style on the .gauge-fill element. r=80 → 502.65.
+        const gFill = scene.querySelector('.gauge-fill');
+        if (gFill){
+          const len = 2 * Math.PI * 80;
+          gFill.style.strokeDashoffset = String(len * (1 - 0.36));
+        }
+      } else if (p === 4){
+        swapTargets.forEach(s => tweenText(s.sel, s.before, s.after, 1100));
+        const gFill = scene.querySelector('.gauge-fill');
+        if (gFill){
+          const len = 2 * Math.PI * 80;
+          gFill.style.transition = 'stroke-dashoffset 1.2s cubic-bezier(.2,.8,.2,1)';
+          gFill.style.strokeDashoffset = String(len * (1 - 0.78));
+        }
+      } else if (p === 3){
+        // Click pulse on the maximize button mid-phase (~1.65s in)
+        const btn = scene.querySelector('.dash-maximize');
+        if (btn){
+          setTimeout(() => btn.classList.add('is-clicked'), 1650);
+          setTimeout(() => btn.classList.remove('is-clicked'), 1950);
+        }
+      }
+    }
+
+    function runLoop(startedAt){
+      // Schedule each phase transition relative to loop start
+      PHASES.forEach(p => {
+        timer = setTimeout(() => applyPhase(p.phase), p.at);
+      });
+      // Loop back
+      timer = setTimeout(() => { if (!paused) runLoop(performance.now()); }, LOOP_MS);
+    }
+
+    function start(){
+      if (started) return;
+      started = true;
+      // Keep .in-view so the existing reveal animations (gauge fill, agent
+      // bars, distribution bars, heatmap) play once on first paint. The
+      // phase controller layers the storytelling overlay on top.
+      if (!scene.classList.contains('in-view')) scene.classList.add('in-view');
+      // Start at phase 1 after a short delay so the initial reveal completes
+      // before we wipe values back down to the BEFORE state.
+      setTimeout(() => applyPhase(1), 100);
+      runLoop(performance.now());
+    }
+    function stop(){
+      paused = true;
+      if (timer) clearTimeout(timer);
+    }
+
+    // Visibility-aware: pause when tab is hidden
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) stop();
+      else if (started){ paused = false; runLoop(performance.now()); }
+    });
+
+    // Start when scene is in viewport (or immediately if it already is)
+    const r0 = scene.getBoundingClientRect();
+    if (r0.top < window.innerHeight && r0.bottom > 0){
+      requestAnimationFrame(() => requestAnimationFrame(start));
+    } else {
+      const obs2 = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+          if (e.isIntersecting){ start(); obs2.disconnect(); }
+        });
+      }, { threshold: 0 });
+      obs2.observe(scene);
+    }
+  })();
 
   // Subtle parallax tilt on mouse move (desktop only)
   if (window.matchMedia('(min-width: 880px)').matches && !window.matchMedia('(prefers-reduced-motion: reduce)').matches){
