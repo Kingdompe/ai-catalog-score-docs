@@ -3363,15 +3363,21 @@ section{ position: relative; }
   grid-template-columns: 1fr 28px 1fr 28px 1fr;
   gap: 0;
   align-items: stretch;
-  /* Break out of the standard container's 1480px cap. The 3 mockup
-     cards need every pixel of horizontal room they can get to avoid
-     wrapping signals / cropping tile content. Falls back to the
-     container width on narrow screens. */
-  max-width: min(1760px, calc(100vw - 64px));
-  margin-left: auto; margin-right: auto;
+  /* Break out of the standard 1480px container — the 3 mockup cards
+     need every pixel of horizontal room. left:50% + transform pulls
+     the grid back to viewport-centred regardless of the parent
+     container's narrower max-width. */
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(1760px, calc(100vw - 48px));
+  max-width: none;
 }
-@media (max-width: 1760px){
-  .hiw-grid{ max-width: 100%; }
+@media (max-width: 1280px){
+  .hiw-grid{
+    left: auto; transform: none;
+    width: 100%;
+  }
 }
 @media (max-width: 1280px){
   .hiw-grid{ grid-template-columns: 1fr; gap: 28px; margin-top: 48px; }
@@ -3742,19 +3748,21 @@ section{ position: relative; }
   padding: 4px 10px; border-radius: 7px;
 }
 .prove-chart-row{
-  display: grid; grid-template-columns: 130px 1fr;
-  gap: 16px; align-items: center;
+  display: grid; grid-template-columns: 170px 1fr;
+  gap: 20px; align-items: center;
 }
 .prove-bigstat{
   display: flex; flex-direction: column; gap: 4px;
+  min-width: 0;
 }
 .prove-bigstat-num{
-  font-family: var(--font-display); font-size: 42px; font-weight: 700;
+  font-family: var(--font-display); font-size: 38px; font-weight: 700;
   letter-spacing: -.028em; line-height: 1;
   background: linear-gradient(180deg, var(--brand) 0%, var(--brand-deep) 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
+  white-space: nowrap;
 }
 .prove-bigstat-label{
   font-family: var(--font-mono); font-size: 9.5px; font-weight: 700;
@@ -3836,14 +3844,15 @@ section{ position: relative; }
 .pt-val{
   font-family: var(--font-display); font-size: 13.5px; font-weight: 700;
   color: var(--ink-0); line-height: 1.2; margin-top: 3px;
-  display: inline-flex; align-items: center; gap: 4px;
+  display: inline-flex; align-items: center; gap: 3px;
+  white-space: nowrap;
 }
 .pt-val-num{
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
 }
 .pt-shield{ font-size: 12px; color: var(--brand-deep); }
-.pt-sub{ font-size: 10.5px; color: var(--ink-3); margin-top: 1px; }
+.pt-sub{ font-size: 10.5px; color: var(--ink-3); margin-top: 1px; white-space: nowrap; }
 
 @media (max-width: 1100px){
   .hiw-fix-body{ grid-template-columns: 1fr; gap: 16px; }
