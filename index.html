@@ -3468,11 +3468,22 @@ section{ position: relative; }
   text-align: center;
   padding-top: 4px;
 }
-/* Product thumbnails — CSS gradients faking product photos */
-.thumb-bag{ width: 100%; height: 100%; background: linear-gradient(160deg, #e3d8c0 0%, #b89967 100%); }
-.thumb-serum{ width: 100%; height: 100%; background: linear-gradient(160deg, #3d4a3a 0%, #5a6e4f 50%, #2c3329 100%); }
+/* Product thumbnails — real images generated via Flow (see /images/).
+   The CSS-gradient placeholders from the v3 draft are gone; backgrounds
+   now reference the actual photos. background-size:cover with center
+   anchoring crops gracefully into the rounded square / portrait frames. */
+.thumb-bag,
+.thumb-serum,
+.thumb-lamp{
+  width: 100%; height: 100%;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+.thumb-bag{ background-image: url('images/bag.jpg'); }
+.thumb-serum{ background-image: url('images/serum.jpg'); }
+.thumb-lamp{ background-image: url('images/lamp.jpg'); }
 .thumb-serum-lg{ border-radius: 8px; }
-.thumb-lamp{ width: 100%; height: 100%; background: linear-gradient(160deg, #f4c690 0%, #e09455 100%); }
 
 .scan-product{
   background: linear-gradient(180deg, #f3ede0 0%, #e8dec8 100%);
