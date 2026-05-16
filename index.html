@@ -3323,6 +3323,409 @@ section{ position: relative; }
 
 /* ============ HOW IT WORKS ============ */
 .how-section{ background: var(--bg); }
+
+/* ============================================================
+   HOW IT WORKS v3 — rich product mockups instead of bare icons.
+   Three cards (SCAN / FIX / PROVE), each a self-contained UI
+   mockup, separated by an → arrow connector. Soft green-tinted
+   halo behind the whole section to evoke a fresh product canvas.
+   ============================================================ */
+.how-section-v3{
+  background:
+    radial-gradient(ellipse 60% 60% at 50% 50%, rgba(0,208,132,.08) 0%, transparent 70%),
+    var(--bg);
+  position: relative;
+}
+.hiw-head{
+  font-family: var(--font-display);
+  font-size: clamp(40px, 4.6vw, 64px);
+  font-weight: 500;
+  letter-spacing: -.025em; line-height: 1.05;
+  color: var(--ink-0);
+  margin: 16px 0 0;
+}
+.hiw-aplus{
+  background: linear-gradient(180deg, var(--brand) 0%, var(--brand-deep) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-style: normal;
+}
+.hiw-sub{
+  font-size: 17px; color: var(--ink-2);
+  margin-top: 18px; max-width: 720px;
+  margin-left: auto; margin-right: auto;
+  line-height: 1.5;
+}
+
+.hiw-grid{
+  margin-top: 56px;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr auto 1fr;
+  gap: 8px;
+  align-items: stretch;
+}
+@media (max-width: 1280px){
+  .hiw-grid{ grid-template-columns: 1fr; gap: 24px; }
+  .hiw-arrow{ display: none; }
+}
+
+.hiw-arrow{
+  align-self: center;
+  font-size: 24px; font-weight: 300;
+  color: var(--brand-deep);
+  padding: 0 4px;
+}
+
+/* === Base card === */
+.hiw-card{
+  background: #fff;
+  border: 1px solid rgba(36,32,18,.07);
+  border-radius: 20px;
+  padding: 22px;
+  display: flex; flex-direction: column;
+  box-shadow:
+    0 1px 0 rgba(255,255,255,.9) inset,
+    0 6px 20px -8px rgba(36,32,18,.08),
+    0 1px 2px rgba(36,32,18,.04);
+}
+.hiw-card-head{
+  display: grid; grid-template-columns: 36px 1fr 40px;
+  gap: 12px; align-items: center;
+  margin-bottom: 16px;
+}
+.hiw-num{
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  background: rgba(0,208,132,.12);
+  color: var(--brand-deep);
+  display: inline-flex; align-items: center; justify-content: center;
+  font-family: var(--font-display); font-size: 15px; font-weight: 700;
+}
+.hiw-tt{ display: flex; flex-direction: column; gap: 1px; }
+.hiw-step{
+  font-family: var(--font-mono); font-size: 13px; font-weight: 700;
+  letter-spacing: .08em; color: var(--ink-1);
+}
+.hiw-substep{
+  font-size: 12.5px; color: var(--ink-3);
+  letter-spacing: -.005em;
+}
+.hiw-icon{
+  width: 40px; height: 40px;
+  border-radius: 10px;
+  background: #f6f3e8;
+  border: 1px solid rgba(36,32,18,.08);
+  display: inline-flex; align-items: center; justify-content: center;
+  color: var(--brand-deep);
+  justify-self: end;
+}
+.hiw-icon svg{ width: 20px; height: 20px; }
+
+.hiw-card-foot{
+  margin-top: auto;
+  padding-top: 16px;
+  border-top: 1px solid rgba(36,32,18,.06);
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 12px; flex-wrap: wrap;
+}
+.hiw-foot-stat{
+  font-size: 12.5px; color: var(--ink-2);
+  display: inline-flex; align-items: center; gap: 6px;
+}
+.hcfs-ok{ color: var(--brand-deep); font-weight: 700; }
+.hiw-foot-link{
+  font-size: 13px; font-weight: 600;
+  color: var(--brand-deep);
+  text-decoration: none;
+  transition: gap .2s;
+}
+.hiw-foot-link:hover{ text-decoration: underline; }
+
+/* ============== SCAN card mockup ============== */
+.hiw-scan-body{
+  display: grid;
+  grid-template-columns: 56px 1fr 1.4fr;
+  gap: 12px;
+  align-items: stretch;
+}
+.scan-thumbs{
+  display: flex; flex-direction: column; gap: 6px;
+}
+.scan-thumb{
+  width: 52px; height: 60px;
+  border-radius: 10px;
+  border: 1px solid rgba(36,32,18,.08);
+  background: #f6f3e8;
+  overflow: hidden;
+}
+.scan-thumb.is-current{
+  border-color: var(--brand);
+  box-shadow: 0 0 0 2px rgba(0,208,132,.2);
+}
+.scan-thumb-more{
+  font-size: 11px; color: var(--ink-3);
+  text-align: center;
+  padding-top: 4px;
+}
+/* Product thumbnails — CSS gradients faking product photos */
+.thumb-bag{ width: 100%; height: 100%; background: linear-gradient(160deg, #e3d8c0 0%, #b89967 100%); }
+.thumb-serum{ width: 100%; height: 100%; background: linear-gradient(160deg, #3d4a3a 0%, #5a6e4f 50%, #2c3329 100%); }
+.thumb-serum-lg{ border-radius: 8px; }
+.thumb-lamp{ width: 100%; height: 100%; background: linear-gradient(160deg, #f4c690 0%, #e09455 100%); }
+
+.scan-product{
+  background: linear-gradient(180deg, #f3ede0 0%, #e8dec8 100%);
+  border-radius: 10px;
+  padding: 12px 10px;
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  border: 1px solid rgba(36,32,18,.06);
+}
+.scan-product-img{
+  width: 96px; height: 110px;
+  border-radius: 8px;
+  overflow: hidden;
+}
+.scan-product-label{
+  font-family: var(--font-mono); font-size: 9.5px;
+  text-align: center; color: var(--ink-0);
+  font-weight: 700; line-height: 1.25;
+}
+.scan-product-label span{ font-size: 8px; opacity: .8; font-weight: 600; }
+
+.scan-meta{
+  display: flex; flex-direction: column; gap: 10px;
+  min-width: 0;
+}
+.scan-meta-head{
+  display: flex; align-items: center; justify-content: space-between;
+}
+.scan-meta-label{
+  font-size: 12px; font-weight: 600; color: var(--ink-2);
+}
+.scan-meta-info{ font-size: 11px; color: var(--ink-4); }
+.scan-meta-grid{
+  display: grid; grid-template-columns: 80px 1fr; gap: 12px;
+  align-items: center;
+}
+.scan-gauge{
+  position: relative; width: 80px; height: 80px;
+}
+.scan-gauge svg{ width: 100%; height: 100%; }
+.scan-gauge-text{
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  flex-direction: column; line-height: 1;
+}
+.scan-gauge-num{
+  font-family: var(--font-display); font-size: 22px; font-weight: 700;
+  color: var(--ink-0);
+}
+.scan-gauge-out{
+  font-size: 10px; color: var(--ink-3); margin-top: 1px;
+}
+.scan-signals{
+  list-style: none; padding: 0; margin: 0;
+  font-size: 11px; line-height: 1.4;
+  display: grid; grid-template-columns: 1fr; gap: 1px;
+}
+.scan-signals .scan-sig-head{
+  font-weight: 700; color: var(--ink-1); margin-bottom: 2px;
+  font-size: 11px;
+}
+.scan-signals li{
+  display: flex; align-items: center; gap: 4px;
+  color: var(--ink-2);
+}
+.sig-tick{ color: var(--brand); font-weight: 700; font-size: 10px; }
+
+.scan-issues{
+  border-top: 1px dashed rgba(36,32,18,.10);
+  padding-top: 8px;
+}
+.scan-issues-label{
+  font-size: 11px; font-weight: 600; color: var(--ink-2);
+  display: block; margin-bottom: 4px;
+}
+.scan-issues ul{
+  list-style: none; padding: 0; margin: 0;
+  display: flex; flex-direction: column; gap: 3px;
+  font-size: 11px;
+}
+.scan-issues li{
+  display: grid; grid-template-columns: 10px 1fr auto; gap: 6px;
+  align-items: center;
+}
+.iss-dot{ width: 6px; height: 6px; border-radius: 50%; }
+.iss-dot.crit{ background: #c63d2f; }
+.iss-dot.warn{ background: #f59e0b; }
+.iss-name{ color: var(--ink-1); }
+.iss-count{ color: var(--ink-3); font-family: var(--font-mono); font-weight: 600; }
+
+/* ============== FIX card mockup ============== */
+.hiw-fix-body{
+  display: grid;
+  grid-template-columns: 1fr 20px 1fr;
+  gap: 10px;
+  align-items: start;
+}
+.fix-col{
+  display: flex; flex-direction: column; gap: 8px;
+  min-width: 0;
+}
+.fix-badge{
+  align-self: flex-start;
+  font-family: var(--font-mono); font-size: 9.5px; font-weight: 800;
+  letter-spacing: .12em;
+  padding: 3px 8px; border-radius: 6px;
+}
+.fix-badge-before{ background: rgba(198,61,47,.10); color: #c63d2f; }
+.fix-badge-after{ background: rgba(0,208,132,.12); color: var(--brand-deep); }
+.fix-prod-img{
+  width: 100%; aspect-ratio: 4 / 3;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #f3ede0;
+}
+.fix-prod-title{
+  font-family: var(--font-display); font-size: 13px; font-weight: 700;
+  color: var(--ink-0); line-height: 1.25;
+}
+.fix-prod-desc{
+  font-size: 11.5px; line-height: 1.4;
+  color: var(--ink-2); margin: 0;
+}
+.fix-issues{
+  list-style: none; padding: 0; margin: 0;
+  display: flex; flex-direction: column; gap: 4px;
+  font-size: 11.5px;
+}
+.fix-issues li{
+  display: flex; align-items: center; gap: 6px;
+  color: var(--ink-1);
+}
+.fix-x{
+  width: 14px; height: 14px; border-radius: 50%;
+  background: #c63d2f; color: #fff;
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: 8px; font-weight: 800; flex-shrink: 0;
+}
+.fix-ok{
+  width: 14px; height: 14px; border-radius: 50%;
+  background: var(--brand); color: #fff;
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: 8px; font-weight: 800; flex-shrink: 0;
+}
+.fix-arrow{
+  align-self: center;
+  color: var(--brand-deep);
+  font-size: 18px;
+  padding-top: 60px; /* roughly aligns with the product image */
+}
+
+.fix-foot{ flex-direction: column; align-items: stretch; gap: 10px; }
+.fix-tags-row{
+  display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
+  font-size: 11.5px;
+}
+.fix-tags-label{ color: var(--ink-3); font-weight: 600; margin-right: 4px; }
+.fix-tag{
+  padding: 3px 8px;
+  background: rgba(0,208,132,.08);
+  color: var(--brand-deep);
+  border: 1px solid rgba(0,208,132,.18);
+  border-radius: 6px;
+  font-size: 10.5px; font-weight: 600;
+}
+.fix-foot-cta{
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 10px; font-size: 12.5px; color: var(--ink-2);
+}
+.fix-spark{ margin-right: 6px; }
+
+/* ============== PROVE card mockup ============== */
+.hiw-prove-body{
+  display: flex; flex-direction: column; gap: 12px;
+}
+.prove-chart-head{
+  display: flex; align-items: center; justify-content: space-between;
+  font-size: 12px; color: var(--ink-2);
+}
+.prove-pbadge{
+  font-family: var(--font-mono); font-size: 10.5px; font-weight: 700;
+  color: var(--brand-deep);
+  background: rgba(0,208,132,.10);
+  padding: 3px 8px; border-radius: 6px;
+}
+.prove-chart-row{
+  display: grid; grid-template-columns: 1fr 1.6fr;
+  gap: 14px; align-items: center;
+}
+.prove-bigstat{
+  display: flex; flex-direction: column; gap: 3px;
+}
+.prove-bigstat-num{
+  font-family: var(--font-display); font-size: 36px; font-weight: 700;
+  letter-spacing: -.025em; line-height: 1;
+  background: linear-gradient(180deg, var(--brand) 0%, var(--brand-deep) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.prove-bigstat-label{
+  font-family: var(--font-mono); font-size: 9px; font-weight: 700;
+  letter-spacing: .14em; color: var(--ink-3);
+  margin-top: 4px;
+}
+.prove-bigstat-conf{
+  font-size: 10.5px; color: var(--ink-4); margin-top: 2px;
+}
+.prove-chart{ width: 100%; height: 100px; }
+.prove-chart-legend{
+  display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+  font-size: 10.5px; color: var(--ink-3);
+}
+.legend-item{ display: inline-flex; align-items: center; gap: 5px; }
+.legend-swatch{ width: 18px; height: 2px; border-radius: 2px; }
+.legend-swatch-opt{ background: var(--brand); }
+.legend-swatch-ctrl{ background: rgba(36,32,18,.32); }
+.legend-x{
+  font-family: var(--font-mono); color: var(--ink-4);
+  font-size: 9.5px; margin-left: auto;
+}
+.prove-tiles{
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+.prove-tile{
+  display: flex; flex-direction: column; gap: 2px;
+  padding: 10px 10px;
+  background: #fafaf7;
+  border: 1px solid rgba(36,32,18,.06);
+  border-radius: 10px;
+  min-width: 0;
+}
+.pt-label{ font-size: 10px; color: var(--ink-3); font-weight: 600; line-height: 1.2; }
+.pt-val{
+  font-family: var(--font-display); font-size: 13px; font-weight: 700;
+  color: var(--ink-0); line-height: 1.2; margin-top: 3px;
+  display: inline-flex; align-items: center; gap: 4px;
+}
+.pt-val-num{ font-variant-numeric: tabular-nums; white-space: nowrap; }
+.pt-shield{ font-size: 11px; }
+.pt-sub{ font-size: 10px; color: var(--ink-3); margin-top: 1px; }
+
+.prove-foot{ }
+
+@media (max-width: 1100px){
+  .hiw-fix-body{ grid-template-columns: 1fr; gap: 16px; }
+  .fix-arrow{ display: none; }
+  .hiw-scan-body{ grid-template-columns: 1fr; }
+  .scan-thumbs{ flex-direction: row; overflow-x: auto; }
+  .scan-meta-grid{ grid-template-columns: 80px 1fr; }
+  .prove-chart-row{ grid-template-columns: 1fr; }
+  .prove-tiles{ grid-template-columns: repeat(2, 1fr); }
+}
 .how-grid{
   display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
   margin-top: 60px; position: relative;
@@ -5869,35 +6272,239 @@ section + .cta-section{ padding-top: 64px; }
   </div>
 </section>
 
-<!-- HOW IT WORKS -->
-<section id="how" class="how-section section-pad">
+<!-- HOW IT WORKS — v3: rich product mockups, one per step, with arrow connectors -->
+<section id="how" class="how-section how-section-v3 section-pad">
   <div class="container">
     <div class="text-center reveal">
       <div class="eyebrow"><span class="section-num">02</span><span class="dot"></span> HOW IT WORKS</div>
       <div class="section-head text-center" style="margin-bottom:0">
-        <h2>From "invisible" to A+ in three steps.</h2>
-        <p style="font-size:17px;color:var(--ink-2);margin-top:18px">Install, scan, fix. The tool does the work. You approve before anything ships.</p>
+        <h2 class="hiw-head">From invisible to <span class="hiw-aplus">A+</span> in three steps.</h2>
+        <p class="hiw-sub">AI Catalog Score finds what's holding your products back, fixes it for AI discovery, and proves the lift — so you win more sales.</p>
       </div>
     </div>
-    <div class="how-grid reveal-stagger">
-      <div class="how-step">
-        <span class="num">01 · SCAN</span>
-        <div class="icon">🔍</div>
-        <h3>Audit every product</h3>
-        <p>One click. We run the open <a href="https://github.com/commerce-agentic/agentic-commerce-spec" target="_blank" rel="noopener" style="color:var(--brand-deep);font-weight:500;border-bottom:1px solid var(--brand-deep)">Agentic Commerce Spec</a> against every SKU. 8 dimensions, deterministic scoring, top issues ranked by impact.</p>
-      </div>
-      <div class="how-step">
-        <span class="num">02 · FIX</span>
-        <div class="icon">⚡</div>
-        <h3>Auto-fix with preview</h3>
-        <p>Generate alt text from images, rewrite descriptions with Claude, inject JSON-LD, fix metafields. Every mutation is <code style="font-family:var(--font-mono);background:var(--bg-sunk);padding:2px 6px;border-radius:4px;font-size:13px">dry_run: true</code> by default - you approve, then we apply.</p>
-      </div>
-      <div class="how-step">
-        <span class="num">03 · PROVE</span>
-        <div class="icon">📊</div>
-        <h3>Measure causal uplift</h3>
-        <p>Every fix runs as a Difference-in-Differences experiment with control group. Welch's t-test on per-product session deltas. <strong style="color:var(--ink-0)">p &lt; 0.05 or it didn't happen.</strong></p>
-      </div>
+
+    <div class="hiw-grid reveal-stagger">
+
+      <!-- ============== STEP 1 · SCAN ============== -->
+      <article class="hiw-card hiw-card-scan">
+        <header class="hiw-card-head">
+          <span class="hiw-num">1</span>
+          <div class="hiw-tt">
+            <span class="hiw-step">SCAN</span>
+            <span class="hiw-substep">Audit every product</span>
+          </div>
+          <span class="hiw-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none"><circle cx="10" cy="10" r="6" stroke="currentColor" stroke-width="1.8"/><line x1="14.5" y1="14.5" x2="19" y2="19" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          </span>
+        </header>
+
+        <div class="hiw-scan-body">
+          <!-- Left: product thumbnails column -->
+          <div class="scan-thumbs">
+            <div class="scan-thumb"><div class="thumb-bag"></div></div>
+            <div class="scan-thumb is-current"><div class="thumb-serum"></div></div>
+            <div class="scan-thumb"><div class="thumb-lamp"></div></div>
+            <div class="scan-thumb-more">+24 more</div>
+          </div>
+          <!-- Middle: featured product card -->
+          <div class="scan-product">
+            <div class="scan-product-img"><div class="thumb-serum thumb-serum-lg"></div></div>
+            <div class="scan-product-label">VERDE<br/><span>BOTANICAL<br/>RENEWAL<br/>SERUM</span></div>
+          </div>
+          <!-- Right: score gauge + signals + top issues -->
+          <div class="scan-meta">
+            <div class="scan-meta-head">
+              <span class="scan-meta-label">AI Readiness Score</span>
+              <span class="scan-meta-info">ⓘ</span>
+            </div>
+            <div class="scan-meta-grid">
+              <div class="scan-gauge" aria-label="AI Readiness Score: 63 of 100">
+                <svg viewBox="0 0 100 100" aria-hidden="true">
+                  <circle cx="50" cy="50" r="42" fill="none" stroke="rgba(36,32,18,.08)" stroke-width="7"/>
+                  <circle cx="50" cy="50" r="42" fill="none" stroke="#f59e0b" stroke-width="7" stroke-linecap="round"
+                    stroke-dasharray="263.9" stroke-dashoffset="97.6"
+                    transform="rotate(-90 50 50)"/>
+                </svg>
+                <div class="scan-gauge-text">
+                  <span class="scan-gauge-num">63</span>
+                  <span class="scan-gauge-out">/100</span>
+                </div>
+              </div>
+              <ul class="scan-signals">
+                <li class="scan-sig-head">8 AI-readiness signals</li>
+                <li><span class="sig-tick">✓</span>Title clarity</li>
+                <li><span class="sig-tick">✓</span>Description depth</li>
+                <li><span class="sig-tick">✓</span>Alt text</li>
+                <li><span class="sig-tick">✓</span>JSON-LD</li>
+                <li><span class="sig-tick">✓</span>Category alignment</li>
+                <li><span class="sig-tick">✓</span>Metafields</li>
+                <li><span class="sig-tick">✓</span>Reviews &amp; social proof</li>
+                <li><span class="sig-tick">✓</span>Price &amp; availability</li>
+              </ul>
+            </div>
+            <div class="scan-issues">
+              <span class="scan-issues-label">Top issues</span>
+              <ul>
+                <li><span class="iss-dot crit"></span><span class="iss-name">Missing alt text</span><span class="iss-count">423</span></li>
+                <li><span class="iss-dot crit"></span><span class="iss-name">Thin descriptions</span><span class="iss-count">312</span></li>
+                <li><span class="iss-dot warn"></span><span class="iss-name">Missing JSON-LD</span><span class="iss-count">287</span></li>
+                <li><span class="iss-dot warn"></span><span class="iss-name">Incomplete ingredients / metafields</span><span class="iss-count">156</span></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <footer class="hiw-card-foot">
+          <span class="hiw-foot-stat"><span class="hcfs-ok">✓</span> Scanned 143 products in 42s</span>
+          <a href="#install" class="hiw-foot-link">View full audit →</a>
+        </footer>
+      </article>
+
+      <span class="hiw-arrow" aria-hidden="true">→</span>
+
+      <!-- ============== STEP 2 · FIX ============== -->
+      <article class="hiw-card hiw-card-fix">
+        <header class="hiw-card-head">
+          <span class="hiw-num">2</span>
+          <div class="hiw-tt">
+            <span class="hiw-step">FIX</span>
+            <span class="hiw-substep">Auto-fix with preview</span>
+          </div>
+          <span class="hiw-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M5 19l8-8m0 0l-2-5 5 2m-3 3l3 3m-3-3l-3-3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+        </header>
+
+        <div class="hiw-fix-body">
+          <!-- BEFORE -->
+          <div class="fix-col">
+            <span class="fix-badge fix-badge-before">BEFORE</span>
+            <div class="fix-prod-img"><div class="thumb-serum thumb-serum-lg"></div></div>
+            <div class="fix-prod-title">Botanical Serum</div>
+            <p class="fix-prod-desc">Hydrating serum for the skin. Helps improve skin look.</p>
+            <ul class="fix-issues">
+              <li><span class="fix-x">✕</span>No alt text</li>
+              <li><span class="fix-x">✕</span>Thin description</li>
+              <li><span class="fix-x">✕</span>Missing ingredients</li>
+            </ul>
+          </div>
+          <span class="fix-arrow" aria-hidden="true">→</span>
+          <!-- AFTER (PREVIEW) -->
+          <div class="fix-col">
+            <span class="fix-badge fix-badge-after">AFTER (PREVIEW)</span>
+            <div class="fix-prod-img"><div class="thumb-serum thumb-serum-lg"></div></div>
+            <div class="fix-prod-title">Botanical Renewal Serum — Barrier Repair for Sensitive Skin</div>
+            <p class="fix-prod-desc">A lightweight, plant-powered serum with centella, squalane &amp; niacinamide to strengthen the skin barrier, calm redness and hydrate deeply. For sensitive, dry &amp; combination skin.</p>
+            <ul class="fix-issues fix-issues-good">
+              <li><span class="fix-ok">✓</span>Alt text added</li>
+              <li><span class="fix-ok">✓</span>Rich description</li>
+              <li><span class="fix-ok">✓</span>JSON-LD added</li>
+              <li><span class="fix-ok">✓</span>Ingredients &amp; skin type optimized</li>
+            </ul>
+          </div>
+        </div>
+
+        <footer class="hiw-card-foot fix-foot">
+          <div class="fix-tags-row">
+            <span class="fix-tags-label">What changed</span>
+            <span class="fix-tag">Ingredients</span>
+            <span class="fix-tag">Benefits</span>
+            <span class="fix-tag">Skin type</span>
+            <span class="fix-tag">Structured data</span>
+          </div>
+          <div class="fix-foot-cta">
+            <span><span class="fix-spark">✨</span>Generate fixes with AI. Preview before you apply.</span>
+            <a href="#install" class="hiw-foot-link">Preview all →</a>
+          </div>
+        </footer>
+      </article>
+
+      <span class="hiw-arrow" aria-hidden="true">→</span>
+
+      <!-- ============== STEP 3 · PROVE ============== -->
+      <article class="hiw-card hiw-card-prove">
+        <header class="hiw-card-head">
+          <span class="hiw-num">3</span>
+          <div class="hiw-tt">
+            <span class="hiw-step">PROVE</span>
+            <span class="hiw-substep">Measure causal uplift</span>
+          </div>
+          <span class="hiw-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none"><rect x="3.5" y="11" width="3.5" height="9" rx="1" fill="currentColor" opacity=".55"/><rect x="10.25" y="6" width="3.5" height="14" rx="1" fill="currentColor" opacity=".75"/><rect x="17" y="3" width="3.5" height="17" rx="1" fill="currentColor"/></svg>
+          </span>
+        </header>
+
+        <div class="hiw-prove-body">
+          <div class="prove-chart-head">
+            <span class="prove-chart-title">Causal uplift (Optimized vs. Control)</span>
+            <span class="prove-pbadge">p &lt; 0.05</span>
+          </div>
+          <div class="prove-chart-row">
+            <div class="prove-bigstat">
+              <div class="prove-bigstat-num">+27.3%</div>
+              <div class="prove-bigstat-label">ATTRIBUTABLE REVENUE LIFT</div>
+              <div class="prove-bigstat-conf">95% confidence</div>
+            </div>
+            <svg class="prove-chart" viewBox="0 0 320 160" preserveAspectRatio="none" aria-hidden="true">
+              <defs>
+                <linearGradient id="proveOptArea" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#00d084" stop-opacity=".22"/>
+                  <stop offset="100%" stop-color="#00d084" stop-opacity="0"/>
+                </linearGradient>
+              </defs>
+              <!-- Horizontal grid lines -->
+              <g stroke="rgba(36,32,18,.10)" stroke-width="1" stroke-dasharray="2 4">
+                <line x1="0" y1="40"  x2="320" y2="40"/>
+                <line x1="0" y1="80"  x2="320" y2="80"/>
+                <line x1="0" y1="120" x2="320" y2="120"/>
+              </g>
+              <!-- Control (grey, flat-ish) -->
+              <polyline points="0,90 40,92 80,88 120,90 160,87 200,89 240,86 280,90 320,88"
+                fill="none" stroke="rgba(36,32,18,.32)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+              <!-- Optimized (green, climbing) — area + line -->
+              <path d="M0,90 L40,82 L80,72 L120,60 L160,52 L200,44 L240,32 L280,22 L320,12 L320,160 L0,160 Z"
+                fill="url(#proveOptArea)"/>
+              <polyline points="0,90 40,82 80,72 120,60 160,52 200,44 240,32 280,22 320,12"
+                fill="none" stroke="#00d084" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+              <!-- Endpoint dot on the optimized line -->
+              <circle cx="320" cy="12" r="3.5" fill="#00d084" stroke="#fff" stroke-width="1.5"/>
+            </svg>
+          </div>
+          <div class="prove-chart-legend">
+            <span class="legend-item"><span class="legend-swatch legend-swatch-opt"></span>Optimized items</span>
+            <span class="legend-item"><span class="legend-swatch legend-swatch-ctrl"></span>Control group</span>
+            <span class="legend-x">Apr 15 &nbsp; Apr 22 &nbsp; Apr 29 &nbsp; May 6 &nbsp; May 13 &nbsp; May 20 &nbsp; May 31</span>
+          </div>
+          <div class="prove-tiles">
+            <div class="prove-tile">
+              <span class="pt-label">Lift is real</span>
+              <span class="pt-val"><span class="pt-shield">🛡</span>p &lt; 0.05</span>
+              <span class="pt-sub">Statistically significant</span>
+            </div>
+            <div class="prove-tile">
+              <span class="pt-label">Incremental revenue</span>
+              <span class="pt-val pt-val-num">$18,642</span>
+              <span class="pt-sub">Last 30 days</span>
+            </div>
+            <div class="prove-tile">
+              <span class="pt-label">Test window</span>
+              <span class="pt-val pt-val-num">May 1 – May 31</span>
+              <span class="pt-sub">30 days</span>
+            </div>
+            <div class="prove-tile">
+              <span class="pt-label">Products tested</span>
+              <span class="pt-val pt-val-num">143</span>
+              <span class="pt-sub">Auto-selected</span>
+            </div>
+          </div>
+        </div>
+
+        <footer class="hiw-card-foot prove-foot">
+          <span class="hiw-foot-stat"><span class="hcfs-ok">🛡</span> Causal. Defensible. Board-ready.</span>
+          <a href="#install" class="hiw-foot-link">View full report →</a>
+        </footer>
+      </article>
+
     </div>
   </div>
 </section>
