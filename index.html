@@ -2196,577 +2196,321 @@ section{ position: relative; }
 
 
 /* ============================================================
-   HERO CINEMATIC STAGE — multi-scene product demo
+   HERO STATIC COMPOSITION (v7) — single rich composition hero
    ============================================================
-   6 bespoke scenes slide horizontally through one window frame.
-   data-scene on .cine-stage selects which scene is visible;
-   transitions are 600ms cubic-bezier slides driven by JS.
-
-   Layout:  hero-visual → cine-stage → cine-window → cine-frame
-                                          ↘ cine-caption
+   Linear/Stripe-style: one perspective-tilted screenshot at the
+   centre, with floating chips/cards in each corner. No scene
+   swaps — everything is visible simultaneously, with constant
+   micro-animations to give the impression of a living product.
    ============================================================ */
 
-.cine-stage{
+.hero-static{
   position: relative;
-  max-width: 1400px; margin: 0 auto;
-  padding: 28px 0 12px;
-  perspective: 1800px;
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 36px 28px 64px;
+  perspective: 2200px;
+  perspective-origin: 50% 30%;
+  --hs-tilt-x: 0deg;   /* JS-driven parallax */
+  --hs-tilt-y: 0deg;
+  isolation: isolate;
 }
 
-/* Browser/app window chrome — same wrapper for every scene */
-.cine-window{
-  position: relative;
-  border-radius: 18px;
-  background: #fff;
-  border: 1px solid rgba(36,32,18,.08);
+/* ---- Background atmosphere: green orbs + faint dot grid ---- */
+.hs-bg{
+  position: absolute; inset: 0;
+  pointer-events: none;
+  z-index: 0;
   overflow: hidden;
-  box-shadow:
-    0 1px 2px rgba(20,18,10,.04),
-    0 24px 60px -16px rgba(20,18,10,.22),
-    0 60px 120px -40px rgba(0,208,132,.18);
-  transform: rotateX(1.5deg) rotateY(-2deg);
+  border-radius: 24px;
+}
+.hs-orb{
+  position: absolute;
+  width: 480px; height: 480px;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: .55;
+  animation: hsOrbDrift 18s ease-in-out infinite;
+}
+.hs-orb-a{
+  background: radial-gradient(circle, rgba(0,208,132,.55), transparent 70%);
+  top: -10%; left: -8%;
+  animation-delay: 0s;
+}
+.hs-orb-b{
+  background: radial-gradient(circle, rgba(0,168,106,.45), transparent 70%);
+  bottom: -12%; right: -8%;
+  animation-delay: -9s;
+}
+@keyframes hsOrbDrift{
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50%      { transform: translate(40px, -30px) scale(1.08); }
+}
+.hs-grid{
+  position: absolute; inset: 0;
+  background-image: radial-gradient(rgba(36,32,18,.06) 1px, transparent 1px);
+  background-size: 28px 28px;
+  mask-image: radial-gradient(ellipse 70% 60% at 50% 50%, #000 0%, transparent 75%);
+  -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 50%, #000 0%, transparent 75%);
+  opacity: .6;
+}
+
+/* ---- Main screenshot in 3D perspective ---- */
+.hs-main{
+  position: relative;
+  z-index: 2;
+  width: min(100%, 1100px);
+  margin: 0 auto;
   transform-style: preserve-3d;
+  transform:
+    rotateX(calc(6deg + var(--hs-tilt-x)))
+    rotateY(calc(-4deg + var(--hs-tilt-y)));
   transition: transform .6s cubic-bezier(.2,.8,.2,1);
+  animation: hsMainFloat 9s ease-in-out infinite;
 }
-.cine-window:hover{ transform: rotateX(.5deg) rotateY(-1deg); }
-
-.cine-chrome{
-  display: flex; align-items: center; gap: 14px;
-  padding: 10px 14px;
-  background: #f4efe1;
-  border-bottom: 1px solid rgba(36,32,18,.06);
-  font-family: var(--font-mono); font-size: 11px; color: var(--ink-3);
+@keyframes hsMainFloat{
+  0%, 100% { translate: 0 0; }
+  50%      { translate: 0 -6px; }
 }
-.cw-traffic{ display: flex; gap: 6px; }
-.cw-traffic span{ width: 11px; height: 11px; border-radius: 50%; }
-.cw-traffic span:nth-child(1){ background: #FF5F57; }
-.cw-traffic span:nth-child(2){ background: #FEBC2E; }
-.cw-traffic span:nth-child(3){ background: #28C840; }
-.cw-url{
-  flex: 1;
-  background: #fff;
-  border: 1px solid rgba(36,32,18,.06);
-  border-radius: 100px;
-  padding: 5px 12px;
-  font-size: 11px;
-  color: var(--ink-2);
-  letter-spacing: 0;
-  font-family: var(--font-mono);
-  text-align: center;
-  transition: background .4s ease, color .4s ease;
-}
-.cw-actions{ display: flex; gap: 5px; }
-.cw-pad{ width: 16px; height: 16px; background: rgba(36,32,18,.10); border-radius: 4px; }
-
-/* Frame that holds the scenes — fixed aspect ratio, hides overflow */
-.cine-frame{
+.hs-main-inner{
   position: relative;
-  aspect-ratio: 16 / 10;
+  border-radius: 16px;
   overflow: hidden;
-  background: #fcfbf6;
-}
-@media (max-width: 880px){
-  .cine-frame{ aspect-ratio: 4 / 3; }
-}
-
-/* Each scene fills the frame, absolutely positioned, transitions on data-scene */
-.cine-scene{
-  position: absolute; inset: 0;
-  opacity: 0;
-  transform: translateX(40px) scale(.98);
-  pointer-events: none;
-  transition:
-    opacity .55s cubic-bezier(.4,.0,.2,1),
-    transform .65s cubic-bezier(.2,.8,.2,1);
-  background: #fcfbf6;
-  overflow: hidden;
-}
-.cine-stage[data-scene="1"] .cs-1,
-.cine-stage[data-scene="2"] .cs-2,
-.cine-stage[data-scene="3"] .cs-3,
-.cine-stage[data-scene="4"] .cs-4,
-.cine-stage[data-scene="5"] .cs-5,
-.cine-stage[data-scene="6"] .cs-6{
-  opacity: 1; transform: translateX(0) scale(1);
-}
-/* Scenes that came before slide further LEFT to clear the frame */
-.cine-stage[data-scene="2"] .cs-1,
-.cine-stage[data-scene="3"] .cs-1, .cine-stage[data-scene="3"] .cs-2,
-.cine-stage[data-scene="4"] .cs-1, .cine-stage[data-scene="4"] .cs-2, .cine-stage[data-scene="4"] .cs-3,
-.cine-stage[data-scene="5"] .cs-1, .cine-stage[data-scene="5"] .cs-2, .cine-stage[data-scene="5"] .cs-3, .cine-stage[data-scene="5"] .cs-4,
-.cine-stage[data-scene="6"] .cs-1, .cine-stage[data-scene="6"] .cs-2, .cine-stage[data-scene="6"] .cs-3, .cine-stage[data-scene="6"] .cs-4, .cine-stage[data-scene="6"] .cs-5{
-  transform: translateX(-50px) scale(.98);
-}
-
-/* Caption strip — text + step counter + pip indicators */
-.cine-caption{
-  display: flex; align-items: center; gap: 16px;
-  padding: 14px 6px 6px;
-  font-family: var(--font-mono); font-size: 12px;
-}
-.cc-step{
-  font-size: 10px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase;
-  color: var(--brand-deep);
-  background: rgba(0,208,132,.12);
-  padding: 5px 10px; border-radius: 7px;
-  white-space: nowrap;
-}
-.cc-text{
-  flex: 1;
-  font-family: var(--font-display); font-size: 14px; color: var(--ink-1);
-  font-weight: 500;
-  letter-spacing: -.005em;
-}
-.cc-text strong{ color: var(--ink-0); font-weight: 700; }
-.cc-pips{
-  display: inline-flex; gap: 5px;
-}
-.cc-pips span{
-  width: 22px; height: 3px; border-radius: 2px;
-  background: rgba(36,32,18,.10);
-  transition: background .3s ease, width .3s ease;
-}
-.cc-pips span.is-on{ background: var(--brand-deep); width: 28px; }
-
-@media (prefers-reduced-motion: reduce){
-  .cine-scene{ transition: none !important; }
-  .cine-window{ transform: none; }
-}
-
-/* ============================================================
-   SCENE 1 · STOREFRONT (invisible to AI)
-   ============================================================ */
-.cs1-shop{ position: relative; height: 100%; background: #faf7ef; padding: 28px 36px; display: flex; flex-direction: column; gap: 22px; }
-.cs1-shopnav{
-  display: flex; align-items: center; gap: 28px;
-  padding-bottom: 16px;
-  border-bottom: 1px solid rgba(36,32,18,.07);
-}
-.cs1-logo{
-  font-family: var(--font-display); font-size: 22px; font-weight: 700;
-  letter-spacing: .14em; color: #2c3e25;
-}
-.cs1-nav{ display: flex; gap: 22px; flex: 1; }
-.cs1-nav span{
-  font-size: 12px; font-weight: 600; color: var(--ink-2);
-  letter-spacing: -.005em;
-}
-.cs1-cart{
-  font-family: var(--font-mono); font-size: 11px; color: var(--ink-3);
-  padding: 5px 10px; border: 1px solid rgba(36,32,18,.10); border-radius: 100px;
-}
-.cs1-grid{
-  display: grid; grid-template-columns: 1.1fr 1fr;
-  gap: 28px; flex: 1; min-height: 0;
-}
-.cs1-img{
-  background: linear-gradient(180deg, #ebe5d4 0%, #ddd4be 100%);
-  border-radius: 14px;
-  overflow: hidden;
-  border: 1px solid rgba(36,32,18,.06);
-  position: relative;
-}
-.cs1-img .thumb-serum{ position: absolute; inset: 0; }
-.cs1-info{ display: flex; flex-direction: column; gap: 11px; padding-top: 4px; }
-.cs1-breadcrumb{
-  font-family: var(--font-mono); font-size: 10px; color: var(--ink-3);
-  letter-spacing: .14em; text-transform: uppercase;
-}
-.cs1-title{
-  font-family: var(--font-display); font-size: 30px; font-weight: 700;
-  color: var(--ink-0); letter-spacing: -.02em; line-height: 1.1; margin: 0;
-}
-.cs1-meta{ display: flex; align-items: center; gap: 14px; }
-.cs1-stars{ font-size: 13px; color: #f59e0b; letter-spacing: -.05em; }
-.cs1-stars em{ font-style: normal; color: var(--ink-3); font-size: 11px; margin-left: 4px; }
-.cs1-price{ font-family: var(--font-display); font-size: 22px; font-weight: 700; color: var(--ink-0); }
-.cs1-desc{ font-size: 13px; color: var(--ink-2); line-height: 1.5; margin: 0; }
-.cs1-swatches{ display: flex; gap: 8px; margin-top: 4px; }
-.cs1-swatches span{
-  width: 22px; height: 22px; border-radius: 50%;
-  border: 2px solid #fff;
-  box-shadow: 0 0 0 1px rgba(36,32,18,.10);
-}
-.cs1-swatches span:nth-child(1){ background: #2c3e25; }
-.cs1-swatches span:nth-child(2){ background: #b8a37e; }
-.cs1-swatches span:nth-child(3){ background: #d4d0c5; }
-.cs1-swatches .is-on{ box-shadow: 0 0 0 2px var(--ink-0); }
-.cs1-cta{
-  appearance: none; border: 0;
-  background: var(--ink-0); color: #fff;
-  font-family: var(--font-display); font-size: 14px; font-weight: 600;
-  padding: 12px 22px; border-radius: 10px;
-  margin-top: 6px;
-  align-self: flex-start; cursor: default;
-}
-.cs1-bullets{ list-style: none; padding: 0; margin: 8px 0 0; display: flex; flex-direction: column; gap: 4px; }
-.cs1-bullets li{ font-family: var(--font-mono); font-size: 10px; color: var(--ink-3); letter-spacing: .04em; }
-
-/* Stamp overlay — appears at ~1s with rotate + scale punch */
-.cs1-stamp{
-  position: absolute; inset: 0;
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  gap: 8px;
-  background: radial-gradient(ellipse at center, rgba(20,18,10,.78) 0%, rgba(20,18,10,.92) 100%);
-  opacity: 0;
-  z-index: 4;
-  pointer-events: none;
-  backdrop-filter: blur(2px);
-}
-.cine-stage[data-scene="1"] .cs1-stamp{
-  animation: cs1StampIn .55s cubic-bezier(.2,.8,.2,1) 1.0s forwards;
-}
-@keyframes cs1StampIn{
-  from{ opacity: 0; transform: scale(1.05); }
-  to  { opacity: 1; transform: scale(1); }
-}
-.cs1-stamp-line1, .cs1-stamp-line2{
-  font-family: var(--font-display); font-weight: 800;
-  color: #fff; letter-spacing: -.02em; line-height: 1;
-  text-shadow: 0 4px 16px rgba(198,61,47,.30);
-}
-.cs1-stamp-line1{ font-size: 30px; opacity: .78; }
-.cs1-stamp-line2{
-  font-size: 52px;
-  background: linear-gradient(180deg, #ff7a6b 0%, #c63d2f 100%);
-  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
-}
-.cs1-stamp-agents{ display: flex; gap: 8px; margin-top: 8px; }
-.cs1a{
-  width: 32px; height: 32px; border-radius: 9px;
-  display: inline-flex; align-items: center; justify-content: center;
-  color: #fff; font-weight: 700; font-size: 13px;
-  filter: grayscale(1) brightness(.55);
-  position: relative;
-}
-.cs1a::after{
-  content: '✕';
-  position: absolute; inset: 0;
-  display: flex; align-items: center; justify-content: center;
-  color: #c63d2f; font-size: 22px; font-weight: 900;
-  text-shadow: 0 0 6px rgba(0,0,0,.4);
-}
-.cs1a.chatgpt{ background: #10A37F; }
-.cs1a.claude{ background: #D97757; }
-.cs1a.gemini{ background: #4285F4; }
-.cs1a.mistral{ background: #FA520F; }
-.cs1a.deepseek{ background: #4D6BFE; }
-.cs1-stamp-sub{
-  font-family: var(--font-mono); font-size: 11px;
-  color: rgba(255,255,255,.70); letter-spacing: .04em;
-  margin-top: 4px; text-align: center; max-width: 360px;
-}
-
-/* ============================================================
-   SCENE 2 · SHOPIFY INSTALL
-   ============================================================ */
-.cs2-admin{ height: 100%; display: flex; flex-direction: column; background: #f6f6f7; }
-.cs2-topbar{
-  display: flex; align-items: center; gap: 14px;
-  padding: 10px 18px;
-  background: #fff;
-  border-bottom: 1px solid rgba(36,32,18,.07);
-}
-.cs2-logo-sh{ display: inline-flex; align-items: center; }
-.cs2-search{
-  flex: 1; max-width: 520px;
-  display: inline-flex; align-items: center; gap: 8px;
-  background: #f6f6f7; padding: 7px 14px; border-radius: 8px;
-  font-family: var(--font-mono); font-size: 12px; color: var(--ink-3);
-}
-.cs2-search-ic{ font-size: 11px; opacity: .6; }
-.cs2-avatar{
-  margin-left: auto;
-  width: 30px; height: 30px; border-radius: 50%;
-  background: linear-gradient(135deg, #6b6f76, #2c3e25);
-  display: inline-flex; align-items: center; justify-content: center;
-  color: #fff; font-size: 11px; font-weight: 700;
-}
-.cs2-body{ flex: 1; display: grid; grid-template-columns: 200px 1fr; min-height: 0; }
-.cs2-sidebar{
-  background: #f6f6f7;
-  border-right: 1px solid rgba(36,32,18,.07);
-  padding: 16px 12px;
-  display: flex; flex-direction: column; gap: 2px;
-}
-.cs2-side{
-  font-family: var(--font-display); font-size: 13.5px; font-weight: 500;
-  color: var(--ink-2); padding: 8px 12px; border-radius: 7px;
-}
-.cs2-side-active{ background: rgba(0,208,132,.10); color: var(--brand-deep); font-weight: 700; }
-.cs2-main{ padding: 36px 48px; position: relative; }
-.cs2-card{
-  background: #fff;
   border: 1px solid rgba(36,32,18,.08);
-  border-radius: 14px;
-  padding: 28px 32px;
-  max-width: 540px;
+  background: #fff;
   box-shadow:
-    0 1px 2px rgba(20,18,10,.04),
-    0 12px 28px -12px rgba(20,18,10,.10);
+    0 1px 0 rgba(255,255,255,.7) inset,
+    0 -1px 0 rgba(36,32,18,.04) inset,
+    0 2px 6px rgba(20,18,10,.05),
+    0 28px 64px -16px rgba(20,18,10,.25),
+    0 70px 140px -40px rgba(0,168,106,.30);
 }
-.cs2-app-head{ display: flex; align-items: center; gap: 14px; }
-.cs2-app-icon{
-  width: 56px; height: 56px; border-radius: 14px;
-  background: var(--ink-0); padding: 8px;
+.hs-main img{
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: inherit;
+  image-rendering: -webkit-optimize-contrast;
+}
+.hs-main-shine{
+  position: absolute; inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: linear-gradient(115deg, transparent 30%, rgba(255,255,255,.30) 50%, transparent 70%);
+  transform: translateX(-110%);
+  animation: hsShine 7s ease-in-out infinite;
+  animation-delay: 1.4s;
+  mix-blend-mode: overlay;
+}
+@keyframes hsShine{
+  0%, 100% { transform: translateX(-110%); }
+  35%      { transform: translateX(110%); }
+}
+
+/* ---- Floating chip/card wrapper ---- */
+.hs-float{
+  position: absolute;
+  z-index: 4;
+  filter: drop-shadow(0 12px 28px rgba(20,18,10,.18));
+  animation: hsFloatBob 5s ease-in-out infinite;
+}
+@keyframes hsFloatBob{
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-6px); }
+}
+.hs-float-tl{ top: 9%;  left: 1%;   animation-delay: -.5s; }
+.hs-float-tr{ top: 5%;  right: 1%;  animation-delay: -2s; }
+.hs-float-bl{ bottom: 4%; left: 1%;  animation-delay: -1.2s; }
+.hs-float-br{ bottom: 8%; right: 1%; animation-delay: -3s; }
+@media (max-width: 880px){
+  .hs-float-tl, .hs-float-bl{ left: -8px; }
+  .hs-float-tr, .hs-float-br{ right: -8px; }
+  .hs-float-tl, .hs-float-tr{ top: 2%; }
+}
+
+/* ---- TOP-LEFT: ChatGPT agent badge ---- */
+.hs-agent{
+  display: inline-flex; align-items: center; gap: 11px;
+  padding: 10px 14px;
+  background: rgba(255,255,255,.92);
+  border: 1px solid rgba(36,32,18,.08);
+  border-radius: 100px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: 0 1px 0 rgba(255,255,255,.7) inset, 0 2px 6px rgba(20,18,10,.04);
+}
+.hs-agent-logo{
+  width: 28px; height: 28px; border-radius: 50%;
   display: inline-flex; align-items: center; justify-content: center;
   flex-shrink: 0;
 }
-.cs2-app-icon img{ width: 100%; height: 100%; object-fit: contain; }
-.cs2-app-meta h4{ font-family: var(--font-display); font-size: 18px; font-weight: 700; margin: 0 0 3px; letter-spacing: -.015em; }
-.cs2-app-meta p{ margin: 0; font-size: 12px; color: var(--ink-3); }
-.cs2-app-desc{
-  margin: 16px 0 20px; padding: 14px 16px;
-  background: #f6f6f7; border-radius: 9px;
-  font-size: 13px; line-height: 1.5; color: var(--ink-1);
+.hs-agent-chatgpt{ background: #10A37F; color: #fff; }
+.hs-agent-text{ display: flex; flex-direction: column; line-height: 1.15; }
+.hs-agent-text strong{ font-family: var(--font-display); font-size: 13px; font-weight: 700; color: var(--ink-0); letter-spacing: -.01em; }
+.hs-agent-text em{ font-family: var(--font-mono); font-style: normal; font-size: 10.5px; color: var(--brand-deep); font-weight: 600; margin-top: 1px; display: inline-flex; align-items: center; gap: 6px; }
+.hs-live-dot{
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--brand);
+  box-shadow: 0 0 0 0 rgba(0,208,132,.50);
+  animation: hsLivePulse 1.6s ease-out infinite;
 }
-.cs2-perms{ margin-bottom: 22px; }
-.cs2-perms-label{
-  display: block;
-  font-family: var(--font-mono); font-size: 10px; font-weight: 800;
-  letter-spacing: .14em; text-transform: uppercase;
-  color: var(--ink-3); margin-bottom: 10px;
-}
-.cs2-perms ul{ list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 7px; }
-.cs2-perms li{
-  display: flex; align-items: center; gap: 9px;
-  font-size: 12.5px; color: var(--ink-1);
-}
-.cs2-tick{
-  width: 16px; height: 16px; border-radius: 50%;
-  background: rgba(0,208,132,.16); color: var(--brand-deep);
-  display: inline-flex; align-items: center; justify-content: center;
-  font-size: 9px; font-weight: 800; flex-shrink: 0;
-}
-.cs2-install{
-  position: relative; appearance: none; border: 0;
-  background: #5E8E3E; color: #fff;
-  font-family: var(--font-display); font-size: 14px; font-weight: 600;
-  padding: 12px 22px; border-radius: 8px;
-  width: 100%; cursor: default;
-  overflow: hidden;
-  transition: transform .25s cubic-bezier(.2,.8,.2,1), filter .3s ease;
-}
-.cs2-install-label{ position: relative; z-index: 2; }
-.cs2-install-progress{
-  position: absolute; inset: 0 100% 0 0;
-  background: rgba(255,255,255,.18);
-  transition: right 1.4s cubic-bezier(.4,0,.2,1);
-}
-/* Cursor flies in, hovers button, clicks, button "installs" */
-.cs2-cursor{
-  position: absolute;
-  left: 10%; top: 30%;
-  filter: drop-shadow(0 4px 6px rgba(20,18,10,.30));
-  opacity: 0; z-index: 9; pointer-events: none;
-}
-.cine-stage[data-scene="2"] .cs2-cursor{
-  opacity: 1;
-  animation: cs2CursorMove 2.0s cubic-bezier(.5,.0,.25,1) .3s forwards;
-}
-@keyframes cs2CursorMove{
-  0%   { left: 8%;  top: 25%; transform: scale(1); }
-  55%  { left: 55%; top: 92%; transform: scale(1); }
-  68%  { left: 55%; top: 92%; transform: scale(.85); }
-  78%  { left: 55%; top: 92%; transform: scale(1); }
-  100% { left: 55%; top: 92%; transform: scale(1); }
-}
-.cine-stage[data-scene="2"] .cs2-install{
-  animation: cs2InstallClick .25s ease-out 1.6s forwards;
-}
-.cine-stage[data-scene="2"] .cs2-install-progress{
-  animation: cs2Progress 1.4s cubic-bezier(.4,0,.2,1) 1.85s forwards;
-}
-@keyframes cs2InstallClick{
-  0%{ transform: scale(1); }
-  50%{ transform: scale(.96); filter: brightness(1.18); }
-  100%{ transform: scale(1); filter: brightness(1); }
-}
-@keyframes cs2Progress{ to{ right: 0; } }
-.cine-stage[data-scene="2"] .cs2-install-label{
-  animation: cs2LabelSwap 0s ease 1.85s forwards;
-}
-@keyframes cs2LabelSwap{
-  to{ content: 'Installing…'; }
+@keyframes hsLivePulse{
+  0%{ box-shadow: 0 0 0 0 rgba(0,208,132,.50); }
+  70%{ box-shadow: 0 0 0 7px rgba(0,208,132,0); }
+  100%{ box-shadow: 0 0 0 0 rgba(0,208,132,0); }
 }
 
-/* ============================================================
-   SCREENSHOT-BASED SCENES (3 · 4 · 5 · 6) — shared overlay kit
-   ============================================================
-   Each scene's content is a real PNG/JPEG capture of the actual
-   Shopify app, with motion overlays (highlights, cursor, +pts
-   floaters, annotation chips) layered on top.  The overlay
-   coordinates are set inline via --x/--y/--w/--h custom props
-   as percentages of the frame so they stay aligned across
-   responsive resizes.
-   ============================================================ */
-
-.cs-shot{
-  position: relative; width: 100%; height: 100%;
-  background: #fafafa;
-  overflow: hidden;
-}
-.cs-shot img{
-  position: absolute; inset: 0;
-  width: 100%; height: 100%;
-  object-fit: cover;
-  object-position: top center;
-  display: block;
-  /* Subtle initial scale to hint zoom-in; the active scene's
-     animation pushes it back to scale(1). */
-  transform: scale(1.02);
-  transform-origin: center;
-  transition: transform 5s linear;
-}
-.cs-shot-fit img{ object-fit: cover; }
-.cine-stage[data-scene="3"] .cs-3 .cs-shot img,
-.cine-stage[data-scene="4"] .cs-4 .cs-shot img,
-.cine-stage[data-scene="5"] .cs-5 .cs-shot img,
-.cine-stage[data-scene="6"] .cs-6 .cs-shot img{
-  transform: scale(1);  /* slow zoom-out for that "Ken Burns" cinema feel */
-}
-.cs-overlay{
-  position: absolute; inset: 0;
-  pointer-events: none;
-  z-index: 4;
-}
-
-/* ---- Pulsing highlight rectangle (positioned via --x/--y/--w/--h) ---- */
-.cs-highlight{
-  position: absolute;
-  left: var(--x, 50%); top: var(--y, 50%);
-  width: var(--w, 20%); height: var(--h, 10%);
-  border-radius: 10px;
-  border: 2px solid var(--brand);
+/* ---- TOP-RIGHT: Maximize cascade pill ---- */
+.hs-cascade{
+  display: inline-flex; align-items: center; gap: 11px;
+  padding: 10px 14px;
+  background: linear-gradient(135deg, rgba(255,255,255,.96) 0%, rgba(248,253,250,.96) 100%);
+  border: 1px solid rgba(0,208,132,.25);
+  border-radius: 14px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   box-shadow:
-    0 0 0 4px rgba(0,208,132,.16),
-    0 0 28px rgba(0,208,132,.45),
-    inset 0 0 0 1px rgba(255,255,255,.55);
-  opacity: 0;
-  animation: csHighlightIn .55s cubic-bezier(.2,.8,.2,1) forwards;
+    0 1px 0 rgba(255,255,255,.8) inset,
+    0 4px 12px -2px rgba(0,168,106,.20);
 }
-.cs-highlight-strong{
+.hs-cascade-icon{
+  font-size: 18px;
+  filter: drop-shadow(0 0 6px rgba(0,208,132,.55));
+}
+.hs-cascade-text{ display: flex; flex-direction: column; line-height: 1.15; }
+.hs-cascade-text strong{ font-family: var(--font-display); font-size: 13px; font-weight: 700; color: var(--ink-0); }
+.hs-cascade-text em{ font-family: var(--font-mono); font-style: normal; font-size: 10.5px; color: var(--ink-2); margin-top: 1px; }
+.hs-cascade-time{ color: var(--brand-deep); font-weight: 700; }
+.hs-cascade-status{
+  display: inline-flex; align-items: center; gap: 5px;
+  font-family: var(--font-mono); font-size: 9.5px; font-weight: 800;
+  letter-spacing: .14em;
+  padding: 4px 8px;
+  background: rgba(0,208,132,.16);
+  color: var(--brand-deep);
+  border-radius: 6px;
+}
+.hs-pulse-dot{
+  width: 5px; height: 5px; border-radius: 50%; background: var(--brand);
+  box-shadow: 0 0 0 0 rgba(0,208,132,.55);
+  animation: hsLivePulse 1.5s ease-out infinite;
+}
+
+/* ---- BOTTOM-LEFT: Score Guarantee glass card ---- */
+.hs-guarantee{
+  width: 280px;
+  padding: 16px 18px;
+  background: linear-gradient(180deg, rgba(255,255,255,.96), rgba(252,250,243,.96));
+  border: 1px solid rgba(36,32,18,.08);
+  border-radius: 16px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   box-shadow:
-    0 0 0 5px rgba(0,208,132,.22),
-    0 0 40px rgba(0,208,132,.65),
-    inset 0 0 0 1px rgba(255,255,255,.65);
+    0 1px 0 rgba(255,255,255,.8) inset,
+    0 2px 6px rgba(20,18,10,.06);
 }
-.cine-stage[data-scene="3"] .cs-3 .cs-highlight{ animation-delay: .7s; }
-.cine-stage[data-scene="4"] .cs-4 .cs-highlight{ animation-delay: .5s; }
-.cine-stage[data-scene="5"] .cs-5 .cs-highlight{ animation-delay: .55s; }
-.cine-stage[data-scene="6"] .cs-6 .cs-highlight{ animation-delay: .55s; }
-@keyframes csHighlightIn{
-  0%   { opacity: 0; transform: scale(1.04); }
-  100% { opacity: 1; transform: scale(1); }
+.hs-g-eyebrow{
+  display: inline-flex; align-items: center; gap: 6px;
+  font-family: var(--font-mono); font-size: 9.5px; font-weight: 800;
+  letter-spacing: .16em; color: var(--brand-deep); text-transform: uppercase;
 }
-/* Continuous breathe after the entry animation */
-.cs-highlight::after{
-  content:''; position: absolute; inset: -2px;
-  border-radius: inherit;
-  box-shadow: 0 0 0 0 rgba(0,208,132,.30);
-  animation: csHighlightPulse 2.4s ease-in-out 1.2s infinite;
+.hs-g-shield{ font-size: 11px; }
+.hs-g-progress{
+  display: inline-flex; align-items: baseline; gap: 8px;
+  margin-top: 10px;
 }
-@keyframes csHighlightPulse{
-  0%, 100% { box-shadow: 0 0 0 0 rgba(0,208,132,.30); }
-  50%      { box-shadow: 0 0 0 12px rgba(0,208,132,0); }
+.hs-g-from{
+  font-family: var(--font-display); font-size: 22px; font-weight: 700;
+  color: var(--ink-2); opacity: .65; letter-spacing: -.02em;
+  font-variant-numeric: tabular-nums;
 }
-
-/* ---- Animated cursor (used in scene 3 to land on the selection) ---- */
-.cs-cursor{
-  position: absolute;
-  filter: drop-shadow(0 4px 6px rgba(20,18,10,.35));
-  opacity: 0;
-  z-index: 6;
-  pointer-events: none;
+.hs-g-arrow{ color: var(--ink-3); font-weight: 300; font-size: 18px; }
+.hs-g-to{
+  font-family: var(--font-display); font-size: 26px; font-weight: 700;
+  letter-spacing: -.025em; line-height: 1;
+  background: linear-gradient(180deg, var(--brand) 0%, var(--brand-deep) 100%);
+  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+  font-variant-numeric: tabular-nums;
 }
-.cs-cursor-3{
-  left: 8%; top: 70%;
-}
-.cine-stage[data-scene="3"] .cs-cursor-3{
-  animation: csCursor3Move 1.6s cubic-bezier(.5,.0,.25,1) .25s forwards;
-}
-@keyframes csCursor3Move{
-  0%   { left: 8%;  top: 70%; opacity: 0; transform: scale(1); }
-  20%  { opacity: 1; }
-  85%  { left: 28%; top: 22%; opacity: 1; transform: scale(1); }
-  92%  { left: 28%; top: 22%; opacity: 1; transform: scale(.88); }
-  100% { left: 28%; top: 22%; opacity: 1; transform: scale(1); }
-}
-
-/* ---- +N pts floaters (scene 4) — fly up over the per-product rows ---- */
-.cs-pts{
-  position: absolute;
-  font-family: var(--font-mono); font-weight: 800; font-size: 16px;
-  color: #fff;
-  background: linear-gradient(135deg, var(--brand), var(--brand-deep));
-  padding: 6px 11px;
-  border-radius: 10px;
-  letter-spacing: .04em;
-  opacity: 0;
-  box-shadow:
-    0 6px 18px -4px rgba(0,168,106,.65),
-    0 1px 0 rgba(255,255,255,.35) inset;
-  z-index: 6;
-  pointer-events: none;
-  transform: translateY(20px) scale(.7);
-}
-.cs-pts-1{ left: 84%; top: 38%; }
-.cs-pts-2{ left: 84%; top: 48%; }
-.cs-pts-3{ left: 84%; top: 58%; }
-.cs-pts-4{ left: 84%; top: 68%; }
-.cs-pts-5{ left: 84%; top: 78%; }
-.cine-stage[data-scene="4"] .cs-pts{
-  animation: csPtsRise 1.6s cubic-bezier(.2,.8,.2,1) forwards;
-}
-.cine-stage[data-scene="4"] .cs-pts-1{ animation-delay: 1.30s; }
-.cine-stage[data-scene="4"] .cs-pts-2{ animation-delay: 1.46s; }
-.cine-stage[data-scene="4"] .cs-pts-3{ animation-delay: 1.62s; }
-.cine-stage[data-scene="4"] .cs-pts-4{ animation-delay: 1.78s; }
-.cine-stage[data-scene="4"] .cs-pts-5{ animation-delay: 1.94s; }
-@keyframes csPtsRise{
-  0%   { opacity: 0; transform: translateY(20px) scale(.7); }
-  18%  { opacity: 1; transform: translateY(-2px) scale(1.10); }
-  25%  { transform: translateY(-6px) scale(1); }
-  85%  { opacity: 1; transform: translateY(-60px) scale(1); }
-  100% { opacity: 0; transform: translateY(-78px) scale(.9); }
-}
-
-/* ---- Annotation chip (label + arrow) used in scenes 5, 6 ---- */
-.cs-annot{
-  position: absolute;
-  left: var(--x, 50%); top: var(--y, 50%);
+.hs-g-delta{
+  margin-left: auto;
   font-family: var(--font-mono); font-size: 11px; font-weight: 800;
-  color: #fff;
-  background: linear-gradient(135deg, var(--brand-deep) 0%, #017a4a 100%);
-  padding: 7px 12px;
-  border-radius: 8px;
+  padding: 4px 8px; border-radius: 7px;
+  background: rgba(0,208,132,.16); color: var(--brand-deep);
   letter-spacing: .04em;
-  white-space: nowrap;
-  z-index: 7;
-  opacity: 0;
-  transform: translateY(-6px);
+}
+.hs-g-bar{
+  position: relative; height: 7px; border-radius: 4px;
+  background: rgba(36,32,18,.06);
+  margin-top: 10px;
+  overflow: hidden;
+}
+.hs-g-bar-fill{
+  position: absolute; inset: 0 26.7% 0 0;  /* 76.5% fill (76.5/100×100, but progress is +26.5/40 target ≈ 66%) */
+  width: auto; right: auto; left: 0;
+  background: linear-gradient(90deg, var(--brand), var(--brand-deep));
+  border-radius: inherit;
+  box-shadow: 0 0 8px rgba(0,208,132,.45);
+  /* animate fill from 0 to ~73% on view */
+  width: 0;
+  animation: hsGBarFill 1.6s cubic-bezier(.2,.8,.2,1) .5s forwards;
+}
+@keyframes hsGBarFill{ to{ width: 73%; } }
+.hs-g-foot{
+  display: block; margin-top: 8px;
+  font-family: var(--font-mono); font-size: 10px; color: var(--ink-3);
+  letter-spacing: .04em;
+}
+
+/* ---- BOTTOM-RIGHT: stacked +pts pills ---- */
+.hs-pts-stack{
+  display: flex; flex-direction: column; gap: 6px;
+  align-items: flex-end;
+}
+.hs-pt{
+  display: inline-block;
+  font-family: var(--font-mono); font-size: 13px; font-weight: 800;
+  color: #fff;
+  background: linear-gradient(135deg, var(--brand) 0%, var(--brand-deep) 100%);
+  padding: 6px 12px;
+  border-radius: 10px;
+  letter-spacing: .04em;
   box-shadow:
-    0 8px 22px -6px rgba(0,108,68,.55),
-    0 1px 0 rgba(255,255,255,.30) inset;
-  pointer-events: none;
+    0 6px 16px -4px rgba(0,168,106,.55),
+    0 1px 0 rgba(255,255,255,.35) inset;
+  opacity: 0;
+  transform: translateY(12px);
+  animation: hsPtIn .5s cubic-bezier(.2,.8,.2,1) forwards, hsPtBob 3.2s ease-in-out infinite;
 }
-.cine-stage[data-scene="5"] .cs-annot-5,
-.cine-stage[data-scene="6"] .cs-annot-6{
-  animation: csAnnotIn .5s cubic-bezier(.2,.8,.2,1) 1.0s forwards;
-}
-@keyframes csAnnotIn{
+.hs-pt-1{ animation-delay: 1.0s, 1.5s; }
+.hs-pt-2{ animation-delay: 1.2s, 1.7s; }
+.hs-pt-3{ animation-delay: 1.4s, 1.9s; }
+.hs-pt-4{ animation-delay: 1.6s, 2.1s; opacity: .8; transform: scale(.94); }
+@keyframes hsPtIn{
   to{ opacity: 1; transform: translateY(0); }
 }
+@keyframes hsPtBob{
+  0%, 100% { translate: 0 0; }
+  50%      { translate: 0 -3px; }
+}
 
-/* ---- prefers-reduced-motion: kill all overlay animations ---- */
+@media (max-width: 880px){
+  .hs-main{ width: 100%; transform: rotateX(2deg) rotateY(0); }
+  .hs-guarantee{ width: 240px; }
+  .hs-cascade-text em{ font-size: 9.5px; }
+  .hs-pts-stack .hs-pt{ font-size: 11px; padding: 4px 9px; }
+}
+
 @media (prefers-reduced-motion: reduce){
-  .cs-shot img{ transform: scale(1); transition: none; }
-  .cs-highlight, .cs-highlight::after,
-  .cs-cursor, .cs-pts, .cs-annot{
+  .hs-main, .hs-orb, .hs-main-shine, .hs-float, .hs-live-dot,
+  .hs-pulse-dot, .hs-g-bar-fill, .hs-pt{
     animation: none !important;
     opacity: 1 !important;
     transform: none !important;
   }
+  .hs-g-bar-fill{ width: 73% !important; }
+  .hs-main{ transform: none; }
 }
 /* ============ TICKER ============ */
 .ticker-wrap{
@@ -6722,219 +6466,86 @@ section + .cta-section{ padding-top: 64px; }
 
     <div class="hero-visual" id="heroVisual">
       <!-- ============================================================
-           HERO CINEMATIC STAGE — multi-scene product demo loop
+           HERO STATIC COMPOSITION (v7) — Linear/Stripe-style premium hero
            ============================================================
-           Six bespoke scenes slide horizontally through a single frame.
-           Each scene mimics a real product surface (storefront, app
-           install, product list, before/after, causal proof, revenue),
-           not the same dashboard re-skinned. JS controller swaps the
-           data-scene attribute every 2.5–3.5s with a 600ms slide.
+           One composition, always visible. A perspective-tilted main
+           screenshot (Bulk Maximize Results) anchors the centre;
+           floating chips/cards in each corner each show a different
+           facet of the product (catalog audit, agent visibility,
+           score-guarantee, cascade points). Subtle parallax tracks
+           the cursor — no scene swaps, just constant micro-motion.
            ============================================================ -->
-      <div class="cine-stage" id="cineStage" data-scene="1">
+      <div class="hero-static" id="heroStatic">
 
-        <!-- Browser/app chrome wrapper — same frame for every scene so
-             the cinema feels like "different screens of the same app". -->
-        <div class="cine-window">
-          <div class="cine-chrome">
-            <div class="cw-traffic"><span></span><span></span><span></span></div>
-            <div class="cw-url" id="cwUrl">verde-skin.com/products/botanical-serum</div>
-            <div class="cw-actions"><span class="cw-pad"></span><span class="cw-pad"></span></div>
+        <!-- Background atmosphere: gradient orbs + subtle dot grid -->
+        <div class="hs-bg" aria-hidden="true">
+          <span class="hs-orb hs-orb-a"></span>
+          <span class="hs-orb hs-orb-b"></span>
+          <span class="hs-grid"></span>
+        </div>
+
+        <!-- Main perspective screenshot: the money shot of the app -->
+        <div class="hs-main" id="hsMain">
+          <div class="hs-main-inner">
+            <img src="images/app/bulk-maximize-results.jpg"
+                 alt="AI Catalog Score · Bulk Maximize results — 7/7 products improved · +23.9 points · 14.6s"
+                 width="2415" height="1249"
+                 fetchpriority="high"/>
+            <span class="hs-main-shine" aria-hidden="true"></span>
           </div>
+        </div>
 
-          <div class="cine-frame" id="cineFrame">
-
-            <!-- ===================================================
-                 SCENE 1 · STOREFRONT (invisible to AI)
-                 =================================================== -->
-            <section class="cine-scene cs-1" data-scene="1">
-              <div class="cs1-shop">
-                <header class="cs1-shopnav">
-                  <span class="cs1-logo">VERDE</span>
-                  <nav class="cs1-nav"><span>Shop</span><span>Routine</span><span>About</span><span>Journal</span></nav>
-                  <span class="cs1-cart">Cart · 0</span>
-                </header>
-                <div class="cs1-grid">
-                  <div class="cs1-img"><div class="thumb-serum thumb-serum-lg"></div></div>
-                  <div class="cs1-info">
-                    <span class="cs1-breadcrumb">Skincare · Serums</span>
-                    <h3 class="cs1-title">Botanical Serum</h3>
-                    <div class="cs1-meta"><span class="cs1-stars">★★★★★ <em>(86)</em></span><span class="cs1-price">$48.00</span></div>
-                    <p class="cs1-desc">Hydrating serum for the skin. Helps improve skin look.</p>
-                    <div class="cs1-swatches"><span></span><span></span><span class="is-on"></span></div>
-                    <button class="cs1-cta" aria-hidden="true">Add to cart</button>
-                    <ul class="cs1-bullets">
-                      <li>Free shipping · 30-day returns</li>
-                      <li>Cruelty-free · vegan formula</li>
-                    </ul>
-                  </div>
-                </div>
-                <!-- Stamp overlay — fades + scales in at ~1s -->
-                <div class="cs1-stamp" aria-hidden="true">
-                  <div class="cs1-stamp-line1">INVISIBLE TO</div>
-                  <div class="cs1-stamp-line2">AI AGENTS</div>
-                  <div class="cs1-stamp-agents">
-                    <span class="cs1a chatgpt">C</span>
-                    <span class="cs1a claude">A</span>
-                    <span class="cs1a gemini">G</span>
-                    <span class="cs1a mistral">M</span>
-                    <span class="cs1a deepseek">D</span>
-                  </div>
-                  <div class="cs1-stamp-sub">0 of 5 AI agents return this product for relevant queries</div>
-                </div>
-              </div>
-            </section>
-
-            <!-- ===================================================
-                 SCENE 2 · SHOPIFY APP INSTALL
-                 =================================================== -->
-            <section class="cine-scene cs-2" data-scene="2">
-              <div class="cs2-admin">
-                <div class="cs2-topbar">
-                  <span class="cs2-logo-sh"><svg viewBox="0 0 24 24" width="22" height="22"><path d="M14.5 4c-.4 0-1.2.1-1.7.7-.6.7-.9 1.6-1 2.4-.6.2-1.5.4-2.5.7-.4-1-1.1-2-2.4-2-1.2 0-2 .5-2.6 1.2L2 21l11 3 3.5-19c-.6-.4-1.4-1-2-1zm-2 2.5c-.2.4-.3.9-.4 1.4-.7.2-1.6.5-2.5.7.3-.7.7-1.4 1.3-1.7.5-.2 1.1-.3 1.6-.4z" fill="#5E8E3E"/></svg></span>
-                  <div class="cs2-search"><span class="cs2-search-ic">🔍</span><span>Search</span></div>
-                  <span class="cs2-avatar">JD</span>
-                </div>
-                <div class="cs2-body">
-                  <div class="cs2-sidebar">
-                    <span class="cs2-side">Home</span>
-                    <span class="cs2-side">Orders</span>
-                    <span class="cs2-side">Products</span>
-                    <span class="cs2-side cs2-side-active">Apps</span>
-                    <span class="cs2-side">Analytics</span>
-                    <span class="cs2-side">Marketing</span>
-                  </div>
-                  <div class="cs2-main">
-                    <div class="cs2-card">
-                      <div class="cs2-app-head">
-                        <div class="cs2-app-icon"><img src="logo-acs.png" alt="" loading="lazy"/></div>
-                        <div class="cs2-app-meta">
-                          <h4>AI Catalog Score</h4>
-                          <p>by AI Catalog Score · 4.9 ★ (1,200+ stores)</p>
-                        </div>
-                      </div>
-                      <p class="cs2-app-desc">Make every product discoverable by ChatGPT, Claude, Gemini, Mistral &amp; DeepSeek. Auto-fix the 8 signals AI agents read.</p>
-                      <div class="cs2-perms">
-                        <span class="cs2-perms-label">This app needs to:</span>
-                        <ul>
-                          <li><span class="cs2-tick">✓</span>Read products, variants &amp; metafields</li>
-                          <li><span class="cs2-tick">✓</span>Write product copy &amp; alt text (with preview)</li>
-                          <li><span class="cs2-tick">✓</span>Emit JSON-LD on product pages</li>
-                          <li><span class="cs2-tick">✓</span>Read order &amp; revenue data (causal proof)</li>
-                        </ul>
-                      </div>
-                      <button class="cs2-install" aria-hidden="true">
-                        <span class="cs2-install-label">Install</span>
-                        <span class="cs2-install-progress"></span>
-                      </button>
-                    </div>
-                    <!-- Animated cursor flies in and clicks Install -->
-                    <svg class="cs2-cursor" viewBox="0 0 24 24" width="22" height="22"><path d="M3 3 L3 18 L7.5 14 L10 21 L13 19.5 L10.5 13 L17 13 Z" fill="#1f1d12" stroke="#fff" stroke-width="1.4" stroke-linejoin="round"/></svg>
-                  </div>
-                </div>
-              </div>
-            </section>
-
-
-            <!-- ===================================================
-                 SCENE 3 · REAL CATALOG (products-selected screenshot)
-                 ===================================================
-                 The user audits their catalog and bulk-selects products
-                 for the Maximize cascade. Real screenshot from the
-                 Shopify app; pulsing green highlight ring draws the eye
-                 to the "7 selected" selection row + bulk action area. -->
-            <section class="cine-scene cs-3" data-scene="3">
-              <div class="cs-shot cs-shot-fit">
-                <img src="images/app/products-selected.jpg" alt="AI Catalog Score · Products list with 7 selected" loading="lazy"/>
-                <div class="cs-overlay">
-                  <!-- "7 selected" header band -->
-                  <span class="cs-highlight" style="--x:24%; --y:18%; --w:11%; --h:5%"></span>
-                  <!-- Cursor lands on the selected band -->
-                  <svg class="cs-cursor cs-cursor-3" viewBox="0 0 24 24" width="22" height="22"><path d="M3 3 L3 18 L7.5 14 L10 21 L13 19.5 L10.5 13 L17 13 Z" fill="#1f1d12" stroke="#fff" stroke-width="1.4" stroke-linejoin="round"/></svg>
-                </div>
-              </div>
-            </section>
-
-            <!-- ===================================================
-                 SCENE 4 · BULK MAXIMIZE RESULTS (the money shot)
-                 ===================================================
-                 Real screenshot of "Bulk Maximize — Results" page with
-                 "7/7 products improved · +23.9 points · 74.8s".
-                 We pulse a glow ring around the hero stat, then float
-                 +pts pills (matching the actual per-row score gains
-                 shown in the screenshot: +34, +31, +23, +23, +21, +18). -->
-            <section class="cine-scene cs-4" data-scene="4">
-              <div class="cs-shot cs-shot-fit">
-                <img src="images/app/bulk-maximize-results.jpg" alt="Bulk Maximize Results · 7/7 products improved · +23.9 points" loading="lazy"/>
-                <div class="cs-overlay">
-                  <!-- Glow ring around the hero banner -->
-                  <span class="cs-highlight cs-highlight-strong" style="--x:36%; --y:11%; --w:54%; --h:8%"></span>
-                  <!-- +pts floaters anchored to the per-product result rows -->
-                  <span class="cs-pts cs-pts-1">+34</span>
-                  <span class="cs-pts cs-pts-2">+31</span>
-                  <span class="cs-pts cs-pts-3">+23</span>
-                  <span class="cs-pts cs-pts-4">+23</span>
-                  <span class="cs-pts cs-pts-5">+21</span>
-                </div>
-              </div>
-            </section>
-
-            <!-- ===================================================
-                 SCENE 5 · PER-PRODUCT PROOF (product detail screenshot)
-                 ===================================================
-                 Real screenshot of one product's detail page showing
-                 Score Breakdown 83/100 + AI-Powered Fixes panel.
-                 Highlight the score gauge + the All Issues card so the
-                 viewer reads "per-fix transparency". -->
-            <section class="cine-scene cs-5" data-scene="5">
-              <div class="cs-shot cs-shot-fit">
-                <img src="images/app/product-detail.jpg" alt="Per-product detail · Score 83/100 with AI fixes" loading="lazy"/>
-                <div class="cs-overlay">
-                  <!-- Highlight on Score Breakdown card (left) -->
-                  <span class="cs-highlight" style="--x:6%; --y:12%; --w:30%; --h:78%"></span>
-                  <!-- Annotation chip pointing to score -->
-                  <span class="cs-annot cs-annot-5" style="--x:7%; --y:6%">Per-signal scoring</span>
-                </div>
-              </div>
-            </section>
-
-            <!-- ===================================================
-                 SCENE 6 · SCORE GUARANTEE (the trust moment)
-                 ===================================================
-                 Real screenshot of the catalog-level Score Guarantee
-                 page showing "This month's catalog score: 50.0 → 76.5
-                 = +26.5 On track". Pulse-highlight the monthly progress
-                 + the 30-day breakdown stats. -->
-            <section class="cine-scene cs-6" data-scene="6">
-              <div class="cs-shot cs-shot-fit">
-                <img src="images/app/score-guarantee.jpg" alt="Score Guarantee · Catalog score +26.5 this month · On track" loading="lazy"/>
-                <div class="cs-overlay">
-                  <!-- Pulsing highlight around the monthly score progress card -->
-                  <span class="cs-highlight cs-highlight-strong" style="--x:18%; --y:20%; --w:64%; --h:14%"></span>
-                  <!-- Annotation chip with the guarantee promise -->
-                  <span class="cs-annot cs-annot-6" style="--x:60%; --y:36%">+10 pts in 30 days · or refunded</span>
-                </div>
-              </div>
-            </section>
-
-          </div><!-- /.cine-frame -->
-
-          <!-- Caption strip — text + step pip + progress, swaps per scene -->
-          <div class="cine-caption">
-            <span class="cc-step" id="ccStep">Step 1 of 6</span>
-            <span class="cc-text" id="ccText">Your products are <strong>invisible to AI agents</strong>.</span>
-            <div class="cc-pips" id="ccPips">
-              <span data-i="1" class="is-on"></span>
-              <span data-i="2"></span>
-              <span data-i="3"></span>
-              <span data-i="4"></span>
-              <span data-i="5"></span>
-              <span data-i="6"></span>
+        <!-- TOP-LEFT: ChatGPT agent badge (subtle, signals real-time AI traffic) -->
+        <aside class="hs-float hs-float-tl">
+          <div class="hs-agent">
+            <span class="hs-agent-logo hs-agent-chatgpt">
+              <svg viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M22.282 9.821a5.985 5.985 0 0 0-.516-4.91 6.046 6.046 0 0 0-6.51-2.9A6.065 6.065 0 0 0 4.981 4.18a5.985 5.985 0 0 0-3.998 2.9 6.046 6.046 0 0 0 .743 7.097 5.98 5.98 0 0 0 .51 4.911 6.051 6.051 0 0 0 6.515 2.9A5.985 5.985 0 0 0 13.26 24a6.056 6.056 0 0 0 5.772-4.206 5.99 5.99 0 0 0 3.997-2.9 6.056 6.056 0 0 0-.747-7.073zM13.26 22.43a4.476 4.476 0 0 1-2.876-1.04l.141-.081 4.779-2.758a.795.795 0 0 0 .392-.681v-6.737l2.02 1.168a.071.071 0 0 1 .038.052v5.583a4.504 4.504 0 0 1-4.494 4.494zM3.6 18.304a4.47 4.47 0 0 1-.535-3.014l.142.085 4.783 2.759a.771.771 0 0 0 .78 0l5.843-3.369v2.332a.08.08 0 0 1-.033.062L9.74 19.95a4.5 4.5 0 0 1-6.14-1.646zM2.34 7.896a4.485 4.485 0 0 1 2.366-1.973V11.6a.766.766 0 0 0 .388.676l5.815 3.355-2.02 1.168a.076.076 0 0 1-.071 0l-4.83-2.786A4.504 4.504 0 0 1 2.34 7.872zm16.597 3.855l-5.833-3.387L15.119 7.2a.076.076 0 0 1 .071 0l4.83 2.791a4.494 4.494 0 0 1-.676 8.105v-5.678a.79.79 0 0 0-.407-.667zm2.01-3.023l-.141-.085-4.774-2.782a.776.776 0 0 0-.785 0L9.409 9.23V6.897a.066.066 0 0 1 .028-.061l4.83-2.787a4.5 4.5 0 0 1 6.68 4.66zm-12.64 4.135l-2.02-1.164a.08.08 0 0 1-.038-.057V6.075a4.5 4.5 0 0 1 7.375-3.453l-.142.08L8.704 5.46a.795.795 0 0 0-.393.681zm1.097-2.365l2.602-1.5 2.607 1.5v2.999l-2.597 1.5-2.607-1.5z"/></svg>
+            </span>
+            <div class="hs-agent-text">
+              <strong>ChatGPT</strong>
+              <em><span class="hs-live-dot"></span>+147 sessions today</em>
             </div>
           </div>
+        </aside>
 
-        </div><!-- /.cine-window -->
+        <!-- TOP-RIGHT: Maximize cascade pill -->
+        <aside class="hs-float hs-float-tr">
+          <div class="hs-cascade">
+            <span class="hs-cascade-icon">✨</span>
+            <div class="hs-cascade-text">
+              <strong>Maximize cascade</strong>
+              <em>7 products · +23.9 pts · <span class="hs-cascade-time">14.6s</span></em>
+            </div>
+            <span class="hs-cascade-status"><span class="hs-pulse-dot"></span>DONE</span>
+          </div>
+        </aside>
 
-      </div><!-- /.cine-stage -->
+        <!-- BOTTOM-LEFT: Score Guarantee card (glass, the trust card) -->
+        <aside class="hs-float hs-float-bl">
+          <div class="hs-guarantee">
+            <span class="hs-g-eyebrow"><span class="hs-g-shield">🛡</span>SCORE GUARANTEE · MAY</span>
+            <div class="hs-g-progress">
+              <span class="hs-g-from">50.0</span>
+              <span class="hs-g-arrow" aria-hidden="true">→</span>
+              <span class="hs-g-to">76.5</span>
+              <span class="hs-g-delta">+26.5</span>
+            </div>
+            <div class="hs-g-bar"><span class="hs-g-bar-fill"></span></div>
+            <span class="hs-g-foot">On track · +10 pts in 30 days or refunded</span>
+          </div>
+        </aside>
+
+        <!-- BOTTOM-RIGHT: stacked +pts pills (subtly bobbing) -->
+        <aside class="hs-float hs-float-br">
+          <div class="hs-pts-stack">
+            <span class="hs-pt hs-pt-1">+34 pts</span>
+            <span class="hs-pt hs-pt-2">+31 pts</span>
+            <span class="hs-pt hs-pt-3">+23 pts</span>
+            <span class="hs-pt hs-pt-4">+18 pts</span>
+          </div>
+        </aside>
+
+      </div>
     </div>
   </div>
 </section>
@@ -9280,133 +8891,33 @@ if (terminalBody) terminalObserver.observe(terminalBody);
   }
 })();
 
-// ===== HERO CINEMATIC STAGE — 6-scene product demo loop =====
-(function initCineStage(){
-  const stage = document.getElementById('cineStage');
+// ===== HERO STATIC COMPOSITION (v7) — parallax tilt on mouse move =====
+(function initHeroStatic(){
+  const stage = document.getElementById('heroStatic');
   if (!stage) return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  if (!window.matchMedia('(min-width: 880px)').matches) return;
 
-  // Scene definitions: number, duration (ms), URL chrome bar, caption text.
-  // Scenes 3-6 are REAL screenshots from the Shopify app; durations are
-  // longer so the eye has time to read the data inside each capture.
-  const SCENES = [
-    { i: 1, ms: 3200, url: 'verde-skin.com/products/botanical-serum',
-      step: 'Step 1 of 6', text: 'Your products are <strong>invisible to AI agents</strong>.' },
-    { i: 2, ms: 2800, url: 'admin.shopify.com/apps/ai-catalog-score',
-      step: 'Step 2 of 6', text: 'Install in <strong>90 seconds</strong>.  Read-only by default.' },
-    { i: 3, ms: 3600, url: 'admin.shopify.com/apps/ai-catalog-score/catalog',
-      step: 'Step 3 of 6', text: 'Audit your real catalog. <strong>Bulk-select products</strong> for the cascade.' },
-    { i: 4, ms: 4400, url: 'admin.shopify.com/apps/ai-catalog-score/bulk-fix/results',
-      step: 'Step 4 of 6', text: 'One click. <strong>7 of 7 products improved · +23.9 points in 14.6 s</strong>.' },
-    { i: 5, ms: 3800, url: 'admin.shopify.com/apps/ai-catalog-score/product/12345',
-      step: 'Step 5 of 6', text: '<strong>Per-product proof</strong> · every signal scored, every fix tracked.' },
-    { i: 6, ms: 4000, url: 'admin.shopify.com/apps/ai-catalog-score/score-guarantee',
-      step: 'Step 6 of 6', text: '<strong>+10 points in 30 days</strong> · or you get refunded.' },
-  ];
-
-  const urlEl  = document.getElementById('cwUrl');
-  const stepEl = document.getElementById('ccStep');
-  const textEl = document.getElementById('ccText');
-  const pips   = document.querySelectorAll('#ccPips span');
-
-  // Number tweens for Scene 5 stat cells. Re-runs each loop pass.
-  function tweenCs5(){
-    stage.querySelectorAll('[data-cs5-target]').forEach(el => {
-      const target = parseFloat(el.dataset.cs5Target);
-      const prefix = el.dataset.cs5Prefix || '';
-      const start  = performance.now();
-      const dur    = 1400;
-      function tick(now){
-        const t = Math.min((now - start) / dur, 1);
-        const eased = 1 - Math.pow(1 - t, 3);
-        const v = Math.round(target * eased);
-        el.textContent = prefix + v.toLocaleString('en-US');
-        if (t < 1) requestAnimationFrame(tick);
-      }
-      requestAnimationFrame(tick);
-    });
-  }
-
-  function applyScene(scene){
-    stage.setAttribute('data-scene', String(scene.i));
-    if (urlEl)  urlEl.textContent  = scene.url;
-    if (stepEl) stepEl.textContent = scene.step;
-    if (textEl) textEl.innerHTML   = scene.text;
-    pips.forEach((p, idx) => p.classList.toggle('is-on', idx + 1 === scene.i));
-    // Scene-specific JS-driven animations
-    if (scene.i === 5) tweenCs5();
-  }
-
-  // Loop driver
-  let idx = 0;
-  let timer = null;
-  let started = false;
-  let paused  = false;
-
-  function tick(){
-    const scene = SCENES[idx];
-    applyScene(scene);
-    timer = setTimeout(() => {
-      if (paused) return;
-      idx = (idx + 1) % SCENES.length;
-      tick();
-    }, scene.ms);
-  }
-
-  function start(){
-    if (started) return;
-    started = true;
-    tick();
-  }
-  function pause(){
-    paused = true;
-    if (timer) clearTimeout(timer);
-  }
-  function resume(){
-    if (!started) return;
-    paused = false;
-    tick();
-  }
-
-  // Visibility-aware: pause when tab is hidden
-  document.addEventListener('visibilitychange', () => {
-    if (document.hidden) pause();
-    else resume();
+  // The CSS reads --hs-tilt-x and --hs-tilt-y custom properties on the
+  // .hero-static root and adds them to the main screenshot's base
+  // rotateX(6deg) / rotateY(-4deg). We coalesce mousemove into a single
+  // rAF write per frame so we don't thrash style recalc.
+  let raf = null, px = 0, py = 0;
+  const apply = () => {
+    raf = null;
+    stage.style.setProperty('--hs-tilt-x', `${-py * 3}deg`);   // tilt opposite cursor for "lean in"
+    stage.style.setProperty('--hs-tilt-y', `${ px * 4}deg`);
+  };
+  stage.addEventListener('mousemove', (e) => {
+    const r = stage.getBoundingClientRect();
+    px = (e.clientX - r.left) / r.width - 0.5;   // -0.5..0.5
+    py = (e.clientY - r.top)  / r.height - 0.5;
+    if (raf == null) raf = requestAnimationFrame(apply);
   });
-
-  // Reduced motion: just show scene 1 statically.
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches){
-    applyScene(SCENES[0]);
-    return;
-  }
-
-  // Start when the stage enters the viewport (or immediately if it already is)
-  const r0 = stage.getBoundingClientRect();
-  if (r0.top < window.innerHeight && r0.bottom > 0){
-    requestAnimationFrame(() => requestAnimationFrame(start));
-  } else {
-    const obs = new IntersectionObserver((entries) => {
-      entries.forEach(e => {
-        if (e.isIntersecting){ start(); obs.disconnect(); }
-      });
-    }, { threshold: 0 });
-    obs.observe(stage);
-  }
-
-  // Subtle parallax tilt on mouse move (desktop only)
-  if (window.matchMedia('(min-width: 880px)').matches){
-    const win = stage.querySelector('.cine-window');
-    if (win){
-      stage.addEventListener('mousemove', (e) => {
-        const r = stage.getBoundingClientRect();
-        const mx = (e.clientX - r.left) / r.width - 0.5;
-        const my = (e.clientY - r.top) / r.height - 0.5;
-        win.style.transform = `rotateX(${1.5 - my * 2.5}deg) rotateY(${-2 + mx * 3.5}deg)`;
-      });
-      stage.addEventListener('mouseleave', () => {
-        win.style.transform = '';
-      });
-    }
-  }
+  stage.addEventListener('mouseleave', () => {
+    stage.style.setProperty('--hs-tilt-x', '0deg');
+    stage.style.setProperty('--hs-tilt-y', '0deg');
+  });
 })();
 
 // ===== PRICING MONTHLY/YEARLY TOGGLE =====
