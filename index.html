@@ -3195,7 +3195,21 @@ section{ position: relative; }
   color: #fff;
 }
 
-/* === Live examples carousel: 2 rows visible + side controls === */
+/* === Live examples carousel ============================================
+   Layout (after debugging the empty-band issue):
+     - .ls-viewport-grid: fixed 78px tall, overflow hidden — the
+       "window" onto the track.
+     - .ls-track-pair: a HORIZONTAL flex strip 200% wide. The 4 rows
+       sit side-by-side at 25% of track-width each (= 50% of viewport
+       each), so exactly 2 rows are visible at any moment.
+     - Pagination = translateX(-50% × pageIdx). 50% of track width
+       equals one full viewport width, so each step swaps in the next
+       pair. The previous grid (1fr 1fr stacking 2×2) was being shifted
+       100% by the JS, pushing everything off-screen → blank band.
+   !important needed to overpower the original .ls-viewport / .ls-track
+   declarations which set fixed height: 76px and a vertical scroll
+   animation that conflicts with this layout.
+   ========================================================================= */
 .ls-shell{
   display: grid;
   grid-template-columns: 1fr auto;
@@ -3203,34 +3217,41 @@ section{ position: relative; }
   align-items: center;
 }
 .ls-viewport-grid{
-  height: auto;
+  height: 78px !important;
   overflow: hidden;
   position: relative;
   background: var(--bg);
   border: 1px solid var(--border);
   border-radius: 10px;
 }
-.ls-viewport-grid::before, .ls-viewport-grid::after{ display: none; }
+.ls-viewport-grid::before,
+.ls-viewport-grid::after{ display: none !important; }
 .ls-track-pair{
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  animation: none;
+  display: flex !important;
+  flex-direction: row !important;
+  width: 200% !important;
+  animation: none !important;
+  transform: translateX(0);
   transition: transform .55s cubic-bezier(.2,.8,.2,1);
 }
 .ls-track-pair .ls-row{
+  flex: 0 0 25%;   /* 25% of track (200%) = 50% of viewport */
+  width: 25%;
   height: 78px;
   border-right: 1px solid var(--border);
+  box-sizing: border-box;
 }
-.ls-track-pair .ls-row:last-child{ border-right: none; }
+.ls-track-pair .ls-row:nth-child(2n){ border-right: none; }
 .ls-track-pair .ls-agent svg{
   width: 14px; height: 14px;
   color: #fff;
   display: block;
 }
 @media (max-width: 760px){
-  .ls-track-pair{ grid-template-columns: 1fr; }
-  .ls-track-pair .ls-row{ border-right: none; border-bottom: 1px solid var(--border); }
-  .ls-track-pair .ls-row:last-child{ border-bottom: none; }
+  .ls-track-pair .ls-row{ flex: 0 0 50%; width: 50%; }
+  /* On narrow screens the track stays 200% wide but each row takes
+     full viewport so 1 row visible at a time. Pagination still works
+     with the same -50% shift since the track maths is unchanged. */
 }
 
 .ls-controls{
@@ -7407,8 +7428,10 @@ if (terminalBody) terminalObserver.observe(terminalBody);
   let timerId = 0;
 
   const render = () => {
-    // Each pair shifts the track by 100% of the viewport width.
-    track.style.transform = `translateX(${-pageIdx * 100}%)`;
+    // Track is 200% of viewport width with 4 rows at 25% of track each.
+    // To swap pairs (rows 1-2 → rows 3-4) we shift the track LEFT by 50%
+    // of its own width, which equals one viewport width.
+    track.style.transform = `translateX(${-pageIdx * 50}%)`;
   };
   const tick = () => {
     pageIdx = (pageIdx + 1) % totalPairs;
