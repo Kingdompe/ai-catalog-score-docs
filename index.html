@@ -2196,321 +2196,407 @@ section{ position: relative; }
 
 
 /* ============================================================
-   HERO STATIC COMPOSITION (v7) — single rich composition hero
+   HERO CINEMATIC v8 — install intro + live video + revenue outro
    ============================================================
-   Linear/Stripe-style: one perspective-tilted screenshot at the
-   centre, with floating chips/cards in each corner. No scene
-   swaps — everything is visible simultaneously, with constant
-   micro-animations to give the impression of a living product.
+   Cross-fading 3-scene loop. Scene B is the actual Cap recording
+   playing as an HTML5 video; Scenes A (install) + C (revenue
+   confetti celebration) are pure HTML/CSS animations that frame
+   the demo. JS controller orchestrates the timing using the
+   video's `ended` event for B→C, and timers for A→B and C→A.
    ============================================================ */
 
-.hero-static{
+.hero-stage{
   position: relative;
   width: 100%;
   max-width: 1400px;
   margin: 0 auto;
-  padding: 36px 28px 64px;
-  perspective: 2200px;
-  perspective-origin: 50% 30%;
-  --hs-tilt-x: 0deg;   /* JS-driven parallax */
-  --hs-tilt-y: 0deg;
-  isolation: isolate;
+  padding: 24px 16px 56px;
+  perspective: 1800px;
 }
 
-/* ---- Background atmosphere: green orbs + faint dot grid ---- */
-.hs-bg{
-  position: absolute; inset: 0;
-  pointer-events: none;
+/* ---- Background atmosphere (re-used vibe from v7) ---- */
+.hero-stage::before{
+  content:''; position: absolute; inset: 0;
   z-index: 0;
-  overflow: hidden;
-  border-radius: 24px;
-}
-.hs-orb{
-  position: absolute;
-  width: 480px; height: 480px;
-  border-radius: 50%;
-  filter: blur(80px);
-  opacity: .55;
-  animation: hsOrbDrift 18s ease-in-out infinite;
-}
-.hs-orb-a{
-  background: radial-gradient(circle, rgba(0,208,132,.55), transparent 70%);
-  top: -10%; left: -8%;
-  animation-delay: 0s;
-}
-.hs-orb-b{
-  background: radial-gradient(circle, rgba(0,168,106,.45), transparent 70%);
-  bottom: -12%; right: -8%;
-  animation-delay: -9s;
-}
-@keyframes hsOrbDrift{
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  50%      { transform: translate(40px, -30px) scale(1.08); }
-}
-.hs-grid{
-  position: absolute; inset: 0;
-  background-image: radial-gradient(rgba(36,32,18,.06) 1px, transparent 1px);
-  background-size: 28px 28px;
-  mask-image: radial-gradient(ellipse 70% 60% at 50% 50%, #000 0%, transparent 75%);
-  -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 50%, #000 0%, transparent 75%);
-  opacity: .6;
+  pointer-events: none;
+  background:
+    radial-gradient(circle 480px at 5% 10%, rgba(0,208,132,.30), transparent 70%),
+    radial-gradient(circle 460px at 95% 95%, rgba(0,168,106,.22), transparent 70%);
+  filter: blur(40px);
+  opacity: .8;
+  border-radius: 32px;
 }
 
-/* ---- Main screenshot in 3D perspective ---- */
-.hs-main{
-  position: relative;
-  z-index: 2;
-  width: min(100%, 1100px);
-  margin: 0 auto;
-  transform-style: preserve-3d;
-  transform:
-    rotateX(calc(6deg + var(--hs-tilt-x)))
-    rotateY(calc(-4deg + var(--hs-tilt-y)));
-  transition: transform .6s cubic-bezier(.2,.8,.2,1);
-  animation: hsMainFloat 9s ease-in-out infinite;
+/* ---- A scene is absolutely-positioned, only the current one is opaque ---- */
+.hstage{
+  position: absolute;
+  inset: 24px 16px 56px 16px;
+  z-index: 1;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 18px;
+  opacity: 0;
+  transform: scale(.985);
+  pointer-events: none;
+  transition: opacity .6s cubic-bezier(.2,.8,.2,1), transform .8s cubic-bezier(.2,.8,.2,1);
 }
-@keyframes hsMainFloat{
-  0%, 100% { translate: 0 0; }
-  50%      { translate: 0 -6px; }
+.hero-stage[data-scene="a"] .hstage-a,
+.hero-stage[data-scene="b"] .hstage-b,
+.hero-stage[data-scene="c"] .hstage-c{
+  opacity: 1;
+  transform: scale(1);
+  pointer-events: auto;
 }
-.hs-main-inner{
-  position: relative;
+
+/* ---- Shared caption strip (re-used across all 3 scenes) ---- */
+.hstage-caption{
+  display: inline-flex; align-items: center; gap: 14px;
+  padding: 8px 6px;
+  font-family: var(--font-mono); font-size: 12.5px;
+}
+.hsc-step{
+  font-size: 10px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--brand-deep);
+  background: rgba(0,208,132,.12);
+  padding: 5px 10px; border-radius: 7px;
+  white-space: nowrap;
+}
+.hsc-text{
+  font-family: var(--font-display); font-size: 14px; color: var(--ink-1);
+  font-weight: 500; letter-spacing: -.005em;
+}
+.hsc-text strong{ color: var(--ink-0); font-weight: 700; }
+
+/* ---- Pip indicators ---- */
+.hstage-pips{
+  position: absolute;
+  bottom: 16px; left: 50%;
+  transform: translateX(-50%);
+  display: inline-flex; gap: 8px;
+  z-index: 3;
+}
+.hstage-pips button{
+  appearance: none; border: 0; padding: 0;
+  width: 28px; height: 4px; border-radius: 2px;
+  background: rgba(36,32,18,.18);
+  cursor: pointer;
+  transition: background .3s ease, width .3s ease;
+}
+.hstage-pips button.is-on{
+  background: var(--brand-deep);
+  width: 40px;
+}
+.hstage-pips button:hover{ background: rgba(36,32,18,.32); }
+.hstage-pips button.is-on:hover{ background: var(--brand-deep); }
+
+/* ============================================================
+   Scene A — Shopify Install mockup
+   ============================================================ */
+.hsa-frame{
+  width: min(960px, 100%);
+  max-height: 540px;
+  aspect-ratio: 16/10;
+  background: #fff;
   border-radius: 16px;
   overflow: hidden;
   border: 1px solid rgba(36,32,18,.08);
-  background: #fff;
   box-shadow:
     0 1px 0 rgba(255,255,255,.7) inset,
-    0 -1px 0 rgba(36,32,18,.04) inset,
     0 2px 6px rgba(20,18,10,.05),
-    0 28px 64px -16px rgba(20,18,10,.25),
-    0 70px 140px -40px rgba(0,168,106,.30);
+    0 24px 60px -16px rgba(20,18,10,.20),
+    0 60px 120px -40px rgba(0,168,106,.25);
+  display: flex; flex-direction: column;
+  position: relative;
 }
-.hs-main img{
-  display: block;
-  width: 100%;
-  height: auto;
-  border-radius: inherit;
-  image-rendering: -webkit-optimize-contrast;
+.hsa-topbar{
+  display: flex; align-items: center; gap: 14px;
+  padding: 10px 18px;
+  background: #fff;
+  border-bottom: 1px solid rgba(36,32,18,.07);
 }
-.hs-main-shine{
-  position: absolute; inset: 0;
-  border-radius: inherit;
-  pointer-events: none;
-  background: linear-gradient(115deg, transparent 30%, rgba(255,255,255,.30) 50%, transparent 70%);
-  transform: translateX(-110%);
-  animation: hsShine 7s ease-in-out infinite;
-  animation-delay: 1.4s;
-  mix-blend-mode: overlay;
+.hsa-leaf{ display: inline-flex; align-items: center; }
+.hsa-search{
+  flex: 1; max-width: 520px;
+  display: inline-flex; align-items: center; gap: 8px;
+  background: #f6f6f7; padding: 7px 14px; border-radius: 8px;
+  font-family: var(--font-mono); font-size: 12px; color: var(--ink-3);
 }
-@keyframes hsShine{
-  0%, 100% { transform: translateX(-110%); }
-  35%      { transform: translateX(110%); }
+.hsa-avatar{
+  margin-left: auto;
+  width: 30px; height: 30px; border-radius: 50%;
+  background: linear-gradient(135deg, #6b6f76, #2c3e25);
+  display: inline-flex; align-items: center; justify-content: center;
+  color: #fff; font-size: 11px; font-weight: 700;
 }
-
-/* ---- Floating chip/card wrapper ---- */
-.hs-float{
-  position: absolute;
-  z-index: 4;
-  filter: drop-shadow(0 12px 28px rgba(20,18,10,.18));
-  animation: hsFloatBob 5s ease-in-out infinite;
+.hsa-body{ flex: 1; display: grid; grid-template-columns: 200px 1fr; min-height: 0; }
+.hsa-sidebar{
+  background: #f6f6f7;
+  border-right: 1px solid rgba(36,32,18,.07);
+  padding: 16px 12px;
+  display: flex; flex-direction: column; gap: 2px;
+  font-family: var(--font-display); font-size: 13.5px; font-weight: 500;
+  color: var(--ink-2);
 }
-@keyframes hsFloatBob{
-  0%, 100% { transform: translateY(0); }
-  50%      { transform: translateY(-6px); }
+.hsa-sidebar > span{ padding: 8px 12px; border-radius: 7px; }
+.hsa-side-active{ background: rgba(0,208,132,.10); color: var(--brand-deep); font-weight: 700; }
+.hsa-main{
+  padding: 36px 48px; position: relative;
+  background: #f6f6f7;
 }
-.hs-float-tl{ top: 9%;  left: 1%;   animation-delay: -.5s; }
-.hs-float-tr{ top: 5%;  right: 1%;  animation-delay: -2s; }
-.hs-float-bl{ bottom: 4%; left: 1%;  animation-delay: -1.2s; }
-.hs-float-br{ bottom: 8%; right: 1%; animation-delay: -3s; }
-@media (max-width: 880px){
-  .hs-float-tl, .hs-float-bl{ left: -8px; }
-  .hs-float-tr, .hs-float-br{ right: -8px; }
-  .hs-float-tl, .hs-float-tr{ top: 2%; }
-}
-
-/* ---- TOP-LEFT: ChatGPT agent badge ---- */
-.hs-agent{
-  display: inline-flex; align-items: center; gap: 11px;
-  padding: 10px 14px;
-  background: rgba(255,255,255,.92);
+.hsa-card{
+  background: #fff;
   border: 1px solid rgba(36,32,18,.08);
-  border-radius: 100px;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  box-shadow: 0 1px 0 rgba(255,255,255,.7) inset, 0 2px 6px rgba(20,18,10,.04);
+  border-radius: 14px;
+  padding: 24px 28px;
+  max-width: 500px;
+  box-shadow: 0 1px 2px rgba(20,18,10,.04), 0 12px 28px -12px rgba(20,18,10,.10);
 }
-.hs-agent-logo{
-  width: 28px; height: 28px; border-radius: 50%;
+.hsa-app-head{ display: flex; align-items: center; gap: 14px; }
+.hsa-app-icon{
+  width: 52px; height: 52px; border-radius: 12px;
+  background: var(--ink-0); padding: 7px;
   display: inline-flex; align-items: center; justify-content: center;
   flex-shrink: 0;
 }
-.hs-agent-chatgpt{ background: #10A37F; color: #fff; }
-.hs-agent-text{ display: flex; flex-direction: column; line-height: 1.15; }
-.hs-agent-text strong{ font-family: var(--font-display); font-size: 13px; font-weight: 700; color: var(--ink-0); letter-spacing: -.01em; }
-.hs-agent-text em{ font-family: var(--font-mono); font-style: normal; font-size: 10.5px; color: var(--brand-deep); font-weight: 600; margin-top: 1px; display: inline-flex; align-items: center; gap: 6px; }
-.hs-live-dot{
-  width: 6px; height: 6px; border-radius: 50%;
-  background: var(--brand);
-  box-shadow: 0 0 0 0 rgba(0,208,132,.50);
-  animation: hsLivePulse 1.6s ease-out infinite;
+.hsa-app-icon img{ width: 100%; height: 100%; object-fit: contain; }
+.hsa-app-meta h4{ font-family: var(--font-display); font-size: 17px; font-weight: 700; margin: 0 0 3px; letter-spacing: -.015em; }
+.hsa-app-meta p{ margin: 0; font-size: 12px; color: var(--ink-3); }
+.hsa-app-desc{
+  margin: 14px 0 16px; padding: 12px 14px;
+  background: #f6f6f7; border-radius: 9px;
+  font-size: 13px; line-height: 1.5; color: var(--ink-1);
 }
-@keyframes hsLivePulse{
-  0%{ box-shadow: 0 0 0 0 rgba(0,208,132,.50); }
-  70%{ box-shadow: 0 0 0 7px rgba(0,208,132,0); }
-  100%{ box-shadow: 0 0 0 0 rgba(0,208,132,0); }
+.hsa-perms{ list-style: none; padding: 0; margin: 0 0 16px; display: flex; flex-direction: column; gap: 6px; }
+.hsa-perms li{
+  display: flex; align-items: center; gap: 9px;
+  font-size: 12.5px; color: var(--ink-1);
 }
-
-/* ---- TOP-RIGHT: Maximize cascade pill ---- */
-.hs-cascade{
-  display: inline-flex; align-items: center; gap: 11px;
-  padding: 10px 14px;
-  background: linear-gradient(135deg, rgba(255,255,255,.96) 0%, rgba(248,253,250,.96) 100%);
-  border: 1px solid rgba(0,208,132,.25);
-  border-radius: 14px;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  box-shadow:
-    0 1px 0 rgba(255,255,255,.8) inset,
-    0 4px 12px -2px rgba(0,168,106,.20);
-}
-.hs-cascade-icon{
-  font-size: 18px;
-  filter: drop-shadow(0 0 6px rgba(0,208,132,.55));
-}
-.hs-cascade-text{ display: flex; flex-direction: column; line-height: 1.15; }
-.hs-cascade-text strong{ font-family: var(--font-display); font-size: 13px; font-weight: 700; color: var(--ink-0); }
-.hs-cascade-text em{ font-family: var(--font-mono); font-style: normal; font-size: 10.5px; color: var(--ink-2); margin-top: 1px; }
-.hs-cascade-time{ color: var(--brand-deep); font-weight: 700; }
-.hs-cascade-status{
-  display: inline-flex; align-items: center; gap: 5px;
-  font-family: var(--font-mono); font-size: 9.5px; font-weight: 800;
-  letter-spacing: .14em;
-  padding: 4px 8px;
-  background: rgba(0,208,132,.16);
-  color: var(--brand-deep);
-  border-radius: 6px;
-}
-.hs-pulse-dot{
-  width: 5px; height: 5px; border-radius: 50%; background: var(--brand);
-  box-shadow: 0 0 0 0 rgba(0,208,132,.55);
-  animation: hsLivePulse 1.5s ease-out infinite;
-}
-
-/* ---- BOTTOM-LEFT: Score Guarantee glass card ---- */
-.hs-guarantee{
-  width: 280px;
-  padding: 16px 18px;
-  background: linear-gradient(180deg, rgba(255,255,255,.96), rgba(252,250,243,.96));
-  border: 1px solid rgba(36,32,18,.08);
-  border-radius: 16px;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  box-shadow:
-    0 1px 0 rgba(255,255,255,.8) inset,
-    0 2px 6px rgba(20,18,10,.06);
-}
-.hs-g-eyebrow{
-  display: inline-flex; align-items: center; gap: 6px;
-  font-family: var(--font-mono); font-size: 9.5px; font-weight: 800;
-  letter-spacing: .16em; color: var(--brand-deep); text-transform: uppercase;
-}
-.hs-g-shield{ font-size: 11px; }
-.hs-g-progress{
-  display: inline-flex; align-items: baseline; gap: 8px;
-  margin-top: 10px;
-}
-.hs-g-from{
-  font-family: var(--font-display); font-size: 22px; font-weight: 700;
-  color: var(--ink-2); opacity: .65; letter-spacing: -.02em;
-  font-variant-numeric: tabular-nums;
-}
-.hs-g-arrow{ color: var(--ink-3); font-weight: 300; font-size: 18px; }
-.hs-g-to{
-  font-family: var(--font-display); font-size: 26px; font-weight: 700;
-  letter-spacing: -.025em; line-height: 1;
-  background: linear-gradient(180deg, var(--brand) 0%, var(--brand-deep) 100%);
-  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
-  font-variant-numeric: tabular-nums;
-}
-.hs-g-delta{
-  margin-left: auto;
-  font-family: var(--font-mono); font-size: 11px; font-weight: 800;
-  padding: 4px 8px; border-radius: 7px;
+.hsa-tick{
+  width: 16px; height: 16px; border-radius: 50%;
   background: rgba(0,208,132,.16); color: var(--brand-deep);
-  letter-spacing: .04em;
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: 9px; font-weight: 800; flex-shrink: 0;
 }
-.hs-g-bar{
-  position: relative; height: 7px; border-radius: 4px;
-  background: rgba(36,32,18,.06);
-  margin-top: 10px;
+.hsa-install{
+  position: relative; appearance: none; border: 0;
+  background: #5E8E3E; color: #fff;
+  font-family: var(--font-display); font-size: 14px; font-weight: 600;
+  padding: 12px 22px; border-radius: 8px;
+  width: 100%; cursor: default;
   overflow: hidden;
 }
-.hs-g-bar-fill{
-  position: absolute; inset: 0 26.7% 0 0;  /* 76.5% fill (76.5/100×100, but progress is +26.5/40 target ≈ 66%) */
-  width: auto; right: auto; left: 0;
-  background: linear-gradient(90deg, var(--brand), var(--brand-deep));
-  border-radius: inherit;
-  box-shadow: 0 0 8px rgba(0,208,132,.45);
-  /* animate fill from 0 to ~73% on view */
-  width: 0;
-  animation: hsGBarFill 1.6s cubic-bezier(.2,.8,.2,1) .5s forwards;
+.hsa-install-label{ position: relative; z-index: 2; }
+.hsa-install-progress{
+  position: absolute; inset: 0 100% 0 0;
+  background: rgba(255,255,255,.20);
+  transition: right 1.6s cubic-bezier(.4,0,.2,1);
 }
-@keyframes hsGBarFill{ to{ width: 73%; } }
-.hs-g-foot{
-  display: block; margin-top: 8px;
-  font-family: var(--font-mono); font-size: 10px; color: var(--ink-3);
-  letter-spacing: .04em;
-}
-
-/* ---- BOTTOM-RIGHT: stacked +pts pills ---- */
-.hs-pts-stack{
-  display: flex; flex-direction: column; gap: 6px;
-  align-items: flex-end;
-}
-.hs-pt{
-  display: inline-block;
-  font-family: var(--font-mono); font-size: 13px; font-weight: 800;
-  color: #fff;
-  background: linear-gradient(135deg, var(--brand) 0%, var(--brand-deep) 100%);
-  padding: 6px 12px;
-  border-radius: 10px;
-  letter-spacing: .04em;
-  box-shadow:
-    0 6px 16px -4px rgba(0,168,106,.55),
-    0 1px 0 rgba(255,255,255,.35) inset;
+/* Cursor flies in + clicks Install while Scene A is active */
+.hsa-cursor{
+  position: absolute;
+  left: 12%; top: 30%;
+  filter: drop-shadow(0 4px 6px rgba(20,18,10,.30));
   opacity: 0;
-  transform: translateY(12px);
-  animation: hsPtIn .5s cubic-bezier(.2,.8,.2,1) forwards, hsPtBob 3.2s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 9;
 }
-.hs-pt-1{ animation-delay: 1.0s, 1.5s; }
-.hs-pt-2{ animation-delay: 1.2s, 1.7s; }
-.hs-pt-3{ animation-delay: 1.4s, 1.9s; }
-.hs-pt-4{ animation-delay: 1.6s, 2.1s; opacity: .8; transform: scale(.94); }
-@keyframes hsPtIn{
-  to{ opacity: 1; transform: translateY(0); }
+.hero-stage[data-scene="a"] .hsa-cursor{
+  animation: hsaCursorMove 2.2s cubic-bezier(.5,.0,.25,1) .3s forwards;
 }
-@keyframes hsPtBob{
-  0%, 100% { translate: 0 0; }
-  50%      { translate: 0 -3px; }
+@keyframes hsaCursorMove{
+  0%   { left: 8%;  top: 25%; opacity: 0; transform: scale(1); }
+  20%  { opacity: 1; }
+  60%  { left: 60%; top: 87%; opacity: 1; transform: scale(1); }
+  74%  { left: 60%; top: 87%; opacity: 1; transform: scale(.85); }
+  82%  { left: 60%; top: 87%; opacity: 1; transform: scale(1); }
+  100% { left: 60%; top: 87%; opacity: 1; transform: scale(1); }
+}
+.hero-stage[data-scene="a"] .hsa-install{
+  animation: hsaInstallClick .3s ease-out 1.8s forwards;
+}
+.hero-stage[data-scene="a"] .hsa-install-progress{
+  animation: hsaInstallProgress 1.4s cubic-bezier(.4,0,.2,1) 2.05s forwards;
+}
+@keyframes hsaInstallClick{
+  0%   { transform: scale(1); }
+  50%  { transform: scale(.96); filter: brightness(1.18); }
+  100% { transform: scale(1); filter: brightness(1); }
+}
+@keyframes hsaInstallProgress{ to{ right: 0; } }
+
+/* ============================================================
+   Scene B — Live demo video
+   ============================================================ */
+.hsb-frame{
+  width: min(1100px, 100%);
+  background: #fff;
+  border-radius: 18px;
+  overflow: hidden;
+  border: 1px solid rgba(36,32,18,.08);
+  box-shadow:
+    0 1px 0 rgba(255,255,255,.7) inset,
+    0 2px 6px rgba(20,18,10,.05),
+    0 28px 64px -16px rgba(20,18,10,.22),
+    0 70px 140px -40px rgba(0,168,106,.28);
+  display: flex; flex-direction: column;
+  position: relative;
+}
+.hsb-chrome{
+  display: flex; align-items: center; gap: 14px;
+  padding: 10px 14px;
+  background: #f4efe1;
+  border-bottom: 1px solid rgba(36,32,18,.06);
+  font-family: var(--font-mono); font-size: 11px; color: var(--ink-3);
+}
+.hsb-traffic{ display: flex; gap: 6px; }
+.hsb-traffic span{ width: 11px; height: 11px; border-radius: 50%; }
+.hsb-traffic span:nth-child(1){ background: #FF5F57; }
+.hsb-traffic span:nth-child(2){ background: #FEBC2E; }
+.hsb-traffic span:nth-child(3){ background: #28C840; }
+.hsb-url{
+  flex: 1;
+  background: #fff;
+  border: 1px solid rgba(36,32,18,.06);
+  border-radius: 100px;
+  padding: 5px 12px;
+  text-align: center;
+  font-size: 11px;
+  color: var(--ink-2);
+  max-width: 560px;
+  margin: 0 auto;
+}
+.hsb-video{
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16/9;
+  object-fit: cover;
+  background: #fff;
 }
 
+/* ============================================================
+   Scene C — Revenue celebration
+   ============================================================ */
+.hstage-c{
+  background:
+    radial-gradient(80% 60% at 50% 50%, rgba(0,208,132,.10), transparent 65%),
+    linear-gradient(180deg, #fcfbf6 0%, #f0ebdb 100%);
+  border-radius: 20px;
+  overflow: hidden;
+}
+.hsc-confetti{ position: absolute; inset: 0; pointer-events: none; }
+.hsc-confetti span{
+  position: absolute;
+  left: var(--x); top: -20px;
+  width: 8px; height: 14px; border-radius: 2px;
+  background: var(--c, var(--brand));
+  opacity: 0;
+}
+.hero-stage[data-scene="c"] .hsc-confetti span{
+  animation: hscFall 2.6s cubic-bezier(.4,0,.4,1) var(--d, 0s) forwards;
+}
+@keyframes hscFall{
+  0%   { opacity: 0; transform: translateY(0) rotate(0); }
+  10%  { opacity: 1; }
+  90%  { opacity: 1; }
+  100% { opacity: 0; transform: translateY(420px) rotate(540deg); }
+}
+.hsc-card{
+  position: relative;
+  background:
+    radial-gradient(120% 100% at 0% 0%, rgba(0,208,132,.12), transparent 60%),
+    linear-gradient(180deg, #ffffff, #fcfbf6);
+  border: 1px solid rgba(0,208,132,.30);
+  border-radius: 22px;
+  padding: 36px 44px 30px;
+  width: clamp(360px, 60%, 520px);
+  text-align: center;
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  box-shadow:
+    0 1px 0 rgba(255,255,255,1) inset,
+    0 -1px 0 rgba(36,32,18,.04) inset,
+    0 20px 50px -20px rgba(0,168,106,.35),
+    0 30px 80px -30px rgba(36,32,18,.20);
+  opacity: 0; transform: translateY(16px) scale(.98);
+}
+.hero-stage[data-scene="c"] .hsc-card{
+  animation: hscCardIn .55s cubic-bezier(.2,.8,.2,1) .15s forwards;
+}
+@keyframes hscCardIn{ to{ opacity: 1; transform: translateY(0) scale(1); } }
+.hsc-icon{
+  width: 56px; height: 56px; border-radius: 16px;
+  background: var(--ink-0); padding: 9px;
+  display: inline-flex; align-items: center; justify-content: center;
+  box-shadow: 0 8px 22px -8px rgba(36,32,18,.40);
+  margin-bottom: 6px;
+}
+.hsc-icon img{ width: 100%; height: 100%; object-fit: contain; }
+.hsc-eyebrow{
+  font-family: var(--font-mono); font-size: 10px; font-weight: 800;
+  letter-spacing: .18em; color: var(--ink-3); text-transform: uppercase;
+}
+.hsc-big{
+  font-family: var(--font-display); font-size: 60px; font-weight: 700;
+  letter-spacing: -.030em; line-height: 1;
+  background: linear-gradient(180deg, var(--brand) 0%, var(--brand-deep) 100%);
+  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+  margin-top: 2px;
+}
+.hsc-sub{
+  font-family: var(--font-display); font-size: 15px; color: var(--ink-2);
+  font-weight: 500;
+}
+.hsc-detail{
+  display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+  margin: 16px 0 4px;
+  width: 100%;
+}
+.hsc-pill{
+  display: flex; flex-direction: column; gap: 2px;
+  padding: 10px 14px;
+  background: rgba(0,208,132,.10);
+  border: 1px solid rgba(0,208,132,.18);
+  border-radius: 10px;
+  text-align: center;
+}
+.hsc-pill-alt{ background: rgba(36,32,18,.04); border-color: rgba(36,32,18,.10); }
+.hsc-pill-num{
+  font-family: var(--font-display); font-size: 19px; font-weight: 700;
+  color: var(--brand-deep); letter-spacing: -.02em;
+}
+.hsc-pill-alt .hsc-pill-num{ color: var(--ink-0); }
+.hsc-pill-label{
+  font-family: var(--font-mono); font-size: 9.5px;
+  color: var(--ink-3); letter-spacing: .08em; text-transform: uppercase;
+}
+.hsc-foot{
+  font-family: var(--font-mono); font-size: 10.5px; color: var(--ink-3);
+  margin-top: 6px; letter-spacing: .04em;
+}
+.hsc-foot strong{ color: var(--brand-deep); font-weight: 800; }
+
+/* ============================================================
+   Responsive
+   ============================================================ */
 @media (max-width: 880px){
-  .hs-main{ width: 100%; transform: rotateX(2deg) rotateY(0); }
-  .hs-guarantee{ width: 240px; }
-  .hs-cascade-text em{ font-size: 9.5px; }
-  .hs-pts-stack .hs-pt{ font-size: 11px; padding: 4px 9px; }
+  .hsa-body{ grid-template-columns: 1fr; }
+  .hsa-sidebar{ display: none; }
+  .hsa-main{ padding: 22px; }
+  .hsa-card{ padding: 18px; }
+  .hsc-big{ font-size: 46px; }
+  .hsc-card{ padding: 24px 18px; width: 90%; }
+  .hsa-frame{ aspect-ratio: 4/3; max-height: none; }
 }
 
 @media (prefers-reduced-motion: reduce){
-  .hs-main, .hs-orb, .hs-main-shine, .hs-float, .hs-live-dot,
-  .hs-pulse-dot, .hs-g-bar-fill, .hs-pt{
+  .hstage{ transition: none !important; }
+  .hsa-cursor, .hsa-install, .hsa-install-progress,
+  .hsc-confetti span, .hsc-card{
     animation: none !important;
     opacity: 1 !important;
     transform: none !important;
   }
-  .hs-g-bar-fill{ width: 73% !important; }
-  .hs-main{ transform: none; }
+  .hsa-install-progress{ right: 0 !important; }
 }
 /* ============ TICKER ============ */
 .ticker-wrap{
@@ -6466,84 +6552,145 @@ section + .cta-section{ padding-top: 64px; }
 
     <div class="hero-visual" id="heroVisual">
       <!-- ============================================================
-           HERO STATIC COMPOSITION (v7) — Linear/Stripe-style premium hero
+           HERO CINEMATIC v8 — install intro + live video + revenue outro
            ============================================================
-           One composition, always visible. A perspective-tilted main
-           screenshot (Bulk Maximize Results) anchors the centre;
-           floating chips/cards in each corner each show a different
-           facet of the product (catalog audit, agent visibility,
-           score-guarantee, cascade points). Subtle parallax tracks
-           the cursor — no scene swaps, just constant micro-motion.
-           ============================================================ -->
-      <div class="hero-static" id="heroStatic">
+           3-scene loop with cross-fade transitions:
+             Scene A (3.5s): Shopify Admin Install mockup — cursor flies to
+                             green "Install" button, button progress-fills.
+             Scene B (~52s): Live HTML5 video playing the actual Cap recording
+                             of the app demo. Loops based on `ended` event.
+             Scene C (4.5s): Revenue celebration — "+$18,642 incremental
+                             revenue" hero card, confetti falls, then
+                             cross-fades back to Scene A and loops.
+           Cursor (animated CSS) + confetti (falling spans) are HTML/CSS
+           overlays, no extra video weight. The Cap video file is the only
+           heavy asset (~5MB H.264 1080p30, no audio, +faststart). =========== -->
+      <div class="hero-stage" id="heroStage" data-scene="a">
 
-        <!-- Background atmosphere: gradient orbs + subtle dot grid -->
-        <div class="hs-bg" aria-hidden="true">
-          <span class="hs-orb hs-orb-a"></span>
-          <span class="hs-orb hs-orb-b"></span>
-          <span class="hs-grid"></span>
+        <!-- ===== Scene A — Shopify Install mockup ===== -->
+        <section class="hstage hstage-a" data-scene="a" aria-label="Step 1 — install in 90 seconds">
+          <div class="hsa-frame">
+            <!-- Shopify Admin chrome top bar -->
+            <div class="hsa-topbar">
+              <span class="hsa-leaf" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M14.5 4c-.4 0-1.2.1-1.7.7-.6.7-.9 1.6-1 2.4-.6.2-1.5.4-2.5.7-.4-1-1.1-2-2.4-2-1.2 0-2 .5-2.6 1.2L2 21l11 3 3.5-19c-.6-.4-1.4-1-2-1z" fill="#5E8E3E"/></svg></span>
+              <div class="hsa-search"><span>🔍</span><span>Search</span></div>
+              <span class="hsa-avatar">JD</span>
+            </div>
+            <div class="hsa-body">
+              <aside class="hsa-sidebar">
+                <span>Home</span><span>Orders</span><span>Products</span>
+                <span class="hsa-side-active">Apps</span><span>Analytics</span>
+                <span>Marketing</span>
+              </aside>
+              <div class="hsa-main">
+                <div class="hsa-card">
+                  <div class="hsa-app-head">
+                    <div class="hsa-app-icon"><img src="logo-acs.png" alt="" loading="lazy"/></div>
+                    <div class="hsa-app-meta">
+                      <h4>AI Catalog Score</h4>
+                      <p>by AI Catalog Score · 4.9 ★</p>
+                    </div>
+                  </div>
+                  <p class="hsa-app-desc">Make every product discoverable by ChatGPT, Claude, Gemini, Mistral &amp; DeepSeek.</p>
+                  <ul class="hsa-perms">
+                    <li><span class="hsa-tick">✓</span>Read products, variants &amp; metafields</li>
+                    <li><span class="hsa-tick">✓</span>Write product copy &amp; alt text (with preview)</li>
+                    <li><span class="hsa-tick">✓</span>Emit JSON-LD on product pages</li>
+                    <li><span class="hsa-tick">✓</span>Read order &amp; revenue data (causal proof)</li>
+                  </ul>
+                  <button class="hsa-install" type="button" aria-hidden="true">
+                    <span class="hsa-install-label">Install</span>
+                    <span class="hsa-install-progress"></span>
+                  </button>
+                </div>
+                <!-- Animated cursor -->
+                <svg class="hsa-cursor" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
+                  <path d="M3 3 L3 18 L7.5 14 L10 21 L13 19.5 L10.5 13 L17 13 Z" fill="#1f1d12" stroke="#fff" stroke-width="1.4" stroke-linejoin="round"/>
+                </svg>
+              </div>
+            </div>
+          </div>
+          <div class="hstage-caption">
+            <span class="hsc-step">Step 1 of 3</span>
+            <span class="hsc-text">Install in <strong>90 seconds</strong> · read-only by default.</span>
+          </div>
+        </section>
+
+        <!-- ===== Scene B — Live demo video (the Cap recording) ===== -->
+        <section class="hstage hstage-b" data-scene="b" aria-label="Step 2 — see the audit and Maximize flow">
+          <div class="hsb-frame">
+            <div class="hsb-chrome">
+              <span class="hsb-traffic"><span></span><span></span><span></span></span>
+              <span class="hsb-url">admin.shopify.com/store/apps/ai-catalog-score</span>
+            </div>
+            <video
+              id="heroVideo"
+              class="hsb-video"
+              src="videos/hero.mp4"
+              poster="videos/hero-poster.jpg"
+              muted
+              playsinline
+              preload="auto"
+              disablepictureinpicture
+              disableremoteplayback
+              tabindex="-1"
+            ></video>
+          </div>
+          <div class="hstage-caption">
+            <span class="hsc-step">Step 2 of 3</span>
+            <span class="hsc-text">Audit every product · <strong>Bulk Maximize</strong> · per-product proof.</span>
+          </div>
+        </section>
+
+        <!-- ===== Scene C — Revenue celebration ===== -->
+        <section class="hstage hstage-c" data-scene="c" aria-label="Step 3 — incremental revenue">
+          <!-- Confetti rain -->
+          <div class="hsc-confetti" aria-hidden="true">
+            <span style="--x:6%;  --d:.0s;  --c:#00d084"></span>
+            <span style="--x:16%; --d:.18s; --c:#f59e0b"></span>
+            <span style="--x:26%; --d:.32s; --c:#00a86a"></span>
+            <span style="--x:36%; --d:.10s; --c:#c63d2f"></span>
+            <span style="--x:46%; --d:.45s; --c:#00d084"></span>
+            <span style="--x:56%; --d:.22s; --c:#f59e0b"></span>
+            <span style="--x:66%; --d:.36s; --c:#00d084"></span>
+            <span style="--x:76%; --d:.08s; --c:#00a86a"></span>
+            <span style="--x:86%; --d:.28s; --c:#f59e0b"></span>
+            <span style="--x:94%; --d:.50s; --c:#00d084"></span>
+            <span style="--x:11%; --d:.55s; --c:#00d084"></span>
+            <span style="--x:31%; --d:.65s; --c:#f59e0b"></span>
+            <span style="--x:51%; --d:.75s; --c:#00a86a"></span>
+            <span style="--x:71%; --d:.85s; --c:#00d084"></span>
+            <span style="--x:91%; --d:.95s; --c:#c63d2f"></span>
+          </div>
+          <div class="hsc-card">
+            <div class="hsc-icon"><img src="logo-acs.png" alt="" loading="lazy"/></div>
+            <div class="hsc-eyebrow">SHOPIFY · ANALYTICS</div>
+            <div class="hsc-big">+$18,642</div>
+            <div class="hsc-sub">incremental revenue · last 30 days</div>
+            <div class="hsc-detail">
+              <div class="hsc-pill">
+                <span class="hsc-pill-num">+27.3%</span>
+                <span class="hsc-pill-label">vs. control catalog</span>
+              </div>
+              <div class="hsc-pill hsc-pill-alt">
+                <span class="hsc-pill-num">p &lt; 0.05</span>
+                <span class="hsc-pill-label">causal proof</span>
+              </div>
+            </div>
+            <div class="hsc-foot">Powered by <strong>AI Catalog Score</strong> · 90-second install</div>
+          </div>
+          <div class="hstage-caption">
+            <span class="hsc-step">Step 3 of 3</span>
+            <span class="hsc-text"><strong>+$18,642</strong> incremental revenue · causal proof &lt; 0.05.</span>
+          </div>
+        </section>
+
+        <!-- Scene pip indicators (clickable to jump) -->
+        <div class="hstage-pips" id="heroStagePips" aria-label="Scene progress">
+          <button type="button" data-scene="a" class="is-on" aria-label="Install scene"></button>
+          <button type="button" data-scene="b" aria-label="App demo scene"></button>
+          <button type="button" data-scene="c" aria-label="Revenue scene"></button>
         </div>
-
-        <!-- Main perspective screenshot: the money shot of the app -->
-        <div class="hs-main" id="hsMain">
-          <div class="hs-main-inner">
-            <img src="images/app/bulk-maximize-results.jpg"
-                 alt="AI Catalog Score · Bulk Maximize results — 7/7 products improved · +23.9 points · 14.6s"
-                 width="2415" height="1249"
-                 fetchpriority="high"/>
-            <span class="hs-main-shine" aria-hidden="true"></span>
-          </div>
-        </div>
-
-        <!-- TOP-LEFT: ChatGPT agent badge (subtle, signals real-time AI traffic) -->
-        <aside class="hs-float hs-float-tl">
-          <div class="hs-agent">
-            <span class="hs-agent-logo hs-agent-chatgpt">
-              <svg viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M22.282 9.821a5.985 5.985 0 0 0-.516-4.91 6.046 6.046 0 0 0-6.51-2.9A6.065 6.065 0 0 0 4.981 4.18a5.985 5.985 0 0 0-3.998 2.9 6.046 6.046 0 0 0 .743 7.097 5.98 5.98 0 0 0 .51 4.911 6.051 6.051 0 0 0 6.515 2.9A5.985 5.985 0 0 0 13.26 24a6.056 6.056 0 0 0 5.772-4.206 5.99 5.99 0 0 0 3.997-2.9 6.056 6.056 0 0 0-.747-7.073zM13.26 22.43a4.476 4.476 0 0 1-2.876-1.04l.141-.081 4.779-2.758a.795.795 0 0 0 .392-.681v-6.737l2.02 1.168a.071.071 0 0 1 .038.052v5.583a4.504 4.504 0 0 1-4.494 4.494zM3.6 18.304a4.47 4.47 0 0 1-.535-3.014l.142.085 4.783 2.759a.771.771 0 0 0 .78 0l5.843-3.369v2.332a.08.08 0 0 1-.033.062L9.74 19.95a4.5 4.5 0 0 1-6.14-1.646zM2.34 7.896a4.485 4.485 0 0 1 2.366-1.973V11.6a.766.766 0 0 0 .388.676l5.815 3.355-2.02 1.168a.076.076 0 0 1-.071 0l-4.83-2.786A4.504 4.504 0 0 1 2.34 7.872zm16.597 3.855l-5.833-3.387L15.119 7.2a.076.076 0 0 1 .071 0l4.83 2.791a4.494 4.494 0 0 1-.676 8.105v-5.678a.79.79 0 0 0-.407-.667zm2.01-3.023l-.141-.085-4.774-2.782a.776.776 0 0 0-.785 0L9.409 9.23V6.897a.066.066 0 0 1 .028-.061l4.83-2.787a4.5 4.5 0 0 1 6.68 4.66zm-12.64 4.135l-2.02-1.164a.08.08 0 0 1-.038-.057V6.075a4.5 4.5 0 0 1 7.375-3.453l-.142.08L8.704 5.46a.795.795 0 0 0-.393.681zm1.097-2.365l2.602-1.5 2.607 1.5v2.999l-2.597 1.5-2.607-1.5z"/></svg>
-            </span>
-            <div class="hs-agent-text">
-              <strong>ChatGPT</strong>
-              <em><span class="hs-live-dot"></span>+147 sessions today</em>
-            </div>
-          </div>
-        </aside>
-
-        <!-- TOP-RIGHT: Maximize cascade pill -->
-        <aside class="hs-float hs-float-tr">
-          <div class="hs-cascade">
-            <span class="hs-cascade-icon">✨</span>
-            <div class="hs-cascade-text">
-              <strong>Maximize cascade</strong>
-              <em>7 products · +23.9 pts · <span class="hs-cascade-time">14.6s</span></em>
-            </div>
-            <span class="hs-cascade-status"><span class="hs-pulse-dot"></span>DONE</span>
-          </div>
-        </aside>
-
-        <!-- BOTTOM-LEFT: Score Guarantee card (glass, the trust card) -->
-        <aside class="hs-float hs-float-bl">
-          <div class="hs-guarantee">
-            <span class="hs-g-eyebrow"><span class="hs-g-shield">🛡</span>SCORE GUARANTEE · MAY</span>
-            <div class="hs-g-progress">
-              <span class="hs-g-from">50.0</span>
-              <span class="hs-g-arrow" aria-hidden="true">→</span>
-              <span class="hs-g-to">76.5</span>
-              <span class="hs-g-delta">+26.5</span>
-            </div>
-            <div class="hs-g-bar"><span class="hs-g-bar-fill"></span></div>
-            <span class="hs-g-foot">On track · +10 pts in 30 days or refunded</span>
-          </div>
-        </aside>
-
-        <!-- BOTTOM-RIGHT: stacked +pts pills (subtly bobbing) -->
-        <aside class="hs-float hs-float-br">
-          <div class="hs-pts-stack">
-            <span class="hs-pt hs-pt-1">+34 pts</span>
-            <span class="hs-pt hs-pt-2">+31 pts</span>
-            <span class="hs-pt hs-pt-3">+23 pts</span>
-            <span class="hs-pt hs-pt-4">+18 pts</span>
-          </div>
-        </aside>
 
       </div>
     </div>
@@ -8891,33 +9038,138 @@ if (terminalBody) terminalObserver.observe(terminalBody);
   }
 })();
 
-// ===== HERO STATIC COMPOSITION (v7) — parallax tilt on mouse move =====
-(function initHeroStatic(){
-  const stage = document.getElementById('heroStatic');
+// ===== HERO CINEMATIC v8 — 3-scene loop controller =====
+// Scene A (install mockup, 3.5s) → Scene B (Cap video, plays full)
+// → Scene C (revenue confetti, 4.5s) → loop back to A.
+// Uses the video's `ended` event for B→C; CSS transitions handle
+// the cross-fade. Pauses on hidden tab / offscreen to save battery.
+(function initHeroStage(){
+  const stage = document.getElementById('heroStage');
   if (!stage) return;
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  if (!window.matchMedia('(min-width: 880px)').matches) return;
+  const video = document.getElementById('heroVideo');
+  const pips  = document.querySelectorAll('#heroStagePips button');
 
-  // The CSS reads --hs-tilt-x and --hs-tilt-y custom properties on the
-  // .hero-static root and adds them to the main screenshot's base
-  // rotateX(6deg) / rotateY(-4deg). We coalesce mousemove into a single
-  // rAF write per frame so we don't thrash style recalc.
-  let raf = null, px = 0, py = 0;
-  const apply = () => {
-    raf = null;
-    stage.style.setProperty('--hs-tilt-x', `${-py * 3}deg`);   // tilt opposite cursor for "lean in"
-    stage.style.setProperty('--hs-tilt-y', `${ px * 4}deg`);
+  // Reduced-motion path: skip all the animation, freeze on the
+  // video poster + caption so the user sees a static hero.
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+    stage.setAttribute('data-scene', 'b');
+    if (video){ video.controls = false; }
+    pips.forEach((p, i) => p.classList.toggle('is-on', i === 1));
+    return;
+  }
+
+  const SCENE_TIMINGS = {
+    a: 3500,    // install mockup duration (matches CSS keyframe budget)
+    // b: managed by video `ended` event
+    c: 4800,    // celebration linger after card finishes animating in
   };
-  stage.addEventListener('mousemove', (e) => {
-    const r = stage.getBoundingClientRect();
-    px = (e.clientX - r.left) / r.width - 0.5;   // -0.5..0.5
-    py = (e.clientY - r.top)  / r.height - 0.5;
-    if (raf == null) raf = requestAnimationFrame(apply);
+
+  let timer = null;
+  let started = false;
+  let paused = false;
+  let userJumped = false; // suppress auto-advance if user clicks a pip
+  let currentVideoStartHandler = null;
+
+  function goTo(scene){
+    if (!stage) return;
+    stage.setAttribute('data-scene', scene);
+    pips.forEach((p) => p.classList.toggle('is-on', p.dataset.scene === scene));
+    // Reset video on EVERY transition so playback restarts when scene B activates again
+    if (video){
+      if (scene === 'b'){
+        try {
+          video.currentTime = 0;
+          // Some browsers block muted-autoplay until user-interaction
+          // when triggered via .play(); we wrap in catch and just fall
+          // through — the controller will detect non-progress via the
+          // `loadedmetadata` fallback below.
+          const p = video.play();
+          if (p && typeof p.catch === 'function') p.catch(() => {});
+        } catch {}
+      } else {
+        try { video.pause(); } catch {}
+      }
+    }
+  }
+
+  function scheduleNextFromTimer(scene){
+    if (timer) clearTimeout(timer);
+    const ms = SCENE_TIMINGS[scene];
+    if (!ms) return; // scene "b" has no timer; relies on video.ended
+    timer = setTimeout(() => {
+      if (paused || userJumped) return;
+      // a → b, c → a
+      const next = scene === 'a' ? 'b' : scene === 'c' ? 'a' : 'a';
+      goTo(next);
+      scheduleNextFromTimer(next);
+    }, ms);
+  }
+
+  function onVideoEnded(){
+    // Manual loop control: don't use `<video loop>` because we want
+    // to jump to Scene C between repeats, not restart immediately.
+    if (paused || userJumped) return;
+    goTo('c');
+    scheduleNextFromTimer('c');
+  }
+
+  function start(){
+    if (started) return;
+    started = true;
+    if (video) video.addEventListener('ended', onVideoEnded);
+    goTo('a');
+    scheduleNextFromTimer('a');
+  }
+
+  function stop(){
+    paused = true;
+    if (timer) clearTimeout(timer);
+    if (video) { try { video.pause(); } catch {} }
+  }
+  function resume(){
+    if (!started) return;
+    paused = false;
+    const current = stage.getAttribute('data-scene') || 'a';
+    if (current === 'b' && video){ try { video.play().catch(() => {}); } catch {} }
+    else scheduleNextFromTimer(current);
+  }
+
+  // Visibility-aware: pause when tab is hidden
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) stop();
+    else resume();
   });
-  stage.addEventListener('mouseleave', () => {
-    stage.style.setProperty('--hs-tilt-x', '0deg');
-    stage.style.setProperty('--hs-tilt-y', '0deg');
+
+  // Click pip → jump to scene (manual override; restarts auto-advance after)
+  pips.forEach((pip) => {
+    pip.addEventListener('click', () => {
+      const scene = pip.dataset.scene;
+      if (!scene) return;
+      userJumped = true;
+      if (timer) clearTimeout(timer);
+      goTo(scene);
+      // Restart auto-advance after a brief grace period so user has
+      // time to read whatever they jumped to.
+      setTimeout(() => { userJumped = false; scheduleNextFromTimer(scene); }, 2000);
+    });
   });
+
+  // Defer start until the stage scrolls into view — saves a video
+  // network fetch + decode for visitors who never reach the hero.
+  const r0 = stage.getBoundingClientRect();
+  if (r0.top < window.innerHeight && r0.bottom > 0){
+    // Double rAF so the initial CSS scene state has painted before
+    // we start swapping data-scene (otherwise the cross-fade
+    // animations don't trigger on the first transition).
+    requestAnimationFrame(() => requestAnimationFrame(start));
+  } else {
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting){ start(); obs.disconnect(); }
+      });
+    }, { threshold: 0 });
+    obs.observe(stage);
+  }
 })();
 
 // ===== PRICING MONTHLY/YEARLY TOGGLE =====

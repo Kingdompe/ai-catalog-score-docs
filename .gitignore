@@ -1,0 +1,4 @@
+# Source uncompressed Cap recording — too large for git. Only the
+# compressed videos/hero.mp4 (~5MB) goes to the public repo.
+video/
+*.mp4.bak
