@@ -6531,7 +6531,10 @@ section + .cta-section{ padding-top: 64px; }
 <script>
 (function(){
   // Fallback values (in case fetch fails or stats.json missing)
-  window.acsStats = { captures_total: 78527, captures_per_day: 2400, agents_count: 5, stores_benchmarked: 304 };
+  // Fallback values used until /stats.json finishes loading. Bumped
+  // 2026-05-18 from the stale 78k baseline to the current ~228k value so
+  // the first paint matches reality even on a cache miss.
+  window.acsStats = { captures_total: 228000, captures_per_day: 38562, agents_count: 6, stores_benchmarked: 1 };
   // Global live-counter value — shared with the hero ticker so applyStats()
   // can override it after fetch resolves. Without this, the ticker's closure
   // would hold the stale fallback forever and override the DOM each tick.
@@ -6541,7 +6544,12 @@ section + .cta-section{ padding-top: 64px; }
     if (!s || typeof s.captures_total !== 'number') return;
     window.acsStats = s;
     window.__acsLiveValue = s.captures_total;
-    // Hero live counter element
+    // Format helper: 227883 -> "228k+", 1543 -> "1.5k+"
+    function fmtK(n){
+      if (n >= 1000) return Math.round(n / 1000) + 'k+';
+      return n.toLocaleString('en-US');
+    }
+    // Hero live counter element (legacy — kept in case the eyebrow returns)
     var lc = document.getElementById('liveCounter');
     if (lc) lc.textContent = s.captures_total.toLocaleString('en-US');
     // Problem section stat tile (data-count attribute drives the count-up animation)
@@ -6550,6 +6558,19 @@ section + .cta-section{ padding-top: 64px; }
     // Bento Scale tile (data-target drives the count-up)
     var bento = document.querySelector('.stat-big[data-target]');
     if (bento) bento.dataset.target = s.captures_total;
+    // v9 (2026-05-18): also update the hard-coded "Xk+" numbers that
+    // were stuck at the 79k+ fallback. Selectors:
+    //   .ls-counter .num         → banner above the live-examples carousel
+    //   .ne-num[data-stat=captures] → "Captures" tile in the network-effect viz
+    //   .ls-counter .agents      → "5 agents tracked daily" → live agent count
+    document.querySelectorAll('.ls-counter .num, .ne-num[data-stat="captures"]').forEach(function(el){
+      el.textContent = fmtK(s.captures_total);
+    });
+    if (typeof s.agents_count === 'number'){
+      document.querySelectorAll('.ls-counter .agents').forEach(function(el){
+        el.textContent = s.agents_count;
+      });
+    }
   }
   // Apply fallback now, then refine when fetch resolves
   document.addEventListener('DOMContentLoaded', function(){ applyStats(window.acsStats); });
@@ -7422,7 +7443,7 @@ section + .cta-section{ padding-top: 64px; }
     <div class="live-scenarios reveal">
       <div class="ls-head">
         <span class="ls-title"><span class="live-dot"></span> LIVE EXAMPLES FROM OUR OPEN DATASET</span>
-        <span class="ls-counter">Real captures from our public CC0 pipeline · <span class="num">79k+</span> in dataset · 5 agents tracked daily</span>
+        <span class="ls-counter">Real captures from our public CC0 pipeline · <span class="num">228k+</span> in dataset · <span class="agents">6</span> agents tracked daily</span>
       </div>
       <div class="ls-shell">
         <div class="ls-viewport ls-viewport-grid">
@@ -8039,7 +8060,7 @@ section + .cta-section{ padding-top: 64px; }
             <div class="ne-grid"></div>
             <div class="ne-content">
               <div class="ne-label">Captures</div>
-              <div class="ne-num">79k+</div>
+              <div class="ne-num" data-stat="captures">228k+</div>
             </div>
           </div>
           <div class="ne-tile future">
@@ -8185,7 +8206,7 @@ section + .cta-section{ padding-top: 64px; }
       </div>
       <div class="bento-cell">
         <div class="label">SCALE</div>
-        <div class="stat-big num" data-target="79000" style="margin-top:18px">79k+</div>
+        <div class="stat-big num" data-target="228000" style="margin-top:18px">228k+</div>
         <p>captures in our open dataset, growing by <span style="color:var(--brand-deep);font-weight:700;font-family:var(--font-mono)">+2.4k/day</span>.</p>
         <div class="visual">
           <svg class="viz-spark" viewBox="0 0 200 56" preserveAspectRatio="none">
