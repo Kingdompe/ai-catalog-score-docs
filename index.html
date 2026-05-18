@@ -71,10 +71,15 @@
   --shadow-md: 0 2px 4px rgba(20,18,10,.04), 0 8px 24px rgba(20,18,10,.06);
   --shadow-lg: 0 10px 30px rgba(20,18,10,.08), 0 30px 80px rgba(20,18,10,.10);
   --shadow-glow: 0 0 0 1px var(--brand), 0 0 40px rgba(0,208,132,.25);
-  --fs-display: clamp(52px, 7.4vw, 104px);
+  --fs-display: clamp(52px, 7.4vw, 96px);
   /* Section h2 bumped to feel like 'chapter headings' - you immediately know what section you're in */
-  --fs-h1: clamp(48px, 5.6vw, 84px);
-  --fs-h2: clamp(30px, 3vw, 44px);
+  /* v8.3 (2026-05-18): reduced max font-size for section headings.
+     Previous values (84/44) forced titles like "From invisible to A+
+     in three steps" to wrap to 3-4 lines at 1480px container width.
+     New values (60/38) keep section titles to 1-2 lines on desktop
+     while staying impactful on mobile (clamp lower bounds unchanged). */
+  --fs-h1: clamp(42px, 4.6vw, 60px);
+  --fs-h2: clamp(26px, 2.6vw, 38px);
   --font-display: 'General Sans', 'Inter', ui-sans-serif, system-ui, sans-serif;
   --font-body: 'Inter', ui-sans-serif, system-ui, sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
@@ -1226,7 +1231,7 @@ body{
 }
 @media (max-width: 880px), (hover: none){ .spotlight{ display: none; } }
 
-h1,h2,h3{ font-family: var(--font-display); font-weight: 500; letter-spacing: -0.025em; color: var(--ink-0); margin: 0; line-height: 1.05; }
+h1,h2,h3{ font-family: var(--font-display); font-weight: 500; letter-spacing: -0.025em; color: var(--ink-0); margin: 0; line-height: 1.05; text-wrap: balance; }
 h1{ font-size: var(--fs-display); letter-spacing: -0.035em; font-weight: 600; }
 h2{ font-size: var(--fs-h1); letter-spacing: -0.028em; }
 h3{ font-size: var(--fs-h2); }
@@ -3790,9 +3795,10 @@ section{ position: relative; }
 .how-section-v3 .hiw-grid{ z-index: 1; }
 .hiw-head{
   font-family: var(--font-display);
-  font-size: clamp(40px, 4.8vw, 68px);
+  font-size: clamp(36px, 4vw, 56px);
   font-weight: 500;
   letter-spacing: -.028em; line-height: 1.04;
+  text-wrap: balance;
   color: var(--ink-0);
   margin: 18px 0 0;
 }
@@ -5925,8 +5931,8 @@ section + .cta-section{ padding-top: 64px; }
 .reveal-stagger.visible > *:nth-child(9){ opacity: 1; transform: translateY(0); transition-delay: .64s; }
 .reveal-stagger.visible > *:nth-child(10){ opacity: 1; transform: translateY(0); transition-delay: .72s; }
 
-.section-head{ max-width: 1000px; margin-bottom: 72px; }
-.section-head h2{ margin-top: 18px; line-height: 1.05; }
+.section-head{ max-width: 1180px; margin-bottom: 56px; }
+.section-head h2{ margin-top: 18px; line-height: 1.04; text-wrap: balance; }
 /* Sub-paragraph below section h2 keeps a readable measure */
 .section-head > p{ max-width: 720px; }
 .text-center .section-head > p{ margin-left: auto; margin-right: auto; }
@@ -8219,7 +8225,7 @@ section + .cta-section{ padding-top: 64px; }
     <div class="text-center reveal">
       <div class="eyebrow"><span class="section-num">06</span><span class="dot"></span> OPEN SKILLS LIBRARY</div>
       <div class="section-head text-center" style="margin-bottom:0">
-        <h2>Drop our skills into Claude Code, Cursor, Cline, Copilot, Gemini CLI.</h2>
+        <h2 style="font-size:clamp(28px, 3.2vw, 46px); line-height:1.1">Drop our skills into Claude Code, Cursor, Cline, Copilot, Gemini CLI.</h2>
         <p style="font-size:17px;margin-top:18px">One command. 8 skills available out of the box. MIT-licensed.</p>
       </div>
     </div>
