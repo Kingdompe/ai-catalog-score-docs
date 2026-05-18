@@ -6569,6 +6569,33 @@ section + .cta-section{ padding-top: 64px; }
   color: var(--brand);
   flex-shrink: 0;
 }
+/* "Soon" pill — visually distinguishes roadmap items from shipped ones.
+   Used in place of the ✓ check on features marked as coming soon. */
+.pricing-glassy-card .feat.is-soon{ color: rgba(255,255,255,.55); }
+.pricing-glassy-card .feat.is-soon .feat-soon{
+  display: inline-flex; align-items: center;
+  padding: 1px 7px;
+  background: rgba(170, 200, 240, .12);
+  border: 1px solid rgba(170, 200, 240, .30);
+  border-radius: 100px;
+  font-family: var(--font-mono); font-size: 9.5px; font-weight: 700;
+  letter-spacing: .08em; text-transform: uppercase;
+  color: #b9d3ff;
+  flex-shrink: 0;
+  line-height: 1.6;
+}
+.pricing-glassy-card .feat.is-soon .feat-soon-inline{
+  display: inline-block;
+  margin-left: 6px;
+  padding: 1px 6px;
+  background: rgba(170, 200, 240, .10);
+  border: 1px solid rgba(170, 200, 240, .26);
+  border-radius: 100px;
+  font-family: var(--font-mono); font-size: 9px; font-weight: 700;
+  letter-spacing: .08em; text-transform: uppercase;
+  color: #b9d3ff;
+  vertical-align: middle;
+}
 .pricing-glassy-card .pcta{
   margin-top: 24px;
   width: 100%;
@@ -8359,7 +8386,7 @@ section + .cta-section{ padding-top: 64px; }
           <div class="feat"><span class="feat-check">✓</span><span>Agentic Checklist (per-product to-do)</span></div>
           <div class="feat"><span class="feat-check">✓</span><span>AI Query Simulator (3 queries/day)</span></div>
           <div class="feat"><span class="feat-check">✓</span><span>30-day score history</span></div>
-          <div class="feat"><span class="feat-check">✓</span><span>Email alerts on score drops</span></div>
+          <div class="feat is-soon"><span class="feat-check">✓</span><span>Email alerts on score drops<span class="feat-soon-inline">Soon</span></span></div>
         </div>
         <a href="#install" class="pcta secondary">Get started free →</a>
       </div>
@@ -8382,8 +8409,8 @@ section + .cta-section{ padding-top: 64px; }
           <div class="feat"><span class="feat-check">✓</span><span>Bulk Fix up to 25 products at once</span></div>
           <div class="feat"><span class="feat-check">✓</span><span>Competitor comparison (see how rivals score)</span></div>
           <div class="feat"><span class="feat-check">✓</span><span>Review Intelligence (trust signals from reviews)</span></div>
-          <div class="feat"><span class="feat-check">✓</span><span>Revenue impact estimator (per-fix $ projection)</span></div>
-          <div class="feat"><span class="feat-check">✓</span><span>Per-agent visibility report (see your blind spots)</span></div>
+          <div class="feat is-soon"><span class="feat-check">✓</span><span>Revenue impact estimator (per-fix $ projection)<span class="feat-soon-inline">Soon</span></span></div>
+          <div class="feat is-soon"><span class="feat-check">✓</span><span>Per-agent visibility report (see your blind spots)<span class="feat-soon-inline">Soon</span></span></div>
           <div class="feat"><span class="feat-check">✓</span><span>100 cross-agent visibility tests / month</span></div>
           <div class="feat"><span class="feat-check">✓</span><span>Unlimited AI Query Simulator</span></div>
           <div class="feat"><span class="feat-check">✓</span><span>90-day score history &amp; trends</span></div>
@@ -8412,8 +8439,8 @@ section + .cta-section{ padding-top: 64px; }
           <div class="feat"><span class="feat-check">✓</span><span>Unlimited cross-agent visibility tests</span></div>
           <div class="feat"><span class="feat-check">✓</span><span>Agent traffic monitor (see who's crawling your store)</span></div>
           <div class="feat"><span class="feat-check">✓</span><span>Per-vertical benchmarks</span></div>
-          <div class="feat"><span class="feat-check">✓</span><span>PDF export of audit &amp; experiment reports</span></div>
-          <div class="feat"><span class="feat-check">✓</span><span>Slack alerts + priority support (&lt; 24h response)</span></div>
+          <div class="feat is-soon"><span class="feat-check">✓</span><span>PDF export of audit &amp; experiment reports<span class="feat-soon-inline">Soon</span></span></div>
+          <div class="feat"><span class="feat-check">✓</span><span>Priority support (&lt; 24h response) <span class="feat-soon-inline">Slack alerts soon</span></span></div>
           <div class="feat"><span class="feat-check">✓</span><span>Shared Experiment Library</span></div>
         </div>
         <a href="#install" class="pcta primary">Choose Pro →</a>
@@ -8436,11 +8463,11 @@ section + .cta-section{ padding-top: 64px; }
           <div class="feat"><span class="feat-check">✓</span><span>Everything in Pro, plus:</span></div>
           <div class="feat"><span class="feat-check">✓</span><span>Unlimited SKUs — no caps, no tiers</span></div>
           <div class="feat"><span class="feat-check">✓</span><span>Choice: $499 flat <strong>or</strong> 5% of AI uplift</span></div>
-          <div class="feat"><span class="feat-check">✓</span><span>Causal attribution dashboard (every $ traced)</span></div>
-          <div class="feat"><span class="feat-check">✓</span><span>Custom vertical model (trained on your category)</span></div>
-          <div class="feat"><span class="feat-check">✓</span><span>Multi-store dashboard</span></div>
+          <div class="feat is-soon"><span class="feat-check">✓</span><span>Causal attribution dashboard (every $ traced)<span class="feat-soon-inline">Soon</span></span></div>
+          <div class="feat is-soon"><span class="feat-check">✓</span><span>Custom vertical model (trained on your category)<span class="feat-soon-inline">Soon</span></span></div>
+          <div class="feat is-soon"><span class="feat-check">✓</span><span>Multi-store dashboard<span class="feat-soon-inline">Soon</span></span></div>
           <div class="feat"><span class="feat-check">✓</span><span>Dedicated success manager</span></div>
-          <div class="feat"><span class="feat-check">✓</span><span>White-label option for agencies</span></div>
+          <div class="feat is-soon"><span class="feat-check">✓</span><span>White-label option for agencies<span class="feat-soon-inline">Soon</span></span></div>
         </div>
         <a href="#install" class="pcta secondary">Choose Performance →</a>
       </div>
