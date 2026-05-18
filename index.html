@@ -3346,6 +3346,155 @@ section{ position: relative; }
   50%{ box-shadow: 0 0 0 7px rgba(229,72,77,0); }
 }
 
+/* ============================================================
+   AI SHOPPER PROOF — phone mockup panel
+   Visual evidence that lives just above the live-examples carousel.
+   Two-column layout: phone on the left, copy on the right. All three
+   animation layers (halo pulse, idle float, scroll-reveal + tilt) are
+   coherent with the warm-amber lighting of the photo itself.
+   ============================================================ */
+.ai-shopper-proof{
+  margin-top: 56px;
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+  gap: 48px;
+  align-items: center;
+  padding: 40px 32px;
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  border-radius: var(--r-xl);
+  overflow: hidden;
+}
+@media (max-width: 880px){
+  .ai-shopper-proof{ grid-template-columns: 1fr; gap: 32px; padding: 32px 24px; }
+}
+/* Warm amber halo behind the phone — matches the lighting of the photo */
+.ai-shopper-proof::before{
+  content: '';
+  position: absolute;
+  width: 720px; height: 720px;
+  left: -120px; top: 50%;
+  transform: translateY(-50%);
+  background: radial-gradient(closest-side, rgba(255, 175, 80, .28), rgba(255, 140, 60, .10) 45%, transparent 70%);
+  filter: blur(20px);
+  z-index: 0;
+  pointer-events: none;
+  animation: asp-halo-pulse 6s ease-in-out infinite;
+}
+@keyframes asp-halo-pulse{
+  0%, 100% { opacity: .85; transform: translateY(-50%) scale(1); }
+  50%      { opacity: 1;  transform: translateY(-50%) scale(1.05); }
+}
+.ai-shopper-proof > *{ position: relative; z-index: 1; }
+
+/* Phone column */
+.asp-phone{
+  perspective: 1600px;
+  display: flex;
+  justify-content: center;
+}
+.asp-phone-frame{
+  width: min(420px, 100%);
+  border-radius: 38px;
+  overflow: hidden;
+  box-shadow:
+    0 1px 0 rgba(255, 220, 160, .15) inset,
+    0 20px 60px -16px rgba(0, 0, 0, .35),
+    0 50px 120px -32px rgba(255, 150, 80, .25);
+}
+.asp-phone-frame img{
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 38px;
+}
+@keyframes asp-float{
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-6px); }
+}
+/* Hover-tilt — applied only once the entrance reveal has fired so the
+   transform doesn't fight with the slide-in. Pauses the idle float
+   while hovering and applies a fixed perspective tilt instead. */
+.ai-shopper-proof.visible .asp-phone:hover .asp-phone-frame{
+  animation-play-state: paused;
+  transform: rotateX(4deg) rotateY(-6deg) translateY(-4px);
+  transition: transform .4s cubic-bezier(.2,.7,.2,1);
+}
+
+/* Copy column */
+.asp-copy{ display: flex; flex-direction: column; gap: 14px; }
+.asp-eyebrow{
+  display: inline-flex; align-items: center; gap: 8px;
+  align-self: flex-start;
+  font-family: var(--font-mono); font-size: 11px; font-weight: 700;
+  letter-spacing: .12em; text-transform: uppercase;
+  color: #B97A04;
+  padding: 5px 10px;
+  background: rgba(255, 175, 80, .12);
+  border: 1px solid rgba(255, 175, 80, .35);
+  border-radius: 100px;
+}
+.asp-eyebrow::before{
+  content: '';
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: #E59437;
+  box-shadow: 0 0 8px rgba(229, 148, 55, .8);
+  animation: barPulse 1.6s ease-in-out infinite;
+}
+.asp-title{
+  font-family: var(--font-display);
+  font-size: clamp(24px, 2.6vw, 32px);
+  font-weight: 700;
+  letter-spacing: -.025em;
+  line-height: 1.15;
+  color: var(--ink-0);
+  margin: 0;
+}
+.asp-title .asp-em{ color: var(--brand-deep); }
+.asp-body{
+  font-size: 15.5px;
+  line-height: 1.55;
+  color: var(--ink-2);
+  margin: 0;
+}
+.asp-meta{
+  display: inline-flex; align-items: center; gap: 6px;
+  align-self: flex-start;
+  margin-top: 8px;
+  padding: 6px 11px;
+  font-family: var(--font-mono); font-size: 11px; font-weight: 600;
+  color: var(--ink-3);
+  background: rgba(0, 0, 0, .04);
+  border: 1px solid var(--border);
+  border-radius: 100px;
+}
+.asp-meta::before{
+  content: '';
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: var(--brand);
+}
+
+/* Scroll-triggered reveal — IntersectionObserver toggles .visible on
+   any .reveal element. Default state: phone is offset + tilted; once
+   visible, it lands. The idle float keyframe takes over after. */
+.ai-shopper-proof .asp-phone-frame{
+  opacity: 0;
+  transform: translateY(40px) rotateX(8deg);
+  transition: opacity .9s cubic-bezier(.2,.7,.2,1), transform .9s cubic-bezier(.2,.7,.2,1);
+}
+.ai-shopper-proof.visible .asp-phone-frame{
+  opacity: 1;
+  transform: translateY(0) rotateX(0deg);
+}
+/* Once the entrance transition has settled, the idle float animation
+   kicks in via a delay matching the transition duration. */
+.ai-shopper-proof.visible .asp-phone-frame{
+  animation: asp-float 4s ease-in-out 1s infinite;
+}
+
 /* "While you read this" live scenarios block */
 .live-scenarios{
   margin-top: 56px;
@@ -7708,6 +7857,27 @@ section + .cta-section{ padding-top: 64px; }
             <span><span class="accent">+2,400</span> captures /day · CC0 dataset</span>
           </div>
         </div>
+      </div>
+    </div>
+
+    <!-- AI SHOPPER PROOF — phone mockup panel -->
+    <div class="ai-shopper-proof reveal">
+      <div class="asp-phone">
+        <div class="asp-phone-frame">
+          <img src="images/chatgpt-beauty-mockup.png" alt="ChatGPT recommending beauty products from competing Shopify brands" loading="lazy" width="420" height="850" />
+        </div>
+      </div>
+      <div class="asp-copy">
+        <span class="asp-eyebrow">This is happening now</span>
+        <h3 class="asp-title">
+          ChatGPT just recommended three brands.
+          <br/>
+          <span class="asp-em">Yours could've been one of them.</span>
+        </h3>
+        <p class="asp-body">
+          AI agents read every Shopify catalog and pick the ones their answer pages will feature. Brands with clean signals win the placement. Catalogs that read like noise get skipped.
+        </p>
+        <span class="asp-meta">Real query · captured on ChatGPT</span>
       </div>
     </div>
 
