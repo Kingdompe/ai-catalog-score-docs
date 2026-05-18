@@ -6047,38 +6047,69 @@ section + .cta-section{ padding-top: 64px; }
 .text-center .eyebrow{ justify-content: center; }
 .text-center .section-head{ margin-left: auto; margin-right: auto; }
 
-/* ============ ANIMATED GLASSY PRICING ============ */
+/* ============ STATIC ARC PRICING BACKGROUND ============ */
 .pricing-glassy{
   position: relative;
   overflow: hidden;
-  background: var(--bg-dark);
+  background:
+    /* faint tech grid */
+    linear-gradient(rgba(120, 240, 180, .045) 1px, transparent 1px) 0 0 / 80px 80px,
+    linear-gradient(90deg, rgba(120, 240, 180, .045) 1px, transparent 1px) 0 0 / 80px 80px,
+    /* darker top to ground the title */
+    radial-gradient(ellipse 100% 55% at 50% 0%, rgba(5, 10, 8, .85), transparent 80%),
+    /* warm green ambient floor */
+    radial-gradient(ellipse 90% 55% at 50% 100%, rgba(0, 168, 106, .14), transparent 65%),
+    var(--bg-dark);
   color: var(--ink-dark-1);
   border-top: 1px solid var(--border-dark);
   border-bottom: 1px solid var(--border-dark);
   min-height: 900px;
   display: flex; align-items: center;
 }
-.pricing-shader-canvas{
+/* Legacy canvas/fallback nodes from the rotating-circle shader — hidden */
+.pricing-shader-canvas, .pricing-shader-fallback{ display: none !important; }
+
+.pricing-bg{
   position: absolute; inset: 0;
-  width: 100%; height: 100%;
-  z-index: 0;
-  display: block;
+  pointer-events: none;
+  z-index: 1;
+  overflow: hidden;
 }
-.pricing-shader-fallback{
-  position: absolute; inset: 0;
-  background:
-    radial-gradient(ellipse 60% 70% at 50% 50%, rgba(0,208,132,.2), transparent 60%),
-    radial-gradient(ellipse 80% 60% at 30% 30%, rgba(139,92,246,.15), transparent 60%),
-    radial-gradient(ellipse 60% 80% at 70% 70%, rgba(37,99,235,.15), transparent 60%),
-    var(--bg-dark);
-  z-index: 0;
+/* The top arc — a wide ellipse positioned so its top edge frames the cards */
+.pricing-arc{
+  position: absolute;
+  left: 50%;
+  top: 14%;
+  transform: translateX(-50%);
+  width: min(1900px, 115%);
+  aspect-ratio: 2.5 / 1;
+  border: 1.5px solid rgba(120, 240, 200, .7);
+  border-radius: 50%;
+  box-shadow:
+    0 0 22px rgba(0, 220, 150, .55),
+    0 0 60px rgba(0, 220, 150, .38),
+    0 0 140px rgba(0, 220, 150, .22),
+    inset 0 0 30px rgba(0, 220, 150, .18);
 }
-/* dark overlay behind title to absorb shader brightness */
-.pricing-glassy::after{
-  content: ''; position: absolute;
-  top: 0; left: 0; right: 0; height: 45%;
-  background: linear-gradient(180deg, var(--bg-dark) 0%, rgba(10,10,9,.8) 30%, transparent 100%);
-  z-index: 1; pointer-events: none;
+/* Inner arc — thinner, brighter, slightly inset for that "glowing rim" feel */
+.pricing-arc::before{
+  content: '';
+  position: absolute;
+  inset: 6px;
+  border: 1px solid rgba(180, 255, 220, .35);
+  border-radius: 50%;
+  box-shadow: 0 0 24px rgba(180, 255, 220, .25);
+}
+/* Bottom glow pool — soft floor light under the cards */
+.pricing-bottom-glow{
+  position: absolute;
+  bottom: -120px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60%;
+  height: 320px;
+  background: radial-gradient(ellipse 60% 60% at 50% 0%, rgba(0, 240, 160, .35), transparent 70%);
+  filter: blur(24px);
 }
 .pricing-glassy .container{ position: relative; z-index: 3; }
 .pricing-glassy-head{
@@ -8153,10 +8184,12 @@ section + .cta-section{ padding-top: 64px; }
   </div>
 </section>
 
-<!-- PRICING - Animated Glassy -->
+<!-- PRICING - Static arc framing -->
 <section id="pricing" class="pricing-glassy section-pad">
-  <canvas class="pricing-shader-canvas" id="pricingShaderCanvas"></canvas>
-  <div class="pricing-shader-fallback" id="pricingShaderFallback" style="display:none"></div>
+  <div class="pricing-bg" aria-hidden="true">
+    <div class="pricing-arc"></div>
+    <div class="pricing-bottom-glow"></div>
+  </div>
   <div class="container">
     <div class="pricing-glassy-head reveal">
       <div class="eyebrow" style="justify-content:center;margin-bottom:16px"><span class="section-num">04</span><span class="dot"></span> PRICING</div>
