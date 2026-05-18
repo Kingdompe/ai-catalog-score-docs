@@ -3244,12 +3244,26 @@ section{ position: relative; }
   max-width: 1280px;
   margin: 18px auto 0;
   line-height: 1.05;
+  /* Override the global h2 clamp() floor of 42px — too big for phones.
+     This one needs to scale smaller because the headline runs 11 words
+     across two lines and overflows under 480px otherwise. */
+  font-size: clamp(28px, 6.4vw, 60px);
+}
+@media (max-width: 480px){
+  .problem-headline{
+    font-size: clamp(24px, 7vw, 32px);
+    letter-spacing: -.02em;
+    line-height: 1.1;
+  }
 }
 .problem-sub{
   font-size: 17px; line-height: 1.65;
   max-width: 820px;
   margin: 28px auto 0;
   color: var(--ink-2);
+}
+@media (max-width: 480px){
+  .problem-sub{ font-size: 14.5px; line-height: 1.55; }
 }
 .problem-sub strong{ color: var(--ink-0); font-weight: 600; }
 /* Legacy class kept for safety (no longer used in HTML) */
