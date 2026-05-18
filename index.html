@@ -6227,22 +6227,33 @@ section + .cta-section{ padding-top: 64px; }
   color: var(--ink-1); text-decoration: line-through; text-decoration-color: var(--ink-4); font-weight: 600;
 }
 
-/* Score Guarantee badge inside each card */
+/* Score Guarantee badge inside each card — bright + glowy for visibility */
 .pricing-glassy-card .guarantee-pill{
-  display: inline-flex; align-items: center; gap: 6px;
-  margin-top: 14px; padding: 8px 12px;
-  background: linear-gradient(135deg, var(--brand-wash), transparent);
-  border: 1px solid rgba(0,208,132,.3);
-  border-radius: 10px;
-  font-family: var(--font-mono); font-size: 11px; font-weight: 700;
-  color: var(--brand-deep);
+  display: inline-flex; align-items: center; gap: 8px;
+  margin-top: 14px; padding: 10px 14px;
+  background: linear-gradient(135deg, rgba(0, 208, 132, .22) 0%, rgba(0, 208, 132, .08) 100%);
+  border: 1px solid rgba(0, 208, 132, .55);
+  border-radius: 12px;
+  font-family: var(--font-mono); font-size: 11.5px; font-weight: 700;
+  color: #92e8c0;
   letter-spacing: .04em;
+  box-shadow:
+    0 0 18px rgba(0, 208, 132, .22),
+    inset 0 1px 0 rgba(255, 255, 255, .12);
+  text-shadow: 0 0 8px rgba(0, 208, 132, .35);
 }
 .pricing-glassy-card .guarantee-pill::before{
-  content: '✓'; font-size: 12px; font-weight: 800;
+  content: '✓';
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 16px; height: 16px;
+  background: rgba(0, 208, 132, .25);
+  border: 1px solid rgba(0, 208, 132, .6);
+  border-radius: 50%;
+  font-size: 10px; font-weight: 800;
+  color: #b9f4d4;
 }
 .pricing-glassy-card .guarantee-pill .gsub{
-  color: var(--ink-2); font-weight: 500; font-size: 10.5px;
+  color: rgba(255, 255, 255, .80); font-weight: 500; font-size: 10.5px;
   letter-spacing: 0;
 }
 
@@ -6274,50 +6285,82 @@ section + .cta-section{ padding-top: 64px; }
   color: #c8b3ff;
 }
 
-/* Free-tier specifics — visually distinct from the green paid cards.
-   Slate/cool tint, dashed border, "FREE FOREVER" pill. */
+/* Free-tier specifics — WARM AMBER palette to break entirely from the
+   green paid-tier family. Different hue, different visual rhythm. */
 .pricing-glassy-card.pricing-free{
-  background: linear-gradient(180deg, rgba(150, 175, 200, .06) 0%, rgba(150, 175, 200, .015) 100%);
-  border: 1px dashed rgba(180, 200, 220, .22);
+  background:
+    radial-gradient(ellipse 90% 50% at 50% 0%, rgba(255, 190, 100, .14), transparent 70%),
+    linear-gradient(180deg, rgba(255, 175, 80, .08) 0%, rgba(255, 175, 80, .02) 60%, rgba(0, 0, 0, .10) 100%);
+  border: 1px solid rgba(255, 190, 100, .28);
+  box-shadow:
+    0 1px 0 rgba(255, 220, 160, .18) inset,
+    0 0 24px rgba(255, 175, 80, .12),
+    0 4px 14px rgba(0, 0, 0, .30),
+    0 18px 40px -16px rgba(0, 0, 0, .55);
 }
 .pricing-glassy-card.pricing-free:hover{
-  background: linear-gradient(180deg, rgba(150, 175, 200, .10) 0%, rgba(150, 175, 200, .03) 100%);
-  border-color: rgba(180, 200, 220, .35);
+  background:
+    radial-gradient(ellipse 90% 50% at 50% 0%, rgba(255, 190, 100, .20), transparent 70%),
+    linear-gradient(180deg, rgba(255, 175, 80, .12) 0%, rgba(255, 175, 80, .03) 60%, rgba(0, 0, 0, .10) 100%);
+  border-color: rgba(255, 190, 100, .42);
+  box-shadow:
+    0 1px 0 rgba(255, 220, 160, .22) inset,
+    0 0 36px rgba(255, 175, 80, .18),
+    0 12px 32px rgba(0, 0, 0, .35),
+    0 28px 60px -16px rgba(255, 175, 80, .18);
+}
+/* Amber top-edge sheen, replaces the cooler white one for paid cards */
+.pricing-glassy-card.pricing-free::before{
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(255, 200, 120, .55) 30%,
+    rgba(255, 220, 160, .85) 50%,
+    rgba(255, 200, 120, .55) 70%,
+    transparent 100%);
 }
 .pricing-glassy-card.pricing-free .founding-ribbon{ display: none; }
 .pricing-glassy-card.pricing-free .plan-icon{
-  background: linear-gradient(135deg, rgba(180, 200, 220, .18), rgba(120, 145, 175, .08));
-  color: #c8d4e0;
-  border-color: rgba(180, 200, 220, .18);
+  background: linear-gradient(135deg, rgba(255, 190, 100, .30), rgba(220, 140, 60, .14));
+  color: #ffd699;
+  border-color: rgba(255, 190, 100, .32);
 }
 .pricing-glassy-card.pricing-free .free-pill{
-  display: inline-flex; align-items: center; gap: 5px;
+  display: inline-flex; align-items: center; gap: 6px;
   align-self: flex-start;
-  padding: 4px 10px;
+  padding: 5px 11px;
   margin-bottom: 12px;
-  background: rgba(180, 200, 220, .10);
-  border: 1px solid rgba(180, 200, 220, .25);
+  background: linear-gradient(135deg, rgba(255, 190, 100, .22), rgba(255, 190, 100, .08));
+  border: 1px solid rgba(255, 190, 100, .45);
   border-radius: 100px;
   font-family: var(--font-mono); font-size: 10.5px; font-weight: 700;
   letter-spacing: .08em; text-transform: uppercase;
-  color: #c8d4e0;
+  color: #ffd699;
+  box-shadow: 0 0 18px rgba(255, 175, 80, .25);
+  text-shadow: 0 0 6px rgba(255, 175, 80, .35);
 }
 .pricing-glassy-card.pricing-free .free-pill::before{
   content: '';
   width: 6px; height: 6px;
   border-radius: 50%;
-  background: #c8d4e0;
-  box-shadow: 0 0 6px rgba(200, 212, 224, .6);
+  background: #ffc266;
+  box-shadow: 0 0 8px rgba(255, 175, 80, .8);
 }
-/* Free CTA reads as the cool-slate variant rather than green */
+/* Make the Free price + unit amber-toned too so the whole card reads warm */
+.pricing-glassy-card.pricing-free .price{
+  background: linear-gradient(135deg, #ffd699 0%, #ffb466 100%);
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+/* Free CTA — warm amber variant */
 .pricing-glassy-card.pricing-free .pcta.secondary{
-  background: rgba(180, 200, 220, .08);
-  border-color: rgba(180, 200, 220, .25);
-  color: #d8e2ed;
+  background: linear-gradient(180deg, rgba(255, 190, 100, .14), rgba(255, 175, 80, .06));
+  border: 1px solid rgba(255, 190, 100, .40);
+  color: #ffd699;
 }
 .pricing-glassy-card.pricing-free .pcta.secondary:hover{
-  background: rgba(180, 200, 220, .14);
-  border-color: rgba(180, 200, 220, .40);
+  background: linear-gradient(180deg, rgba(255, 190, 100, .22), rgba(255, 175, 80, .10));
+  border-color: rgba(255, 190, 100, .60);
+  box-shadow: 0 0 24px rgba(255, 175, 80, .25);
 }
 
 /* ============================================================
@@ -6367,36 +6410,67 @@ section + .cta-section{ padding-top: 64px; }
   position: relative;
   padding: 32px 28px;
   border-radius: 20px;
-  background: linear-gradient(180deg, rgba(255,255,255,.08) 0%, rgba(255,255,255,.02) 100%);
-  border: 1px solid rgba(255,255,255,.1);
+  /* Layered background: vertical gradient + soft inner top-glow for depth */
+  background:
+    radial-gradient(ellipse 90% 50% at 50% 0%, rgba(255,255,255,.07), transparent 70%),
+    linear-gradient(180deg, rgba(255,255,255,.06) 0%, rgba(255,255,255,.012) 60%, rgba(0,0,0,.10) 100%);
+  border: 1px solid rgba(255,255,255,.12);
   backdrop-filter: blur(16px) saturate(1.1);
   -webkit-backdrop-filter: blur(16px) saturate(1.1);
+  /* Crisp double-shadow + bright top edge so it reads as a lifted glass tile */
   box-shadow:
-    0 4px 12px rgba(0,0,0,.2),
-    inset 0 1px 0 rgba(255,255,255,.1);
+    0 1px 0 rgba(255,255,255,.10) inset,
+    0 -1px 0 rgba(0,0,0,.20) inset,
+    0 4px 14px rgba(0,0,0,.30),
+    0 18px 40px -16px rgba(0,0,0,.55);
   display: flex; flex-direction: column;
-  transition: all var(--transition);
+  transition: transform .35s cubic-bezier(.2,.7,.2,1),
+              box-shadow .35s cubic-bezier(.2,.7,.2,1),
+              border-color .25s ease,
+              background .25s ease;
   color: var(--ink-dark-1);
+  overflow: hidden;
+}
+/* Animated top-edge sheen — a subtle moving highlight on the rim */
+.pricing-glassy-card::before{
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(255,255,255,.4) 20%,
+    rgba(255,255,255,.7) 50%,
+    rgba(255,255,255,.4) 80%,
+    transparent 100%);
+  opacity: .55;
 }
 .pricing-glassy-card:hover{
-  transform: translateY(-4px);
-  background: linear-gradient(180deg, rgba(255,255,255,.12) 0%, rgba(255,255,255,.04) 100%);
-  border-color: rgba(255,255,255,.18);
+  transform: translateY(-8px);
+  background:
+    radial-gradient(ellipse 90% 50% at 50% 0%, rgba(255,255,255,.10), transparent 70%),
+    linear-gradient(180deg, rgba(255,255,255,.09) 0%, rgba(255,255,255,.025) 60%, rgba(0,0,0,.10) 100%);
+  border-color: rgba(255,255,255,.22);
   box-shadow:
-    0 12px 32px rgba(0,0,0,.3),
-    inset 0 1px 0 rgba(255,255,255,.15);
+    0 1px 0 rgba(255,255,255,.18) inset,
+    0 -1px 0 rgba(0,0,0,.25) inset,
+    0 10px 24px rgba(0,0,0,.35),
+    0 30px 60px -16px rgba(0,0,0,.55);
 }
 .pricing-glassy-card.popular{
-  background: linear-gradient(180deg, rgba(0,208,132,.14) 0%, rgba(0,208,132,.04) 100%);
-  border-color: rgba(0,208,132,.4);
+  background:
+    radial-gradient(ellipse 90% 50% at 50% 0%, rgba(0,208,132,.30), transparent 70%),
+    linear-gradient(180deg, rgba(0,208,132,.18) 0%, rgba(0,208,132,.04) 100%);
+  border-color: rgba(0,208,132,.5);
   box-shadow:
-    0 0 0 1px rgba(0,208,132,.2),
-    0 12px 40px rgba(0,208,132,.2),
-    inset 0 1px 0 rgba(255,255,255,.12);
+    0 0 0 1px rgba(0,208,132,.35),
+    0 1px 0 rgba(255,255,255,.18) inset,
+    0 0 40px rgba(0,208,132,.25),
+    0 20px 60px -10px rgba(0,208,132,.30),
+    0 24px 48px -12px rgba(0,0,0,.55);
   transform: scale(1.04);
 }
 @media (max-width: 1100px){ .pricing-glassy-card.popular{ transform: scale(1); } }
-.pricing-glassy-card.popular:hover{ transform: scale(1.05) translateY(-3px); }
+.pricing-glassy-card.popular:hover{ transform: scale(1.06) translateY(-6px); }
 .pricing-glassy-card .pop-badge{
   position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
   background: linear-gradient(135deg, var(--brand), var(--brand-light));
@@ -9157,7 +9231,10 @@ if (terminalBody) terminalObserver.observe(terminalBody);
       return sin(dot(normalize(v1), normalize(v2)) * strength + iTime * speed) / 100.0;
     }
     vec3 paintCircle(vec2 uv, vec2 center, float rad, float width){
-      vec2 diff = center - uv;
+      // Squash y so the "circle" is actually a flat ellipse — wider than tall,
+      // which keeps the visible arc inside the pricing section and lets it
+      // frame the cards from the left/right rather than crowning above & below.
+      vec2 diff = (center - uv) * vec2(1.0, 1.8);
       float len = length(diff);
       len += variation(diff, vec2(0., 1.), 5., 2.);
       len -= variation(diff, vec2(1., 0.), 5., 2.);
@@ -9169,10 +9246,10 @@ if (terminalBody) terminalObserver.observe(terminalBody);
       uv.x *= iResolution.x / iResolution.y;
       uv.x -= (iResolution.x / iResolution.y - 1.0) * 0.5;
       float mask = 0.0;
-      // Larger radius so the ring frames the 4 cards from outside instead of cutting across them
-      float radius = .58;
-      // Center slightly above middle so the visible arc peaks above the cards
-      vec2 center = vec2(.5, .48);
+      // Radius tuned with the y-squash above so the ring stays inside the
+      // section bounds while still being wider than the cards horizontally.
+      float radius = .52;
+      vec2 center = vec2(.5, .5);
       mask += paintCircle(uv, center, radius, .04).r;
       mask += paintCircle(uv, center, radius - .018, .012).r;
       mask += paintCircle(uv, center, radius + .018, .006).r;
