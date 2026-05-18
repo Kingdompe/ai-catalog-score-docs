@@ -3354,30 +3354,30 @@ section{ position: relative; }
    coherent with the warm-amber lighting of the photo itself.
    ============================================================ */
 .ai-shopper-proof{
-  margin-top: 56px;
+  margin-top: 64px;
   position: relative;
   display: grid;
-  grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
-  gap: 48px;
+  grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+  gap: 56px;
   align-items: center;
-  padding: 40px 32px;
-  background: var(--bg-raised);
-  border: 1px solid var(--border);
-  border-radius: var(--r-xl);
-  overflow: hidden;
+  /* No card chrome — sits directly on the section background so the
+     phone and the warm halo behind it dominate the composition. */
+  background: transparent;
+  border: 0;
+  padding: 0;
 }
 @media (max-width: 880px){
-  .ai-shopper-proof{ grid-template-columns: 1fr; gap: 32px; padding: 32px 24px; }
+  .ai-shopper-proof{ grid-template-columns: 1fr; gap: 32px; }
 }
 /* Warm amber halo behind the phone — matches the lighting of the photo */
 .ai-shopper-proof::before{
   content: '';
   position: absolute;
-  width: 720px; height: 720px;
-  left: -120px; top: 50%;
+  width: 960px; height: 960px;
+  left: -180px; top: 50%;
   transform: translateY(-50%);
-  background: radial-gradient(closest-side, rgba(255, 175, 80, .28), rgba(255, 140, 60, .10) 45%, transparent 70%);
-  filter: blur(20px);
+  background: radial-gradient(closest-side, rgba(255, 175, 80, .26), rgba(255, 140, 60, .09) 45%, transparent 70%);
+  filter: blur(24px);
   z-index: 0;
   pointer-events: none;
   animation: asp-halo-pulse 6s ease-in-out infinite;
@@ -3395,13 +3395,13 @@ section{ position: relative; }
   justify-content: center;
 }
 .asp-phone-frame{
-  width: min(420px, 100%);
-  border-radius: 38px;
+  width: min(560px, 100%);
+  border-radius: 42px;
   overflow: hidden;
   box-shadow:
     0 1px 0 rgba(255, 220, 160, .15) inset,
-    0 20px 60px -16px rgba(0, 0, 0, .35),
-    0 50px 120px -32px rgba(255, 150, 80, .25);
+    0 30px 80px -16px rgba(0, 0, 0, .40),
+    0 70px 160px -32px rgba(255, 150, 80, .30);
 }
 .asp-phone-frame img{
   display: block;
@@ -7868,7 +7868,6 @@ section + .cta-section{ padding-top: 64px; }
         </div>
       </div>
       <div class="asp-copy">
-        <span class="asp-eyebrow">This is happening now</span>
         <h3 class="asp-title">
           ChatGPT just recommended three brands.
           <br/>
