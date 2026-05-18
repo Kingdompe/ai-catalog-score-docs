@@ -2237,22 +2237,24 @@ section{ position: relative; }
      the parent container's narrower max-width. */
   left: 50%;
   transform: translateX(-50%);
-  width: min(1760px, calc(100vw - 32px));
+  width: min(1560px, calc(100vw - 32px));
   max-width: none;
   margin: 0;
-  padding: 24px 16px 56px;
+  padding: 12px 16px 32px;
   perspective: 1800px;
   /* All 3 scenes are position:absolute → the parent has nothing to size
-     against and collapses to 0px height. Lock an aspect-ratio + min-height
-     so the stage always reserves enough room for the largest scene. */
-  min-height: clamp(560px, 60vw, 880px);
-  aspect-ratio: 16 / 9;
+     against and collapses to 0px height. Lock aspect + min-height so the
+     stage reserves room for the largest scene. Sized so that headline +
+     subtitle + CTAs + stage all fit in a typical 1080p viewport without
+     scroll. */
+  min-height: clamp(420px, 42vw, 640px);
+  aspect-ratio: 21 / 9;
 }
 @media (max-width: 1280px){
   .hero-stage{ left: auto; transform: none; width: 100%; margin: 0 auto; }
 }
 @media (max-width: 880px){
-  .hero-stage{ aspect-ratio: 4 / 3; min-height: 480px; }
+  .hero-stage{ aspect-ratio: 4 / 3; min-height: 420px; }
 }
 
 /* ---- Background atmosphere (re-used vibe from v7) ---- */
@@ -6952,22 +6954,18 @@ section + .cta-section{ padding-top: 64px; }
     <div class="hero-content">
       <h1>
         <span class="word" style="animation-delay:.05s">Your</span>
-        <span class="word" style="animation-delay:.10s">customers</span>
-        <span class="word" style="animation-delay:.15s">ask</span>
-        <span class="word accent" style="animation-delay:.20s">AI agents</span>
-        <span class="word" style="animation-delay:.25s">what</span>
-        <span class="word" style="animation-delay:.30s">to</span>
-        <span class="word" style="animation-delay:.35s">buy.</span>
+        <span class="word" style="animation-delay:.10s">Shopify</span>
+        <span class="word" style="animation-delay:.15s">products</span>
+        <span class="word" style="animation-delay:.20s">are</span>
         <br/>
-        <span class="word" style="animation-delay:.55s">They</span>
-        <span class="word" style="animation-delay:.60s">don't</span>
-        <span class="word" style="animation-delay:.65s">know</span>
-        <span class="word" style="animation-delay:.70s">your</span>
-        <span class="word" style="animation-delay:.75s">products</span>
-        <span class="word" style="animation-delay:.80s">exist.</span>
+        <span class="word" style="animation-delay:.40s">invisible</span>
+        <span class="word" style="animation-delay:.45s">to</span>
+        <span class="word accent" style="animation-delay:.50s">ChatGPT</span>
+        <span class="word" style="animation-delay:.55s">and</span>
+        <span class="word accent" style="animation-delay:.60s">Claude.</span>
       </h1>
       <p class="sub">
-        AI Catalog Score audits every product against the 8 signals Shopify's Agentic Storefronts ship to ChatGPT, Claude, Gemini, Mistral and DeepSeek (Perplexity coming) - then rewrites what's broken, with causal proof.
+        Make your products discoverable on ChatGPT, Claude, Gemini, Mistral and DeepSeek. One click to audit, fix, and prove the revenue lift with p-values.
       </p>
       <div class="ctas">
         <a href="#install" class="btn btn-primary">Install free on Shopify <span class="btn-arrow">→</span></a>
