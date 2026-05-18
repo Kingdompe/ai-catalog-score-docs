@@ -406,6 +406,9 @@ html{ scroll-behavior: smooth; scroll-padding-top: 96px; }
   display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;
   margin-top: 10px;
 }
+@media (max-width: 480px){
+  .pm-rich-tiles{ grid-template-columns: 1fr; }
+}
 .prt{
   padding: 10px 10px 9px;
   border-radius: 12px;
@@ -661,6 +664,9 @@ html{ scroll-behavior: smooth; scroll-padding-top: 96px; }
 .pmv-moats-grid{
   display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px;
   width: 100%;
+}
+@media (max-width: 640px){
+  .pmv-moats-grid{ grid-template-columns: repeat(2, 1fr); }
 }
 .pmmt{
   display: flex; align-items: center; gap: 6px;
@@ -1490,7 +1496,73 @@ section{ position: relative; }
   .nav nav{ gap: 2px; font-size: 14.5px; }
   .nav nav a{ padding: 8px 12px; }
 }
-@media (max-width: 880px){ .nav nav{ display: none; } }
+
+/* Mobile menu — hamburger toggles a slide-down drawer with the same
+   nav links. Visible only under 880px; matches the dark-glass aesthetic
+   of the desktop nav. Drawer auto-closes when a link is clicked or the
+   user taps outside (handled in the script at the bottom of the file). */
+.nav-toggle{
+  display: none;
+  appearance: none;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, .12);
+  border-radius: 8px;
+  padding: 8px;
+  cursor: pointer;
+  color: var(--ink-dark-1, #f1ede0);
+  align-items: center;
+  justify-content: center;
+}
+.nav-toggle svg{ width: 22px; height: 22px; display: block; }
+.nav-toggle .icon-close{ display: none; }
+.nav-toggle[aria-expanded="true"] .icon-open{ display: none; }
+.nav-toggle[aria-expanded="true"] .icon-close{ display: block; }
+
+.nav-drawer{
+  display: none;
+  position: fixed;
+  top: 64px; left: 0; right: 0;
+  background: var(--bg-dark, #0a0807);
+  border-bottom: 1px solid rgba(255, 255, 255, .08);
+  box-shadow: 0 16px 32px -8px rgba(0, 0, 0, .55);
+  z-index: 45;
+  padding: 16px 20px 24px;
+  flex-direction: column;
+  gap: 4px;
+  transform: translateY(-12px);
+  opacity: 0;
+  transition: transform .25s ease, opacity .25s ease;
+  pointer-events: none;
+}
+.nav-drawer.is-open{
+  transform: translateY(0);
+  opacity: 1;
+  pointer-events: auto;
+}
+.nav-drawer a{
+  display: block;
+  padding: 14px 12px;
+  color: var(--ink-dark-1, #f1ede0);
+  font-size: 16px;
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: 8px;
+}
+.nav-drawer a:active,
+.nav-drawer a:hover{
+  background: rgba(255, 255, 255, .06);
+  color: var(--brand-light, #92e8c0);
+}
+.nav-drawer .nav-ext{ margin-left: 4px; }
+
+@media (max-width: 880px){
+  .nav nav{ display: none; }
+  .nav-toggle{ display: inline-flex; }
+  .nav-drawer{ display: flex; }
+  /* The CTA button shrinks so the layout stays balanced next to the
+     hamburger without overflowing on 375px screens. */
+  .nav .btn-sm{ padding: 8px 14px; font-size: 13px; }
+}
 
 /* ============ HERO (v9 — dark warm spotlight, Cap.so style) ============ */
 .hero{
@@ -2643,7 +2715,8 @@ section{ position: relative; }
   border: 1px solid rgba(0,208,132,.30);
   border-radius: 22px;
   padding: 44px 56px 36px;
-  width: clamp(420px, 48%, 680px);
+  width: clamp(280px, 70%, 680px);
+  max-width: calc(100% - 24px);
   text-align: center;
   display: flex; flex-direction: column; align-items: center; gap: 6px;
   box-shadow:
@@ -3368,6 +3441,10 @@ section{ position: relative; }
 }
 @media (max-width: 880px){
   .ai-shopper-proof{ grid-template-columns: 1fr; gap: 32px; }
+  .ai-shopper-proof::before{
+    width: 560px; height: 560px; left: 50%;
+    transform: translate(-50%, -50%); top: 30%;
+  }
 }
 /* Warm amber halo behind the phone — matches the lighting of the photo */
 .ai-shopper-proof::before{
@@ -5526,6 +5603,10 @@ section{ position: relative; }
 .moat-viz-network{
   display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;
 }
+@media (max-width: 480px){
+  .moat-viz-network{ grid-template-columns: 1fr; gap: 6px; }
+  .moat-viz-network .ne-label{ font-size: 10px; letter-spacing: .08em; }
+}
 .moat-viz-network .ne-tile{
   padding: 10px 8px; border-radius: 8px;
   border: 1px solid var(--border);
@@ -7094,6 +7175,18 @@ section + .cta-section{ padding-top: 64px; }
       <a href="https://github.com/commerce-agentic" target="_blank" rel="noopener">GitHub <span class="nav-ext">↗</span></a>
     </nav>
     <a href="#install" class="btn btn-sm btn-primary">Install free <span class="btn-arrow">→</span></a>
+    <button class="nav-toggle" id="navToggle" type="button" aria-controls="navDrawer" aria-expanded="false" aria-label="Open menu">
+      <svg class="icon-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      <svg class="icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+  </div>
+  <div class="nav-drawer" id="navDrawer" role="menu" aria-hidden="true">
+    <a href="#how" data-nav-target="how" role="menuitem">How</a>
+    <a href="#features" data-nav-target="features" role="menuitem">Why</a>
+    <a href="#pricing" data-nav-target="pricing" role="menuitem">Pricing</a>
+    <a href="#terminal" data-nav-target="terminal" role="menuitem">Skills</a>
+    <a href="#ecosystem" data-nav-target="ecosystem" role="menuitem">Open source</a>
+    <a href="https://github.com/commerce-agentic" target="_blank" rel="noopener" role="menuitem">GitHub <span class="nav-ext">↗</span></a>
   </div>
 </header>
 
@@ -10173,6 +10266,40 @@ if (splineViewer) {
     if (splineLoading) splineLoading.style.display = 'none';
   }, 8000);
 }
+
+// ============ MOBILE NAV TOGGLE ============
+// Hamburger drawer wired here so the markup stays declarative. Closes
+// on link tap (sane default for anchor-link navs) and on Escape.
+(function initNavToggle(){
+  const btn = document.getElementById('navToggle');
+  const drawer = document.getElementById('navDrawer');
+  if (!btn || !drawer) return;
+
+  const close = () => {
+    drawer.classList.remove('is-open');
+    btn.setAttribute('aria-expanded', 'false');
+    drawer.setAttribute('aria-hidden', 'true');
+    btn.setAttribute('aria-label', 'Open menu');
+  };
+  const open = () => {
+    drawer.classList.add('is-open');
+    btn.setAttribute('aria-expanded', 'true');
+    drawer.setAttribute('aria-hidden', 'false');
+    btn.setAttribute('aria-label', 'Close menu');
+  };
+
+  btn.addEventListener('click', () => {
+    if (drawer.classList.contains('is-open')) close(); else open();
+  });
+  drawer.querySelectorAll('a').forEach(a => a.addEventListener('click', close));
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && drawer.classList.contains('is-open')) close();
+  });
+  // Close if the viewport grows back past the mobile breakpoint
+  window.addEventListener('resize', () => {
+    if (window.innerWidth > 880 && drawer.classList.contains('is-open')) close();
+  });
+})();
 </script>
 
 </body>
