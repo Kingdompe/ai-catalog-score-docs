@@ -1492,52 +1492,45 @@ section{ position: relative; }
 }
 @media (max-width: 880px){ .nav nav{ display: none; } }
 
-/* ============ HERO ============ */
+/* ============ HERO (v9 — dark warm spotlight, Cap.so style) ============ */
 .hero{
   padding: 64px 0 56px;
   position: relative;
   overflow: hidden;
+  /* Dark warm base — almost-black with a hint of amber */
+  background: #0A0807;
+  color: var(--dark-ink, #f1ede0);
 }
-.hero-canvas{
-  position: absolute; inset: 0;
-  pointer-events: none; z-index: 0;
-  opacity: .7;
-}
-.hero-grid-pattern{
-  position: absolute; inset: 0;
-  background-image:
-    linear-gradient(var(--border) 1px, transparent 1px),
-    linear-gradient(90deg, var(--border) 1px, transparent 1px);
-  background-size: 56px 56px;
-  mask-image: radial-gradient(ellipse 60% 50% at 50% 40%, #000 30%, transparent 75%);
-  -webkit-mask-image: radial-gradient(ellipse 60% 50% at 50% 40%, #000 30%, transparent 75%);
-  opacity: .4;
-  pointer-events: none;
+.hero::before{
+  /* Amber softer spotlight, bottom-center — like a stage light under
+     the video frame. Cap.so / Resend aesthetic. */
+  content:''; position: absolute; inset: 0;
   z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 1300px 540px at 50% 92%, rgba(255, 175, 80, .30), transparent 70%);
 }
-.hero-orb{
-  position: absolute; border-radius: 50%;
-  pointer-events: none; z-index: 0;
-  filter: blur(70px);
-  opacity: .35;
+.hero::after{
+  /* Fine grain texture — adds material feel without distracting */
+  content:''; position: absolute; inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image: radial-gradient(rgba(255,255,255,.02) 1px, transparent 1px);
+  background-size: 4px 4px;
+  opacity: .9;
 }
-.hero-orb.a{ width: 500px; height: 500px; background: var(--brand); top: -10%; left: 5%; animation: float-a 18s var(--ease-in-out) infinite; }
-.hero-orb.b{ width: 450px; height: 450px; background: var(--accent-purple); bottom: -5%; right: 5%; animation: float-b 22s var(--ease-in-out) infinite; }
-.hero-orb.c{ width: 350px; height: 350px; background: var(--accent-blue); top: 40%; left: 50%; transform: translateX(-50%); animation: float-c 16s var(--ease-in-out) infinite; opacity: .25; }
-@keyframes float-a{ 0%,100%{ transform: translate(0,0); } 50%{ transform: translate(80px,60px); } }
-@keyframes float-b{ 0%,100%{ transform: translate(0,0); } 50%{ transform: translate(-100px,-40px); } }
-@keyframes float-c{ 0%,100%{ transform: translateX(-50%) translateY(0); } 50%{ transform: translateX(-50%) translateY(50px); } }
+/* Legacy elements no longer used in v9 hero — hide so they don't fight the new bg */
+.hero-canvas,
+.hero-grid-pattern,
+.hero-orb{ display: none !important; }
 
 .hero-content{ max-width: 1200px; margin: 0 auto; text-align: center; position: relative; z-index: 1; }
 .hero h1{
   margin-top: 18px;
   max-width: 1400px; margin-left: auto; margin-right: auto;
-  /* v8.4: dropped max from 72→58px so the new 2-line tagline
-     ("Your customers ask AI agents what to buy. / They don't know
-     your products exist.") fits 1 line per <br/> at desktop widths
-     instead of wrapping the first line to 2-3 sub-lines. */
   font-size: clamp(36px, 4.2vw, 58px);
   letter-spacing: -.035em;
+  color: #f1ede0;       /* v9: light on dark */
 }
 @media (max-width: 1100px){ .hero h1{ font-size: clamp(32px, 5vw, 54px); } }
 .hero h1 .word{
@@ -1546,14 +1539,18 @@ section{ position: relative; }
   animation: word-in .8s var(--ease-out) forwards;
 }
 .hero h1 .accent{
-  background: linear-gradient(135deg, var(--brand-deep) 0%, var(--brand) 70%, var(--brand-light) 100%);
+  /* v9: flipped gradient direction so brand-light (lightest) reads
+     against the dark background better than brand-deep would. */
+  background: linear-gradient(135deg, var(--brand-light) 0%, var(--brand) 60%, var(--brand-deep) 100%);
   -webkit-background-clip: text; background-clip: text;
   -webkit-text-fill-color: transparent;
   position: relative;
 }
 @keyframes word-in{ to { opacity: 1; transform: translateY(0) skewY(0); } }
 .hero .sub{
-  font-size: 17px; color: var(--ink-2); margin-top: 18px;
+  font-size: 17px;
+  color: rgba(241, 237, 224, .72);   /* v9: 72% cream — soft, not glaring */
+  margin-top: 18px;
   max-width: 760px; margin-left: auto; margin-right: auto; line-height: 1.5;
   opacity: 0; animation: fade-up 1s var(--ease-out) .6s forwards;
 }
@@ -1563,9 +1560,27 @@ section{ position: relative; }
   opacity: 0; animation: fade-up 1s var(--ease-out) .8s forwards;
 }
 .hero .micro{
-  font-family: var(--font-mono); font-size: 11px; color: var(--ink-3);
+  font-family: var(--font-mono); font-size: 11px;
+  color: rgba(241, 237, 224, .45);   /* v9: faded micro line */
   margin-top: 14px; letter-spacing: .08em;
   opacity: 0; animation: fade-up 1s var(--ease-out) 1s forwards;
+}
+/* v9: ghost button overrides for the dark hero only — keeps the
+   global .btn-ghost untouched for the rest of the page (still light). */
+.hero .btn-ghost{
+  background: rgba(255, 255, 255, .05);
+  color: var(--dark-ink, #f1ede0);
+  border: 1px solid rgba(255, 255, 255, .15);
+}
+.hero .btn-ghost:hover{
+  background: rgba(255, 255, 255, .10);
+  border-color: rgba(255, 255, 255, .28);
+}
+/* v9: primary button gets a stronger amber-tinted shadow on dark */
+.hero .btn-primary{
+  box-shadow:
+    0 8px 22px -4px rgba(0, 208, 132, .55),
+    0 1px 0 rgba(255, 255, 255, .18) inset;
 }
 @keyframes fade-up{ to { opacity: 1; transform: translateY(0); } }
 .hero .sub, .hero .ctas, .hero .micro{ transform: translateY(20px); }
@@ -2452,19 +2467,100 @@ section{ position: relative; }
 /* ============================================================
    Scene B — Live demo video
    ============================================================ */
-.hsb-frame{
+/* Shell wrapper — hosts the rotating conic-gradient halo + the float
+   animation. The .hsb-frame inside keeps overflow:hidden so the video's
+   rounded corners stay clipped cleanly; the halo lives on the OUTSIDE
+   of the shell so it doesn't need to escape the frame's clip. */
+.hsb-shell{
+  position: relative;
+  display: inline-block;
   width: min(1600px, 100%);
+  isolation: isolate;
+  animation: hsbFloat 6.4s ease-in-out infinite;
+  will-change: transform;
+}
+@keyframes hsbFloat{
+  0%, 100% { transform: translateY(0)    translateZ(0); }
+  50%      { transform: translateY(-10px) translateZ(0); }
+}
+/* Rotating conic-gradient halo behind the frame. Two pseudo-elements:
+   ::before = wide blurred glow (the "stage light" leaking past the bezel)
+   ::after  = sharp 2px ring (the "fibre-optic edge" of the frame).
+   The conic angle rotates via @property --halo-angle so the gradient
+   itself spins, not the pseudo (which would warp the rounded shape). */
+@property --halo-angle{
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+.hsb-shell::before,
+.hsb-shell::after{
+  content:'';
+  position: absolute;
+  border-radius: 22px;
+  pointer-events: none;
+  z-index: 0;
+}
+.hsb-shell::before{
+  /* Wide blurred glow halo, 8px outside the frame */
+  inset: -8px;
+  background: conic-gradient(
+    from var(--halo-angle, 0deg),
+    rgba(255, 175, 80, 0)        0deg,
+    rgba(255, 175, 80, .60)      18deg,
+    rgba(255, 200, 120, .38)     40deg,
+    rgba(255, 175, 80, 0)        78deg,
+    rgba(255, 175, 80, 0)        180deg,
+    rgba(255, 175, 80, .60)      198deg,
+    rgba(255, 200, 120, .38)     220deg,
+    rgba(255, 175, 80, 0)        258deg,
+    rgba(255, 175, 80, 0)        360deg
+  );
+  filter: blur(18px);
+  opacity: .9;
+  animation: hsbHaloSpin 8s linear infinite;
+}
+.hsb-shell::after{
+  /* Sharp 1.5px ring, hugging the frame edge */
+  inset: -1.5px;
+  border-radius: 19.5px;
+  background: conic-gradient(
+    from var(--halo-angle, 0deg),
+    rgba(255, 175, 80, 0)        0deg,
+    rgba(255, 220, 160, .90)     14deg,
+    rgba(255, 175, 80, .55)      36deg,
+    rgba(255, 175, 80, 0)        66deg,
+    rgba(255, 175, 80, 0)        180deg,
+    rgba(255, 220, 160, .90)     194deg,
+    rgba(255, 175, 80, .55)      216deg,
+    rgba(255, 175, 80, 0)        246deg,
+    rgba(255, 175, 80, 0)        360deg
+  );
+  filter: blur(2px);
+  opacity: .95;
+  animation: hsbHaloSpin 8s linear infinite;
+}
+@keyframes hsbHaloSpin{
+  to { --halo-angle: 360deg; }
+}
+@media (prefers-reduced-motion: reduce){
+  .hsb-shell{ animation: none; transform: none; }
+  .hsb-shell::before, .hsb-shell::after{ animation: none; }
+}
+
+.hsb-frame{
+  position: relative;
+  z-index: 1;            /* sits ABOVE the halo pseudo-elements */
+  width: 100%;           /* fills the shell */
   background: #fff;
   border-radius: 18px;
-  overflow: hidden;
-  border: 1px solid rgba(36,32,18,.08);
+  overflow: hidden;      /* clips the video corners cleanly */
+  border: 1px solid rgba(255, 255, 255, .14);
   box-shadow:
-    0 1px 0 rgba(255,255,255,.7) inset,
-    0 2px 6px rgba(20,18,10,.05),
-    0 28px 64px -16px rgba(20,18,10,.22),
-    0 70px 140px -40px rgba(0,168,106,.28);
+    0 1px 0 rgba(255,255,255,.18) inset,
+    0 24px 60px -12px rgba(0, 0, 0, .55),
+    0 60px 140px -30px rgba(255, 150, 60, .35);
   display: flex; flex-direction: column;
-  position: relative;
 }
 .hsb-chrome{
   display: flex; align-items: center; gap: 14px;
@@ -6658,23 +6754,28 @@ section + .cta-section{ padding-top: 64px; }
 
         <!-- ===== Scene B — Live demo video (the Cap recording) ===== -->
         <section class="hstage hstage-b" data-scene="b" aria-label="Step 2 — see the audit and Maximize flow">
-          <div class="hsb-frame">
-            <div class="hsb-chrome">
-              <span class="hsb-traffic"><span></span><span></span><span></span></span>
-              <span class="hsb-url">admin.shopify.com/store/apps/ai-catalog-score</span>
+          <!-- Shell wrapper for the rotating conic-gradient halo. The
+               halo lives on the shell's ::before/::after so the inner
+               .hsb-frame can keep overflow:hidden (rounded video corners). -->
+          <div class="hsb-shell">
+            <div class="hsb-frame">
+              <div class="hsb-chrome">
+                <span class="hsb-traffic"><span></span><span></span><span></span></span>
+                <span class="hsb-url">admin.shopify.com/store/apps/ai-catalog-score</span>
+              </div>
+              <video
+                id="heroVideo"
+                class="hsb-video"
+                src="videos/hero.mp4"
+                poster="videos/hero-poster.jpg"
+                muted
+                playsinline
+                preload="auto"
+                disablepictureinpicture
+                disableremoteplayback
+                tabindex="-1"
+              ></video>
             </div>
-            <video
-              id="heroVideo"
-              class="hsb-video"
-              src="videos/hero.mp4"
-              poster="videos/hero-poster.jpg"
-              muted
-              playsinline
-              preload="auto"
-              disablepictureinpicture
-              disableremoteplayback
-              tabindex="-1"
-            ></video>
           </div>
           <div class="hstage-caption">
             <span class="hsc-step">Step 2 of 3</span>
