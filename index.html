@@ -1500,6 +1500,10 @@ section{ position: relative; }
   /* Dark warm base — almost-black with a hint of amber */
   background: #0A0807;
   color: var(--dark-ink, #f1ede0);
+  /* Fill the viewport so the next section's light background never
+     bleeds in above the fold. Sticky nav is ~64px → subtract it so
+     the hero exactly covers what's visible. */
+  min-height: calc(100vh - 64px);
 }
 .hero::before{
   /* Amber softer spotlight, bottom-center — like a stage light under
@@ -6966,7 +6970,7 @@ section + .cta-section{ padding-top: 64px; }
         <span class="word accent" style="animation-delay:.75s">list.</span>
       </h1>
       <p class="sub">
-        AI Catalog Score audits how ChatGPT, Claude, Gemini, Mistral and DeepSeek read your catalog. Fix what's broken in one click. Prove the revenue lift with p-values.
+        AI Catalog Score audits how ChatGPT, Claude, Gemini, Mistral and DeepSeek read your catalog. Fix what's broken in one click.
       </p>
       <div class="ctas">
         <a href="#install" class="btn btn-primary">Install free on Shopify <span class="btn-arrow">→</span></a>
