@@ -2668,12 +2668,116 @@ section{ position: relative; }
   display: block;
   width: 100%;
   height: auto;
-  /* Cropped video is 1920×988 (~1.943:1) — the Cap recording's letterbox
-     bars were removed via ffmpeg crop=1920:988:0:46. Aspect-ratio matches
-     so the frame stays flush against the chrome bar and the bottom. */
-  aspect-ratio: 1920 / 988;
+  /* Cropped Loom export — 1920×976 (~1.967:1) after ffmpeg
+     crop=1920:976:0:54 strips the Loom letterbox bars. Match the
+     ratio here so the frame sits flush against the chrome bar. */
+  aspect-ratio: 1920 / 976;
   object-fit: cover;
   background: #fff;
+}
+
+/* ============================================================
+   Scene B — Floating annotations overlaid on the live video.
+   Six glass cards rotate through the 4 corners of the frame across
+   the ~108s playback. Each card is a small "live stat" badge that
+   sells the product visually without the merchant having to read
+   the underlying UI in the recording.
+
+   Visibility is driven by JS in `initHeroStage`: it listens to
+   `video.timeupdate` and toggles `.is-active` based on the
+   `data-show-at` / `data-hide-at` seconds on each card.
+   ============================================================ */
+.hsb-frame{ /* Make sure the annotations can position relative to here */
+  /* (already position:relative above — no change needed) */
+}
+.hsb-anno{
+  position: absolute;
+  z-index: 5;
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 10px 14px;
+  background: rgba(20, 18, 12, .78);
+  color: #f1ede0;
+  border: 1px solid rgba(255, 220, 160, .22);
+  border-radius: 12px;
+  backdrop-filter: blur(14px) saturate(1.4);
+  -webkit-backdrop-filter: blur(14px) saturate(1.4);
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: -.005em;
+  line-height: 1.2;
+  box-shadow:
+    0 1px 0 rgba(255, 220, 160, .15) inset,
+    0 8px 28px -8px rgba(0, 0, 0, .5),
+    0 0 30px rgba(255, 170, 80, .10);
+  /* Default: hidden + offset off the edge it slides from */
+  opacity: 0;
+  transform: translateY(8px) scale(.96);
+  pointer-events: none;
+  transition: opacity .5s cubic-bezier(.2,.7,.2,1),
+              transform .5s cubic-bezier(.2,.7,.2,1);
+}
+.hsb-anno.is-active{
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+.hsb-anno .hsb-anno-icon{
+  display: inline-grid; place-items: center;
+  width: 26px; height: 26px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, rgba(0, 208, 132, .35), rgba(0, 168, 106, .15));
+  border: 1px solid rgba(0, 208, 132, .55);
+  font-size: 13px;
+  flex-shrink: 0;
+}
+.hsb-anno .hsb-anno-num{
+  font-family: var(--font-mono);
+  font-weight: 700;
+  color: #92e8c0;
+  margin-right: 2px;
+}
+.hsb-anno-tl{ top: 56px; left: 18px; }   /* below the chrome bar */
+.hsb-anno-tr{ top: 56px; right: 18px; }
+.hsb-anno-bl{ bottom: 18px; left: 18px; }
+.hsb-anno-br{ bottom: 18px; right: 18px; }
+
+/* Amber-variant for the "money" reveal at the end of playback */
+.hsb-anno.amber{
+  background: rgba(40, 24, 8, .85);
+  border-color: rgba(255, 180, 90, .45);
+  box-shadow:
+    0 1px 0 rgba(255, 220, 160, .22) inset,
+    0 8px 28px -8px rgba(0, 0, 0, .55),
+    0 0 40px rgba(255, 170, 80, .35);
+}
+.hsb-anno.amber .hsb-anno-icon{
+  background: linear-gradient(135deg, rgba(255, 190, 100, .45), rgba(220, 140, 60, .20));
+  border-color: rgba(255, 190, 100, .65);
+}
+.hsb-anno.amber .hsb-anno-num{ color: #ffd699; }
+
+/* Subtle pulse on the icon so the eye is drawn to the card while it's active */
+.hsb-anno.is-active .hsb-anno-icon{
+  animation: hsb-anno-pulse 1.4s ease-in-out infinite;
+}
+@keyframes hsb-anno-pulse{
+  0%, 100% { box-shadow: 0 0 0 0 rgba(0, 208, 132, .45); }
+  50%      { box-shadow: 0 0 0 6px rgba(0, 208, 132, 0); }
+}
+
+/* Smaller phones — keep cards readable but a bit more compact */
+@media (max-width: 720px){
+  .hsb-anno{ font-size: 12px; padding: 7px 10px; gap: 7px; }
+  .hsb-anno .hsb-anno-icon{ width: 20px; height: 20px; font-size: 11px; }
+  .hsb-anno-tl, .hsb-anno-tr{ top: 44px; }
+  .hsb-anno-tl, .hsb-anno-bl{ left: 10px; }
+  .hsb-anno-tr, .hsb-anno-br{ right: 10px; }
+  .hsb-anno-bl, .hsb-anno-br{ bottom: 10px; }
+}
+/* Respect prefers-reduced-motion: keep cards visible without pulse */
+@media (prefers-reduced-motion: reduce){
+  .hsb-anno.is-active .hsb-anno-icon{ animation: none; }
+  .hsb-anno{ transition: opacity .2s linear; }
 }
 
 /* ============================================================
@@ -7324,6 +7428,33 @@ section + .cta-section{ padding-top: 64px; }
                 disableremoteplayback
                 tabindex="-1"
               ></video>
+              <!-- Floating annotations layered over the video. Six cards
+                   sequenced through the ~108s playback by initHeroStage's
+                   timeupdate listener using data-show-at / data-hide-at. -->
+              <div class="hsb-anno hsb-anno-tl" data-show-at="4" data-hide-at="13" aria-hidden="true">
+                <span class="hsb-anno-icon">⚡</span>
+                <span><span class="hsb-anno-num">5</span> AI agents · scanning</span>
+              </div>
+              <div class="hsb-anno hsb-anno-tr" data-show-at="16" data-hide-at="26" aria-hidden="true">
+                <span class="hsb-anno-icon">✓</span>
+                <span><span class="hsb-anno-num">247</span> products audited</span>
+              </div>
+              <div class="hsb-anno hsb-anno-bl" data-show-at="32" data-hide-at="44" aria-hidden="true">
+                <span class="hsb-anno-icon">⚙</span>
+                <span>Bulk Maximize · <span class="hsb-anno-num">12</span> products fixing</span>
+              </div>
+              <div class="hsb-anno hsb-anno-tr" data-show-at="52" data-hide-at="64" aria-hidden="true">
+                <span class="hsb-anno-icon">↑</span>
+                <span>Avg score lift <span class="hsb-anno-num">+18</span> pts</span>
+              </div>
+              <div class="hsb-anno hsb-anno-br" data-show-at="72" data-hide-at="85" aria-hidden="true">
+                <span class="hsb-anno-icon">π</span>
+                <span><span class="hsb-anno-num">p &lt; 0.05</span> · causal proof</span>
+              </div>
+              <div class="hsb-anno hsb-anno-tl amber" data-show-at="92" data-hide-at="108" aria-hidden="true">
+                <span class="hsb-anno-icon">$</span>
+                <span>Projected <span class="hsb-anno-num">+$30,870</span>/mo</span>
+              </div>
             </div>
           </div>
           <div class="hstage-caption">
@@ -9880,6 +10011,10 @@ if (terminalBody) terminalObserver.observe(terminalBody);
       if (scene === 'b'){
         try {
           video.currentTime = 0;
+          // Reset annotations so the next playthrough starts from a
+          // clean state — otherwise leftover .is-active flags can
+          // briefly show before the first timeupdate fires.
+          stage.querySelectorAll('.hsb-anno.is-active').forEach((el) => el.classList.remove('is-active'));
           // Some browsers block muted-autoplay until user-interaction
           // when triggered via .play(); we wrap in catch and just fall
           // through — the controller will detect non-progress via the
@@ -9889,6 +10024,8 @@ if (terminalBody) terminalObserver.observe(terminalBody);
         } catch {}
       } else {
         try { video.pause(); } catch {}
+        // Off-scene B: hide all annotations so they don't bleed into A/C
+        stage.querySelectorAll('.hsb-anno.is-active').forEach((el) => el.classList.remove('is-active'));
       }
     }
   }
@@ -9914,10 +10051,35 @@ if (terminalBody) terminalObserver.observe(terminalBody);
     scheduleNextFromTimer('c');
   }
 
+  // Floating-annotation overlays inside .hsb-frame — each card has
+  // data-show-at / data-hide-at (seconds into the video). On every
+  // timeupdate we toggle .is-active so cards fade in/out at the
+  // right moments. Resets when the video restarts (currentTime < 0.5
+  // means we just rolled over to the beginning).
+  const annos = stage.querySelectorAll('.hsb-anno');
+  function updateAnnotations(){
+    if (!video || !annos.length) return;
+    const t = video.currentTime;
+    annos.forEach((el) => {
+      const showAt = parseFloat(el.dataset.showAt || '0');
+      const hideAt = parseFloat(el.dataset.hideAt || '0');
+      const active = t >= showAt && t < hideAt;
+      el.classList.toggle('is-active', active);
+    });
+  }
+  function resetAnnotations(){
+    annos.forEach((el) => el.classList.remove('is-active'));
+  }
+
   function start(){
     if (started) return;
     started = true;
-    if (video) video.addEventListener('ended', onVideoEnded);
+    if (video){
+      video.addEventListener('ended', onVideoEnded);
+      video.addEventListener('timeupdate', updateAnnotations);
+      video.addEventListener('seeking', resetAnnotations);
+      video.addEventListener('play', updateAnnotations);
+    }
     goTo('a');
     scheduleNextFromTimer('a');
   }
