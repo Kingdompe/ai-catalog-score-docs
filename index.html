@@ -2677,371 +2677,332 @@ section{ position: relative; }
 }
 
 /* ================================================================
-   Scene B — FOUR setpiece overlays layered on top of the video.
-   Each .hsb-fx is wrapped by initHeroStage and toggled .is-active
-   via video.timeupdate. They're designed to dominate visually, not
-   sit politely in a corner.
+   Scene B — CINEMATIC LAYER. Continuous atmosphere over the playing
+   video + ONE massive finale at the end. Not labels-in-corners —
+   the goal is to make the whole frame feel filmic.
    ================================================================ */
 .hsb-fx{
   position: absolute;
   z-index: 6;
   pointer-events: none;
+  inset: 0;
   opacity: 0;
   transition: opacity .35s ease;
 }
 .hsb-fx.is-active{ opacity: 1; }
+/* While scene B is playing, the video itself breathes — subtle
+   brightness/contrast/saturation pulse for "alive" feel, and a slow
+   imperceptible zoom for depth. */
+.hero-stage[data-scene="b"] .hsb-video{
+  animation: hsb-video-breathe 9s ease-in-out infinite,
+             hsb-video-zoom 108s linear forwards;
+  transform-origin: 50% 50%;
+}
+@keyframes hsb-video-breathe{
+  0%, 100% { filter: brightness(1) contrast(1) saturate(1); }
+  50%      { filter: brightness(1.05) contrast(1.04) saturate(1.08); }
+}
+@keyframes hsb-video-zoom{
+  0%   { transform: scale(1); }
+  100% { transform: scale(1.04); }
+}
 
 /* ----------------------------------------------------------------
-   A. AI AGENTS SCANNING GRID (4-25s)
+   A. Continuous atmosphere (.hsb-fx-cinema, always on during scene B)
+   Three layers stacked over the video: vignette pulse, drifting light
+   leak (warm), drifting particles (cool). Each animates forever.
    ---------------------------------------------------------------- */
-.hsb-fx-agents{
-  top: 56px; left: 0; right: 0;
-  display: flex; flex-direction: column; align-items: center;
-  gap: 12px;
-  padding: 14px 0;
-}
-.hsb-fx-agents-row{
-  display: flex; gap: 18px;
-  position: relative;
-  z-index: 2;
-}
-.hsb-agent{
-  width: 60px; height: 60px;
-  display: inline-grid; place-items: center;
-  border-radius: 50%;
-  background: rgba(20, 18, 12, .85);
-  border: 1.5px solid rgba(0, 220, 150, .45);
-  color: #b9f4d4;
-  font-family: var(--font-display);
-  font-weight: 800;
-  font-size: 26px;
-  letter-spacing: -.04em;
-  box-shadow:
-    0 0 0 0 rgba(0, 220, 150, .55),
-    0 12px 32px -8px rgba(0, 0, 0, .55);
-  transform: translateY(-12px) scale(.85);
-  opacity: 0;
-}
-.hsb-fx-agents.is-active .hsb-agent{
-  animation:
-    hsb-agent-pop .55s cubic-bezier(.2,1.1,.4,1) calc(var(--i) * .12s) forwards,
-    hsb-agent-pulse 1.8s ease-in-out calc(.7s + var(--i) * .12s) infinite;
-}
-@keyframes hsb-agent-pop{
-  0%   { opacity: 0; transform: translateY(-12px) scale(.85); }
-  60%  { opacity: 1; transform: translateY(4px) scale(1.08); }
-  100% { opacity: 1; transform: translateY(0) scale(1); }
-}
-@keyframes hsb-agent-pulse{
-  0%, 100% { box-shadow: 0 0 0 0 rgba(0, 220, 150, .55), 0 12px 32px -8px rgba(0,0,0,.55); }
-  50%      { box-shadow: 0 0 0 10px rgba(0, 220, 150, 0),   0 12px 32px -8px rgba(0,0,0,.55); }
-}
-.hsb-agent-glyph{ display: inline-block; }
-.hsb-fx-agents-label{
-  font-family: var(--font-mono);
-  font-size: 13px;
-  letter-spacing: .12em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, .92);
-  text-shadow: 0 2px 12px rgba(0, 0, 0, .6);
-  background: rgba(20, 18, 12, .72);
-  padding: 7px 14px;
-  border-radius: 100px;
-  border: 1px solid rgba(0, 220, 150, .35);
-  backdrop-filter: blur(8px);
-  opacity: 0;
-}
-.hsb-fx-agents.is-active .hsb-fx-agents-label{
-  animation: hsb-fade-in .6s ease-out 1.1s forwards;
-}
-/* Radar sweep — a rotating gradient stripe over the badge row */
-.hsb-radar{
-  position: absolute;
-  width: 100%; height: 200px;
-  top: -20px; left: 0;
+.hsb-vignette{
+  position: absolute; inset: 0;
   pointer-events: none;
-  background: conic-gradient(from 0deg, transparent 0%, transparent 92%, rgba(0, 220, 150, .35) 96%, rgba(0, 220, 150, 0) 100%);
-  mask: radial-gradient(closest-side, transparent 60%, black 70%, transparent 100%);
-  -webkit-mask: radial-gradient(closest-side, transparent 60%, black 70%, transparent 100%);
+  background:
+    radial-gradient(ellipse 120% 90% at 50% 50%, transparent 55%, rgba(0,0,0,.55) 100%);
+  mix-blend-mode: multiply;
+  animation: hsb-vignette-breathe 7s ease-in-out infinite;
+}
+@keyframes hsb-vignette-breathe{
+  0%, 100% { opacity: .9; }
+  50%      { opacity: 1;  }
+}
+.hsb-lightleak{
+  position: absolute; inset: -20% -10%;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 30% 50% at 15% 25%, rgba(255, 175, 80, .35), transparent 60%),
+    radial-gradient(ellipse 28% 45% at 85% 75%, rgba(0, 220, 150, .25), transparent 60%);
+  mix-blend-mode: screen;
+  filter: blur(40px);
+  animation: hsb-leak-drift 18s ease-in-out infinite alternate;
+}
+@keyframes hsb-leak-drift{
+  0%   { transform: translate(0, 0) rotate(0deg) scale(1); opacity: .85; }
+  50%  { transform: translate(8%, -4%) rotate(8deg) scale(1.05); opacity: 1; }
+  100% { transform: translate(-6%, 5%) rotate(-6deg) scale(1.08); opacity: .9; }
+}
+.hsb-particles{
+  position: absolute; inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+.hsb-particles span{
+  position: absolute;
+  bottom: -10px;
+  left: var(--x, 50%);
+  width: 4px; height: 4px;
+  border-radius: 50%;
+  background: rgba(255, 220, 180, .85);
+  box-shadow: 0 0 8px rgba(255, 200, 130, .8);
   opacity: 0;
+  animation: hsb-particle-drift 9s linear calc(var(--i) * -.7s) infinite;
 }
-.hsb-fx-agents.is-active .hsb-radar{
-  animation: hsb-radar-sweep 2.4s linear infinite, hsb-fade-in .8s ease-out .2s forwards;
+@keyframes hsb-particle-drift{
+  0%   { transform: translateY(0) translateX(0); opacity: 0; }
+  10%  { opacity: .7; }
+  90%  { opacity: .5; }
+  100% { transform: translateY(-700px) translateX(40px); opacity: 0; }
 }
-@keyframes hsb-radar-sweep{ to { transform: rotate(360deg); } }
 
 /* ----------------------------------------------------------------
-   B. SCORE LIFT BIG REVEAL (50-78s)
+   B. Light-beam sweeps — fast diagonal streaks at 20s / 55s / 78s.
+   Each block lives ~2s. The sweep itself is a CSS gradient bar
+   translating across the frame with motion blur.
    ---------------------------------------------------------------- */
-.hsb-fx-score{
+.hsb-fx-beam{
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  transition: opacity 0s;     /* hard cut — instant on */
+}
+.hsb-fx-beam::before{
+  content: '';
+  position: absolute;
+  top: -50%; left: -30%;
+  width: 30%; height: 200%;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(255, 240, 220, .25) 30%,
+    rgba(255, 255, 255, .55) 50%,
+    rgba(255, 240, 220, .25) 70%,
+    transparent 100%);
+  filter: blur(8px);
+  transform: rotate(18deg) translateX(0);
+  opacity: 0;
+}
+.hsb-fx-beam.is-active::before{
+  animation: hsb-beam-sweep 1.8s cubic-bezier(.4, 0, .2, 1) forwards;
+}
+@keyframes hsb-beam-sweep{
+  0%   { transform: rotate(18deg) translateX(-50%); opacity: 0; }
+  20%  { opacity: 1; }
+  100% { transform: rotate(18deg) translateX(500%); opacity: 0; }
+}
+
+/* ----------------------------------------------------------------
+   C. FINALE CLIMAX (80-108s)
+   ---------------------------------------------------------------- */
+.hsb-fx-climax{ inset: 0; }
+/* Letterbox — top + bottom cinematic bars that slide in when the
+   climax begins, then slide back out as scene transitions. */
+.hsb-letterbox{
+  position: absolute;
+  left: 0; right: 0;
+  height: 14%;
+  background: #050402;
+  transform: translateY(-100%);
+  transition: transform .9s cubic-bezier(.7, 0, .25, 1);
+}
+.hsb-letterbox-top{ top: 0; }
+.hsb-letterbox-bot{ bottom: 0; transform: translateY(100%); }
+.hsb-fx-climax.is-active .hsb-letterbox-top{ transform: translateY(0); }
+.hsb-fx-climax.is-active .hsb-letterbox-bot{ transform: translateY(0); }
+/* Curtain — dims the underlying video so the reveal pops */
+.hsb-curtain{
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 80% 80% at 50% 50%, rgba(0,0,0,.35), rgba(0,0,0,.65) 80%);
+  opacity: 0;
+  transition: opacity 1.2s ease;
+}
+.hsb-fx-climax.is-active .hsb-curtain{ opacity: 1; transition-delay: .2s; }
+
+/* Common eyebrow style for the climax cards */
+.hsb-climax-eyebrow{
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, .68);
+  text-shadow: 0 2px 16px rgba(0,0,0,.6);
+}
+
+/* SCORE reveal — visible 80-93s, then yields to MONEY */
+.hsb-climax-score{
+  position: absolute;
   top: 50%; left: 50%;
   transform: translate(-50%, -50%);
   display: flex; flex-direction: column; align-items: center;
-  gap: 8px;
-  padding: 28px 44px;
-  background: rgba(8, 14, 10, .82);
-  border: 1px solid rgba(0, 220, 150, .45);
-  border-radius: 24px;
-  backdrop-filter: blur(20px) saturate(1.4);
-  box-shadow:
-    0 0 0 1px rgba(0, 220, 150, .25),
-    0 0 80px rgba(0, 220, 150, .25),
-    0 30px 80px -16px rgba(0, 0, 0, .6);
+  gap: 14px;
+  opacity: 0;
+  transition: opacity .6s ease, transform .8s cubic-bezier(.2,.7,.2,1);
 }
-.hsb-score-eyebrow{
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: .18em;
-  text-transform: uppercase;
-  color: rgba(0, 220, 150, .9);
+.hsb-fx-climax.is-active .hsb-climax-score[data-show-at]{ /* default: show */
+  opacity: 1; transform: translate(-50%, -50%) scale(1);
 }
-.hsb-score-row{
-  display: flex; align-items: baseline; gap: 18px;
-  font-family: var(--font-display);
-  font-weight: 800;
-  letter-spacing: -.04em;
+.hsb-climax-score.is-out{
+  opacity: 0; transform: translate(-50%, -55%) scale(.92);
+  transition: opacity .5s ease, transform .5s ease;
+}
+.hsb-climax-score-row{
+  display: flex; align-items: baseline; gap: 28px;
+  font-family: var(--font-display); font-weight: 800;
+  letter-spacing: -.045em;
   color: #fff;
-  text-shadow: 0 4px 24px rgba(0, 0, 0, .55);
+  text-shadow: 0 6px 32px rgba(0,0,0,.8);
 }
-.hsb-score-from{
-  font-size: 64px;
-  color: rgba(255, 255, 255, .42);
+.hsb-climax-from{
+  font-size: 96px;
+  color: rgba(255, 255, 255, .35);
   text-decoration: line-through;
-  text-decoration-thickness: 3px;
-  text-decoration-color: rgba(255, 90, 90, .6);
+  text-decoration-thickness: 4px;
+  text-decoration-color: rgba(255, 90, 90, .65);
 }
-.hsb-score-arrow{ font-size: 36px; color: rgba(255, 255, 255, .65); }
-.hsb-score-to{
-  font-size: 88px;
-  background: linear-gradient(135deg, #92e8c0, #00d084);
+.hsb-climax-arrow{
+  font-size: 56px;
+  color: rgba(255, 255, 255, .65);
+  animation: hsb-arrow-bob 1.4s ease-in-out infinite;
+}
+@keyframes hsb-arrow-bob{
+  0%, 100% { transform: translateX(0); opacity: .65; }
+  50%      { transform: translateX(8px); opacity: 1; }
+}
+.hsb-climax-to{
+  font-size: 144px;
+  background: linear-gradient(135deg, #b9f4d4 0%, #00d084 50%, #008f5a 100%);
   -webkit-background-clip: text; background-clip: text;
   -webkit-text-fill-color: transparent;
-  filter: drop-shadow(0 0 20px rgba(0, 220, 150, .35));
+  filter: drop-shadow(0 0 32px rgba(0, 220, 150, .55));
+  line-height: 1;
 }
-.hsb-score-delta{
+.hsb-climax-delta{
   display: inline-block;
-  padding: 6px 16px;
+  padding: 10px 22px;
   background: linear-gradient(135deg, #00d084, #00a86a);
   color: #08120c;
   font-family: var(--font-mono);
   font-weight: 800;
-  font-size: 14px;
-  letter-spacing: .08em;
+  font-size: 18px;
+  letter-spacing: .12em;
   border-radius: 100px;
-  box-shadow: 0 8px 24px -6px rgba(0, 208, 132, .55);
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,.15) inset,
+    0 16px 40px -8px rgba(0, 208, 132, .65),
+    0 0 60px rgba(0, 208, 132, .35);
 }
-.hsb-fx-score.is-active .hsb-score-eyebrow{ animation: hsb-fade-in .5s ease-out forwards; opacity: 0; }
-.hsb-fx-score.is-active .hsb-score-from{
-  animation: hsb-fade-in .5s ease-out .15s forwards;
+/* Stagger entry inside the score moment */
+.hsb-fx-climax.is-active .hsb-climax-eyebrow{
+  animation: hsb-cinema-fade-up .7s ease-out forwards;
   opacity: 0;
 }
-.hsb-fx-score.is-active .hsb-score-arrow{
-  animation: hsb-fade-in .4s ease-out .5s forwards;
+.hsb-fx-climax.is-active .hsb-climax-score-row .hsb-climax-from{
+  animation: hsb-cinema-fade-up .7s ease-out .2s forwards;
   opacity: 0;
 }
-.hsb-fx-score.is-active .hsb-score-to{
-  animation: hsb-score-pop .7s cubic-bezier(.2,1.1,.4,1) .75s forwards;
+.hsb-fx-climax.is-active .hsb-climax-score-row .hsb-climax-to{
+  animation: hsb-score-explode 1s cubic-bezier(.2,1.1,.4,1) .7s forwards;
   opacity: 0;
-  transform: scale(.6);
+  transform: scale(.4);
 }
-.hsb-fx-score.is-active .hsb-score-delta{
-  animation: hsb-score-pop .5s cubic-bezier(.2,1.1,.4,1) 1.15s forwards;
+.hsb-fx-climax.is-active .hsb-climax-delta{
+  animation: hsb-score-explode .65s cubic-bezier(.2,1.1,.4,1) 1.25s forwards;
   opacity: 0;
-  transform: scale(.5) rotate(-8deg);
+  transform: scale(.5) rotate(-6deg);
 }
-@keyframes hsb-score-pop{
-  0%   { opacity: 0; transform: scale(.6); }
-  70%  { opacity: 1; transform: scale(1.15); }
+@keyframes hsb-cinema-fade-up{
+  0%   { opacity: 0; transform: translateY(20px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+@keyframes hsb-score-explode{
+  0%   { opacity: 0; transform: scale(.4); }
+  70%  { opacity: 1; transform: scale(1.18); }
   100% { opacity: 1; transform: scale(1); }
 }
-@keyframes hsb-fade-in{ to { opacity: 1; } }
 
-/* Score particles — 8 small dots that radiate out from the score reveal */
-.hsb-score-particles{
-  position: absolute;
-  width: 100%; height: 100%;
-  top: 0; left: 0;
-  pointer-events: none;
-}
-.hsb-score-particles span{
+/* MONEY reveal — visible 93-108s */
+.hsb-climax-money{
   position: absolute;
   top: 50%; left: 50%;
-  width: 8px; height: 8px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #92e8c0, #00d084);
-  box-shadow: 0 0 12px rgba(0, 220, 150, .8);
-  opacity: 0;
-  --angle: calc(var(--a) * 45deg);
-}
-.hsb-fx-score.is-active .hsb-score-particles span{
-  animation: hsb-particle-burst 1s ease-out 1.05s forwards;
-}
-@keyframes hsb-particle-burst{
-  0%   { opacity: 0; transform: translate(-50%, -50%) rotate(var(--angle)) translateX(0); }
-  20%  { opacity: 1; }
-  100% { opacity: 0; transform: translate(-50%, -50%) rotate(var(--angle)) translateX(140px); }
-}
-
-/* ----------------------------------------------------------------
-   C. MONEY EXPLOSION (88-108s)
-   ---------------------------------------------------------------- */
-.hsb-fx-money{
-  top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%) scale(.92);
   display: flex; flex-direction: column; align-items: center;
-  gap: 6px;
-  padding: 32px 56px;
-  background: linear-gradient(135deg, rgba(28, 18, 6, .9), rgba(20, 14, 4, .85));
-  border: 1px solid rgba(255, 180, 90, .55);
-  border-radius: 28px;
-  backdrop-filter: blur(20px) saturate(1.5);
-  box-shadow:
-    0 0 0 1px rgba(255, 180, 90, .25),
-    0 0 120px rgba(255, 170, 80, .35),
-    0 30px 80px -16px rgba(0, 0, 0, .6);
-}
-.hsb-money-eyebrow{
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: .18em;
-  text-transform: uppercase;
-  color: #ffd699;
+  gap: 12px;
   opacity: 0;
+  transition: opacity .6s ease, transform .8s cubic-bezier(.2,.7,.2,1);
 }
-.hsb-fx-money.is-active .hsb-money-eyebrow{ animation: hsb-fade-in .5s ease-out forwards; }
-
-.hsb-money-amount{
-  display: flex; align-items: baseline; gap: 4px;
+.hsb-climax-money.is-in{
+  opacity: 1; transform: translate(-50%, -50%) scale(1);
+}
+.hsb-climax-money-amount{
+  display: flex; align-items: baseline; gap: 6px;
   font-family: var(--font-display);
   font-weight: 800;
   letter-spacing: -.045em;
-  background: linear-gradient(135deg, #ffe4b5, #ffb466 50%, #ff7a59);
+  background: linear-gradient(135deg, #ffe4b5 0%, #ffb466 50%, #ff7a59 100%);
   -webkit-background-clip: text; background-clip: text;
   -webkit-text-fill-color: transparent;
-  filter: drop-shadow(0 0 24px rgba(255, 170, 80, .55));
-  text-shadow: 0 4px 24px rgba(0, 0, 0, .35);
-  opacity: 0;
-  transform: scale(.5);
+  filter: drop-shadow(0 0 36px rgba(255, 170, 80, .65)) drop-shadow(0 8px 32px rgba(0,0,0,.4));
+  line-height: 1;
 }
-.hsb-fx-money.is-active .hsb-money-amount{
-  animation: hsb-score-pop .9s cubic-bezier(.2,1.1,.4,1) .3s forwards;
-}
-.hsb-money-plus{ font-size: 56px; }
-.hsb-money-num{ font-size: 96px; line-height: 1; font-variant-numeric: tabular-nums; }
-.hsb-money-tag{
+.hsb-money-plus{ font-size: 80px; }
+.hsb-money-num{ font-size: 144px; font-variant-numeric: tabular-nums; }
+.hsb-climax-tag{
   font-family: var(--font-mono);
-  font-size: 12px;
-  letter-spacing: .1em;
-  color: rgba(255, 220, 160, .85);
-  margin-top: 4px;
-  opacity: 0;
+  font-size: 13px;
+  letter-spacing: .12em;
+  color: rgba(255, 220, 160, .9);
+  margin-top: 6px;
 }
-.hsb-fx-money.is-active .hsb-money-tag{ animation: hsb-fade-in .5s ease-out 1.2s forwards; }
-
-/* Money burst — 10 confetti particles erupting from the number */
-.hsb-money-burst{
+.hsb-climax-burst{
   position: absolute;
   width: 100%; height: 100%;
   top: 0; left: 0;
   pointer-events: none;
 }
-.hsb-money-burst span{
+.hsb-climax-burst span{
   position: absolute;
   top: 50%; left: 50%;
-  width: 10px; height: 14px;
+  width: 12px; height: 16px;
   border-radius: 2px;
   background: var(--c, #ffb466);
-  box-shadow: 0 0 8px rgba(255, 170, 80, .6);
+  box-shadow: 0 0 12px rgba(255, 170, 80, .7);
   opacity: 0;
-  --angle: calc(var(--a) * 36deg);
+  --angle: calc(var(--a) * 30deg);
 }
-.hsb-fx-money.is-active .hsb-money-burst span{
-  animation: hsb-money-confetti 1.6s cubic-bezier(.2, .7, .3, 1) .8s forwards;
+.hsb-climax-money.is-in .hsb-climax-burst span{
+  animation: hsb-money-confetti 2.4s cubic-bezier(.2, .7, .3, 1) .4s forwards;
 }
 @keyframes hsb-money-confetti{
   0%   { opacity: 0; transform: translate(-50%, -50%) rotate(var(--angle)) translateX(0) rotate(0deg); }
-  15%  { opacity: 1; }
-  100% { opacity: 0; transform: translate(-50%, -50%) rotate(var(--angle)) translateX(240px) rotate(720deg); }
+  10%  { opacity: 1; }
+  100% { opacity: 0; transform: translate(-50%, -50%) rotate(var(--angle)) translateX(360px) rotate(900deg); }
 }
 
 /* ----------------------------------------------------------------
-   D. BOTTOM ACTIVITY TICKER (continuous)
-   ---------------------------------------------------------------- */
-.hsb-fx-ticker{
-  bottom: 0; left: 0; right: 0;
-  height: 38px;
-  overflow: hidden;
-  background: linear-gradient(to top, rgba(8, 12, 10, .92), rgba(8, 12, 10, .82));
-  border-top: 1px solid rgba(0, 220, 150, .25);
-  backdrop-filter: blur(12px);
-}
-.hsb-ticker-track{
-  display: inline-flex; align-items: center; gap: 16px;
-  white-space: nowrap;
-  height: 100%;
-  padding-left: 100%;     /* start off-screen right */
-  animation: hsb-ticker-scroll 32s linear infinite;
-  font-family: var(--font-mono);
-  font-size: 12.5px;
-  letter-spacing: .04em;
-  color: rgba(255, 255, 255, .82);
-}
-.hsb-ticker-track strong{ color: #92e8c0; font-weight: 700; }
-.hsb-ticker-track .hsb-ticker-money strong{ color: #ffd699; }
-.hsb-ticker-sep{ color: rgba(255, 255, 255, .35); padding: 0 4px; }
-.hsb-ticker-dot{
-  display: inline-block;
-  width: 7px; height: 7px;
-  border-radius: 50%;
-  background: #00d084;
-  box-shadow: 0 0 12px rgba(0, 220, 150, .8);
-  animation: hsb-anno-pulse 1.4s ease-in-out infinite;
-}
-@keyframes hsb-ticker-scroll{
-  to { transform: translateX(-100%); }
-}
-@keyframes hsb-anno-pulse{
-  0%, 100% { box-shadow: 0 0 0 0 rgba(0, 208, 132, .55); }
-  50%      { box-shadow: 0 0 0 6px rgba(0, 208, 132, 0); }
-}
-
-/* ----------------------------------------------------------------
-   Responsive scaling — under 880px, shrink the giant numbers so they
-   still fit the smaller frame without overflowing.
+   Responsive — shrink the giant climax numbers under 880px so
+   they don't overflow the smaller frame on tablet/phone.
    ---------------------------------------------------------------- */
 @media (max-width: 880px){
-  .hsb-fx-agents{ top: 44px; }
-  .hsb-agent{ width: 44px; height: 44px; font-size: 18px; }
-  .hsb-fx-agents-row{ gap: 10px; }
-  .hsb-fx-agents-label{ font-size: 11px; padding: 5px 10px; }
-  .hsb-fx-score{ padding: 18px 26px; }
-  .hsb-score-from{ font-size: 36px; }
-  .hsb-score-arrow{ font-size: 22px; }
-  .hsb-score-to{ font-size: 54px; }
-  .hsb-score-delta{ font-size: 11px; padding: 4px 10px; }
-  .hsb-fx-money{ padding: 18px 24px; }
-  .hsb-money-plus{ font-size: 32px; }
-  .hsb-money-num{ font-size: 56px; }
-  .hsb-money-eyebrow, .hsb-money-tag{ font-size: 10px; }
-  .hsb-fx-ticker{ height: 30px; }
-  .hsb-ticker-track{ font-size: 11px; gap: 12px; animation-duration: 24s; }
+  .hsb-climax-eyebrow{ font-size: 10px; letter-spacing: .15em; }
+  .hsb-climax-from{ font-size: 56px; }
+  .hsb-climax-arrow{ font-size: 32px; }
+  .hsb-climax-to{ font-size: 84px; }
+  .hsb-climax-delta{ font-size: 13px; padding: 6px 14px; }
+  .hsb-money-plus{ font-size: 44px; }
+  .hsb-money-num{ font-size: 76px; }
+  .hsb-letterbox{ height: 10%; }
 }
 @media (prefers-reduced-motion: reduce){
-  .hsb-fx-agents.is-active .hsb-agent,
-  .hsb-fx-agents.is-active .hsb-radar,
-  .hsb-fx-score.is-active *,
-  .hsb-fx-money.is-active *,
-  .hsb-ticker-track{ animation: none; }
-  .hsb-fx-agents.is-active .hsb-agent,
-  .hsb-fx-agents.is-active .hsb-fx-agents-label,
-  .hsb-fx-score.is-active .hsb-score-eyebrow,
-  .hsb-fx-score.is-active .hsb-score-from,
-  .hsb-fx-score.is-active .hsb-score-arrow,
-  .hsb-fx-score.is-active .hsb-score-to,
-  .hsb-fx-score.is-active .hsb-score-delta,
-  .hsb-fx-money.is-active .hsb-money-eyebrow,
-  .hsb-fx-money.is-active .hsb-money-amount,
-  .hsb-fx-money.is-active .hsb-money-tag{ opacity: 1; transform: none; }
+  .hero-stage[data-scene="b"] .hsb-video{ animation: none; }
+  .hsb-vignette, .hsb-lightleak, .hsb-particles span,
+  .hsb-fx-beam::before, .hsb-climax-arrow{ animation: none; }
+  .hsb-fx-climax.is-active *{ opacity: 1; transform: none; }
 }
 
 /* ============================================================
@@ -7693,85 +7654,79 @@ section + .cta-section{ padding-top: 64px; }
                 tabindex="-1"
               ></video>
               <!-- ============================================================
-                   FOUR SETPIECE OVERLAYS — sequenced by initHeroStage's
-                   timeupdate listener via .is-active toggling.
+                   CINEMATIC LAYER — continuous atmosphere over the playing
+                   video + one massive finale climax. No labels in corners,
+                   no busy chips; the video keeps the spotlight and the
+                   effects build a mood underneath.
                    ============================================================ -->
 
-              <!-- A: AI AGENTS SCANNING GRID (4-25s) — five big LLM badges
-                   pulse in across the top, with a radar sweep behind them. -->
-              <div class="hsb-fx hsb-fx-agents" data-show-at="3" data-hide-at="25" aria-hidden="true">
-                <div class="hsb-fx-agents-row">
-                  <span class="hsb-agent" style="--i:0"><span class="hsb-agent-glyph">G</span></span>
-                  <span class="hsb-agent" style="--i:1"><span class="hsb-agent-glyph">C</span></span>
-                  <span class="hsb-agent" style="--i:2"><span class="hsb-agent-glyph">M</span></span>
-                  <span class="hsb-agent" style="--i:3"><span class="hsb-agent-glyph">P</span></span>
-                  <span class="hsb-agent" style="--i:4"><span class="hsb-agent-glyph">D</span></span>
-                </div>
-                <div class="hsb-fx-agents-label">5 AI agents · scanning your catalog</div>
-                <div class="hsb-radar"></div>
-              </div>
-
-              <!-- B: SCORE LIFT BIG REVEAL (50-78s) — score number morphs
-                   from 64 to 87 with a +23 badge popping out, particle burst. -->
-              <div class="hsb-fx hsb-fx-score" data-show-at="50" data-hide-at="78" aria-hidden="true">
-                <div class="hsb-score-eyebrow">CATALOG SCORE</div>
-                <div class="hsb-score-row">
-                  <span class="hsb-score-from">64</span>
-                  <span class="hsb-score-arrow">→</span>
-                  <span class="hsb-score-to">87</span>
-                </div>
-                <div class="hsb-score-delta">+23 pts</div>
-                <div class="hsb-score-particles">
-                  <span style="--a:0"></span><span style="--a:1"></span><span style="--a:2"></span>
-                  <span style="--a:3"></span><span style="--a:4"></span><span style="--a:5"></span>
-                  <span style="--a:6"></span><span style="--a:7"></span>
+              <!-- A. Continuous atmosphere (always on while scene B plays).
+                   The vignette, light leak, and particle drift are pure
+                   CSS pseudo-elements + keyframes so JS doesn't have to
+                   manage them — they fade in/out with .hsb-fx-cinema's
+                   .is-active state. -->
+              <div class="hsb-fx hsb-fx-cinema" data-show-at="0" data-hide-at="108" aria-hidden="true">
+                <div class="hsb-vignette"></div>
+                <div class="hsb-lightleak"></div>
+                <div class="hsb-particles">
+                  <span style="--i:0;--x:8%"></span>
+                  <span style="--i:1;--x:17%"></span>
+                  <span style="--i:2;--x:24%"></span>
+                  <span style="--i:3;--x:31%"></span>
+                  <span style="--i:4;--x:39%"></span>
+                  <span style="--i:5;--x:47%"></span>
+                  <span style="--i:6;--x:55%"></span>
+                  <span style="--i:7;--x:63%"></span>
+                  <span style="--i:8;--x:71%"></span>
+                  <span style="--i:9;--x:79%"></span>
+                  <span style="--i:10;--x:87%"></span>
+                  <span style="--i:11;--x:93%"></span>
                 </div>
               </div>
 
-              <!-- C: MONEY EXPLOSION (88-108s) — massive +$30,870 reveal with
-                   confetti burst around the number and a glow halo. -->
-              <div class="hsb-fx hsb-fx-money" data-show-at="88" data-hide-at="108" aria-hidden="true">
-                <div class="hsb-money-eyebrow">PROJECTED MONTHLY REVENUE</div>
-                <div class="hsb-money-amount">
-                  <span class="hsb-money-plus">+$</span><span class="hsb-money-num" data-target="30870">0</span>
-                </div>
-                <div class="hsb-money-tag">causal proof · p &lt; 0.05</div>
-                <div class="hsb-money-burst">
-                  <span style="--a:0;--c:#00d084"></span><span style="--a:1;--c:#ffb466"></span>
-                  <span style="--a:2;--c:#92e8c0"></span><span style="--a:3;--c:#ff7a59"></span>
-                  <span style="--a:4;--c:#fcd34d"></span><span style="--a:5;--c:#00a86a"></span>
-                  <span style="--a:6;--c:#ffd699"></span><span style="--a:7;--c:#92e8c0"></span>
-                  <span style="--a:8;--c:#00d084"></span><span style="--a:9;--c:#ffb466"></span>
-                </div>
-              </div>
+              <!-- B. Light-beam sweeps — 3 fast diagonal streaks at
+                   different moments to add cinematic punctuation. -->
+              <div class="hsb-fx hsb-fx-beam" data-show-at="20" data-hide-at="22" aria-hidden="true"></div>
+              <div class="hsb-fx hsb-fx-beam" data-show-at="55" data-hide-at="57" aria-hidden="true"></div>
+              <div class="hsb-fx hsb-fx-beam" data-show-at="78" data-hide-at="80" aria-hidden="true"></div>
 
-              <!-- D: BOTTOM ACTIVITY TICKER (continuous, 2-108s) — scrolling
-                   feed of audit events runs along the bottom edge. -->
-              <div class="hsb-fx hsb-fx-ticker" data-show-at="2" data-hide-at="108" aria-hidden="true">
-                <div class="hsb-ticker-track">
-                  <span class="hsb-ticker-dot"></span>
-                  <span>Auditing <strong>Vitamin C Serum</strong></span>
-                  <span class="hsb-ticker-sep">·</span>
-                  <span><strong>247</strong> products in queue</span>
-                  <span class="hsb-ticker-sep">·</span>
-                  <span>Issue · <strong>missing alt text</strong></span>
-                  <span class="hsb-ticker-sep">·</span>
-                  <span>Applying fix · <strong>seo descriptions</strong></span>
-                  <span class="hsb-ticker-sep">·</span>
-                  <span>Score <strong>64 → 78</strong> (+14)</span>
-                  <span class="hsb-ticker-sep">·</span>
-                  <span>Verified by causal A/B · <strong>p &lt; 0.05</strong></span>
-                  <span class="hsb-ticker-sep">·</span>
-                  <span class="hsb-ticker-money">Projected lift <strong>+$30,870/mo</strong></span>
-                  <span class="hsb-ticker-sep">·</span>
-                  <!-- Duplicate so the scroll loops seamlessly -->
-                  <span class="hsb-ticker-dot"></span>
-                  <span>Auditing <strong>Hydrating Toner</strong></span>
-                  <span class="hsb-ticker-sep">·</span>
-                  <span>Bulk Maximize · <strong>12 products fixing</strong></span>
-                  <span class="hsb-ticker-sep">·</span>
-                  <span>Score lift <strong>+23 pts</strong> across catalog</span>
-                  <span class="hsb-ticker-sep">·</span>
+              <!-- C. FINALE CLIMAX (80s → 108s). Cinematic letterbox slides
+                   in, the video dims, then a single massive sequence plays:
+                   score reveal first, then revenue explosion. -->
+              <div class="hsb-fx hsb-fx-climax" data-show-at="80" data-hide-at="108" aria-hidden="true">
+                <!-- Letterbox top + bottom bars, slide in to frame the moment -->
+                <div class="hsb-letterbox hsb-letterbox-top"></div>
+                <div class="hsb-letterbox hsb-letterbox-bot"></div>
+
+                <!-- Dim curtain over the video so the reveal pops -->
+                <div class="hsb-curtain"></div>
+
+                <!-- Score reveal — visible 80-93s -->
+                <div class="hsb-climax-score" data-show-at="80" data-hide-at="93">
+                  <div class="hsb-climax-eyebrow">CATALOG SCORE</div>
+                  <div class="hsb-climax-score-row">
+                    <span class="hsb-climax-from">64</span>
+                    <span class="hsb-climax-arrow">→</span>
+                    <span class="hsb-climax-to">87</span>
+                  </div>
+                  <div class="hsb-climax-delta">+23 pts</div>
+                </div>
+
+                <!-- Money reveal — visible 93-108s, takes over from score -->
+                <div class="hsb-climax-money" data-show-at="93" data-hide-at="108">
+                  <div class="hsb-climax-eyebrow">PROJECTED MONTHLY REVENUE</div>
+                  <div class="hsb-climax-money-amount">
+                    <span class="hsb-money-plus">+$</span><span class="hsb-money-num" data-target="30870">0</span>
+                  </div>
+                  <div class="hsb-climax-tag">causal proof · p &lt; 0.05</div>
+                  <div class="hsb-climax-burst">
+                    <span style="--a:0;--c:#00d084"></span><span style="--a:1;--c:#ffb466"></span>
+                    <span style="--a:2;--c:#92e8c0"></span><span style="--a:3;--c:#ff7a59"></span>
+                    <span style="--a:4;--c:#fcd34d"></span><span style="--a:5;--c:#00a86a"></span>
+                    <span style="--a:6;--c:#ffd699"></span><span style="--a:7;--c:#92e8c0"></span>
+                    <span style="--a:8;--c:#00d084"></span><span style="--a:9;--c:#ffb466"></span>
+                    <span style="--a:10;--c:#ff7a59"></span><span style="--a:11;--c:#fcd34d"></span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -10402,6 +10357,14 @@ if (terminalBody) terminalObserver.observe(terminalBody);
     moneyTweenRaf = requestAnimationFrame(tick);
   }
 
+  // Climax has two nested sequences (score 80-93s, money 93-108s) that
+  // we drive separately via .is-out (score fades out) and .is-in (money
+  // fades in). The outer .hsb-fx-climax toggles via the standard
+  // is-active mechanism below.
+  const climaxScoreEl = stage.querySelector('.hsb-climax-score');
+  const climaxMoneyEl = stage.querySelector('.hsb-climax-money');
+  const climaxScoreOut = 93;   // score yields to money at this second
+
   function updateFx(){
     if (!video || !fxBlocks.length) return;
     const t = video.currentTime;
@@ -10412,17 +10375,27 @@ if (terminalBody) terminalObserver.observe(terminalBody);
       const isActive = t >= showAt && t < hideAt;
       if (isActive !== wasActive){
         el.classList.toggle('is-active', isActive);
-        // Money number — start the count-up when its block first activates
-        if (isActive && el.classList.contains('hsb-fx-money')){
-          if (moneyNumEl) moneyNumEl.textContent = '0';
-          // Delay the count-up to match the .hsb-money-amount entrance (0.3s)
-          setTimeout(startMoneyTween, 350);
-        }
       }
     });
+    // Drive the climax sub-sections explicitly
+    if (climaxScoreEl){
+      climaxScoreEl.classList.toggle('is-out', t >= climaxScoreOut);
+    }
+    if (climaxMoneyEl){
+      const moneyIn = t >= climaxScoreOut && t < 108;
+      const wasIn = climaxMoneyEl.classList.contains('is-in');
+      climaxMoneyEl.classList.toggle('is-in', moneyIn);
+      // Trigger the count-up the first time money becomes visible
+      if (moneyIn && !wasIn){
+        if (moneyNumEl) moneyNumEl.textContent = '0';
+        setTimeout(startMoneyTween, 400);
+      }
+    }
   }
   function resetFx(){
     fxBlocks.forEach((el) => el.classList.remove('is-active'));
+    if (climaxScoreEl) climaxScoreEl.classList.remove('is-out');
+    if (climaxMoneyEl) climaxMoneyEl.classList.remove('is-in');
     if (moneyNumEl) moneyNumEl.textContent = '0';
     cancelAnimationFrame(moneyTweenRaf);
   }
