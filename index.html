@@ -5619,8 +5619,12 @@ section{ position: relative; }
 .moat-viz-network{
   display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;
 }
+/* Two-tile variant: Captures + Verticals only (Catalogs tile removed
+   because the count was inflated/misleading). */
+.moat-viz-network-2{ grid-template-columns: repeat(2, 1fr); }
 @media (max-width: 480px){
-  .moat-viz-network{ grid-template-columns: 1fr; gap: 6px; }
+  .moat-viz-network,
+  .moat-viz-network-2{ grid-template-columns: 1fr; gap: 6px; }
   .moat-viz-network .ne-label{ font-size: 10px; letter-spacing: .08em; }
 }
 .moat-viz-network .ne-tile{
@@ -7685,11 +7689,6 @@ section + .cta-section{ padding-top: 64px; }
               <span class="pmr-lic mit">MIT</span>
             </div>
           </div>
-          <div class="pmv-ghstats">
-            <span class="pmghs"><span class="pmghs-i">★</span><strong>3.2k</strong> stars</span>
-            <span class="pmghs-sep">·</span>
-            <span class="pmghs"><span class="pmghs-i">⊞</span><strong>12</strong> repos</span>
-          </div>
         </div>
         <span class="pm-cta">View on GitHub</span>
       </a>
@@ -8596,16 +8595,9 @@ section + .cta-section{ padding-top: 64px; }
         </div>
         <div class="title">Every merchant makes the score smarter.</div>
         <div class="body">
-          We benchmark across <strong>304 Shopify catalogs today</strong>, growing daily. Every scan sharpens our per-vertical baselines (10 verticals modeled). Every A/B run feeds the <strong>Shared Experiment Library</strong>. <strong>The product gets better the more merchants we have.</strong> Static rule-based scoring tools don't.
+          Every catalog scan sharpens our per-vertical baselines (10 verticals modeled). Every A/B run feeds the <strong>Shared Experiment Library</strong>. <strong>The product gets better the more merchants we have.</strong> Static rule-based scoring tools don't.
         </div>
-        <div class="moat-viz moat-viz-network">
-          <div class="ne-tile now">
-            <div class="ne-grid"></div>
-            <div class="ne-content">
-              <div class="ne-label">Catalogs</div>
-              <div class="ne-num">304</div>
-            </div>
-          </div>
+        <div class="moat-viz moat-viz-network moat-viz-network-2">
           <div class="ne-tile mid">
             <div class="ne-grid"></div>
             <div class="ne-content">
