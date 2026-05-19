@@ -2676,108 +2676,372 @@ section{ position: relative; }
   background: #fff;
 }
 
-/* ============================================================
-   Scene B — Floating annotations overlaid on the live video.
-   Six glass cards rotate through the 4 corners of the frame across
-   the ~108s playback. Each card is a small "live stat" badge that
-   sells the product visually without the merchant having to read
-   the underlying UI in the recording.
-
-   Visibility is driven by JS in `initHeroStage`: it listens to
-   `video.timeupdate` and toggles `.is-active` based on the
-   `data-show-at` / `data-hide-at` seconds on each card.
-   ============================================================ */
-.hsb-frame{ /* Make sure the annotations can position relative to here */
-  /* (already position:relative above — no change needed) */
-}
-.hsb-anno{
+/* ================================================================
+   Scene B — FOUR setpiece overlays layered on top of the video.
+   Each .hsb-fx is wrapped by initHeroStage and toggled .is-active
+   via video.timeupdate. They're designed to dominate visually, not
+   sit politely in a corner.
+   ================================================================ */
+.hsb-fx{
   position: absolute;
-  z-index: 5;
-  display: inline-flex; align-items: center; gap: 10px;
-  padding: 10px 14px;
-  background: rgba(20, 18, 12, .78);
-  color: #f1ede0;
-  border: 1px solid rgba(255, 220, 160, .22);
-  border-radius: 12px;
-  backdrop-filter: blur(14px) saturate(1.4);
-  -webkit-backdrop-filter: blur(14px) saturate(1.4);
-  font-family: var(--font-display);
-  font-size: 14px;
-  font-weight: 600;
-  letter-spacing: -.005em;
-  line-height: 1.2;
-  box-shadow:
-    0 1px 0 rgba(255, 220, 160, .15) inset,
-    0 8px 28px -8px rgba(0, 0, 0, .5),
-    0 0 30px rgba(255, 170, 80, .10);
-  /* Default: hidden + offset off the edge it slides from */
-  opacity: 0;
-  transform: translateY(8px) scale(.96);
+  z-index: 6;
   pointer-events: none;
-  transition: opacity .5s cubic-bezier(.2,.7,.2,1),
-              transform .5s cubic-bezier(.2,.7,.2,1);
+  opacity: 0;
+  transition: opacity .35s ease;
 }
-.hsb-anno.is-active{
-  opacity: 1;
-  transform: translateY(0) scale(1);
+.hsb-fx.is-active{ opacity: 1; }
+
+/* ----------------------------------------------------------------
+   A. AI AGENTS SCANNING GRID (4-25s)
+   ---------------------------------------------------------------- */
+.hsb-fx-agents{
+  top: 56px; left: 0; right: 0;
+  display: flex; flex-direction: column; align-items: center;
+  gap: 12px;
+  padding: 14px 0;
 }
-.hsb-anno .hsb-anno-icon{
+.hsb-fx-agents-row{
+  display: flex; gap: 18px;
+  position: relative;
+  z-index: 2;
+}
+.hsb-agent{
+  width: 60px; height: 60px;
   display: inline-grid; place-items: center;
-  width: 26px; height: 26px;
   border-radius: 50%;
-  background: linear-gradient(135deg, rgba(0, 208, 132, .35), rgba(0, 168, 106, .15));
-  border: 1px solid rgba(0, 208, 132, .55);
-  font-size: 13px;
-  flex-shrink: 0;
-}
-.hsb-anno .hsb-anno-num{
-  font-family: var(--font-mono);
-  font-weight: 700;
-  color: #92e8c0;
-  margin-right: 2px;
-}
-.hsb-anno-tl{ top: 56px; left: 18px; }   /* below the chrome bar */
-.hsb-anno-tr{ top: 56px; right: 18px; }
-.hsb-anno-bl{ bottom: 18px; left: 18px; }
-.hsb-anno-br{ bottom: 18px; right: 18px; }
-
-/* Amber-variant for the "money" reveal at the end of playback */
-.hsb-anno.amber{
-  background: rgba(40, 24, 8, .85);
-  border-color: rgba(255, 180, 90, .45);
+  background: rgba(20, 18, 12, .85);
+  border: 1.5px solid rgba(0, 220, 150, .45);
+  color: #b9f4d4;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 26px;
+  letter-spacing: -.04em;
   box-shadow:
-    0 1px 0 rgba(255, 220, 160, .22) inset,
-    0 8px 28px -8px rgba(0, 0, 0, .55),
-    0 0 40px rgba(255, 170, 80, .35);
+    0 0 0 0 rgba(0, 220, 150, .55),
+    0 12px 32px -8px rgba(0, 0, 0, .55);
+  transform: translateY(-12px) scale(.85);
+  opacity: 0;
 }
-.hsb-anno.amber .hsb-anno-icon{
-  background: linear-gradient(135deg, rgba(255, 190, 100, .45), rgba(220, 140, 60, .20));
-  border-color: rgba(255, 190, 100, .65);
+.hsb-fx-agents.is-active .hsb-agent{
+  animation:
+    hsb-agent-pop .55s cubic-bezier(.2,1.1,.4,1) calc(var(--i) * .12s) forwards,
+    hsb-agent-pulse 1.8s ease-in-out calc(.7s + var(--i) * .12s) infinite;
 }
-.hsb-anno.amber .hsb-anno-num{ color: #ffd699; }
+@keyframes hsb-agent-pop{
+  0%   { opacity: 0; transform: translateY(-12px) scale(.85); }
+  60%  { opacity: 1; transform: translateY(4px) scale(1.08); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes hsb-agent-pulse{
+  0%, 100% { box-shadow: 0 0 0 0 rgba(0, 220, 150, .55), 0 12px 32px -8px rgba(0,0,0,.55); }
+  50%      { box-shadow: 0 0 0 10px rgba(0, 220, 150, 0),   0 12px 32px -8px rgba(0,0,0,.55); }
+}
+.hsb-agent-glyph{ display: inline-block; }
+.hsb-fx-agents-label{
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, .92);
+  text-shadow: 0 2px 12px rgba(0, 0, 0, .6);
+  background: rgba(20, 18, 12, .72);
+  padding: 7px 14px;
+  border-radius: 100px;
+  border: 1px solid rgba(0, 220, 150, .35);
+  backdrop-filter: blur(8px);
+  opacity: 0;
+}
+.hsb-fx-agents.is-active .hsb-fx-agents-label{
+  animation: hsb-fade-in .6s ease-out 1.1s forwards;
+}
+/* Radar sweep — a rotating gradient stripe over the badge row */
+.hsb-radar{
+  position: absolute;
+  width: 100%; height: 200px;
+  top: -20px; left: 0;
+  pointer-events: none;
+  background: conic-gradient(from 0deg, transparent 0%, transparent 92%, rgba(0, 220, 150, .35) 96%, rgba(0, 220, 150, 0) 100%);
+  mask: radial-gradient(closest-side, transparent 60%, black 70%, transparent 100%);
+  -webkit-mask: radial-gradient(closest-side, transparent 60%, black 70%, transparent 100%);
+  opacity: 0;
+}
+.hsb-fx-agents.is-active .hsb-radar{
+  animation: hsb-radar-sweep 2.4s linear infinite, hsb-fade-in .8s ease-out .2s forwards;
+}
+@keyframes hsb-radar-sweep{ to { transform: rotate(360deg); } }
 
-/* Subtle pulse on the icon so the eye is drawn to the card while it's active */
-.hsb-anno.is-active .hsb-anno-icon{
+/* ----------------------------------------------------------------
+   B. SCORE LIFT BIG REVEAL (50-78s)
+   ---------------------------------------------------------------- */
+.hsb-fx-score{
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex; flex-direction: column; align-items: center;
+  gap: 8px;
+  padding: 28px 44px;
+  background: rgba(8, 14, 10, .82);
+  border: 1px solid rgba(0, 220, 150, .45);
+  border-radius: 24px;
+  backdrop-filter: blur(20px) saturate(1.4);
+  box-shadow:
+    0 0 0 1px rgba(0, 220, 150, .25),
+    0 0 80px rgba(0, 220, 150, .25),
+    0 30px 80px -16px rgba(0, 0, 0, .6);
+}
+.hsb-score-eyebrow{
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: rgba(0, 220, 150, .9);
+}
+.hsb-score-row{
+  display: flex; align-items: baseline; gap: 18px;
+  font-family: var(--font-display);
+  font-weight: 800;
+  letter-spacing: -.04em;
+  color: #fff;
+  text-shadow: 0 4px 24px rgba(0, 0, 0, .55);
+}
+.hsb-score-from{
+  font-size: 64px;
+  color: rgba(255, 255, 255, .42);
+  text-decoration: line-through;
+  text-decoration-thickness: 3px;
+  text-decoration-color: rgba(255, 90, 90, .6);
+}
+.hsb-score-arrow{ font-size: 36px; color: rgba(255, 255, 255, .65); }
+.hsb-score-to{
+  font-size: 88px;
+  background: linear-gradient(135deg, #92e8c0, #00d084);
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 20px rgba(0, 220, 150, .35));
+}
+.hsb-score-delta{
+  display: inline-block;
+  padding: 6px 16px;
+  background: linear-gradient(135deg, #00d084, #00a86a);
+  color: #08120c;
+  font-family: var(--font-mono);
+  font-weight: 800;
+  font-size: 14px;
+  letter-spacing: .08em;
+  border-radius: 100px;
+  box-shadow: 0 8px 24px -6px rgba(0, 208, 132, .55);
+}
+.hsb-fx-score.is-active .hsb-score-eyebrow{ animation: hsb-fade-in .5s ease-out forwards; opacity: 0; }
+.hsb-fx-score.is-active .hsb-score-from{
+  animation: hsb-fade-in .5s ease-out .15s forwards;
+  opacity: 0;
+}
+.hsb-fx-score.is-active .hsb-score-arrow{
+  animation: hsb-fade-in .4s ease-out .5s forwards;
+  opacity: 0;
+}
+.hsb-fx-score.is-active .hsb-score-to{
+  animation: hsb-score-pop .7s cubic-bezier(.2,1.1,.4,1) .75s forwards;
+  opacity: 0;
+  transform: scale(.6);
+}
+.hsb-fx-score.is-active .hsb-score-delta{
+  animation: hsb-score-pop .5s cubic-bezier(.2,1.1,.4,1) 1.15s forwards;
+  opacity: 0;
+  transform: scale(.5) rotate(-8deg);
+}
+@keyframes hsb-score-pop{
+  0%   { opacity: 0; transform: scale(.6); }
+  70%  { opacity: 1; transform: scale(1.15); }
+  100% { opacity: 1; transform: scale(1); }
+}
+@keyframes hsb-fade-in{ to { opacity: 1; } }
+
+/* Score particles — 8 small dots that radiate out from the score reveal */
+.hsb-score-particles{
+  position: absolute;
+  width: 100%; height: 100%;
+  top: 0; left: 0;
+  pointer-events: none;
+}
+.hsb-score-particles span{
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #92e8c0, #00d084);
+  box-shadow: 0 0 12px rgba(0, 220, 150, .8);
+  opacity: 0;
+  --angle: calc(var(--a) * 45deg);
+}
+.hsb-fx-score.is-active .hsb-score-particles span{
+  animation: hsb-particle-burst 1s ease-out 1.05s forwards;
+}
+@keyframes hsb-particle-burst{
+  0%   { opacity: 0; transform: translate(-50%, -50%) rotate(var(--angle)) translateX(0); }
+  20%  { opacity: 1; }
+  100% { opacity: 0; transform: translate(-50%, -50%) rotate(var(--angle)) translateX(140px); }
+}
+
+/* ----------------------------------------------------------------
+   C. MONEY EXPLOSION (88-108s)
+   ---------------------------------------------------------------- */
+.hsb-fx-money{
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex; flex-direction: column; align-items: center;
+  gap: 6px;
+  padding: 32px 56px;
+  background: linear-gradient(135deg, rgba(28, 18, 6, .9), rgba(20, 14, 4, .85));
+  border: 1px solid rgba(255, 180, 90, .55);
+  border-radius: 28px;
+  backdrop-filter: blur(20px) saturate(1.5);
+  box-shadow:
+    0 0 0 1px rgba(255, 180, 90, .25),
+    0 0 120px rgba(255, 170, 80, .35),
+    0 30px 80px -16px rgba(0, 0, 0, .6);
+}
+.hsb-money-eyebrow{
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: #ffd699;
+  opacity: 0;
+}
+.hsb-fx-money.is-active .hsb-money-eyebrow{ animation: hsb-fade-in .5s ease-out forwards; }
+
+.hsb-money-amount{
+  display: flex; align-items: baseline; gap: 4px;
+  font-family: var(--font-display);
+  font-weight: 800;
+  letter-spacing: -.045em;
+  background: linear-gradient(135deg, #ffe4b5, #ffb466 50%, #ff7a59);
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 24px rgba(255, 170, 80, .55));
+  text-shadow: 0 4px 24px rgba(0, 0, 0, .35);
+  opacity: 0;
+  transform: scale(.5);
+}
+.hsb-fx-money.is-active .hsb-money-amount{
+  animation: hsb-score-pop .9s cubic-bezier(.2,1.1,.4,1) .3s forwards;
+}
+.hsb-money-plus{ font-size: 56px; }
+.hsb-money-num{ font-size: 96px; line-height: 1; font-variant-numeric: tabular-nums; }
+.hsb-money-tag{
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: .1em;
+  color: rgba(255, 220, 160, .85);
+  margin-top: 4px;
+  opacity: 0;
+}
+.hsb-fx-money.is-active .hsb-money-tag{ animation: hsb-fade-in .5s ease-out 1.2s forwards; }
+
+/* Money burst — 10 confetti particles erupting from the number */
+.hsb-money-burst{
+  position: absolute;
+  width: 100%; height: 100%;
+  top: 0; left: 0;
+  pointer-events: none;
+}
+.hsb-money-burst span{
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 10px; height: 14px;
+  border-radius: 2px;
+  background: var(--c, #ffb466);
+  box-shadow: 0 0 8px rgba(255, 170, 80, .6);
+  opacity: 0;
+  --angle: calc(var(--a) * 36deg);
+}
+.hsb-fx-money.is-active .hsb-money-burst span{
+  animation: hsb-money-confetti 1.6s cubic-bezier(.2, .7, .3, 1) .8s forwards;
+}
+@keyframes hsb-money-confetti{
+  0%   { opacity: 0; transform: translate(-50%, -50%) rotate(var(--angle)) translateX(0) rotate(0deg); }
+  15%  { opacity: 1; }
+  100% { opacity: 0; transform: translate(-50%, -50%) rotate(var(--angle)) translateX(240px) rotate(720deg); }
+}
+
+/* ----------------------------------------------------------------
+   D. BOTTOM ACTIVITY TICKER (continuous)
+   ---------------------------------------------------------------- */
+.hsb-fx-ticker{
+  bottom: 0; left: 0; right: 0;
+  height: 38px;
+  overflow: hidden;
+  background: linear-gradient(to top, rgba(8, 12, 10, .92), rgba(8, 12, 10, .82));
+  border-top: 1px solid rgba(0, 220, 150, .25);
+  backdrop-filter: blur(12px);
+}
+.hsb-ticker-track{
+  display: inline-flex; align-items: center; gap: 16px;
+  white-space: nowrap;
+  height: 100%;
+  padding-left: 100%;     /* start off-screen right */
+  animation: hsb-ticker-scroll 32s linear infinite;
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  letter-spacing: .04em;
+  color: rgba(255, 255, 255, .82);
+}
+.hsb-ticker-track strong{ color: #92e8c0; font-weight: 700; }
+.hsb-ticker-track .hsb-ticker-money strong{ color: #ffd699; }
+.hsb-ticker-sep{ color: rgba(255, 255, 255, .35); padding: 0 4px; }
+.hsb-ticker-dot{
+  display: inline-block;
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: #00d084;
+  box-shadow: 0 0 12px rgba(0, 220, 150, .8);
   animation: hsb-anno-pulse 1.4s ease-in-out infinite;
 }
+@keyframes hsb-ticker-scroll{
+  to { transform: translateX(-100%); }
+}
 @keyframes hsb-anno-pulse{
-  0%, 100% { box-shadow: 0 0 0 0 rgba(0, 208, 132, .45); }
+  0%, 100% { box-shadow: 0 0 0 0 rgba(0, 208, 132, .55); }
   50%      { box-shadow: 0 0 0 6px rgba(0, 208, 132, 0); }
 }
 
-/* Smaller phones — keep cards readable but a bit more compact */
-@media (max-width: 720px){
-  .hsb-anno{ font-size: 12px; padding: 7px 10px; gap: 7px; }
-  .hsb-anno .hsb-anno-icon{ width: 20px; height: 20px; font-size: 11px; }
-  .hsb-anno-tl, .hsb-anno-tr{ top: 44px; }
-  .hsb-anno-tl, .hsb-anno-bl{ left: 10px; }
-  .hsb-anno-tr, .hsb-anno-br{ right: 10px; }
-  .hsb-anno-bl, .hsb-anno-br{ bottom: 10px; }
+/* ----------------------------------------------------------------
+   Responsive scaling — under 880px, shrink the giant numbers so they
+   still fit the smaller frame without overflowing.
+   ---------------------------------------------------------------- */
+@media (max-width: 880px){
+  .hsb-fx-agents{ top: 44px; }
+  .hsb-agent{ width: 44px; height: 44px; font-size: 18px; }
+  .hsb-fx-agents-row{ gap: 10px; }
+  .hsb-fx-agents-label{ font-size: 11px; padding: 5px 10px; }
+  .hsb-fx-score{ padding: 18px 26px; }
+  .hsb-score-from{ font-size: 36px; }
+  .hsb-score-arrow{ font-size: 22px; }
+  .hsb-score-to{ font-size: 54px; }
+  .hsb-score-delta{ font-size: 11px; padding: 4px 10px; }
+  .hsb-fx-money{ padding: 18px 24px; }
+  .hsb-money-plus{ font-size: 32px; }
+  .hsb-money-num{ font-size: 56px; }
+  .hsb-money-eyebrow, .hsb-money-tag{ font-size: 10px; }
+  .hsb-fx-ticker{ height: 30px; }
+  .hsb-ticker-track{ font-size: 11px; gap: 12px; animation-duration: 24s; }
 }
-/* Respect prefers-reduced-motion: keep cards visible without pulse */
 @media (prefers-reduced-motion: reduce){
-  .hsb-anno.is-active .hsb-anno-icon{ animation: none; }
-  .hsb-anno{ transition: opacity .2s linear; }
+  .hsb-fx-agents.is-active .hsb-agent,
+  .hsb-fx-agents.is-active .hsb-radar,
+  .hsb-fx-score.is-active *,
+  .hsb-fx-money.is-active *,
+  .hsb-ticker-track{ animation: none; }
+  .hsb-fx-agents.is-active .hsb-agent,
+  .hsb-fx-agents.is-active .hsb-fx-agents-label,
+  .hsb-fx-score.is-active .hsb-score-eyebrow,
+  .hsb-fx-score.is-active .hsb-score-from,
+  .hsb-fx-score.is-active .hsb-score-arrow,
+  .hsb-fx-score.is-active .hsb-score-to,
+  .hsb-fx-score.is-active .hsb-score-delta,
+  .hsb-fx-money.is-active .hsb-money-eyebrow,
+  .hsb-fx-money.is-active .hsb-money-amount,
+  .hsb-fx-money.is-active .hsb-money-tag{ opacity: 1; transform: none; }
 }
 
 /* ============================================================
@@ -7428,32 +7692,87 @@ section + .cta-section{ padding-top: 64px; }
                 disableremoteplayback
                 tabindex="-1"
               ></video>
-              <!-- Floating annotations layered over the video. Six cards
-                   sequenced through the ~108s playback by initHeroStage's
-                   timeupdate listener using data-show-at / data-hide-at. -->
-              <div class="hsb-anno hsb-anno-tl" data-show-at="4" data-hide-at="13" aria-hidden="true">
-                <span class="hsb-anno-icon">⚡</span>
-                <span><span class="hsb-anno-num">5</span> AI agents · scanning</span>
+              <!-- ============================================================
+                   FOUR SETPIECE OVERLAYS — sequenced by initHeroStage's
+                   timeupdate listener via .is-active toggling.
+                   ============================================================ -->
+
+              <!-- A: AI AGENTS SCANNING GRID (4-25s) — five big LLM badges
+                   pulse in across the top, with a radar sweep behind them. -->
+              <div class="hsb-fx hsb-fx-agents" data-show-at="3" data-hide-at="25" aria-hidden="true">
+                <div class="hsb-fx-agents-row">
+                  <span class="hsb-agent" style="--i:0"><span class="hsb-agent-glyph">G</span></span>
+                  <span class="hsb-agent" style="--i:1"><span class="hsb-agent-glyph">C</span></span>
+                  <span class="hsb-agent" style="--i:2"><span class="hsb-agent-glyph">M</span></span>
+                  <span class="hsb-agent" style="--i:3"><span class="hsb-agent-glyph">P</span></span>
+                  <span class="hsb-agent" style="--i:4"><span class="hsb-agent-glyph">D</span></span>
+                </div>
+                <div class="hsb-fx-agents-label">5 AI agents · scanning your catalog</div>
+                <div class="hsb-radar"></div>
               </div>
-              <div class="hsb-anno hsb-anno-tr" data-show-at="16" data-hide-at="26" aria-hidden="true">
-                <span class="hsb-anno-icon">✓</span>
-                <span><span class="hsb-anno-num">247</span> products audited</span>
+
+              <!-- B: SCORE LIFT BIG REVEAL (50-78s) — score number morphs
+                   from 64 to 87 with a +23 badge popping out, particle burst. -->
+              <div class="hsb-fx hsb-fx-score" data-show-at="50" data-hide-at="78" aria-hidden="true">
+                <div class="hsb-score-eyebrow">CATALOG SCORE</div>
+                <div class="hsb-score-row">
+                  <span class="hsb-score-from">64</span>
+                  <span class="hsb-score-arrow">→</span>
+                  <span class="hsb-score-to">87</span>
+                </div>
+                <div class="hsb-score-delta">+23 pts</div>
+                <div class="hsb-score-particles">
+                  <span style="--a:0"></span><span style="--a:1"></span><span style="--a:2"></span>
+                  <span style="--a:3"></span><span style="--a:4"></span><span style="--a:5"></span>
+                  <span style="--a:6"></span><span style="--a:7"></span>
+                </div>
               </div>
-              <div class="hsb-anno hsb-anno-bl" data-show-at="32" data-hide-at="44" aria-hidden="true">
-                <span class="hsb-anno-icon">⚙</span>
-                <span>Bulk Maximize · <span class="hsb-anno-num">12</span> products fixing</span>
+
+              <!-- C: MONEY EXPLOSION (88-108s) — massive +$30,870 reveal with
+                   confetti burst around the number and a glow halo. -->
+              <div class="hsb-fx hsb-fx-money" data-show-at="88" data-hide-at="108" aria-hidden="true">
+                <div class="hsb-money-eyebrow">PROJECTED MONTHLY REVENUE</div>
+                <div class="hsb-money-amount">
+                  <span class="hsb-money-plus">+$</span><span class="hsb-money-num" data-target="30870">0</span>
+                </div>
+                <div class="hsb-money-tag">causal proof · p &lt; 0.05</div>
+                <div class="hsb-money-burst">
+                  <span style="--a:0;--c:#00d084"></span><span style="--a:1;--c:#ffb466"></span>
+                  <span style="--a:2;--c:#92e8c0"></span><span style="--a:3;--c:#ff7a59"></span>
+                  <span style="--a:4;--c:#fcd34d"></span><span style="--a:5;--c:#00a86a"></span>
+                  <span style="--a:6;--c:#ffd699"></span><span style="--a:7;--c:#92e8c0"></span>
+                  <span style="--a:8;--c:#00d084"></span><span style="--a:9;--c:#ffb466"></span>
+                </div>
               </div>
-              <div class="hsb-anno hsb-anno-tr" data-show-at="52" data-hide-at="64" aria-hidden="true">
-                <span class="hsb-anno-icon">↑</span>
-                <span>Avg score lift <span class="hsb-anno-num">+18</span> pts</span>
-              </div>
-              <div class="hsb-anno hsb-anno-br" data-show-at="72" data-hide-at="85" aria-hidden="true">
-                <span class="hsb-anno-icon">π</span>
-                <span><span class="hsb-anno-num">p &lt; 0.05</span> · causal proof</span>
-              </div>
-              <div class="hsb-anno hsb-anno-tl amber" data-show-at="92" data-hide-at="108" aria-hidden="true">
-                <span class="hsb-anno-icon">$</span>
-                <span>Projected <span class="hsb-anno-num">+$30,870</span>/mo</span>
+
+              <!-- D: BOTTOM ACTIVITY TICKER (continuous, 2-108s) — scrolling
+                   feed of audit events runs along the bottom edge. -->
+              <div class="hsb-fx hsb-fx-ticker" data-show-at="2" data-hide-at="108" aria-hidden="true">
+                <div class="hsb-ticker-track">
+                  <span class="hsb-ticker-dot"></span>
+                  <span>Auditing <strong>Vitamin C Serum</strong></span>
+                  <span class="hsb-ticker-sep">·</span>
+                  <span><strong>247</strong> products in queue</span>
+                  <span class="hsb-ticker-sep">·</span>
+                  <span>Issue · <strong>missing alt text</strong></span>
+                  <span class="hsb-ticker-sep">·</span>
+                  <span>Applying fix · <strong>seo descriptions</strong></span>
+                  <span class="hsb-ticker-sep">·</span>
+                  <span>Score <strong>64 → 78</strong> (+14)</span>
+                  <span class="hsb-ticker-sep">·</span>
+                  <span>Verified by causal A/B · <strong>p &lt; 0.05</strong></span>
+                  <span class="hsb-ticker-sep">·</span>
+                  <span class="hsb-ticker-money">Projected lift <strong>+$30,870/mo</strong></span>
+                  <span class="hsb-ticker-sep">·</span>
+                  <!-- Duplicate so the scroll loops seamlessly -->
+                  <span class="hsb-ticker-dot"></span>
+                  <span>Auditing <strong>Hydrating Toner</strong></span>
+                  <span class="hsb-ticker-sep">·</span>
+                  <span>Bulk Maximize · <strong>12 products fixing</strong></span>
+                  <span class="hsb-ticker-sep">·</span>
+                  <span>Score lift <strong>+23 pts</strong> across catalog</span>
+                  <span class="hsb-ticker-sep">·</span>
+                </div>
               </div>
             </div>
           </div>
@@ -10011,10 +10330,11 @@ if (terminalBody) terminalObserver.observe(terminalBody);
       if (scene === 'b'){
         try {
           video.currentTime = 0;
-          // Reset annotations so the next playthrough starts from a
-          // clean state — otherwise leftover .is-active flags can
-          // briefly show before the first timeupdate fires.
-          stage.querySelectorAll('.hsb-anno.is-active').forEach((el) => el.classList.remove('is-active'));
+          // Clear any setpiece flags so each playthrough animates fresh
+          stage.querySelectorAll('.hsb-fx.is-active').forEach((el) => el.classList.remove('is-active'));
+          // Reset the money counter to 0 so the count-up tweens from scratch
+          const m = stage.querySelector('.hsb-money-num');
+          if (m) m.textContent = '0';
           // Some browsers block muted-autoplay until user-interaction
           // when triggered via .play(); we wrap in catch and just fall
           // through — the controller will detect non-progress via the
@@ -10024,8 +10344,8 @@ if (terminalBody) terminalObserver.observe(terminalBody);
         } catch {}
       } else {
         try { video.pause(); } catch {}
-        // Off-scene B: hide all annotations so they don't bleed into A/C
-        stage.querySelectorAll('.hsb-anno.is-active').forEach((el) => el.classList.remove('is-active'));
+        // Off-scene B: hide all setpiece overlays so they don't bleed into A/C
+        stage.querySelectorAll('.hsb-fx.is-active').forEach((el) => el.classList.remove('is-active'));
       }
     }
   }
@@ -10051,24 +10371,60 @@ if (terminalBody) terminalObserver.observe(terminalBody);
     scheduleNextFromTimer('c');
   }
 
-  // Floating-annotation overlays inside .hsb-frame — each card has
+  // Setpiece overlays inside .hsb-frame — each .hsb-fx block carries
   // data-show-at / data-hide-at (seconds into the video). On every
-  // timeupdate we toggle .is-active so cards fade in/out at the
-  // right moments. Resets when the video restarts (currentTime < 0.5
-  // means we just rolled over to the beginning).
-  const annos = stage.querySelectorAll('.hsb-anno');
-  function updateAnnotations(){
-    if (!video || !annos.length) return;
+  // timeupdate we toggle .is-active so each setpiece animates in/out
+  // at the right moments. The money-amount also tweens its number from
+  // 0 → target during the first ~1.2s of its active window.
+  const fxBlocks = stage.querySelectorAll('.hsb-fx');
+  const moneyNumEl = stage.querySelector('.hsb-money-num');
+  const moneyTarget = moneyNumEl ? parseInt(moneyNumEl.dataset.target || '0', 10) : 0;
+  let moneyTweenStart = 0;
+  let moneyTweenRaf = null;
+
+  function fmtMoney(n){ return n.toLocaleString('en-US'); }
+
+  function startMoneyTween(){
+    if (!moneyNumEl) return;
+    cancelAnimationFrame(moneyTweenRaf);
+    moneyTweenStart = performance.now();
+    const DURATION = 1400;       // ms
+    const FROM = 0;
+    const TO = moneyTarget;
+    const tick = (now) => {
+      const p = Math.min(1, (now - moneyTweenStart) / DURATION);
+      // easeOutCubic so the count-up decelerates near the target
+      const eased = 1 - Math.pow(1 - p, 3);
+      const value = Math.round(FROM + (TO - FROM) * eased);
+      moneyNumEl.textContent = fmtMoney(value);
+      if (p < 1) moneyTweenRaf = requestAnimationFrame(tick);
+    };
+    moneyTweenRaf = requestAnimationFrame(tick);
+  }
+
+  function updateFx(){
+    if (!video || !fxBlocks.length) return;
     const t = video.currentTime;
-    annos.forEach((el) => {
+    fxBlocks.forEach((el) => {
       const showAt = parseFloat(el.dataset.showAt || '0');
       const hideAt = parseFloat(el.dataset.hideAt || '0');
-      const active = t >= showAt && t < hideAt;
-      el.classList.toggle('is-active', active);
+      const wasActive = el.classList.contains('is-active');
+      const isActive = t >= showAt && t < hideAt;
+      if (isActive !== wasActive){
+        el.classList.toggle('is-active', isActive);
+        // Money number — start the count-up when its block first activates
+        if (isActive && el.classList.contains('hsb-fx-money')){
+          if (moneyNumEl) moneyNumEl.textContent = '0';
+          // Delay the count-up to match the .hsb-money-amount entrance (0.3s)
+          setTimeout(startMoneyTween, 350);
+        }
+      }
     });
   }
-  function resetAnnotations(){
-    annos.forEach((el) => el.classList.remove('is-active'));
+  function resetFx(){
+    fxBlocks.forEach((el) => el.classList.remove('is-active'));
+    if (moneyNumEl) moneyNumEl.textContent = '0';
+    cancelAnimationFrame(moneyTweenRaf);
   }
 
   function start(){
@@ -10076,9 +10432,9 @@ if (terminalBody) terminalObserver.observe(terminalBody);
     started = true;
     if (video){
       video.addEventListener('ended', onVideoEnded);
-      video.addEventListener('timeupdate', updateAnnotations);
-      video.addEventListener('seeking', resetAnnotations);
-      video.addEventListener('play', updateAnnotations);
+      video.addEventListener('timeupdate', updateFx);
+      video.addEventListener('seeking', resetFx);
+      video.addEventListener('play', updateFx);
     }
     goTo('a');
     scheduleNextFromTimer('a');
