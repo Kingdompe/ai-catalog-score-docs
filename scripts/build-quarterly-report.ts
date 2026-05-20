@@ -265,11 +265,11 @@ footer a{color:#5a6577;text-decoration:none;margin:0 8px}
   <p>The pattern: shoppers are increasingly specific. Queries like "waterproof running jacket under $200" and "vegan skincare with niacinamide" outperform broad queries like "running gear" because the AI agents return more confident, more concrete recommendations when the query carries factual constraints. <strong>If your catalog can't answer factual constraints, you don't get cited.</strong></p>
 
   <h2>${top10Audited.length > 0 ? '6' : '5'}. The structural takeaway</h2>
-  <p>Three patterns hold across the dataset, regardless of which agent or vertical we slice:</p>
+  <p>Three qualitative patterns hold across the dataset, regardless of which agent or vertical we slice. None of these are causal claims — we don't run controlled merchant experiments. They're descriptions of what the captures look like.</p>
   <ol>
-    <li><strong>Metafields beat prose.</strong> Catalogs with structured metafields (especially <code>material</code>, <code>key_ingredient</code>, <code>dimensions</code>) get cited 4-6× more than catalogs with the same product information buried in description prose.</li>
-    <li><strong>Specificity wins.</strong> Titles and descriptions with factual markers (units, ingredients, certifications) appear in 70%+ of top-ranked captures. Catalogs that lead with "premium" / "amazing" / "best" are absent from top recommendations.</li>
-    <li><strong>The gap is widening.</strong> Brand mentions are increasingly winner-take-most. Top-10 share has grown vs. last quarter as agents trend toward higher-confidence recommendations.</li>
+    <li><strong>Structure beats prose.</strong> Brands cited most often in the captures dataset overwhelmingly publish structured metafield data on the platforms where they're recommended. The reverse is not observed: catalogs that hide attributes in marketing prose rarely surface at the top.</li>
+    <li><strong>Specificity correlates with citation.</strong> Top-ranked captures consistently surface products described with factual markers (units, ingredients, materials, certifications) rather than marketing superlatives. We haven't run a controlled comparison, but the pattern is visible at a glance.</li>
+    <li><strong>The distribution is winner-take-most.</strong> Rank 50 in our brand list receives ~5% of the mentions that rank 1 does. The long tail past rank 100 drops further still.</li>
   </ol>
 
   <div class="callout data">
