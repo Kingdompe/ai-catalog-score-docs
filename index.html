@@ -7138,7 +7138,7 @@ section + .cta-section{ padding-top: 64px; }
   // Fallback values used until /stats.json finishes loading. Bumped
   // 2026-05-18 from the stale 78k baseline to the current ~228k value so
   // the first paint matches reality even on a cache miss.
-  window.acsStats = { captures_total: 228000, captures_per_day: 38562, agents_count: 6, stores_benchmarked: 1 };
+  window.acsStats = { captures_total: 228000, captures_per_day: 38562, agents_count: 6, brands_tracked: 0 };
   // Global live-counter value — shared with the hero ticker so applyStats()
   // can override it after fetch resolves. Without this, the ticker's closure
   // would hold the stale fallback forever and override the DOM each tick.

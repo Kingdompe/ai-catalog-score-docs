@@ -17,7 +17,7 @@ const LEADERBOARD_PATH = 'public-data/catalog-score-leaderboard.json';
 
 interface Insights {
   updatedAt: string;
-  totals: { captures: number; agents: number; stores: number; corpusDays: number };
+  totals: { captures: number; agents: number; brandsTracked: number; corpusDays: number };
   capturesByAgent: Record<string, number>;
   capturesPerDay: Array<{ date: string; count: number }>;
   topBrands: Array<{ domain: string; mentions: number; agents: string[] }>;
@@ -79,7 +79,7 @@ function renderReport(ins: Insights, lb: LeaderboardData | null): string {
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>State of AI Commerce on Shopify — Q2 2026 Report | AI Catalog Score</title>
-<meta name="description" content="${esc(`${captures} AI agent captures, 6 agents, ${ins.totals.stores}+ Shopify stores benchmarked. The first open dataset report on AI shopping behavior — what agents recommend, which catalogs win, what's missing.`)}">
+<meta name="description" content="${esc(`${captures} AI agent captures, 6 agents, ${ins.totals.brandsTracked.toLocaleString('en')} distinct brands tracked. The first open dataset report on AI shopping behavior — what agents recommend, which catalogs win, what's missing.`)}">
 <link rel="canonical" href="https://aicatalogscore.com/blog/state-of-ai-commerce-q2-2026">
 <meta property="og:title" content="State of AI Commerce on Shopify — Q2 2026 Report">
 <meta property="og:description" content="${esc(`First open dataset report — ${captures} AI agent captures across 6 agents. What ChatGPT, Claude, Perplexity recommend on Shopify, and the data behind it.`)}">
@@ -90,7 +90,7 @@ function renderReport(ins: Insights, lb: LeaderboardData | null): string {
 <meta property="article:author" content="AI Catalog Score">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="State of AI Commerce on Shopify — Q2 2026 Report">
-<meta name="twitter:description" content="${esc(`${captures} AI agent captures, 6 agents, ${ins.totals.stores}+ Shopify stores. The open dataset report on AI shopping behavior.`)}">
+<meta name="twitter:description" content="${esc(`${captures} AI agent captures, 6 agents, ${ins.totals.brandsTracked.toLocaleString('en')} brands tracked. The open dataset report on AI shopping behavior.`)}">
 <meta name="twitter:image" content="https://aicatalogscore.com/og-card.png">
 <meta name="robots" content="index,follow,max-image-preview:large">
 <link rel="icon" type="image/png" href="/logo-acs-1200-light.png">
@@ -99,7 +99,7 @@ ${JSON.stringify({
   '@context': 'https://schema.org',
   '@type': 'Report',
   headline: 'State of AI Commerce on Shopify — Q2 2026',
-  description: `${captures} AI agent captures across 6 agents and ${ins.totals.stores}+ Shopify stores benchmarked.`,
+  description: `${captures} AI agent captures across 6 agents and ${ins.totals.brandsTracked.toLocaleString('en')} distinct brands tracked.`,
   datePublished: '2026-05-20T16:00:00Z',
   dateModified: ins.updatedAt,
   author: { '@type': 'Organization', name: 'AI Catalog Score', url: 'https://aicatalogscore.com' },
@@ -175,12 +175,12 @@ footer a{color:#5a6577;text-decoration:none;margin:0 8px}
 <article class="container">
   <div class="meta">QUARTERLY REPORT · Q2 2026 · 12 min read · Published 20 May 2026</div>
   <h1>State of AI Commerce on Shopify — Q2 2026</h1>
-  <p class="lede">The first open quarterly report on AI shopping agent behavior across Shopify catalogs. ${captures} ground-truth captures across ${ins.totals.agents} agents and ${ins.totals.stores}+ benchmarked stores. What ChatGPT, Claude, Perplexity, Gemini, Mistral and DeepSeek recommend — and what they don't.</p>
+  <p class="lede">The first open quarterly report on AI shopping agent behavior across Shopify catalogs. ${captures} ground-truth captures across ${ins.totals.agents} agents and ${ins.totals.brandsTracked.toLocaleString('en')} distinct brands. What ChatGPT, Claude, Perplexity, Gemini, Mistral and DeepSeek recommend — and what they don't.</p>
 
   <div class="stat-grid">
     <div class="stat"><b>${captures}</b><span>captures observed</span></div>
     <div class="stat"><b>${ins.totals.agents}</b><span>agents tracked</span></div>
-    <div class="stat"><b>${ins.totals.stores.toLocaleString('en')}</b><span>stores benchmarked</span></div>
+    <div class="stat"><b>${ins.totals.brandsTracked.toLocaleString('en')}</b><span>brands tracked</span></div>
     <div class="stat"><b>${ins.totals.corpusDays}</b><span>days of data</span></div>
   </div>
 

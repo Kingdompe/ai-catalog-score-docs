@@ -11,11 +11,13 @@
 
 const BRAND_GREEN = '#00a86a';
 const BRAND_DARK = '#0e1b2c';
-const INSIGHTS_URL = 'https://shopify-app-production-7e58.up.railway.app/api/public/insights';
+// `?v=2` busts the edge cache from before the brandsTracked schema change.
+// Bump again if the response schema changes.
+const INSIGHTS_URL = 'https://shopify-app-production-7e58.up.railway.app/api/public/insights?v=2';
 
 interface Insights {
   updatedAt: string;
-  totals: { captures: number; agents: number; stores: number; corpusDays: number };
+  totals: { captures: number; agents: number; brandsTracked: number; corpusDays: number };
   capturesByAgent: Record<string, number>;
   capturesPerDay: Array<{ date: string; count: number }>;
   topBrands: Array<{ domain: string; mentions: number; agents: string[] }>;
@@ -154,7 +156,7 @@ export function renderLeaderboardIndex(insights: Insights | null): string {
   const totals = insights?.totals;
   const title = 'Shopify AI Visibility Leaderboard — Top brands recommended by ChatGPT, Claude, Perplexity';
   const desc = totals
-    ? `Two leaderboards, calibrated on ${totals.captures.toLocaleString('en')} AI agent captures across ${totals.agents} agents and ${totals.stores}+ Shopify stores. Updated hourly.`
+    ? `Two leaderboards, calibrated on ${totals.captures.toLocaleString('en')} AI agent captures across ${totals.agents} agents and ${totals.brandsTracked.toLocaleString('en')} distinct brands. Updated hourly.`
     : 'Two open leaderboards of Shopify AI visibility — most-mentioned by AI agents, and highest AI Catalog Score.';
   const canonical = 'https://aicatalogscore.com/leaderboard/';
 
@@ -174,7 +176,7 @@ ${shellHeader()}
     <div class="stat-grid">
       <div class="stat"><b>${totals.captures.toLocaleString('en')}</b><span>captures</span></div>
       <div class="stat"><b>${totals.agents}</b><span>AI agents</span></div>
-      <div class="stat"><b>${totals.stores.toLocaleString('en')}</b><span>stores</span></div>
+      <div class="stat"><b>${totals.brandsTracked.toLocaleString('en')}</b><span>brands tracked</span></div>
       <div class="stat"><b>${totals.corpusDays}</b><span>days of data</span></div>
     </div>` : ''}
   </section>
