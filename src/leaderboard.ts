@@ -295,14 +295,14 @@ export function renderCatalogScoreLeaderboard(
   meta: { totalScanned: number; auditedAt: string },
 ): string {
   const top = entries.slice(0, 100);
-  const title = 'Top 100 Shopify Stores by AI Catalog Score — open methodology, public audit';
-  const desc = `The 100 highest-scoring Shopify catalogs by AI-readiness. ${meta.totalScanned} stores scanned; ${top[0]?.domain ?? '—'} leads at ${top[0]?.score ?? 0}/100. Open methodology, audit any store free.`;
+  const title = `Top ${top.length} Shopify Stores by AI Catalog Score — open methodology, public audit`;
+  const desc = `The ${top.length} highest-scoring Shopify catalogs by AI-readiness. ${meta.totalScanned} stores scanned; ${top[0]?.domain ?? '—'} leads at ${top[0]?.score ?? 0}/100. Open methodology, audit any store free.`;
   const canonical = 'https://aicatalogscore.com/leaderboard/catalog-score';
 
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'ItemList',
-    name: 'Top 100 Shopify Stores by AI Catalog Score',
+    name: `Top ${top.length} Shopify Stores by AI Catalog Score`,
     description: desc,
     url: canonical,
     numberOfItems: top.length,
@@ -325,7 +325,7 @@ ${shellHead(title, desc, canonical)}
 ${shellHeader()}
 <main class="container">
   <section class="hero">
-    <h1>Top 100 Shopify Stores by AI Catalog Score</h1>
+    <h1>Top ${top.length} Shopify Stores by AI Catalog Score</h1>
     <p class="sub">Highest AI-readiness scores from our public audit engine — derived from the brands most cited by AI agents, audited from their public Shopify catalogs (no install required).</p>
     <div class="stat-grid">
       <div class="stat"><b>${meta.totalScanned.toLocaleString('en')}</b><span>stores scanned</span></div>

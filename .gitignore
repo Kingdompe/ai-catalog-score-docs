@@ -2,3 +2,7 @@
 # compressed videos/hero.mp4 (~5MB) goes to the public repo.
 video/
 *.mp4.bak
+
+# Local script bootstrap — not needed at the deploy surface
+node_modules/
+package-lock.json

@@ -1,0 +1,328 @@
+{
+  "builtAt": "2026-05-20T15:15:53.225Z",
+  "totalScanned": 200,
+  "entries": [
+    {
+      "domain": "mattandnat.com",
+      "score": 75,
+      "productCount": 250,
+      "topIssue": "Description only N words — too short for AI matching, aim N+",
+      "aiMentions": 1590
+    },
+    {
+      "domain": "rothys.com",
+      "score": 73,
+      "productCount": 250,
+      "topIssue": "Title has no factual marker (material/spec/ingredient) — AI matches better with one",
+      "aiMentions": 2844
+    },
+    {
+      "domain": "gymshark.com",
+      "score": 72,
+      "productCount": 250,
+      "topIssue": "Product type \"...\" missing from title — AI agents use it for category matching",
+      "aiMentions": 1629
+    },
+    {
+      "domain": "decathlon.com",
+      "score": 70,
+      "productCount": 250,
+      "topIssue": "Description only N words — too short for AI matching, aim N+",
+      "aiMentions": 3536
+    },
+    {
+      "domain": "outdoorresearch.com",
+      "score": 67,
+      "productCount": 250,
+      "topIssue": "No bullet list in description — AI agents parse structured lists better than prose",
+      "aiMentions": 5520
+    },
+    {
+      "domain": "boody.com",
+      "score": 67,
+      "productCount": 250,
+      "topIssue": "Title has no factual marker (material/spec/ingredient) — AI matches better with one",
+      "aiMentions": 2249
+    },
+    {
+      "domain": "toms.com",
+      "score": 66,
+      "productCount": 250,
+      "topIssue": "No product_type field — AI agents use it for taxonomy mapping",
+      "aiMentions": 1889
+    },
+    {
+      "domain": "eddiebauer.com",
+      "score": 65,
+      "productCount": 250,
+      "topIssue": "Title has no factual marker (material/spec/ingredient) — AI matches better with one",
+      "aiMentions": 7502
+    },
+    {
+      "domain": "wearethought.com",
+      "score": 65,
+      "productCount": 250,
+      "topIssue": "No product_type field — AI agents use it for taxonomy mapping",
+      "aiMentions": 3172
+    },
+    {
+      "domain": "thursdayboots.com",
+      "score": 65,
+      "productCount": 250,
+      "topIssue": "Product type \"...\" missing from title — AI agents use it for category matching",
+      "aiMentions": 1976
+    },
+    {
+      "domain": "simmsfishing.com",
+      "score": 65,
+      "productCount": 250,
+      "topIssue": "Title has no factual marker (material/spec/ingredient) — AI matches better with one",
+      "aiMentions": 1627
+    },
+    {
+      "domain": "darntough.com",
+      "score": 64,
+      "productCount": 250,
+      "topIssue": "No bullet list in description — AI agents parse structured lists better than prose",
+      "aiMentions": 1836
+    },
+    {
+      "domain": "smartwool.com",
+      "score": 63,
+      "productCount": 250,
+      "topIssue": "No bullet list in description — AI agents parse structured lists better than prose",
+      "aiMentions": 6610
+    },
+    {
+      "domain": "keenfootwear.com",
+      "score": 63,
+      "productCount": 250,
+      "topIssue": "Product type \"...\" missing from title — AI agents use it for category matching",
+      "aiMentions": 2322
+    },
+    {
+      "domain": "beyondyoga.com",
+      "score": 63,
+      "productCount": 250,
+      "topIssue": "Description has no specific attributes (materials, dimensions, ingredients, certifications)",
+      "aiMentions": 2255
+    },
+    {
+      "domain": "eberjey.com",
+      "score": 63,
+      "productCount": 250,
+      "topIssue": "No bullet list in description — AI agents parse structured lists better than prose",
+      "aiMentions": 1632
+    },
+    {
+      "domain": "champion.com",
+      "score": 62,
+      "productCount": 250,
+      "topIssue": "No bullet list in description — AI agents parse structured lists better than prose",
+      "aiMentions": 2364
+    },
+    {
+      "domain": "kleankanteen.com",
+      "score": 62,
+      "productCount": 133,
+      "topIssue": "No bullet list in description — AI agents parse structured lists better than prose",
+      "aiMentions": 1619
+    },
+    {
+      "domain": "allbirds.com",
+      "score": 61,
+      "productCount": 250,
+      "topIssue": "Product type \"...\" missing from title — AI agents use it for category matching",
+      "aiMentions": 8892
+    },
+    {
+      "domain": "aloyoga.com",
+      "score": 61,
+      "productCount": 250,
+      "topIssue": "Product type \"...\" missing from title — AI agents use it for category matching",
+      "aiMentions": 6004
+    },
+    {
+      "domain": "everlane.com",
+      "score": 60,
+      "productCount": 250,
+      "topIssue": "No bullet list in description — AI agents parse structured lists better than prose",
+      "aiMentions": 13581
+    },
+    {
+      "domain": "reebok.com",
+      "score": 60,
+      "productCount": 250,
+      "topIssue": "Title has no factual marker (material/spec/ingredient) — AI matches better with one",
+      "aiMentions": 7590
+    },
+    {
+      "domain": "girlfriend.com",
+      "score": 60,
+      "productCount": 169,
+      "topIssue": "Description only N words — too short for AI matching, aim N+",
+      "aiMentions": 5342
+    },
+    {
+      "domain": "gaiam.com",
+      "score": 60,
+      "productCount": 151,
+      "topIssue": "Product type \"...\" missing from title — AI agents use it for category matching",
+      "aiMentions": 4249
+    },
+    {
+      "domain": "outerknown.com",
+      "score": 60,
+      "productCount": 250,
+      "topIssue": "Title has no factual marker (material/spec/ingredient) — AI matches better with one",
+      "aiMentions": 2990
+    },
+    {
+      "domain": "liforme.com",
+      "score": 60,
+      "productCount": 187,
+      "topIssue": "No bullet list in description — AI agents parse structured lists better than prose",
+      "aiMentions": 2095
+    },
+    {
+      "domain": "brooklinen.com",
+      "score": 59,
+      "productCount": 250,
+      "topIssue": "Title has no factual marker (material/spec/ingredient) — AI matches better with one",
+      "aiMentions": 1544
+    },
+    {
+      "domain": "manduka.com",
+      "score": 58,
+      "productCount": 103,
+      "topIssue": "No bullet list in description — AI agents parse structured lists better than prose",
+      "aiMentions": 5033
+    },
+    {
+      "domain": "ecoroots.us",
+      "score": 58,
+      "productCount": 170,
+      "topIssue": "No product_type field — AI agents use it for taxonomy mapping",
+      "aiMentions": 1424
+    },
+    {
+      "domain": "thetiebar.com",
+      "score": 57,
+      "productCount": 250,
+      "topIssue": "No bullet list in description — AI agents parse structured lists better than prose",
+      "aiMentions": 2351
+    },
+    {
+      "domain": "melissaanddoug.com",
+      "score": 57,
+      "productCount": 250,
+      "topIssue": "Title has no factual marker (material/spec/ingredient) — AI matches better with one",
+      "aiMentions": 1936
+    },
+    {
+      "domain": "parachutehome.com",
+      "score": 56,
+      "productCount": 250,
+      "topIssue": "Description only N words — too short for AI matching, aim N+",
+      "aiMentions": 1526
+    },
+    {
+      "domain": "ministryofsupply.com",
+      "score": 54,
+      "productCount": 250,
+      "topIssue": "Title has no factual marker (material/spec/ingredient) — AI matches better with one",
+      "aiMentions": 5078
+    },
+    {
+      "domain": "beeswrap.com",
+      "score": 54,
+      "productCount": 30,
+      "topIssue": "Title length N chars — aim N-N for AI matching",
+      "aiMentions": 1893
+    },
+    {
+      "domain": "woolandprince.com",
+      "score": 54,
+      "productCount": 175,
+      "topIssue": "Title length N chars — aim N-N for AI matching",
+      "aiMentions": 1408
+    },
+    {
+      "domain": "blackdiamondequipment.com",
+      "score": 53,
+      "productCount": 250,
+      "topIssue": "No bullet list in description — AI agents parse structured lists better than prose",
+      "aiMentions": 2932
+    },
+    {
+      "domain": "outdoorvoices.com",
+      "score": 52,
+      "productCount": 250,
+      "topIssue": "No bullet list in description — AI agents parse structured lists better than prose",
+      "aiMentions": 3805
+    },
+    {
+      "domain": "tentree.com",
+      "score": 51,
+      "productCount": 250,
+      "topIssue": "Product type \"...\" missing from title — AI agents use it for category matching",
+      "aiMentions": 5870
+    },
+    {
+      "domain": "organicbasics.com",
+      "score": 51,
+      "productCount": 250,
+      "topIssue": "Title has no factual marker (material/spec/ingredient) — AI matches better with one",
+      "aiMentions": 1663
+    },
+    {
+      "domain": "harney.com",
+      "score": 51,
+      "productCount": 250,
+      "topIssue": "Title has no factual marker (material/spec/ingredient) — AI matches better with one",
+      "aiMentions": 1470
+    },
+    {
+      "domain": "wyze.com",
+      "score": 50,
+      "productCount": 250,
+      "topIssue": "Title has no factual marker (material/spec/ingredient) — AI matches better with one",
+      "aiMentions": 1976
+    },
+    {
+      "domain": "counterculturecoffee.com",
+      "score": 49,
+      "productCount": 167,
+      "topIssue": "Title has no factual marker (material/spec/ingredient) — AI matches better with one",
+      "aiMentions": 1392
+    },
+    {
+      "domain": "plantoys.com",
+      "score": 48,
+      "productCount": 250,
+      "topIssue": "Title has no factual marker (material/spec/ingredient) — AI matches better with one",
+      "aiMentions": 1427
+    },
+    {
+      "domain": "blundstone.com",
+      "score": 47,
+      "productCount": 216,
+      "topIssue": "Product type \"...\" missing from title — AI agents use it for category matching",
+      "aiMentions": 1682
+    },
+    {
+      "domain": "peets.com",
+      "score": 41,
+      "productCount": 250,
+      "topIssue": "Description only N words — too short for AI matching, aim N+",
+      "aiMentions": 1650
+    },
+    {
+      "domain": "tatcha.com",
+      "score": 35,
+      "productCount": 131,
+      "topIssue": "Description only N words — too short for AI matching, aim N+",
+      "aiMentions": 1954
+    }
+  ]
+}
