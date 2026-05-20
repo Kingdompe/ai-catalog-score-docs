@@ -27,7 +27,7 @@ export interface PublicProduct {
   body_html: string;
   product_type: string;
   vendor: string;
-  tags: string;    // comma-separated
+  tags: string | string[];   // Admin API returns comma-separated; public products.json returns string[]
   images: Array<{ id: number; src: string; alt: string | null }>;
   variants: Array<{
     id: number;
@@ -47,10 +47,10 @@ export interface ProductAudit {
   handle: string;
   scoreTitle: number;     // /15
   scoreDesc: number;      // /20
-  scoreImages: number;    // /15
-  scoreVariants: number;  // /10
+  scoreImages: number;    // /8 (count only — alt text install-only)
+  scoreVariants: number;  // /8 (no barcode — install-only)
   scoreCategory: number;  // /10
-  scoreTotal: number;     // /70 raw, rescaled to /100 in UI
+  scoreTotal: number;     // /61 raw, rescaled to /100 in UI
   scorePct: number;       // 0-100 rescaled
   issues: string[];
 }
@@ -110,40 +110,40 @@ function scoreDescription(p: PublicProduct): { score: number; issues: string[] }
 }
 
 function scoreImages(p: PublicProduct): { score: number; issues: string[] } {
+  // NOTE: alt text is NOT exposed in public products.json — that signal
+  // is checked by the installed app only. Score is count-based here.
   const issues: string[] = [];
   let s = 0;
   const imgs = p.images || [];
-  if (imgs.length >= 3) s += 8;
-  else if (imgs.length >= 2) { s += 5; issues.push(`Only ${imgs.length} images — add 1-2 more angles for AI confidence`); }
-  else if (imgs.length >= 1) { s += 3; issues.push('Only 1 image — add at least 2 more angles for AI discovery'); }
+  if (imgs.length >= 5) s += 8;
+  else if (imgs.length >= 3) s += 6;
+  else if (imgs.length >= 2) { s += 4; issues.push(`Only ${imgs.length} images — add 1-2 more angles for AI confidence`); }
+  else if (imgs.length >= 1) { s += 2; issues.push('Only 1 image — add at least 2 more angles for AI discovery'); }
   else issues.push('No product images — AI agents need visuals to match queries');
-  const withAlt = imgs.filter(i => i.alt && i.alt.length > 5).length;
-  const ratio = imgs.length > 0 ? withAlt / imgs.length : 0;
-  if (ratio >= 0.8) s += 7;
-  else if (ratio >= 0.5) { s += 4; issues.push(`${imgs.length - withAlt} images missing alt text — AI uses alt to understand visuals`); }
-  else if (imgs.length > 0) { s += 1; issues.push(`${imgs.length - withAlt} of ${imgs.length} images lack alt text — major AI signal gap`); }
-  return { score: Math.min(s, 15), issues };
+  return { score: Math.min(s, 8), issues };
 }
 
 function scoreVariants(p: PublicProduct): { score: number; issues: string[] } {
+  // NOTE: barcode is NOT exposed in public products.json — that signal
+  // is checked by the installed app only.
   const issues: string[] = [];
   let s = 0;
   const variants = p.variants || [];
-  if (variants.length > 1) s += 3;
-  else if (variants.length === 1 && variants[0].option1 !== 'Default Title') s += 3;
+  if (variants.length > 1) s += 4;
+  else if (variants.length === 1 && variants[0].option1 !== 'Default Title') s += 4;
   else { issues.push('Only default variant — add size/color/style options if product has them'); }
   if (variants.length > 0 && variants.every(v => v.sku && v.sku.length > 0)) s += 3;
   else issues.push('Some variants missing SKU — AI agents use SKU for unique-product identification');
-  if (variants.some(v => v.barcode && v.barcode.length > 0)) s += 2;
-  else issues.push('No barcode on any variant — GTIN/ISBN/EAN strengthens AI matching');
-  if (variants.length > 0 && variants[0].option1 && variants[0].option1 !== 'Default Title') s += 2;
-  return { score: Math.min(s, 10), issues };
+  if (variants.length > 0 && variants[0].option1 && variants[0].option1 !== 'Default Title') s += 1;
+  return { score: Math.min(s, 8), issues };
 }
 
 function scoreCategoryTags(p: PublicProduct): { score: number; issues: string[] } {
   const issues: string[] = [];
   let s = 0;
-  const tags = (p.tags || '').split(',').map(t => t.trim()).filter(Boolean);
+  const tags = Array.isArray(p.tags)
+    ? p.tags.map(t => String(t).trim()).filter(Boolean)
+    : String(p.tags || '').split(',').map(t => t.trim()).filter(Boolean);
   if (p.product_type && p.product_type.length > 0) s += 4;
   else issues.push('No product_type field — AI agents use it for taxonomy mapping');
   if (tags.length >= 5) s += 4;
@@ -160,7 +160,7 @@ export function auditProduct(p: PublicProduct): ProductAudit {
   const v = scoreVariants(p);
   const c = scoreCategoryTags(p);
   const raw = t.score + d.score + i.score + v.score + c.score;
-  const MAX = 70;        // metafields + SEO + pricing inventory not auditable from products.json
+  const MAX = 61;        // metafields + SEO + alt text + barcode + pricing/inventory not in public products.json
   const pct = Math.round((raw / MAX) * 100);
   return {
     title: p.title,

@@ -159,7 +159,7 @@ footer a{color:#5a6577;text-decoration:none;margin:0 8px}
           <div class="bucket invisible"><b>${audit.invisible}</b>Invisible (&lt;50)</div>
         </div>
         <div class="partial">
-          <strong>Partial audit.</strong> Public scan covers 70 of 100 signals. Install the Shopify app to audit metafields, SEO meta, and inventory signals (the remaining 30 pts).
+          <strong>Partial audit.</strong> Public scan covers 61 of 100 signals. Install the Shopify app to audit metafields, SEO meta, image alt text, variant barcodes, and inventory (the remaining 39 pts).
         </div>
       </div>
     </div>
@@ -210,8 +210,8 @@ function renderProductCard(p: ProductAudit): string {
     <div class="breakdown">
       <span>Title ${p.scoreTitle}/15</span>
       <span>Desc ${p.scoreDesc}/20</span>
-      <span>Images ${p.scoreImages}/15</span>
-      <span>Variants ${p.scoreVariants}/10</span>
+      <span>Images ${p.scoreImages}/8</span>
+      <span>Variants ${p.scoreVariants}/8</span>
       <span>Category ${p.scoreCategory}/10</span>
     </div>
   </div>`;
