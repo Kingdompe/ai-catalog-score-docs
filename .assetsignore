@@ -1,0 +1,6 @@
+src/**
+*.md
+*.toml
+.github/**
+.gitignore
+.assetsignore

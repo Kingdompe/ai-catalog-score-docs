@@ -1,5 +1,7 @@
 name = "ai-catalog-score-docs"
 compatibility_date = "2026-05-06"
+main = "src/worker.ts"
 
 [assets]
 directory = "./"
+binding = "ASSETS"
