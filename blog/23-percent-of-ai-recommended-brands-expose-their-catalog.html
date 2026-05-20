@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>We Tried to Audit the 200 Brands AI Recommends Most. Only 23% Had a Public Catalog.</title>
+<meta name="description" content="We took the top 200 brands AI shopping agents recommend, pointed our public audit at each one, and got data back from 46. Here's what happened to the other 154 — and what it says about AI catalog visibility.">
+<link rel="canonical" href="https://aicatalogscore.com/blog/23-percent-of-ai-recommended-brands-expose-their-catalog">
+<meta property="og:title" content="We Tried to Audit the 200 Brands AI Recommends Most. Only 23% Had a Public Catalog.">
+<meta property="og:description" content="The closed-catalog problem in AI shopping: 75 returned 404, 34 returned 403, 20 served an auth wall. Why does this matter?">
+<meta property="og:url" content="https://aicatalogscore.com/blog/23-percent-of-ai-recommended-brands-expose-their-catalog">
+<meta property="og:type" content="article">
+<meta property="og:image" content="https://aicatalogscore.com/og-card.png">
+<meta property="article:published_time" content="2026-05-20T17:00:00Z">
+<meta property="article:author" content="AI Catalog Score">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="We Tried to Audit the 200 Brands AI Recommends Most. Only 23% Had a Public Catalog.">
+<meta name="twitter:description" content="What the other 77% looked like, and what it says about the AI shopping ecosystem.">
+<meta name="twitter:image" content="https://aicatalogscore.com/og-card.png">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<link rel="icon" type="image/png" href="/logo-acs-1200-light.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "We Tried to Audit the 200 Brands AI Recommends Most. Only 23% Had a Public Catalog.",
+  "description": "What the other 77% looked like, and what it says about the AI shopping ecosystem.",
+  "datePublished": "2026-05-20T17:00:00Z",
+  "dateModified": "2026-05-20T17:00:00Z",
+  "author": {"@type": "Organization", "name": "AI Catalog Score", "url": "https://aicatalogscore.com"},
+  "publisher": {"@type": "Organization", "name": "AI Catalog Score", "url": "https://aicatalogscore.com", "logo": {"@type": "ImageObject", "url": "https://aicatalogscore.com/logo-acs-1200-light.png"}},
+  "mainEntityOfPage": {"@type": "WebPage", "@id": "https://aicatalogscore.com/blog/23-percent-of-ai-recommended-brands-expose-their-catalog"},
+  "image": "https://aicatalogscore.com/og-card.png"
+}
+</script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;line-height:1.65;color:#0e1b2c;background:#fafaf7}
+.container{max-width:760px;margin:0 auto;padding:32px 20px}
+header{padding:16px 0;border-bottom:1px solid #e6e3da;background:#fff}
+header .container{padding:12px 20px;display:flex;align-items:center;justify-content:space-between;gap:16px;max-width:980px}
+.logo{font-weight:700;font-size:18px;text-decoration:none;color:#0e1b2c}
+.logo span{color:#00a86a}
+.nav-links{display:flex;gap:18px;font-size:14px}
+.nav-links a{color:#5a6577;text-decoration:none}
+.nav-links a:hover{color:#00a86a}
+.cta-top{padding:10px 18px;background:#00a86a;color:#fff;border-radius:8px;text-decoration:none;font-weight:600;font-size:14px}
+article{padding:40px 0 60px}
+.meta{color:#5a6577;font-size:13px;margin-bottom:16px;letter-spacing:0.02em;text-transform:uppercase}
+h1{font-size:34px;line-height:1.15;margin-bottom:20px;letter-spacing:-0.02em;font-weight:700}
+.lede{font-size:19px;color:#3a4555;margin-bottom:32px;line-height:1.55}
+article h2{font-size:24px;line-height:1.2;margin:40px 0 14px;font-weight:700;letter-spacing:-0.01em}
+article h3{font-size:19px;line-height:1.3;margin:28px 0 10px;font-weight:600}
+article p{margin-bottom:16px;font-size:16px}
+article ul, article ol{margin:0 0 16px 22px}
+article li{margin-bottom:6px}
+article a{color:#00a86a;text-decoration:underline;text-underline-offset:2px}
+article a:hover{color:#008f5b}
+article code{background:#f0ede4;padding:1px 6px;border-radius:4px;font-size:0.92em;font-family:"SF Mono",Menlo,Consolas,monospace}
+.callout{margin:24px 0;padding:18px 22px;background:#fff;border-left:3px solid #00a86a;border-radius:6px;font-size:15px}
+.breakdown-table{width:100%;border-collapse:collapse;margin:16px 0 24px;font-size:14px;background:#fff;border-radius:8px;overflow:hidden;border:1px solid #e6e3da}
+.breakdown-table th,.breakdown-table td{padding:10px 14px;text-align:left;border-bottom:1px solid #f0ede4}
+.breakdown-table th{background:#f5f3eb;font-weight:600;font-size:13px}
+.breakdown-table tr:last-child td{border-bottom:0}
+.breakdown-table td.num{text-align:right;font-variant-numeric:tabular-nums;font-weight:600}
+.breakdown-table td.pct{text-align:right;font-variant-numeric:tabular-nums;color:#5a6577}
+.bar{height:8px;background:#f0ede4;border-radius:4px;overflow:hidden;margin-top:6px}
+.bar-fill{height:100%;background:#00a86a;border-radius:4px}
+.stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:24px 0}
+.stat{background:#fff;border:1px solid #e6e3da;padding:18px;border-radius:10px;text-align:center}
+.stat b{display:block;font-size:28px;font-weight:700;color:#00a86a;margin-bottom:4px;letter-spacing:-0.01em}
+.stat span{font-size:12px;color:#5a6577}
+.cta-section{margin:48px 0 20px;padding:32px;background:linear-gradient(135deg,#0e1b2c,#1a2c45);color:#fff;border-radius:16px;text-align:center}
+.cta-section h2{color:#fff;font-size:24px;margin-bottom:8px;margin-top:0}
+.cta-section p{opacity:.85;margin-bottom:20px;color:#fff}
+.cta-section a{display:inline-block;padding:14px 28px;background:#00a86a;color:#fff;border-radius:10px;text-decoration:none;font-weight:600;margin:6px}
+.cta-section a.ghost{background:transparent;border:1px solid rgba(255,255,255,0.3)}
+footer{padding:24px 0;border-top:1px solid #e6e3da;text-align:center;color:#7a8295;font-size:13px}
+footer a{color:#5a6577;text-decoration:none;margin:0 8px}
+@media (max-width:640px){h1{font-size:26px}article h2{font-size:21px}.stat-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header>
+  <div class="container">
+    <a class="logo" href="/">AI Catalog<span> Score</span></a>
+    <div class="nav-links">
+      <a href="/audit">Free audit</a>
+      <a href="/leaderboard/">Leaderboard</a>
+      <a href="/blog/">Blog</a>
+      <a class="cta-top" href="/#install">Install on Shopify →</a>
+    </div>
+  </div>
+</header>
+
+<article class="container">
+  <div class="meta">DATA · 6 min read · 20 May 2026</div>
+  <h1>We tried to audit the 200 brands AI recommends most. Only 23% had a public catalog we could read.</h1>
+  <p class="lede">We pulled the top 200 brands AI shopping agents (ChatGPT, Claude, Gemini, Perplexity, Mistral, DeepSeek) recommend most often. We then pointed our public audit at each — the same audit anyone can run for free at <a href="/audit">aicatalogscore.com/audit</a>. Forty-six brands returned a usable catalog. The other 154 — 77% — gave us something else.</p>
+
+  <div class="stat-grid">
+    <div class="stat"><b>200</b><span>brands probed</span></div>
+    <div class="stat"><b>46</b><span>open catalogs (23%)</span></div>
+    <div class="stat"><b>154</b><span>closed / blocked / not Shopify (77%)</span></div>
+  </div>
+
+  <h2>The experiment</h2>
+  <p>The top-mentioned brands are taken from our open AI agent captures dataset — 342k+ ground-truth captures (released under MIT at <a href="https://github.com/commerce-agentic/ai-visibility-metrics">commerce-agentic/ai-visibility-metrics</a>). For each brand domain, we tried to fetch the standard Shopify public catalog endpoint:</p>
+  <pre style="background:#0e1b2c;color:#9be8d6;padding:14px 18px;border-radius:8px;font-size:13px;overflow-x:auto;margin:16px 0"><code>GET https://{brand}.com/products.json?limit=1</code></pre>
+  <p>Shopify exposes this endpoint by default on every store, no auth required. It's how shopping comparison sites, scrapers, and audit tools (including ours) read public catalog data. It's also the endpoint any AI agent could call to verify a recommendation.</p>
+  <p>Forty-six brands answered. The rest didn't.</p>
+
+  <h2>What the 154 failures looked like</h2>
+
+  <table class="breakdown-table">
+    <thead><tr><th>Outcome</th><th>Count</th><th>Share</th><th>What it means</th></tr></thead>
+    <tbody>
+      <tr><td><b>200 OK</b> · valid catalog</td><td class="num">46</td><td class="pct">23%</td><td>Public products.json returns real product data</td></tr>
+      <tr><td><b>404</b> Not Found</td><td class="num">75</td><td class="pct">37.5%</td><td>Brand isn't on Shopify, OR the public feed is disabled</td></tr>
+      <tr><td><b>403</b> Forbidden</td><td class="num">34</td><td class="pct">17%</td><td>On Shopify but bot/scraper blocking is enabled</td></tr>
+      <tr><td><b>HTML</b> instead of JSON</td><td class="num">20</td><td class="pct">10%</td><td>Auth wall or different platform serves a landing page</td></tr>
+      <tr><td>Timeout / abort</td><td class="num">13</td><td class="pct">6.5%</td><td>Site too slow or rate-limit aborted us</td></tr>
+      <tr><td>Other (410, 451, errors)</td><td class="num">12</td><td class="pct">6%</td><td>Gone, geo-blocked, or upstream errors</td></tr>
+    </tbody>
+  </table>
+
+  <p>Concrete examples in each bucket:</p>
+  <ul>
+    <li><strong>23% open</strong> — Everlane, Allbirds, Reebok, Eddie Bauer, Smartwool, Alo Yoga, Tentree, Outdoor Research, Girlfriend Collective. Many of these are DTC-native Shopify brands without aggressive scraper protection.</li>
+    <li><strong>37.5% returning 404</strong> — Target, Walmart, Amazon, Columbia, Nike, Under Armour, Nordstrom, L.L. Bean. Most of these are not on Shopify at all; they run on Salesforce, custom stacks, or marketplace platforms. Their /products.json doesn't exist by default.</li>
+    <li><strong>17% returning 403</strong> — REI, Adidas, The North Face, Sephora, New Balance, Brooks Running, Zara, Carhartt. These are mostly on Shopify Plus (or comparable enterprise platforms) and have explicit bot/scraper blocking enabled. The endpoint exists; we're just not allowed to read it.</li>
+    <li><strong>10% serving HTML</strong> — Patagonia, Gap, Dr. Martens, Backcountry, Logitech. The URL returns an HTML page instead of JSON — either a different platform, a redirect, or a "membership-required" wall.</li>
+  </ul>
+
+  <h2>What this means</h2>
+
+  <h3>1. AI agents see what audit tools can't</h3>
+  <p>The single most interesting implication: <strong>the brands AI agents recommend most are largely brands you can't easily verify externally</strong>. Adidas, Sephora, Patagonia, REI — all heavily blocked, all heavily recommended. AI agents got their catalog data from somewhere (training corpora, commerce partnerships, first-party integrations like the OpenAI / Shopify deal), but a third-party auditor doesn't have the same access.</p>
+  <p>This creates a two-tier ecosystem:</p>
+  <ul>
+    <li><strong>Open-catalog brands</strong> (the 23%) can be audited, benchmarked, and optimized by any third-party tool — including ours.</li>
+    <li><strong>Closed-catalog brands</strong> (the 77%) can only be audited by tools the merchant installs themselves — which is exactly the install-based path our Shopify app takes.</li>
+  </ul>
+
+  <h3>2. "Public catalog audit" is a self-selecting sample</h3>
+  <p>Every benchmark, ranking, or "state of e-commerce" study built on public catalog data is, inevitably, a study of brands that chose to leave their data accessible. That's not the full population. Our quarterly <a href="/blog/state-of-ai-commerce-q2-2026">State of AI Commerce report</a> is honest about this — the brand ranking is from the captures dataset (what AI cites), but the audit-score leaderboard is from public catalogs only.</p>
+
+  <h3>3. The audit market is bifurcated</h3>
+  <p>The 23% open / 77% closed split predicts the structure of the AI catalog optimization market:</p>
+  <ul>
+    <li>For open-catalog brands, there's room for free / freemium tools (like our public audit) that work without install — high reach, low conversion.</li>
+    <li>For closed-catalog brands, the only viable path is install-based optimization — lower reach, higher conversion, and the only place real optimization (writing fixes back to the store) happens anyway.</li>
+  </ul>
+  <p>Anyone trying to build "an AI catalog SaaS" without an install path is, definitionally, locked out of the most-recommended brands. We learned this the hard way and pivoted to install-first early.</p>
+
+  <h3>4. If you're a merchant reading this</h3>
+  <p>Two questions worth asking:</p>
+  <ul>
+    <li><strong>Did you intentionally block your <code>/products.json</code>?</strong> Many merchants do via Shopify Plus / Cloudflare scraper rules. The cost is real: every third-party tool that could surface your brand (price comparison, audit, AI training scrapes that complement first-party integrations) is locked out. The benefit is real too — you control who can build on your catalog. There's no universally right answer, but the trade-off should be deliberate.</li>
+    <li><strong>If your catalog <em>is</em> open, is it actually optimized?</strong> The same tools AI agents would use to verify you are the tools we audit with. Run a <a href="/audit">free audit</a> and see what they see.</li>
+  </ul>
+
+  <div class="callout">
+    <strong>Methodology + data.</strong> All numbers reproducible from our open dataset and audit engine. Raw breakdown JSON: <a href="/public-data/catalog-openness-breakdown.json">/public-data/catalog-openness-breakdown.json</a>. Rubric: <a href="https://github.com/commerce-agentic/agentic-catalog-scanner">commerce-agentic/agentic-catalog-scanner</a> (CC0).
+  </div>
+
+  <div class="cta-section">
+    <h2>Run your own audit</h2>
+    <p>Free, no install, no signup. Whatever AI agents would see in your public catalog.</p>
+    <a href="/audit">Audit a store →</a>
+    <a href="/leaderboard/" class="ghost">Leaderboard</a>
+  </div>
+</article>
+
+<footer>
+  <a href="/">Home</a> ·
+  <a href="/audit">Free audit</a> ·
+  <a href="/leaderboard/">Leaderboard</a> ·
+  <a href="/blog/">Blog</a> ·
+  <a href="https://github.com/commerce-agentic">Open source</a> ·
+  <a href="/privacy.html">Privacy</a>
+</footer>
+</body>
+</html>
