@@ -1,8 +1,8 @@
 {
-  "captures_total": 342407,
-  "captures_per_day": 48753,
+  "captures_total": 368260,
+  "captures_per_day": 50723,
   "agents_count": 6,
-  "stores_benchmarked": 304,
+  "brands_tracked": 12700,
   "spec_version": "1.0",
-  "updated_at": "2026-05-20T16:53:54.185Z"
+  "updated_at": "2026-05-20T19:27:02.718Z"
 }
