@@ -11,6 +11,13 @@
 
 import { auditStore, type PublicProduct } from './audit';
 import { renderAudit, renderError, renderForm } from './render';
+import {
+  fetchInsights,
+  renderAiMentionsLeaderboard,
+  renderCatalogScoreLeaderboard,
+  renderLeaderboardIndex,
+  type CatalogScoreEntry,
+} from './leaderboard';
 
 interface Env {
   ASSETS: { fetch: (request: Request) => Promise<Response> };
@@ -139,9 +146,74 @@ export default {
         const format: 'html' | 'json' = (shopMatch[2] === '.json' || url.searchParams.get('format') === 'json') ? 'json' : 'html';
         return handleAuditShop(decodeURIComponent(shopMatch[1]), format);
       }
+
+      if (path === '/leaderboard' || path === '/leaderboard/') {
+        return handleLeaderboardIndex();
+      }
+      if (path === '/leaderboard/ai-mentions' || path === '/leaderboard/ai-mentions/') {
+        return handleAiMentions();
+      }
+      if (path === '/leaderboard/catalog-score' || path === '/leaderboard/catalog-score/') {
+        return handleCatalogScore(env);
+      }
     }
 
     // Everything else → static assets (index.html, og-card.png, privacy.html, …)
     return env.ASSETS.fetch(request);
   },
 };
+
+async function handleLeaderboardIndex(): Promise<Response> {
+  const insights = await fetchInsights();
+  return new Response(renderLeaderboardIndex(insights), {
+    status: 200,
+    headers: {
+      'Content-Type': 'text/html; charset=utf-8',
+      'Cache-Control': 'public, max-age=600, s-maxage=3600',
+      'X-Robots-Tag': 'index,follow',
+    },
+  });
+}
+
+async function handleAiMentions(): Promise<Response> {
+  const insights = await fetchInsights();
+  if (!insights) {
+    return new Response('Leaderboard data unavailable. Try again in a few minutes.', {
+      status: 503,
+      headers: { 'Content-Type': 'text/plain; charset=utf-8', 'Retry-After': '300' },
+    });
+  }
+  return new Response(renderAiMentionsLeaderboard(insights), {
+    status: 200,
+    headers: {
+      'Content-Type': 'text/html; charset=utf-8',
+      'Cache-Control': 'public, max-age=600, s-maxage=3600',
+      'X-Robots-Tag': 'index,follow',
+    },
+  });
+}
+
+async function handleCatalogScore(env: Env): Promise<Response> {
+  // Pre-built leaderboard data ships as a static asset. The build script
+  // (scripts/build-leaderboard.ts) refreshes it nightly via GitHub Action.
+  const dataReq = new Request('https://placeholder/public-data/catalog-score-leaderboard.json');
+  const dataRes = await env.ASSETS.fetch(dataReq);
+  if (!dataRes.ok) {
+    return new Response('Catalog-score leaderboard data not built yet. Run scripts/build-leaderboard.ts.', {
+      status: 503,
+      headers: { 'Content-Type': 'text/plain; charset=utf-8' },
+    });
+  }
+  const data = await dataRes.json() as { builtAt: string; totalScanned: number; entries: CatalogScoreEntry[] };
+  return new Response(
+    renderCatalogScoreLeaderboard(data.entries, { totalScanned: data.totalScanned, auditedAt: data.builtAt }),
+    {
+      status: 200,
+      headers: {
+        'Content-Type': 'text/html; charset=utf-8',
+        'Cache-Control': 'public, max-age=600, s-maxage=3600',
+        'X-Robots-Tag': 'index,follow',
+      },
+    },
+  );
+}
