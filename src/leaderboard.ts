@@ -373,9 +373,11 @@ ${shellFooter()}
 
 export async function fetchInsights(): Promise<Insights | null> {
   try {
+    // Cache successful responses 1h at the edge but never cache failures —
+    // otherwise a transient upstream 404/503 sticks around for an hour.
     const res = await fetch(INSIGHTS_URL, {
       headers: { 'Accept': 'application/json' },
-      cf: { cacheTtl: 3600, cacheEverything: true },
+      cf: { cacheTtlByStatus: { '200-299': 3600, '404': 0, '500-599': 0 } },
     } as RequestInit);
     if (!res.ok) return null;
     return await res.json() as Insights;
