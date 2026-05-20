@@ -1,0 +1,37 @@
+# AI Catalog Score — robots.txt
+# Marketing site at aicatalogscore.com. The Shopify app itself is at
+# shopify-app-production-7e58.up.railway.app and explicitly excluded
+# from crawl (Shopify admin chrome, not for indexing).
+
+User-agent: *
+Allow: /
+Disallow: /screenshots/
+
+Sitemap: https://aicatalogscore.com/sitemap.xml
+
+# AI shopping agents — explicit allowlist. We WANT these crawlers
+# reading the marketing site so the product surfaces in their
+# answers when merchants ask "best AI catalog optimization app".
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: GPTBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: Bytespider
+Allow: /
