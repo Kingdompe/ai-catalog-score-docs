@@ -53,9 +53,17 @@ async function fetchProductsJson(shop: string): Promise<PublicProduct[]> {
   }
 }
 
-async function handleAuditShop(shop: string): Promise<Response> {
+async function handleAuditShop(shop: string, format: 'html' | 'json'): Promise<Response> {
+  const jsonHeaders = {
+    'Content-Type': 'application/json; charset=utf-8',
+    'Access-Control-Allow-Origin': '*',
+    'Cache-Control': 'public, max-age=300, s-maxage=3600',
+  };
   const normalized = normalizeShop(shop);
   if (!normalized) {
+    if (format === 'json') {
+      return new Response(JSON.stringify({ error: "That URL doesn't look like a Shopify store.", shop }), { status: 400, headers: jsonHeaders });
+    }
     return new Response(renderError(shop, "That URL doesn't look like a Shopify store."), {
       status: 400,
       headers: { 'Content-Type': 'text/html; charset=utf-8' },
@@ -64,12 +72,18 @@ async function handleAuditShop(shop: string): Promise<Response> {
   try {
     const products = await fetchProductsJson(normalized);
     if (products.length === 0) {
+      if (format === 'json') {
+        return new Response(JSON.stringify({ error: 'The store has no public products.', shop: normalized }), { status: 404, headers: jsonHeaders });
+      }
       return new Response(renderError(normalized, 'The store has no public products.'), {
         status: 404,
         headers: { 'Content-Type': 'text/html; charset=utf-8' },
       });
     }
     const audit = auditStore(normalized, products);
+    if (format === 'json') {
+      return new Response(JSON.stringify(audit), { status: 200, headers: jsonHeaders });
+    }
     return new Response(renderAudit(audit), {
       status: 200,
       headers: {
@@ -80,6 +94,9 @@ async function handleAuditShop(shop: string): Promise<Response> {
     });
   } catch (err) {
     const message = err instanceof Error ? err.message : 'Unknown error fetching the public feed';
+    if (format === 'json') {
+      return new Response(JSON.stringify({ error: message, shop: normalized }), { status: 502, headers: jsonHeaders });
+    }
     return new Response(renderError(normalized, message), {
       status: 502,
       headers: { 'Content-Type': 'text/html; charset=utf-8' },
@@ -117,9 +134,10 @@ export default {
       if (path === '/audit' || path === '/audit/') {
         return handleAuditForm(url);
       }
-      const shopMatch = path.match(/^\/audit\/([^/]+)\/?$/);
+      const shopMatch = path.match(/^\/audit\/([^/]+?)(\.json)?\/?$/);
       if (shopMatch) {
-        return handleAuditShop(decodeURIComponent(shopMatch[1]));
+        const format: 'html' | 'json' = (shopMatch[2] === '.json' || url.searchParams.get('format') === 'json') ? 'json' : 'html';
+        return handleAuditShop(decodeURIComponent(shopMatch[1]), format);
       }
     }
 
