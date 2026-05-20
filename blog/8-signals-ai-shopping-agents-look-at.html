@@ -1,0 +1,280 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The 8 Signals AI Shopping Agents Actually Look At (and How Shopify Stores Score on Each)</title>
+<meta name="description" content="ChatGPT, Claude, and Perplexity decide which Shopify products to recommend using 8 specific signals. We measured 342,000+ AI agent captures to find which ones move the needle — and which ones merchants get wrong most often.">
+<link rel="canonical" href="https://aicatalogscore.com/blog/8-signals-ai-shopping-agents-look-at.html">
+<meta property="og:title" content="The 8 Signals AI Shopping Agents Actually Look At">
+<meta property="og:description" content="Based on 342,000+ AI agent captures across ChatGPT, Claude, Perplexity, Gemini, Mistral and DeepSeek. The full rubric, the weighting, and the failure modes — open source.">
+<meta property="og:url" content="https://aicatalogscore.com/blog/8-signals-ai-shopping-agents-look-at.html">
+<meta property="og:type" content="article">
+<meta property="og:image" content="https://aicatalogscore.com/og-card.png">
+<meta property="article:published_time" content="2026-05-20T14:00:00Z">
+<meta property="article:author" content="AI Catalog Score">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="The 8 Signals AI Shopping Agents Actually Look At">
+<meta name="twitter:description" content="ChatGPT, Claude, Perplexity decide which Shopify products to recommend using 8 specific signals. Here's the open methodology and 342k+ ground-truth captures behind it.">
+<meta name="twitter:image" content="https://aicatalogscore.com/og-card.png">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<link rel="icon" type="image/png" href="/logo-acs-1200-light.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "The 8 Signals AI Shopping Agents Actually Look At",
+  "description": "Open methodology for AI-readiness of Shopify catalogs, calibrated on 342k+ ground-truth captures across 6 agents.",
+  "datePublished": "2026-05-20T14:00:00Z",
+  "dateModified": "2026-05-20T14:00:00Z",
+  "author": {"@type": "Organization", "name": "AI Catalog Score", "url": "https://aicatalogscore.com"},
+  "publisher": {"@type": "Organization", "name": "AI Catalog Score", "url": "https://aicatalogscore.com", "logo": {"@type": "ImageObject", "url": "https://aicatalogscore.com/logo-acs-1200-light.png"}},
+  "mainEntityOfPage": {"@type": "WebPage", "@id": "https://aicatalogscore.com/blog/8-signals-ai-shopping-agents-look-at.html"},
+  "image": "https://aicatalogscore.com/og-card.png"
+}
+</script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;line-height:1.65;color:#0e1b2c;background:#fafaf7}
+.container{max-width:760px;margin:0 auto;padding:32px 20px}
+header{padding:16px 0;border-bottom:1px solid #e6e3da;background:#fff}
+header .container{padding:12px 20px;display:flex;align-items:center;justify-content:space-between;gap:16px;max-width:980px}
+.logo{font-weight:700;font-size:18px;text-decoration:none;color:#0e1b2c}
+.logo span{color:#00a86a}
+.nav-links{display:flex;gap:18px;font-size:14px}
+.nav-links a{color:#5a6577;text-decoration:none}
+.nav-links a:hover{color:#00a86a}
+.cta-top{padding:10px 18px;background:#00a86a;color:#fff;border-radius:8px;text-decoration:none;font-weight:600;font-size:14px}
+.cta-top:hover{background:#008f5b}
+article{padding:40px 0 60px}
+.meta{color:#5a6577;font-size:13px;margin-bottom:16px;letter-spacing:0.02em;text-transform:uppercase}
+h1{font-size:36px;line-height:1.15;margin-bottom:20px;letter-spacing:-0.02em;font-weight:700}
+.lede{font-size:19px;color:#3a4555;margin-bottom:32px;line-height:1.55}
+article h2{font-size:24px;line-height:1.2;margin:40px 0 14px;font-weight:700;letter-spacing:-0.01em}
+article h3{font-size:18px;line-height:1.3;margin:28px 0 10px;font-weight:600}
+article p{margin-bottom:16px;font-size:16px}
+article ul, article ol{margin:0 0 16px 22px}
+article li{margin-bottom:6px}
+article a{color:#00a86a;text-decoration:underline;text-underline-offset:2px}
+article a:hover{color:#008f5b}
+article code{background:#f0ede4;padding:1px 6px;border-radius:4px;font-size:0.92em;font-family:"SF Mono",Menlo,Consolas,monospace}
+.callout{margin:24px 0;padding:18px 22px;background:#fff;border-left:3px solid #00a86a;border-radius:6px;font-size:15px}
+.callout strong{color:#0e1b2c}
+.callout-data{background:#fff7e0;border-left-color:#f4b400}
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:24px 0}
+.stat{background:#fff;border:1px solid #e6e3da;padding:16px;border-radius:10px;text-align:center}
+.stat b{display:block;font-size:24px;font-weight:700;color:#00a86a;margin-bottom:4px;letter-spacing:-0.01em}
+.stat span{font-size:12px;color:#5a6577}
+table{width:100%;border-collapse:collapse;margin:16px 0 24px;font-size:14px;background:#fff;border-radius:8px;overflow:hidden;border:1px solid #e6e3da}
+table th,table td{padding:10px 14px;text-align:left;border-bottom:1px solid #f0ede4}
+table th{background:#f5f3eb;font-weight:600;font-size:13px;color:#0e1b2c}
+table tr:last-child td{border-bottom:0}
+.signal-card{margin:32px 0;padding:24px 26px;background:#fff;border:1px solid #e6e3da;border-radius:12px}
+.signal-card .badge{display:inline-block;padding:3px 10px;background:#00a86a;color:#fff;border-radius:999px;font-size:12px;font-weight:600;margin-bottom:10px;letter-spacing:0.02em}
+.signal-card h3{margin-top:0;font-size:20px}
+.cta-section{margin:48px 0 20px;padding:32px;background:linear-gradient(135deg,#0e1b2c,#1a2c45);color:#fff;border-radius:16px;text-align:center}
+.cta-section h2{color:#fff;font-size:24px;margin-bottom:8px}
+.cta-section p{opacity:.85;margin-bottom:20px;color:#fff}
+.cta-section a{display:inline-block;padding:14px 28px;background:#00a86a;color:#fff;border-radius:10px;text-decoration:none;font-weight:600;font-size:16px;margin:6px}
+.cta-section a:hover{background:#00bf78}
+.cta-section a.ghost{background:transparent;border:1px solid rgba(255,255,255,0.3)}
+.cta-section a.ghost:hover{background:rgba(255,255,255,0.1)}
+.cta-section .small{margin-top:12px;font-size:13px;opacity:.7}
+footer{padding:24px 0;border-top:1px solid #e6e3da;text-align:center;color:#7a8295;font-size:13px}
+footer a{color:#5a6577;text-decoration:none;margin:0 8px}
+@media (max-width:640px){
+  h1{font-size:28px}
+  article h2{font-size:21px}
+  .stat-grid{grid-template-columns:repeat(2,1fr)}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="container">
+    <a class="logo" href="/">AI Catalog<span> Score</span></a>
+    <div class="nav-links">
+      <a href="/audit">Free audit</a>
+      <a href="https://github.com/commerce-agentic">Open source</a>
+      <a class="cta-top" href="/#install">Install on Shopify →</a>
+    </div>
+  </div>
+</header>
+
+<article class="container">
+  <div class="meta">Methodology · 8 min read · Updated 20 May 2026</div>
+  <h1>The 8 Signals AI Shopping Agents Actually Look At</h1>
+  <p class="lede">When a shopper asks ChatGPT, Claude, or Perplexity "what's a good waterproof running jacket under $200?", the LLM doesn't search the way Google does. It reads structured product data, scores it against the query, and recommends two or three items. After capturing 342,407 of those recommendations across six AI agents, we know which signals move the needle — and which ones most Shopify stores get wrong.</p>
+
+  <div class="stat-grid">
+    <div class="stat"><b>342,407</b><span>captures observed</span></div>
+    <div class="stat"><b>48,753</b><span>captures / day</span></div>
+    <div class="stat"><b>6</b><span>agents tracked</span></div>
+    <div class="stat"><b>304</b><span>stores benchmarked</span></div>
+  </div>
+
+  <p>The dataset spans ChatGPT, Claude, Gemini, Perplexity, Mistral and DeepSeek, observed across five verticals (apparel, beauty, home, food, electronics). Stats are refreshed hourly from <a href="https://aicatalogscore.com">aicatalogscore.com</a>; the full rubric and dataset README are open at <a href="https://github.com/commerce-agentic">github.com/commerce-agentic</a> (CC0 + MIT).</p>
+
+  <h2>How AI shopping agents actually read your catalog</h2>
+  <p>Most merchants assume LLMs are searching their store the way Google does — crawling pages, indexing keywords, ranking by relevance. They're not. Modern shopping agents have two acquisition paths:</p>
+  <ol>
+    <li><strong>Tool-use over structured product data</strong> — the agent calls a retrieval function that returns JSON shaped roughly like a Shopify product (title, description, variants, metafields). The agent never sees your HTML.</li>
+    <li><strong>RAG over scraped product pages</strong> — the agent's training set or live retrieval includes your product pages, chunked into embeddings. Here the agent reads what's on the page, but heavily favors <em>structured</em> blocks (lists, tables, headings) over prose.</li>
+  </ol>
+  <p>Either way, the structure of your data matters more than the prose around it. A 600-word marketing description with no bullet points loses to a 200-word description with three bullets and a spec table — every single time, in every single agent we measured.</p>
+
+  <div class="callout">
+    <strong>The mental model:</strong> stop optimizing for human shoppers reading product pages. Optimize for a robot reading a JSON blob that <em>summarizes</em> the page. Everything below derives from that shift.
+  </div>
+
+  <h2>The 8 signals, ranked by weight</h2>
+  <p>Our rubric assigns 100 points across eight dimensions. The weighting reflects how much each signal moves AI agent behavior in the dataset, not how easy it is to fix.</p>
+
+  <table>
+    <thead><tr><th>#</th><th>Signal</th><th>Weight</th><th>Most-common failure</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>Title quality</td><td>15</td><td>Missing product-type noun</td></tr>
+      <tr><td>2</td><td>Description</td><td>20</td><td>No bullets, no factual markers</td></tr>
+      <tr><td>3</td><td>Images & alt text</td><td>15</td><td>≥50% of images have empty alt</td></tr>
+      <tr><td>4</td><td>Variant structure</td><td>10</td><td>No barcode, no semantic option names</td></tr>
+      <tr><td>5</td><td>Metafields</td><td>15</td><td>Zero AI-relevant metafields</td></tr>
+      <tr><td>6</td><td>Category & tags</td><td>10</td><td>Shopify Standard Taxonomy not set</td></tr>
+      <tr><td>7</td><td>SEO meta</td><td>10</td><td>seo.title identical to product title</td></tr>
+      <tr><td>8</td><td>Pricing & inventory</td><td>5</td><td>compareAtPrice missing</td></tr>
+    </tbody>
+  </table>
+
+  <p>The remaining −10 is a penalty applied to any product with zero AI-relevant metafields. We'll get to that at the end — it's the single most impactful lever in the rubric.</p>
+
+  <div class="signal-card">
+    <div class="badge">SIGNAL 1 · 15 pts</div>
+    <h3>Title quality — get the product-type noun into the first 80 characters</h3>
+    <p>Agents lean on the title to decide whether your product is a candidate at all. Six criteria, weighted by what we saw in the captures:</p>
+    <ul>
+      <li>Length 30-80 chars (4 pts) — under 30 chars carries no information; over 80 gets truncated in most agent UIs.</li>
+      <li>Word count ≥ 5 (2 pts) — single-word titles like "Hoodie" are filtered out as ambiguous.</li>
+      <li>Contains the product-type noun (3 pts) — matches your <code>productType</code> field, or a vertical-specific spec pattern.</li>
+      <li>Contains a distinctive attribute (3 pts) — material, color, ingredient, or use case. The thing that disambiguates this product from a thousand others.</li>
+      <li>Not ALL CAPS (2 pts) — agents treat all-caps as low-quality marketing.</li>
+      <li>No fluff superlatives (1 pt) — "premium", "amazing", "best" — these get downweighted as untrusted brand-self-claims.</li>
+    </ul>
+    <p><strong>The fix:</strong> rewrite each title to <code>{Product Type} · {Material/Spec} · {Use-Case}</code>. For example, <code>Performance Hoodie</code> → <code>Men's Performance Hoodie · Recycled Polyester · Training</code>.</p>
+  </div>
+
+  <div class="signal-card">
+    <div class="badge">SIGNAL 2 · 20 pts</div>
+    <h3>Description — 150+ words, structured, with factual markers</h3>
+    <p>The highest-weighted signal, and the one most merchants under-invest in. Agents parse descriptions hierarchically: they scan for bullet lists and subheadings first, then for factual claims (numbers, units, ingredients), then for use-case language.</p>
+    <ul>
+      <li>Word count ≥ 150 (4 pts) — gives the agent enough context to pick this product over competitors.</li>
+      <li>At least one bulleted list (3 pts) — LLMs parse <code>&lt;ul&gt;&lt;li&gt;</code> better than prose.</li>
+      <li>At least one <code>&lt;h3&gt;</code> subheading (2 pts) — semantic anchors help agents chunk content.</li>
+      <li>≥ 3 factual markers (4 pts) — units (mL, oz, cm), percentages, ingredients, materials, certifications.</li>
+      <li>≥ 2 use-case mentions (2 pts) — "ideal for X", "wear during Y", "works with Z".</li>
+      <li>≥ 1 spec list with recognized labels (2 pts) — "Material:", "Size:", "Care:", "Ingredients:" — these get extracted as structured data.</li>
+      <li>Zero fluff terms (3 pts) — same penalty as titles: "premium", "luxury", "high-quality" hurt more than they help.</li>
+    </ul>
+    <p><strong>The fix:</strong> open the description with a one-paragraph hook, then a bulleted spec list, then a use-case paragraph. Cut every adjective that doesn't carry information.</p>
+  </div>
+
+  <div class="signal-card">
+    <div class="badge">SIGNAL 3 · 15 pts</div>
+    <h3>Images & alt text — the alt is what the agent actually reads</h3>
+    <p>Image-based shopping agents (ChatGPT vision, Claude vision) don't reliably interpret your hero shots. They fall back to alt text. Stores that treat alt text as an accessibility checkbox leave a 7-point hole in every product.</p>
+    <ul>
+      <li>Image count ≥ 3 (8 pts) — multiple angles let the agent verify the product matches the query.</li>
+      <li>Alt text coverage ≥ 80% (7 pts) — among image media, with <code>alt.length &gt; 5</code> to filter "image1.jpg" placeholders.</li>
+    </ul>
+    <p><strong>The fix:</strong> write alt text that describes the product, not the photo. <code>Hoodie front view</code> is useless. <code>Men's recycled polyester training hoodie in black with kangaroo pocket</code> tells the agent everything it needs.</p>
+  </div>
+
+  <div class="signal-card">
+    <div class="badge">SIGNAL 4 · 10 pts</div>
+    <h3>Variant structure — barcodes are the AI version of GTINs</h3>
+    <p>Variants are how agents understand "the same product in a different size or color". When you only have a Default variant, the agent treats your product as one of many indistinct hoodies; when you have proper variants with named options and SKUs, it can match queries like "blue hoodie XL" directly.</p>
+    <ul>
+      <li>Multiple variants, not just default (3 pts) — even one extra variant flips this flag.</li>
+      <li>Every variant has a SKU (3 pts) — agents use SKU for unique-product identification.</li>
+      <li>At least one variant has a barcode (2 pts) — ISBN, GTIN, EAN — strengthens cross-store matching.</li>
+      <li>Variant options use semantic names (2 pts) — <code>Size</code> and <code>Color</code> beat <code>Option1</code>.</li>
+    </ul>
+  </div>
+
+  <div class="signal-card">
+    <div class="badge">SIGNAL 5 · 15 pts · HIGHEST LEVERAGE</div>
+    <h3>Metafields — the highest-leverage dimension in the entire rubric</h3>
+    <p>If you fix one thing, fix this. AI agents lean on metafields more than any other signal because metafields are <em>structured by design</em> — they're already in the shape the agent wants. Our rubric is vertical-aware: a beauty product needs <code>key_ingredient</code>, a food product needs <code>ingredients</code>, an apparel product needs <code>material</code>.</p>
+    <ul>
+      <li>Google Product Category set (5 pts) — maps your product to a standard taxonomy agents already know.</li>
+      <li>"Material bucket" metafield set (3 pts) — vertical-specific key (material / key_ingredient / fabric / composition).</li>
+      <li>"Dimensions bucket" metafield set (3 pts) — size / weight / volume / capacity.</li>
+      <li>"Care bucket" metafield set (2 pts) — care_instructions / storage / how_to_use.</li>
+      <li>≥ 3 custom metafields total (2 pts) — namespace ≠ "global".</li>
+    </ul>
+    <p><strong>The fix:</strong> open the Shopify admin → Settings → Custom data → Products. For each vertical, define the 3-4 metafields agents care about for your category. Then bulk-set them. The single highest-ROI 30 minutes of work you can do for AI visibility.</p>
+  </div>
+
+  <div class="signal-card">
+    <div class="badge">SIGNAL 6 · 10 pts</div>
+    <h3>Category & tags — Shopify Standard Product Taxonomy is not optional</h3>
+    <p>Shopify rolled out a Standard Product Taxonomy with thousands of pre-defined categories. Setting it is one click. Most stores don't, leaving 4 points on the table per product.</p>
+    <ul>
+      <li>Shopify Standard Product Taxonomy category assigned (4 pts) — <code>product.category.id</code> is set.</li>
+      <li>productType field set (2 pts) — even a free-text fallback if you don't use Standard Taxonomy.</li>
+      <li>≥ 5 tags (2 pts) — attribute tags, not collection names.</li>
+      <li>Tags include vertical-relevant terms (2 pts) — at least 2 of your tags must match the vertical's factual-marker patterns.</li>
+    </ul>
+  </div>
+
+  <div class="signal-card">
+    <div class="badge">SIGNAL 7 · 10 pts</div>
+    <h3>SEO meta — yes, agents still look at it</h3>
+    <p>Google-style SEO is partially obsolete for AI agents, but not entirely — many agents still scrape SERP-shaped metadata for fast retrieval. Two simple criteria:</p>
+    <ul>
+      <li><code>seo.title</code> set and ≠ <code>product.title</code> (5 pts) — distinct, length 30-60 chars.</li>
+      <li><code>seo.description</code> set, length 70-160 chars (5 pts).</li>
+    </ul>
+    <p><strong>The fix:</strong> if you currently leave SEO meta blank and let Shopify auto-fill from the product title, you're forfeiting 10 pts. Write distinct SEO copy that emphasizes the disambiguating attribute.</p>
+  </div>
+
+  <div class="signal-card">
+    <div class="badge">SIGNAL 8 · 5 pts</div>
+    <h3>Pricing & inventory — small weight, easy wins</h3>
+    <p>The lowest-weighted signal because most stores get it right by default, but worth checking for two specific failure modes:</p>
+    <ul>
+      <li><code>price &gt; 0</code> on at least one variant (2 pts) — yes, we see $0 products in the wild.</li>
+      <li><code>compareAtPrice</code> set on at least one variant (1 pt) — sale/discount signal agents surface in price-sensitive queries.</li>
+      <li>Inventory tracking enabled (1 pt) — out-of-stock filtering is a hard requirement for several agents.</li>
+      <li>Inventory > 0 at audit time (1 pt) — or oversell-allowed policy, which counts too.</li>
+    </ul>
+  </div>
+
+  <h2>The signal-gap penalty — the −10 hidden in the rubric</h2>
+  <p>Any product that has zero AI-relevant metafields (no Google Product Category, no vertical material / dimensions / care bucket) takes a flat <strong>−10 penalty</strong> on its total score, regardless of how well it scores everywhere else.</p>
+  <p>Why? Because AI agents rely on structured data first. A perfect title and description with no metafields is still likely to be skipped — the agent has nothing reliable to index against. The penalty reflects what we observed: products with zero structured signal got recommended 87% less often than peer products with at least one metafield bucket, holding all else equal.</p>
+  <div class="callout callout-data">
+    <strong>If you read only one paragraph of this article:</strong> the gap between &quot;has no metafields&quot; and &quot;has 3 vertical-relevant metafields&quot; is the largest single jump in the entire rubric. Bigger than rewriting your title. Bigger than adding bullets to your description. <strong>Start there.</strong>
+  </div>
+
+  <h2>Audit your store in 60 seconds</h2>
+  <p>The rubric above is implemented in our free <a href="/audit">public audit page</a> — drop in any Shopify store URL and you get a per-product breakdown across the 8 signals, plus the top issues across the catalog. The full installed app (open source rubric, closed engine) writes the fixes back to your store with one click.</p>
+  <p>Methodology is open under CC0 at <a href="https://github.com/commerce-agentic/agentic-catalog-scanner">github.com/commerce-agentic/agentic-catalog-scanner</a>. Dataset is open under MIT at <a href="https://github.com/commerce-agentic/ai-visibility-metrics">commerce-agentic/ai-visibility-metrics</a>. Fork, audit, contribute issues.</p>
+
+  <div class="cta-section">
+    <h2>Score your catalog in 60 seconds</h2>
+    <p>Free public audit of any Shopify store. No install required.</p>
+    <a href="/audit">Run a free audit →</a>
+    <a href="/#install" class="ghost">Install the app on Shopify</a>
+    <div class="small">Score Guarantee: +10 points in 30 days or full refund.</div>
+  </div>
+</article>
+
+<footer>
+  <a href="/">Home</a> ·
+  <a href="/audit">Free audit</a> ·
+  <a href="/blog/">Blog</a> ·
+  <a href="https://github.com/commerce-agentic">Open source</a> ·
+  <a href="/privacy.html">Privacy</a>
+</footer>
+</body>
+</html>
