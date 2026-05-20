@@ -80,10 +80,10 @@ function renderReport(ins: Insights, lb: LeaderboardData | null): string {
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>State of AI Commerce on Shopify — Q2 2026 Report | AI Catalog Score</title>
 <meta name="description" content="${esc(`${captures} AI agent captures, 6 agents, ${ins.totals.stores}+ Shopify stores benchmarked. The first open dataset report on AI shopping behavior — what agents recommend, which catalogs win, what's missing.`)}">
-<link rel="canonical" href="https://aicatalogscore.com/blog/state-of-ai-commerce-q2-2026.html">
+<link rel="canonical" href="https://aicatalogscore.com/blog/state-of-ai-commerce-q2-2026">
 <meta property="og:title" content="State of AI Commerce on Shopify — Q2 2026 Report">
 <meta property="og:description" content="${esc(`First open dataset report — ${captures} AI agent captures across 6 agents. What ChatGPT, Claude, Perplexity recommend on Shopify, and the data behind it.`)}">
-<meta property="og:url" content="https://aicatalogscore.com/blog/state-of-ai-commerce-q2-2026.html">
+<meta property="og:url" content="https://aicatalogscore.com/blog/state-of-ai-commerce-q2-2026">
 <meta property="og:type" content="article">
 <meta property="og:image" content="https://aicatalogscore.com/og-card.png">
 <meta property="article:published_time" content="2026-05-20T16:00:00Z">
@@ -104,7 +104,7 @@ ${JSON.stringify({
   dateModified: ins.updatedAt,
   author: { '@type': 'Organization', name: 'AI Catalog Score', url: 'https://aicatalogscore.com' },
   publisher: { '@type': 'Organization', name: 'AI Catalog Score', url: 'https://aicatalogscore.com', logo: { '@type': 'ImageObject', url: 'https://aicatalogscore.com/logo-acs-1200-light.png' } },
-  mainEntityOfPage: { '@type': 'WebPage', '@id': 'https://aicatalogscore.com/blog/state-of-ai-commerce-q2-2026.html' },
+  mainEntityOfPage: { '@type': 'WebPage', '@id': 'https://aicatalogscore.com/blog/state-of-ai-commerce-q2-2026' },
   image: 'https://aicatalogscore.com/og-card.png',
 })}
 </script>
@@ -273,7 +273,7 @@ footer a{color:#5a6577;text-decoration:none;margin:0 8px}
   </ol>
 
   <div class="callout data">
-    <strong>If you read one paragraph of this report:</strong> the single highest-leverage thing you can do for AI catalog visibility is set vertical-relevant metafields. The gap between "no AI-relevant metafields" and "3 vertical-relevant metafields" is the largest single jump in the rubric. We documented this in detail in the <a href="/blog/8-signals-ai-shopping-agents-look-at.html">8 signals article</a>.
+    <strong>If you read one paragraph of this report:</strong> the single highest-leverage thing you can do for AI catalog visibility is set vertical-relevant metafields. The gap between "no AI-relevant metafields" and "3 vertical-relevant metafields" is the largest single jump in the rubric. We documented this in detail in the <a href="/blog/8-signals-ai-shopping-agents-look-at">8 signals article</a>.
   </div>
 
   <h2>Methodology</h2>
