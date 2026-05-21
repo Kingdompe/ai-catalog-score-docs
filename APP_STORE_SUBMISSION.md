@@ -80,12 +80,12 @@ mix of specificity + hook for the App Store search snippet.
 >
 > **Built on open standards.** Our scoring methodology and the
 > agentic-catalog-scanner are open source (CC0 / MIT) on GitHub —
-> github.com/commerce-agentic. The dataset of 270k+ AI agent captures
-> across 5+ verticals is the same one our audit engine evaluates
-> against.
+> github.com/commerce-agentic. The dataset of 350k+ AI agent captures
+> across 10 verticals is the same one our audit engine evaluates
+> against. Live stats refresh hourly at aicatalogscore.com.
 >
 > **Pricing that aligns with results.** Free forever for catalogs up to
-> 15 SKUs. Performance tier charges only 5% of measured AI revenue
+> 50 SKUs. Performance tier charges only 5% of measured AI revenue
 > uplift (capped at $5,000/mo) — zero base fee if no lift.
 >
 > **Install free. Audit your store in 90 seconds. See exactly what's
@@ -115,38 +115,37 @@ to the in-app `lib/plans.ts`:
 
 | Plan | Recurring | SKU cap | Trial | Notes |
 |---|---|---|---|---|
-| Free | $0 / month | 15 | none — free forever | No credit card required |
+| Free | $0 / month | 50 | none — free forever | No credit card required |
 | Growth | $49 / month | 500 | none (free plan is the trial) | |
 | Pro | $149 / month | 3,000 | none | |
 | Performance | $0 base + usage | unlimited | none | 5% of measured AI revenue uplift, capped $5,000 / month. Skin-in-the-game pricing. |
 
 In the Partner Dashboard pricing section, declare 4 plans:
 - 3 "Recurring" plans (Free, Growth $49, Pro $149)
-- 1 "Usage-based" plan (Performance, $0 base + 5% capped)
+- 1 "Usage-based" plan (Performance, $0 base + 5% capped at $5,000/mo)
 
 **Pricing details copy** (paste into "Pricing description"):
 
-> **Free** — Audit up to 15 SKUs with the full 8-dimension scoring engine,
-> One-Click Apply Fixes, agent visibility report, and 30-day score
-> history. No credit card. No expiry.
+> **Free** — Audit up to 50 SKUs with the full 8-dimension scoring engine,
+> AI Readiness Score, Agentic Checklist, and AI Query Simulator
+> (3 queries/day). No credit card. No expiry.
 >
-> **Growth** ($49/mo) — Up to 500 SKUs, Bulk Fix (25 products/run),
-> Competitor comparison, Review Intelligence, unlimited AI Query
-> Simulator, 90-day score history.
+> **Growth** ($49/mo) — Up to 500 SKUs, One-Click Apply Fixes, Bulk
+> Fix (25 products/run), Competitor comparison, Review Intelligence,
+> unlimited AI Query Simulator, score history & benchmarks, revenue
+> impact estimator.
 >
-> **Pro** ($149/mo) — Up to 3,000 SKUs, unlimited Bulk Fix and Bulk
-> Maximize, Causal A/B testing with p-values, Guardrails on every
-> catalog edit, Agent Traffic Monitor, Slack alerts.
+> **Pro** ($149/mo) — Up to 3,000 SKUs, everything in Growth, priority
+> support, PDF report export, webhook guardrails.
 >
-> **Performance** ($399/mo OR 5% of AI uplift, $5,000/mo cap) —
-> Unlimited SKUs, Double Score Guarantee (+20 pts in 30 days),
-> Causal Attribution dashboard, dedicated success manager. Choose
-> a flat fee or pay only on measured AI revenue uplift (zero if no
-> lift).
+> **Performance** ($0 base + 5% of AI uplift, $5,000/mo cap) —
+> Unlimited SKUs, everything in Pro, causal A/B uplift measurement
+> included, pay only on real AI revenue uplift. Recommended for stores
+> doing $500k+/mo in revenue.
 >
 > Score Guarantee — refund of any month where the catalog's average
-> AI Catalog Score did not lift by at least +10 points (Performance:
-> +20 pts). Written into our Terms of Service v1.0.
+> AI Catalog Score did not lift by at least +10 points. Written into
+> our Terms of Service v1.0.
 
 ---
 
@@ -200,7 +199,7 @@ top-to-bottom:
 | 5 | Causal Experiments (`/app/experiments`) | An experiment with p-value < 0.05 and a measured uplift | "Prove every fix worked with causal A/B testing. p < 0.05 or it didn't ship." |
 | 6 | Settings → Slack alerts | The Slack webhook config card with the green "Slack alerts enabled" pill | "Get notified the moment a product loses AI visibility. Direct to your Slack workspace." |
 | 7 | Score Guarantee (`/app/score-guarantee`) | The +10 pts ring + the ToS reference card | "+10 points in 30 days, or every dollar refunds automatically. Written into the Terms of Service." |
-| 8 | Pricing (`/app/pricing`) | All four plan cards visible | "Free forever up to 15 SKUs. Performance tier pays only when AI revenue actually lifts." |
+| 8 | Pricing (`/app/pricing`) | All four plan cards visible | "Free forever up to 50 SKUs. Performance tier pays only when AI revenue actually lifts." |
 
 **Tip:** Use **macOS Cmd+Shift+5** or **Windows Win+Shift+S** with a
 fixed crop rectangle of 1600×900. Or use ScreenStudio for cleaner
