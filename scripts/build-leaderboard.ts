@@ -14,7 +14,7 @@
 
 import { writeFileSync, mkdirSync, existsSync } from 'node:fs';
 
-const INSIGHTS_URL = 'https://shopify-app-production-7e58.up.railway.app/api/public/insights';
+const INSIGHTS_URL = 'https://app.aicatalogscore.com/api/public/insights';
 const AUDIT_BASE = 'https://aicatalogscore.com';
 const TOP_BRANDS_LIMIT = 200;     // how many to attempt auditing
 const CONCURRENCY = 6;            // gentle on the audit endpoint

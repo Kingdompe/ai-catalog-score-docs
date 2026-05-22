@@ -155,7 +155,7 @@ Paste these into the corresponding fields:
 
 | Field | URL |
 |---|---|
-| App URL | `https://shopify-app-production-7e58.up.railway.app` |
+| App URL | `https://app.aicatalogscore.com` |
 | Marketing website | `https://aicatalogscore.com` |
 | Support URL | `https://aicatalogscore.com/#faq` |
 | Privacy policy | `https://aicatalogscore.com/privacy.html` |

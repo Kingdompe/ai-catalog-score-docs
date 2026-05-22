@@ -8,7 +8,7 @@
 
 import { writeFileSync } from 'node:fs';
 
-const INSIGHTS_URL = 'https://shopify-app-production-7e58.up.railway.app/api/public/insights';
+const INSIGHTS_URL = 'https://app.aicatalogscore.com/api/public/insights';
 const TOP = 200;
 const CONCURRENCY = 6;
 const TIMEOUT_MS = 12_000;

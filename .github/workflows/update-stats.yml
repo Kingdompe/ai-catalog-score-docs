@@ -22,7 +22,7 @@ jobs:
         env:
           # Same pattern as the ai-catalog-score app's daily-refresh workflow.
           # The URL is public (open dataset positioning) so no secret needed.
-          STATS_ENDPOINT_URL: ${{ vars.STATS_ENDPOINT_URL || 'https://shopify-app-production-7e58.up.railway.app/api/public/stats' }}
+          STATS_ENDPOINT_URL: ${{ vars.STATS_ENDPOINT_URL || 'https://app.aicatalogscore.com/api/public/stats' }}
         run: |
           # Fetch (10s timeout, fail on HTTP error, follow redirects)
           curl --fail --silent --show-error --max-time 10 --location \

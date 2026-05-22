@@ -13,7 +13,7 @@ const BRAND_GREEN = '#00a86a';
 const BRAND_DARK = '#0e1b2c';
 // `?v=2` busts the edge cache from before the brandsTracked schema change.
 // Bump again if the response schema changes.
-const INSIGHTS_URL = 'https://shopify-app-production-7e58.up.railway.app/api/public/insights?v=2';
+const INSIGHTS_URL = 'https://app.aicatalogscore.com/api/public/insights?v=2';
 
 interface Insights {
   updatedAt: string;

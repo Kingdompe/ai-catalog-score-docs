@@ -11,7 +11,7 @@
 
 import { writeFileSync, readFileSync, existsSync } from 'node:fs';
 
-const INSIGHTS_URL = 'https://shopify-app-production-7e58.up.railway.app/api/public/insights';
+const INSIGHTS_URL = 'https://app.aicatalogscore.com/api/public/insights';
 const REPORT_PATH = 'blog/state-of-ai-commerce-q2-2026.html';
 const LEADERBOARD_PATH = 'public-data/catalog-score-leaderboard.json';
 

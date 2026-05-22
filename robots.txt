@@ -1,7 +1,7 @@
 # AI Catalog Score — robots.txt
 # Marketing site at aicatalogscore.com. The Shopify app itself is at
-# shopify-app-production-7e58.up.railway.app and explicitly excluded
-# from crawl (Shopify admin chrome, not for indexing).
+# app.aicatalogscore.com and explicitly excluded from crawl (it's
+# the Shopify admin chrome, not for indexing).
 
 User-agent: *
 Allow: /
