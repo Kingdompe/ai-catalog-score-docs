@@ -85,8 +85,9 @@ mix of specificity + hook for the App Store search snippet.
 > against. Live stats refresh hourly at aicatalogscore.com.
 >
 > **Pricing that aligns with results.** Free forever for catalogs up to
-> 50 SKUs. Performance tier charges only 5% of measured AI revenue
-> uplift (capped at $5,000/mo) — zero base fee if no lift.
+> 50 SKUs. Performance tier is $399/month flat for unlimited SKUs,
+> with the Score Guarantee handling all risk reversal: refund any
+> month where the catalog score does not lift by ten points.
 >
 > **Install free. Audit your store in 90 seconds. See exactly what's
 > blocking AI agents from recommending your products.**
@@ -118,11 +119,13 @@ to the in-app `lib/plans.ts`:
 | Free | $0 / month | 50 | none — free forever | No credit card required |
 | Growth | $49 / month | 500 | none (free plan is the trial) | |
 | Pro | $149 / month | 3,000 | none | |
-| Performance | $0 base + usage | unlimited | none | 5% of measured AI revenue uplift, capped $5,000 / month. Skin-in-the-game pricing. |
+| Performance | $399 / month | unlimited | none | Predictable monthly, white-glove tier. Score Guarantee covers risk. |
 
-In the Partner Dashboard pricing section, declare 4 plans:
-- 3 "Recurring" plans (Free, Growth $49, Pro $149)
-- 1 "Usage-based" plan (Performance, $0 base + 5% capped at $5,000/mo)
+In the Partner Dashboard pricing section, declare 4 "Recurring" plans:
+- Free ($0)
+- Growth ($49/mo, $408/yr — 30% off)
+- Pro ($149/mo, $1,248/yr — 30% off)
+- Performance ($399/mo, $3,348/yr — 30% off)
 
 **Pricing details copy** (paste into "Pricing description"):
 
@@ -138,10 +141,11 @@ In the Partner Dashboard pricing section, declare 4 plans:
 > **Pro** ($149/mo) — Up to 3,000 SKUs, everything in Growth, priority
 > support, PDF report export, webhook guardrails.
 >
-> **Performance** ($0 base + 5% of AI uplift, $5,000/mo cap) —
-> Unlimited SKUs, everything in Pro, causal A/B uplift measurement
-> included, pay only on real AI revenue uplift. Recommended for stores
-> doing $500k+/mo in revenue.
+> **Performance** ($399/mo flat) — Unlimited SKUs, everything in Pro,
+> causal A/B uplift measurement included. Recommended for stores doing
+> $500k+/mo in revenue. Score Guarantee covers the risk: if your
+> average score does not lift ten points in 30 days, every dollar
+> refunds automatically.
 >
 > Score Guarantee — refund of any month where the catalog's average
 > AI Catalog Score did not lift by at least +10 points. Written into
@@ -199,7 +203,7 @@ top-to-bottom:
 | 5 | Causal Experiments (`/app/experiments`) | An experiment with p-value < 0.05 and a measured uplift | "Prove every fix worked with causal A/B testing. p < 0.05 or it didn't ship." |
 | 6 | Settings → Slack alerts | The Slack webhook config card with the green "Slack alerts enabled" pill | "Get notified the moment a product loses AI visibility. Direct to your Slack workspace." |
 | 7 | Score Guarantee (`/app/score-guarantee`) | The +10 pts ring + the ToS reference card | "+10 points in 30 days, or every dollar refunds automatically. Written into the Terms of Service." |
-| 8 | Pricing (`/app/pricing`) | All four plan cards visible | "Free forever up to 50 SKUs. Performance tier pays only when AI revenue actually lifts." |
+| 8 | Pricing (`/app/pricing`) | All four plan cards visible | "Free up to 50 SKUs. $49 / $149 / $399 per month, or 30% off when billed yearly. Score Guarantee on every paid tier." |
 
 **Tip:** Use **macOS Cmd+Shift+5** or **Windows Win+Shift+S** with a
 fixed crop rectangle of 1600×900. Or use ScreenStudio for cleaner
