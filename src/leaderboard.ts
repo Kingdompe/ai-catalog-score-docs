@@ -240,7 +240,7 @@ ${shellHeader()}
 <main class="container">
   <section class="hero">
     <h1>Top 100 Brands Recommended by AI</h1>
-    <p class="sub">Brands cited most often when shoppers ask ChatGPT, Claude, Perplexity, Gemini, Mistral, or DeepSeek "what should I buy?" Updated hourly from the open captures dataset.</p>
+    <p class="sub">Brands cited most often by ChatGPT, Claude, Perplexity, Gemini, Mistral, and DeepSeek when our standardized buyer-intent query suite is issued daily. Updated hourly from the open captures dataset. Not a sample of real shopper traffic — see methodology.</p>
     <div class="stat-grid">
       <div class="stat"><b>${insights.totals.captures.toLocaleString('en')}</b><span>captures analyzed</span></div>
       <div class="stat"><b>${insights.topBrands.length.toLocaleString('en')}</b><span>brands tracked</span></div>
