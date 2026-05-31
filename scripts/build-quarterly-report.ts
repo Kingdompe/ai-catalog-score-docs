@@ -94,6 +94,12 @@ function renderReport(ins: Insights, lb: LeaderboardData | null): string {
 <meta name="twitter:image" content="https://aicatalogscore.com/og-card.png">
 <meta name="robots" content="index,follow,max-image-preview:large">
 <link rel="icon" type="image/png" href="/logo-acs-1200-light.png">
+<link rel="preconnect" href="https://api.fontshare.com">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://api.fontshare.com/v2/css?f[]=general-sans@500,600,400,700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/_shared-tokens.css">
 <script type="application/ld+json">
 ${JSON.stringify({
   '@context': 'https://schema.org',
@@ -109,70 +115,56 @@ ${JSON.stringify({
 })}
 </script>
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;line-height:1.65;color:#0e1b2c;background:#fafaf7}
-.container{max-width:760px;margin:0 auto;padding:32px 20px}
-header{padding:16px 0;border-bottom:1px solid #e6e3da;background:#fff}
-header .container{padding:12px 20px;display:flex;align-items:center;justify-content:space-between;gap:16px;max-width:980px}
-.logo{font-weight:700;font-size:18px;text-decoration:none;color:#0e1b2c}
-.logo span{color:#00a86a}
-.nav-links{display:flex;gap:18px;font-size:14px}
-.nav-links a{color:#5a6577;text-decoration:none}
-.nav-links a:hover{color:#00a86a}
-.cta-top{padding:10px 18px;background:#00a86a;color:#fff;border-radius:8px;text-decoration:none;font-weight:600;font-size:14px}
-article{padding:40px 0 60px}
-.meta{color:#5a6577;font-size:13px;margin-bottom:16px;letter-spacing:0.02em;text-transform:uppercase}
-h1{font-size:38px;line-height:1.1;margin-bottom:20px;letter-spacing:-0.02em;font-weight:700}
-.lede{font-size:19px;color:#3a4555;margin-bottom:32px;line-height:1.55}
-article h2{font-size:26px;line-height:1.2;margin:48px 0 16px;font-weight:700;letter-spacing:-0.01em}
-article h3{font-size:19px;line-height:1.3;margin:32px 0 10px;font-weight:600}
-article p{margin-bottom:16px;font-size:16px}
-article ul, article ol{margin:0 0 16px 24px}
-article li{margin-bottom:6px}
-article a{color:#00a86a;text-decoration:underline;text-underline-offset:2px}
-article a:hover{color:#008f5b}
-article code{background:#f0ede4;padding:1px 6px;border-radius:4px;font-size:0.92em;font-family:"SF Mono",Menlo,Consolas,monospace}
-.callout{margin:24px 0;padding:18px 22px;background:#fff;border-left:3px solid #00a86a;border-radius:6px;font-size:15px}
-.callout.data{background:#fff7e0;border-left-color:#f4b400}
-.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:32px 0}
-.stat{background:#fff;border:1px solid #e6e3da;padding:18px;border-radius:10px;text-align:center}
-.stat b{display:block;font-size:24px;font-weight:700;color:#00a86a;margin-bottom:4px;letter-spacing:-0.01em}
-.stat span{font-size:12px;color:#5a6577}
-table{width:100%;border-collapse:collapse;margin:16px 0 24px;font-size:14px;background:#fff;border-radius:8px;overflow:hidden;border:1px solid #e6e3da}
-table th, table td{padding:10px 14px;text-align:left;border-bottom:1px solid #f0ede4}
-table th{background:#f5f3eb;font-weight:600;font-size:13px;color:#0e1b2c}
-table tr:last-child td{border-bottom:0}
-table td.num{text-align:right;font-variant-numeric:tabular-nums}
-.bar{height:10px;background:#f0ede4;border-radius:5px;overflow:hidden;position:relative;margin-top:4px}
-.bar-fill{height:100%;background:#00a86a;border-radius:5px}
-.bar-row{display:grid;grid-template-columns:120px 1fr 80px;gap:14px;align-items:center;padding:8px 0;font-size:14px;border-bottom:1px solid #f0ede4}
-.bar-row:last-child{border-bottom:0}
-.bar-row .lbl{font-weight:500}
-.bar-row .val{font-variant-numeric:tabular-nums;text-align:right;font-weight:600;color:#00a86a}
-.cta-section{margin:48px 0 20px;padding:32px;background:linear-gradient(135deg,#0e1b2c,#1a2c45);color:#fff;border-radius:16px;text-align:center}
-.cta-section h2{color:#fff;font-size:24px;margin-bottom:8px;margin-top:0}
-.cta-section p{opacity:.85;margin-bottom:20px;color:#fff}
-.cta-section a{display:inline-block;padding:14px 28px;background:#00a86a;color:#fff;border-radius:10px;text-decoration:none;font-weight:600;margin:6px}
-.cta-section a.ghost{background:transparent;border:1px solid rgba(255,255,255,0.3)}
-footer{padding:24px 0;border-top:1px solid #e6e3da;text-align:center;color:#7a8295;font-size:13px}
-footer a{color:#5a6577;text-decoration:none;margin:0 8px}
-@media (max-width:640px){h1{font-size:30px}article h2{font-size:22px}.stat-grid{grid-template-columns:repeat(2,1fr)}.bar-row{grid-template-columns:90px 1fr 60px;gap:8px;font-size:13px}}
+article{ padding: 48px 0 64px; }
+.bar{
+  height: 10px;
+  background: var(--bg-sunk);
+  border-radius: var(--r-sm);
+  overflow: hidden;
+  position: relative;
+  margin-top: 4px;
+}
+.bar-fill{ height: 100%; background: var(--brand); border-radius: var(--r-sm); }
+.bar-row{
+  display: grid;
+  grid-template-columns: 120px 1fr 80px;
+  gap: 14px;
+  align-items: center;
+  padding: 8px 0;
+  font-size: 14px;
+  border-bottom: 1px solid var(--border);
+}
+.bar-row:last-child{ border-bottom: 0; }
+.bar-row .lbl{ font-weight: 500; }
+.bar-row .val{
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+  font-weight: 600;
+  color: var(--brand-deep);
+}
+@media (max-width: 640px){
+  .bar-row{ grid-template-columns: 90px 1fr 60px; gap: 8px; font-size: 13px; }
+}
 </style>
 </head>
 <body>
-<header>
+<header class="nav">
   <div class="container">
-    <a class="logo" href="/">AI Catalog<span> Score</span></a>
-    <div class="nav-links">
+    <a href="/" class="wordmark">
+      <span class="mark"><img src="/logo-acs.png" alt="AI Catalog Score" loading="eager"></span>
+      <span class="name">AI Catalog Score</span>
+    </a>
+    <nav>
       <a href="/audit">Free audit</a>
       <a href="/leaderboard/">Leaderboard</a>
-      <a href="/blog/">Blog</a>
-      <a class="cta-top" href="/#install">Install on Shopify →</a>
-    </div>
+      <a href="/blog/" class="is-active">Blog</a>
+      <a href="https://github.com/commerce-agentic" target="_blank" rel="noopener">GitHub</a>
+    </nav>
+    <a href="/#install" class="btn btn-sm btn-primary">Install free <span class="btn-arrow">→</span></a>
   </div>
 </header>
 
-<article class="container">
+<article class="container-narrow">
   <div class="meta">QUARTERLY REPORT · Q2 2026 · 12 min read · Published 20 May 2026</div>
   <h1>State of AI Commerce on Shopify — Q2 2026</h1>
   <p class="lede">The first open quarterly report on AI shopping agent behavior across Shopify catalogs. ${captures} ground-truth captures across ${ins.totals.agents} agents and ${ins.totals.brandsTracked.toLocaleString('en')} distinct brands. What ChatGPT, Claude, Perplexity, Gemini, Mistral and DeepSeek recommend — and what they don't.</p>
@@ -306,18 +298,49 @@ footer a{color:#5a6577;text-decoration:none;margin:0 8px}
   <div class="cta-section">
     <h2>Audit your catalog in 60 seconds</h2>
     <p>Free public scan of any Shopify store. See where you'd rank.</p>
-    <a href="/audit">Run a free audit →</a>
-    <a href="/#install" class="ghost">Install on Shopify</a>
+    <a href="/audit" class="btn btn-primary">Run a free audit <span class="btn-arrow">→</span></a>
+    <a href="/#install" class="btn btn-dark-outline">Install on Shopify</a>
   </div>
 </article>
 
-<footer>
-  <a href="/">Home</a> ·
-  <a href="/audit">Free audit</a> ·
-  <a href="/leaderboard/">Leaderboard</a> ·
-  <a href="/blog/">Blog</a> ·
-  <a href="https://github.com/commerce-agentic">Open source</a> ·
-  <a href="/privacy.html">Privacy</a>
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <a href="/" class="wordmark">
+          <span class="mark"><img src="/logo-acs.png" alt="AI Catalog Score"></span>
+          <span class="name">AI Catalog Score</span>
+        </a>
+        <p class="blurb">The open standard for AI shopping agent visibility on Shopify. Score, fix, and prove uplift causally across ChatGPT, Gemini, Claude, Perplexity, Mistral, and DeepSeek.</p>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Product</div>
+        <div class="stack-12">
+          <a href="/audit">Free audit</a>
+          <a href="/leaderboard/">Leaderboard</a>
+          <a href="/blog/">Blog</a>
+          <a href="/#install">Install on Shopify</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Open source</div>
+        <div class="stack-12">
+          <a href="https://github.com/commerce-agentic" target="_blank" rel="noopener">commerce-agentic</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Legal</div>
+        <div class="stack-12">
+          <a href="/privacy.html">Privacy</a>
+          <a href="/terms.html">Terms</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 AI Catalog Score · All rights reserved.</span>
+      <span>aicatalogscore.com</span>
+    </div>
+  </div>
 </footer>
 </body>
 </html>`;

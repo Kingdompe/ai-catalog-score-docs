@@ -9,8 +9,8 @@
  *                                   we audit each via /audit/{shop}.json)
  */
 
-const BRAND_GREEN = '#00a86a';
-const BRAND_DARK = '#0e1b2c';
+// Brand tokens kept for any rare inline-style edge cases. Most styling now
+// lives in /_shared-tokens.css and is linked from shellHead().
 // `?v=2` busts the edge cache from before the brandsTracked schema change.
 // Bump again if the response schema changes.
 const INSIGHTS_URL = 'https://app.aicatalogscore.com/api/public/insights?v=2';
@@ -48,63 +48,146 @@ function brandName(domain: string): string {
 }
 
 function shellStyles(): string {
-  return `*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;line-height:1.55;color:${BRAND_DARK};background:#fafaf7}
-.container{max-width:980px;margin:0 auto;padding:32px 20px}
-header{padding:16px 0;border-bottom:1px solid #e6e3da;background:#fff}
-header .container{padding:12px 20px;display:flex;align-items:center;justify-content:space-between;gap:16px}
-.logo{font-weight:700;font-size:18px;text-decoration:none;color:${BRAND_DARK}}
-.logo span{color:${BRAND_GREEN}}
-.nav-links{display:flex;gap:18px;font-size:14px;align-items:center}
-.nav-links a{color:#5a6577;text-decoration:none}
-.nav-links a:hover{color:${BRAND_GREEN}}
-.cta-top{padding:10px 18px;background:${BRAND_GREEN};color:#fff;border-radius:8px;text-decoration:none;font-weight:600;font-size:14px}
-.cta-top:hover{background:#008f5b}
-.hero{padding:48px 0 24px}
-.hero h1{font-size:36px;line-height:1.15;margin-bottom:12px;letter-spacing:-0.02em}
-.hero .sub{font-size:18px;color:#5a6577;max-width:680px;margin-bottom:24px}
-.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:24px 0 32px}
-.stat{background:#fff;border:1px solid #e6e3da;padding:16px;border-radius:10px;text-align:center}
-.stat b{display:block;font-size:24px;font-weight:700;color:${BRAND_GREEN};margin-bottom:4px;letter-spacing:-0.01em}
-.stat span{font-size:12px;color:#5a6577}
-.leaderboard{background:#fff;border:1px solid #e6e3da;border-radius:12px;overflow:hidden}
-.lb-head, .lb-row{display:grid;grid-template-columns:64px 1fr 110px 1fr;gap:16px;padding:12px 20px;align-items:center;font-size:14px}
-.lb-head{background:#f5f3eb;font-weight:600;font-size:13px;color:#5a6577;text-transform:uppercase;letter-spacing:0.04em}
-.lb-row{border-top:1px solid #f0ede4}
-.lb-rank{font-weight:700;font-size:16px;color:${BRAND_DARK}}
-.lb-rank.top1{color:#d4a017}
-.lb-rank.top2{color:#7a7a7a}
-.lb-rank.top3{color:#b87333}
-.lb-brand a{color:${BRAND_DARK};text-decoration:none;font-weight:600}
-.lb-brand a:hover{color:${BRAND_GREEN}}
-.lb-brand .domain{display:block;font-size:12px;color:#9aa3b2;font-weight:400;margin-top:2px}
-.lb-mentions{font-weight:600;color:${BRAND_GREEN}}
-.lb-agents{display:flex;gap:4px;flex-wrap:wrap}
-.agent-pill{display:inline-block;padding:2px 9px;background:#f5f3eb;color:#3a4555;border-radius:999px;font-size:11px;font-weight:500}
-.audit-pct{display:inline-block;padding:2px 10px;border-radius:6px;font-size:12px;font-weight:600;color:#fff}
-.audit-link{font-size:12px;color:#9aa3b2;text-decoration:none}
-.audit-link:hover{color:${BRAND_GREEN};text-decoration:underline}
-.partial{margin:24px 0;padding:14px 18px;background:#fff7e0;border-left:3px solid #f4b400;border-radius:6px;font-size:13px;color:#5a4500}
-.cta-section{margin-top:48px;padding:32px;background:linear-gradient(135deg,${BRAND_DARK},#1a2c45);color:#fff;border-radius:16px;text-align:center}
-.cta-section h2{color:#fff;font-size:22px;margin-bottom:8px}
-.cta-section p{opacity:.85;margin-bottom:20px;color:#fff}
-.cta-section a{display:inline-block;padding:14px 28px;background:${BRAND_GREEN};color:#fff;border-radius:10px;text-decoration:none;font-weight:600}
-.cta-section a:hover{background:#00bf78}
-.cta-section .small{margin-top:12px;font-size:13px;opacity:.7}
-footer{margin-top:60px;padding:24px 0;border-top:1px solid #e6e3da;text-align:center;color:#7a8295;font-size:13px}
-footer a{color:#5a6577;text-decoration:none;margin:0 8px}
-.choice-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;margin:32px 0}
-.choice{background:#fff;border:1px solid #e6e3da;border-radius:14px;padding:28px;text-decoration:none;color:inherit;transition:transform .15s,box-shadow .15s;display:block}
-.choice:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(14,27,44,.08)}
-.choice h2{font-size:20px;margin-bottom:8px;color:${BRAND_DARK}}
-.choice p{font-size:14px;color:#5a6577;margin-bottom:16px}
-.choice .arrow{color:${BRAND_GREEN};font-weight:600;font-size:14px}
-@media (max-width:640px){
-  .stat-grid{grid-template-columns:repeat(2,1fr)}
-  .lb-head, .lb-row{grid-template-columns:48px 1fr 100px;gap:10px;padding:10px 12px;font-size:13px}
-  .lb-head .col-agents, .lb-row .lb-agents{display:none}
-  .hero h1{font-size:28px}
-  .choice-grid{grid-template-columns:1fr}
+  // Page-specific leaderboard styles only. Design tokens, typography,
+  // buttons, header/footer, stat-grid, callouts all come from
+  // /_shared-tokens.css (linked in shellHead()).
+  return `.lb-hero{ padding: 56px 0 24px; }
+.lb-hero h1{ font-size: clamp(32px, 4.4vw, 48px); margin-bottom: 16px; }
+.lb-hero .sub{ font-size: 18px; color: var(--ink-2); max-width: 720px; margin-bottom: 24px; line-height: 1.55; }
+.leaderboard{
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+}
+.lb-head, .lb-row{
+  display: grid;
+  grid-template-columns: 64px 1fr 110px 1fr;
+  gap: 16px;
+  padding: 12px 20px;
+  align-items: center;
+  font-size: 14px;
+}
+.lb-head{
+  background: var(--bg-sunk);
+  font-weight: 600;
+  font-size: 11px;
+  color: var(--ink-3);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-family: var(--font-mono);
+}
+.lb-row{ border-top: 1px solid var(--border); }
+.lb-rank{
+  font-weight: 700;
+  font-size: 16px;
+  color: var(--ink-0);
+  font-family: var(--font-display);
+  font-variant-numeric: tabular-nums;
+}
+.lb-rank.top1{ color: #C9A227; }
+.lb-rank.top2{ color: var(--ink-3); }
+.lb-rank.top3{ color: #B87333; }
+.lb-brand a{
+  color: var(--ink-0);
+  text-decoration: none;
+  font-weight: 600;
+}
+.lb-brand a:hover{ color: var(--brand-deep); }
+.lb-brand .domain{
+  display: block;
+  font-size: 12px;
+  color: var(--ink-4);
+  font-weight: 400;
+  margin-top: 2px;
+  font-family: var(--font-mono);
+}
+.lb-mentions{
+  font-weight: 700;
+  color: var(--brand-deep);
+  font-variant-numeric: tabular-nums;
+  font-family: var(--font-display);
+}
+.lb-agents{ display: flex; gap: 4px; flex-wrap: wrap; }
+.agent-pill{
+  display: inline-block;
+  padding: 2px 9px;
+  background: var(--bg-sunk);
+  color: var(--ink-2);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 500;
+  font-family: var(--font-mono);
+}
+.audit-pct{
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: var(--r-sm);
+  font-size: 12px;
+  font-weight: 700;
+  color: #fff;
+  font-variant-numeric: tabular-nums;
+}
+.audit-link{
+  font-size: 12px;
+  color: var(--ink-4);
+  text-decoration: none;
+  font-family: var(--font-mono);
+}
+.audit-link:hover{ color: var(--brand-deep); text-decoration: underline; }
+.partial{
+  margin: 24px 0;
+  padding: 14px 18px;
+  background: var(--warn-wash);
+  border-left: 3px solid var(--warn);
+  border-radius: var(--r-md);
+  font-size: 13px;
+  color: var(--ink-1);
+}
+.choice-grid{
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  margin: 32px 0;
+}
+.choice{
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 28px;
+  text-decoration: none;
+  color: inherit;
+  transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
+  display: block;
+}
+.choice:hover{
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--border-strong);
+}
+.choice h2{
+  font-family: var(--font-display);
+  font-size: 22px;
+  margin: 0 0 10px;
+  color: var(--ink-0);
+  font-weight: 600;
+}
+.choice p{ font-size: 15px; color: var(--ink-2); margin-bottom: 16px; }
+.choice .arrow{
+  color: var(--brand-deep);
+  font-weight: 600;
+  font-size: 14px;
+}
+@media (max-width: 640px){
+  .lb-head, .lb-row{
+    grid-template-columns: 48px 1fr 100px;
+    gap: 10px;
+    padding: 10px 12px;
+    font-size: 13px;
+  }
+  .lb-head .col-agents, .lb-row .lb-agents{ display: none; }
+  .choice-grid{ grid-template-columns: 1fr; }
 }`;
 }
 
@@ -124,31 +207,72 @@ function shellHead(title: string, desc: string, canonical: string, ogPath = '/og
 <meta name="twitter:description" content="${esc(desc)}">
 <meta name="twitter:image" content="https://aicatalogscore.com${ogPath}">
 <meta name="robots" content="index,follow,max-image-preview:large">
-<link rel="icon" type="image/png" href="/logo-acs-1200-light.png">`;
+<link rel="icon" type="image/png" href="/logo-acs-1200-light.png">
+<link rel="preconnect" href="https://api.fontshare.com">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://api.fontshare.com/v2/css?f[]=general-sans@500,600,400,700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/_shared-tokens.css">`;
 }
 
 function shellHeader(): string {
-  return `<header>
+  return `<header class="nav">
   <div class="container">
-    <a class="logo" href="/">AI Catalog<span> Score</span></a>
-    <div class="nav-links">
+    <a href="/" class="wordmark">
+      <span class="mark"><img src="/logo-acs.png" alt="AI Catalog Score" loading="eager"></span>
+      <span class="name">AI Catalog Score</span>
+    </a>
+    <nav>
       <a href="/audit">Free audit</a>
-      <a href="/leaderboard/">Leaderboard</a>
+      <a href="/leaderboard/" class="is-active">Leaderboard</a>
       <a href="/blog/">Blog</a>
-      <a class="cta-top" href="/#install">Install on Shopify →</a>
-    </div>
+      <a href="https://github.com/commerce-agentic" target="_blank" rel="noopener">GitHub</a>
+    </nav>
+    <a href="/#install" class="btn btn-sm btn-primary">Install free <span class="btn-arrow">→</span></a>
   </div>
 </header>`;
 }
 
 function shellFooter(): string {
-  return `<footer>
-  <a href="/">Home</a> ·
-  <a href="/audit">Free audit</a> ·
-  <a href="/leaderboard/">Leaderboard</a> ·
-  <a href="/blog/">Blog</a> ·
-  <a href="https://github.com/commerce-agentic">Open source</a> ·
-  <a href="/privacy.html">Privacy</a>
+  return `<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <a href="/" class="wordmark">
+          <span class="mark"><img src="/logo-acs.png" alt="AI Catalog Score"></span>
+          <span class="name">AI Catalog Score</span>
+        </a>
+        <p class="blurb">The open standard for AI shopping agent visibility on Shopify. Score, fix, and prove uplift causally across ChatGPT, Gemini, Claude, Perplexity, Mistral, and DeepSeek.</p>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Product</div>
+        <div class="stack-12">
+          <a href="/audit">Free audit</a>
+          <a href="/leaderboard/">Leaderboard</a>
+          <a href="/blog/">Blog</a>
+          <a href="/#install">Install on Shopify</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Open source</div>
+        <div class="stack-12">
+          <a href="https://github.com/commerce-agentic" target="_blank" rel="noopener">commerce-agentic</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Legal</div>
+        <div class="stack-12">
+          <a href="/privacy.html">Privacy</a>
+          <a href="/terms.html">Terms</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 AI Catalog Score · All rights reserved.</span>
+      <span>aicatalogscore.com</span>
+    </div>
+  </div>
 </footer>`;
 }
 
@@ -168,8 +292,8 @@ ${shellHead(title, desc, canonical)}
 </head>
 <body>
 ${shellHeader()}
-<main class="container">
-  <section class="hero">
+<main class="container-medium">
+  <section class="lb-hero">
     <h1>Shopify AI Visibility Leaderboards</h1>
     <p class="sub">Two open rankings of Shopify catalogs from the AI agent perspective. ${totals ? `Based on ${totals.captures.toLocaleString('en')} captures across ${totals.agents} agents.` : ''}</p>
     ${totals ? `
@@ -198,7 +322,7 @@ ${shellHeader()}
   <div class="cta-section">
     <h2>See where your store ranks</h2>
     <p>Free public audit of any Shopify store. No install required.</p>
-    <a href="/audit">Run a free audit →</a>
+    <a href="/audit" class="btn btn-primary">Run a free audit <span class="btn-arrow">→</span></a>
     <div class="small">Methodology open at github.com/commerce-agentic</div>
   </div>
 </main>
@@ -237,8 +361,8 @@ ${shellHead(title, desc, canonical)}
 </head>
 <body>
 ${shellHeader()}
-<main class="container">
-  <section class="hero">
+<main class="container-medium">
+  <section class="lb-hero">
     <h1>Top 100 Brands Recommended by AI</h1>
     <p class="sub">Brands cited most often by ChatGPT, Claude, Perplexity, Gemini, Mistral, and DeepSeek when our standardized buyer-intent query suite is issued daily. Updated hourly from the open captures dataset. Not a sample of real shopper traffic — see methodology.</p>
     <div class="stat-grid">
@@ -276,7 +400,7 @@ ${shellHeader()}
   <div class="cta-section">
     <h2>How does your store compare?</h2>
     <p>Free audit of any Shopify catalog. See where you'd rank.</p>
-    <a href="/audit">Run a free audit →</a>
+    <a href="/audit" class="btn btn-primary">Run a free audit <span class="btn-arrow">→</span></a>
     <div class="small">Score Guarantee: +10 pts in 30 days or refund.</div>
   </div>
 </main>
@@ -325,8 +449,8 @@ ${shellHead(title, desc, canonical)}
 </head>
 <body>
 ${shellHeader()}
-<main class="container">
-  <section class="hero">
+<main class="container-medium">
+  <section class="lb-hero">
     <h1>Top ${top.length} Shopify Stores by AI Catalog Score</h1>
     <p class="sub">Highest AI-readiness scores from our public audit engine — derived from the brands most cited by AI agents, audited from their public Shopify catalogs (no install required).</p>
     <div class="stat-grid">
@@ -351,7 +475,9 @@ ${shellHeader()}
     ${top.map((e, i) => {
       const rank = i + 1;
       const rankClass = rank === 1 ? 'top1' : rank === 2 ? 'top2' : rank === 3 ? 'top3' : '';
-      const color = e.score >= 80 ? '#00a86a' : e.score >= 60 ? '#92e8c0' : e.score >= 40 ? '#facc15' : '#fb923c';
+      // Score badge colors (kept inline because they vary per-row).
+      // brand-deep / brand-light come from the shared design tokens.
+      const color = e.score >= 80 ? '#00A76A' : e.score >= 60 ? '#4DE6AB' : e.score >= 40 ? '#F59E0B' : '#E5484D';
       return `<div class="lb-row">
         <div class="lb-rank ${rankClass}">${rank}</div>
         <div class="lb-brand"><a href="/audit/${encodeURIComponent(e.domain)}">${esc(brandName(e.domain))}</a><span class="domain">${esc(e.domain)} · ${e.productCount} products</span></div>

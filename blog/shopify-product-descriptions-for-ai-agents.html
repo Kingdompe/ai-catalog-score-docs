@@ -19,6 +19,12 @@
 <meta name="twitter:image" content="https://aicatalogscore.com/og-card.png">
 <meta name="robots" content="index,follow,max-image-preview:large">
 <link rel="icon" type="image/png" href="/logo-acs-1200-light.png">
+<link rel="preconnect" href="https://api.fontshare.com">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://api.fontshare.com/v2/css?f[]=general-sans@500,600,400,700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/_shared-tokens.css">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -34,73 +40,100 @@
 }
 </script>
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;line-height:1.65;color:#0e1b2c;background:#fafaf7}
-.container{max-width:760px;margin:0 auto;padding:32px 20px}
-header{padding:16px 0;border-bottom:1px solid #e6e3da;background:#fff}
-header .container{padding:12px 20px;display:flex;align-items:center;justify-content:space-between;gap:16px;max-width:980px}
-.logo{font-weight:700;font-size:18px;text-decoration:none;color:#0e1b2c}
-.logo span{color:#00a86a}
-.nav-links{display:flex;gap:18px;font-size:14px}
-.nav-links a{color:#5a6577;text-decoration:none}
-.nav-links a:hover{color:#00a86a}
-.cta-top{padding:10px 18px;background:#00a86a;color:#fff;border-radius:8px;text-decoration:none;font-weight:600;font-size:14px}
-article{padding:40px 0 60px}
-.meta{color:#5a6577;font-size:13px;margin-bottom:16px;letter-spacing:0.02em;text-transform:uppercase}
-h1{font-size:34px;line-height:1.15;margin-bottom:20px;letter-spacing:-0.02em;font-weight:700}
-.lede{font-size:19px;color:#3a4555;margin-bottom:32px;line-height:1.55}
-article h2{font-size:24px;line-height:1.2;margin:40px 0 14px;font-weight:700;letter-spacing:-0.01em}
-article h3{font-size:19px;line-height:1.3;margin:32px 0 10px;font-weight:600}
-article p{margin-bottom:16px;font-size:16px}
-article ul, article ol{margin:0 0 16px 22px}
-article li{margin-bottom:6px}
-article a{color:#00a86a;text-decoration:underline;text-underline-offset:2px}
-article a:hover{color:#008f5b}
-article code{background:#f0ede4;padding:1px 6px;border-radius:4px;font-size:0.92em;font-family:"SF Mono",Menlo,Consolas,monospace}
-.callout{margin:24px 0;padding:18px 22px;background:#fff;border-left:3px solid #00a86a;border-radius:6px;font-size:15px}
-.callout.warn{background:#fff7e0;border-left-color:#f4b400}
-.criteria-table{width:100%;border-collapse:collapse;margin:16px 0 24px;font-size:14px;background:#fff;border-radius:8px;overflow:hidden;border:1px solid #e6e3da}
-.criteria-table th, .criteria-table td{padding:10px 14px;text-align:left;border-bottom:1px solid #f0ede4;vertical-align:top}
-.criteria-table th{background:#f5f3eb;font-weight:600;font-size:13px;color:#0e1b2c}
-.criteria-table tr:last-child td{border-bottom:0}
-.criteria-table td.pts{text-align:right;font-weight:700;color:#00a86a;font-variant-numeric:tabular-nums}
-.code-block{background:#0e1b2c;color:#9be8d6;padding:18px 22px;border-radius:8px;font-size:13.5px;font-family:"SF Mono",Menlo,Consolas,monospace;overflow-x:auto;margin:16px 0 24px;line-height:1.55}
-.code-block .tag{color:#7aa3ff}
-.code-block .attr{color:#ffce5e}
-.code-block .text{color:#fff}
-.example-card{margin:24px 0;padding:22px 24px;background:#fff;border:1px solid #e6e3da;border-radius:12px}
-.example-card h3{margin-top:0;font-size:18px}
-.example-card .badge{display:inline-block;padding:3px 10px;background:#00a86a;color:#fff;border-radius:999px;font-size:11px;font-weight:600;margin-bottom:10px;letter-spacing:0.04em;text-transform:uppercase}
-.antipattern{margin:20px 0;padding:14px 18px;background:#fff7e0;border-left:3px solid #f4b400;border-radius:6px;font-size:14px;color:#5a4500}
-.antipattern b{color:#0e1b2c}
-.cta-section{margin:48px 0 20px;padding:32px;background:linear-gradient(135deg,#0e1b2c,#1a2c45);color:#fff;border-radius:16px;text-align:center}
-.cta-section h2{color:#fff;font-size:24px;margin-bottom:8px;margin-top:0}
-.cta-section p{opacity:.85;margin-bottom:20px;color:#fff}
-.cta-section a{display:inline-block;padding:14px 28px;background:#00a86a;color:#fff;border-radius:10px;text-decoration:none;font-weight:600;margin:6px}
-.cta-section a.ghost{background:transparent;border:1px solid rgba(255,255,255,0.3)}
-footer{padding:24px 0;border-top:1px solid #e6e3da;text-align:center;color:#7a8295;font-size:13px}
-footer a{color:#5a6577;text-decoration:none;margin:0 8px}
-@media (max-width:640px){
-  h1{font-size:26px}
-  article h2{font-size:21px}
-  .criteria-table{font-size:13px}
+article{ padding: 48px 0 64px; }
+.criteria-table{
+  width: 100%; border-collapse: collapse;
+  margin: 16px 0 24px;
+  font-size: 14px;
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  overflow: hidden;
+}
+.criteria-table th, .criteria-table td{
+  padding: 10px 14px;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+.criteria-table th{
+  background: var(--bg-sunk);
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--ink-0);
+}
+.criteria-table tr:last-child td{ border-bottom: 0; }
+.criteria-table td.pts{
+  text-align: right;
+  font-weight: 700;
+  color: var(--brand-deep);
+  font-variant-numeric: tabular-nums;
+}
+.code-block{
+  background: var(--bg-dark);
+  color: #9be8d6;
+  padding: 18px 22px;
+  border-radius: var(--r-md);
+  font-size: 13.5px;
+  font-family: var(--font-mono);
+  overflow-x: auto;
+  margin: 16px 0 24px;
+  line-height: 1.55;
+}
+.example-card{
+  margin: 24px 0;
+  padding: 22px 24px;
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+}
+.example-card h3{ margin-top: 0; font-size: 18px; }
+.example-card .badge{
+  display: inline-block;
+  padding: 4px 10px;
+  background: var(--brand);
+  color: var(--brand-ink);
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+  margin-bottom: 10px;
+  font-family: var(--font-mono);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.antipattern{
+  margin: 20px 0;
+  padding: 14px 18px;
+  background: var(--warn-wash);
+  border-left: 3px solid var(--warn);
+  border-radius: var(--r-md);
+  font-size: 14px;
+  color: var(--ink-1);
+}
+.antipattern b{ color: var(--ink-0); }
+@media (max-width: 640px){
+  .criteria-table{ font-size: 13px; }
 }
 </style>
 </head>
 <body>
-<header>
+<header class="nav">
   <div class="container">
-    <a class="logo" href="/">AI Catalog<span> Score</span></a>
-    <div class="nav-links">
+    <a href="/" class="wordmark">
+      <span class="mark"><img src="/logo-acs.png" alt="AI Catalog Score" loading="eager"></span>
+      <span class="name">AI Catalog Score</span>
+    </a>
+    <nav>
       <a href="/audit">Free audit</a>
       <a href="/leaderboard/">Leaderboard</a>
-      <a href="/blog/">Blog</a>
-      <a class="cta-top" href="/#install">Install on Shopify →</a>
-    </div>
+      <a href="/blog/" class="is-active">Blog</a>
+      <a href="https://github.com/commerce-agentic" target="_blank" rel="noopener">GitHub</a>
+    </nav>
+    <a href="/#install" class="btn btn-sm btn-primary">Install free <span class="btn-arrow">→</span></a>
   </div>
 </header>
 
-<article class="container">
+<article class="container-narrow">
   <div class="meta">METHODOLOGY · 10 min read · 21 May 2026</div>
   <h1>Shopify product descriptions for AI visibility — structure, factuals, length</h1>
   <p class="lede">Descriptions are signal #2 in <a href="/blog/8-signals-ai-shopping-agents-look-at">the 8 signals rubric</a>, and they carry the heaviest weight: 20 of 100 points, more than any other single signal. They're also the dimension merchants under-invest in most. This article walks through the 7 criteria, the HTML structure AI agents actually parse, the template that hits all 7 at once, and the fluff antipatterns that quietly cost you points.</p>
@@ -240,19 +273,50 @@ footer a{color:#5a6577;text-decoration:none;margin:0 8px}
   <div class="cta-section">
     <h2>Score your descriptions in 60 seconds</h2>
     <p>Free audit grades all 7 description criteria across every product in your public catalog.</p>
-    <a href="/audit">Run a free audit →</a>
-    <a href="/#install" class="ghost">Install on Shopify</a>
-    <div style="margin-top:12px;font-size:13px;opacity:.7">Score Guarantee: +10 pts in 30 days or full refund.</div>
+    <a href="/audit" class="btn btn-primary">Run a free audit <span class="btn-arrow">→</span></a>
+    <a href="/#install" class="btn btn-dark-outline">Install on Shopify</a>
+    <div class="small">Score Guarantee: +10 pts in 30 days or full refund.</div>
   </div>
 </article>
 
-<footer>
-  <a href="/">Home</a> ·
-  <a href="/audit">Free audit</a> ·
-  <a href="/leaderboard/">Leaderboard</a> ·
-  <a href="/blog/">Blog</a> ·
-  <a href="https://github.com/commerce-agentic">Open source</a> ·
-  <a href="/privacy.html">Privacy</a>
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <a href="/" class="wordmark">
+          <span class="mark"><img src="/logo-acs.png" alt="AI Catalog Score"></span>
+          <span class="name">AI Catalog Score</span>
+        </a>
+        <p class="blurb">The open standard for AI shopping agent visibility on Shopify. Score, fix, and prove uplift causally across ChatGPT, Gemini, Claude, Perplexity, Mistral, and DeepSeek.</p>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Product</div>
+        <div class="stack-12">
+          <a href="/audit">Free audit</a>
+          <a href="/leaderboard/">Leaderboard</a>
+          <a href="/blog/">Blog</a>
+          <a href="/#install">Install on Shopify</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Open source</div>
+        <div class="stack-12">
+          <a href="https://github.com/commerce-agentic" target="_blank" rel="noopener">commerce-agentic</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Legal</div>
+        <div class="stack-12">
+          <a href="/privacy.html">Privacy</a>
+          <a href="/terms.html">Terms</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 AI Catalog Score · All rights reserved.</span>
+      <span>aicatalogscore.com</span>
+    </div>
+  </div>
 </footer>
 </body>
 </html>
