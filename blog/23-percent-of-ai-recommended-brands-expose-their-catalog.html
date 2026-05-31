@@ -105,7 +105,7 @@ footer a{color:#5a6577;text-decoration:none;margin:0 8px}
   </div>
 
   <h2>The experiment</h2>
-  <p>The top-mentioned brands are taken from our open AI agent captures dataset — 342k+ ground-truth captures (released under MIT at <a href="https://github.com/commerce-agentic/ai-visibility-metrics">commerce-agentic/ai-visibility-metrics</a>). For each brand domain, we tried to fetch the standard Shopify public catalog endpoint:</p>
+  <p>The top-mentioned brands are taken from our open AI agent captures dataset — 950k+ ground-truth captures (released under MIT at <a href="https://github.com/commerce-agentic/ai-visibility-metrics">commerce-agentic/ai-visibility-metrics</a>). For each brand domain, we tried to fetch the standard Shopify public catalog endpoint:</p>
   <pre style="background:#0e1b2c;color:#9be8d6;padding:14px 18px;border-radius:8px;font-size:13px;overflow-x:auto;margin:16px 0"><code>GET https://{brand}.com/products.json?limit=1</code></pre>
   <p>Shopify exposes this endpoint by default on every store, no auth required. It's how shopping comparison sites, scrapers, and audit tools (including ours) read public catalog data. It's also the endpoint any AI agent could call to verify a recommendation.</p>
   <p>Forty-six brands answered. The rest didn't.</p>
