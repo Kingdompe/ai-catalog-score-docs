@@ -3,11 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>The Shopify Metafields That Make AI Agents Recommend Your Products — A Vertical-by-Vertical Guide</title>
+<title>The Shopify Metafields That Make AI Agents Recommend Your Products: A Vertical-by-Vertical Guide</title>
 <meta name="description" content="ChatGPT, Claude, and Perplexity read structured product data more reliably than prose. Here are the exact Shopify metafield keys that map to the AI signals we score, vertical by vertical: apparel, beauty, food, home, electronics, and 5 more.">
 <link rel="canonical" href="https://aicatalogscore.com/blog/shopify-metafields-for-ai-agents-vertical-guide">
 <meta property="og:title" content="The Shopify Metafields That Make AI Agents Recommend Your Products">
-<meta property="og:description" content="Exact metafield keys per vertical (apparel, beauty, food, home, electronics, fitness, pets, baby, outdoor, gifts) — what to set, where, and why AI agents read it.">
+<meta property="og:description" content="Exact metafield keys per vertical (apparel, beauty, food, home, electronics, fitness, pets, baby, outdoor, gifts): what to set, where, and why AI agents read it.">
 <meta property="og:url" content="https://aicatalogscore.com/blog/shopify-metafields-for-ai-agents-vertical-guide">
 <meta property="og:type" content="article">
 <meta property="og:image" content="https://aicatalogscore.com/og-card.png">
@@ -25,11 +25,12 @@
 <link href="https://api.fontshare.com/v2/css?f[]=general-sans@500,600,400,700&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/_shared-tokens.css">
+<script src="/_shared.js" defer></script>
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "Article",
-  "headline": "The Shopify Metafields That Make AI Agents Recommend Your Products — A Vertical-by-Vertical Guide",
+  "headline": "The Shopify Metafields That Make AI Agents Recommend Your Products: A Vertical-by-Vertical Guide",
   "description": "Exact Shopify metafield keys for AI agent visibility, vertical by vertical. Open methodology.",
   "datePublished": "2026-05-20T20:00:00Z",
   "dateModified": "2026-05-20T20:00:00Z",
@@ -154,25 +155,43 @@ article{ padding: 48px 0 64px; }
   </div>
 </header>
 
-<article class="container-narrow">
-  <div class="meta">METHODOLOGY · 10 min read · 20 May 2026</div>
-  <h1>The Shopify metafields that make AI agents recommend your products — a vertical-by-vertical guide</h1>
-  <p class="lede">In <a href="/blog/8-signals-ai-shopping-agents-look-at">the 8 signals article</a> we explained that <strong>metafields are the highest-leverage signal</strong> in the rubric — the gap between "zero AI-relevant metafields" and "three vertical-relevant metafields" is the largest single jump in catalog AI-readiness. This article answers the obvious follow-up question: <em>which metafields, for which vertical?</em></p>
+<div class="article-layout">
+  <aside class="article-toc">
+    <div class="toc-title">On this page</div>
+    <ol>
+      <li><a href="#why-structured-data-beats-prose">Why structured data beats prose</a></li>
+      <li><a href="#the-three-universal-metafield-slots">The three universal slots</a></li>
+      <li><a href="#the-10-verticals">The 10 verticals</a></li>
+      <li><a href="#how-to-set-these-in-shopify">How to set these in Shopify</a></li>
+      <li><a href="#what-this-article-doesnt-claim">What this article doesn't claim</a></li>
+    </ol>
+  </aside>
 
-  <h2>Why structured data beats prose for AI shopping agents</h2>
+  <main>
+    <header class="article-hero reveal">
+      <div class="meta">METHODOLOGY · 10 min read · 20 May 2026</div>
+      <h1>The Shopify metafields that make AI agents recommend your products: a vertical-by-vertical guide</h1>
+      <p class="lede">In <a href="/blog/8-signals-ai-shopping-agents-look-at">the 8 signals article</a> we explained that <strong>metafields are the highest-leverage signal</strong> in the rubric. The gap between "zero AI-relevant metafields" and "three vertical-relevant metafields" is the largest single jump in catalog AI-readiness. This article answers the obvious follow-up question: <em>which metafields, for which vertical?</em></p>
+    </header>
+
+    <section class="reveal" id="why-structured-data-beats-prose">
+    <h2>Why structured data beats prose for AI shopping agents</h2>
   <p>When ChatGPT, Claude, or Perplexity answer a buyer query, they have two ways to read your catalog:</p>
-  <ol>
-    <li><strong>Structured retrieval</strong> — the agent calls a function that returns product objects with named fields (<code>title</code>, <code>price</code>, <code>material</code>, <code>ingredients</code>, etc.). It reads the fields it knows about.</li>
-    <li><strong>Unstructured retrieval</strong> — the agent reads the product description as prose, runs it through embeddings, retrieves what looks relevant.</li>
-  </ol>
+  <ul class="icon-list reveal-stagger">
+    <li><span class="icon-chip"><svg viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg></span><div class="body"><strong>Structured retrieval.</strong><span>The agent calls a function that returns product objects with named fields (<code>title</code>, <code>price</code>, <code>material</code>, <code>ingredients</code>, etc.). It reads the fields it knows about.</span></div></li>
+    <li><span class="icon-chip"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span><div class="body"><strong>Unstructured retrieval.</strong><span>The agent reads the product description as prose, runs it through embeddings, retrieves what looks relevant.</span></div></li>
+  </ul>
   <p>Structured retrieval wins whenever it's available. The agent doesn't have to interpret your marketing copy; it just reads the field. <code>material: "merino wool"</code> tells the agent something definitive. The same fact written as <em>"made with our buttery-soft signature wool blend"</em> requires interpretation and is lossy.</p>
-  <p>This is why metafields are weighted so heavily in the rubric — they're the part of your catalog that's already in the shape agents prefer.</p>
+  <p>This is why metafields are weighted so heavily in the rubric: they're the part of your catalog that's already in the shape agents prefer.</p>
 
   <div class="callout warn">
-    <strong>Honest disclaimer.</strong> We don't run merchant-controlled experiments measuring "products with metafield X get cited Y% more" — we have no clean counterfactual without merchant cooperation. What follows are the keys our open-source rubric scores against, mapped to AI agent retrieval patterns we observe. Treat it as a checklist, not a yield prediction.
+    <strong>Honest disclaimer.</strong> We don't run merchant-controlled experiments measuring "products with metafield X get cited Y% more". We have no clean counterfactual without merchant cooperation. What follows are the keys our open-source rubric scores against, mapped to AI agent retrieval patterns we observe. Treat it as a checklist, not a yield prediction.
   </div>
 
-  <h2>The three universal metafield slots</h2>
+    </section>
+
+    <section class="reveal" id="the-three-universal-metafield-slots">
+    <h2>The three universal metafield slots</h2>
   <p>Across every vertical, the audit rewards three "slot" metafields plus a universal taxonomy field. The slot names vary per vertical; the function is the same.</p>
 
   <table class="master-table">
@@ -187,11 +206,14 @@ article{ padding: 48px 0 64px; }
 
   <p>For each vertical below, we name the canonical key, list the variants our open rubric accepts, and show a concrete value example. Pick one canonical key per slot per vertical and apply it consistently across your catalog. The rubric source for every regex below is <a href="https://github.com/commerce-agentic/agentic-catalog-scanner">commerce-agentic/agentic-catalog-scanner</a>.</p>
 
-  <h2>The 10 verticals</h2>
+    </section>
 
-  <div class="vertical-card">
+    <section class="reveal" id="the-10-verticals">
+    <h2>The 10 verticals</h2>
+
+  <div class="vertical-card lift-hover reveal">
     <div class="badge">APPAREL</div>
-    <h3>Apparel — fabric, sizing, care</h3>
+    <h3>Apparel: fabric, sizing, care</h3>
     <p>The most-cited apparel queries on AI agents are material-led ("merino wool sweater", "100% cotton t-shirt", "recycled polyester jacket"). Get the material field set on every product or you're invisible to those queries.</p>
     <div class="keys">
       <div class="slot">Material slot</div>
@@ -204,10 +226,10 @@ article{ padding: 48px 0 64px; }
     <div class="example"><b>Example value (material):</b> "100% merino wool, 220 gsm, woven in Italy"</div>
   </div>
 
-  <div class="vertical-card">
+  <div class="vertical-card lift-hover reveal">
     <div class="badge">BEAUTY · HIGHEST UPLIFT FOR THE VERTICAL</div>
-    <h3>Beauty — key ingredient, skin type, volume</h3>
-    <p>Beauty queries are aggressively ingredient-led ("retinol serum for sensitive skin", "niacinamide moisturizer", "vitamin C with SPF"). The dominant slot is <code>key_ingredient</code> — agents won't surface your product for an ingredient query if it isn't named in a structured field. Description prose is not enough.</p>
+    <h3>Beauty: key ingredient, skin type, volume</h3>
+    <p>Beauty queries are aggressively ingredient-led ("retinol serum for sensitive skin", "niacinamide moisturizer", "vitamin C with SPF"). The dominant slot is <code>key_ingredient</code>. Agents won't surface your product for an ingredient query if it isn't named in a structured field. Description prose is not enough.</p>
     <div class="keys">
       <div class="slot">Material slot</div>
       <div class="val"><b>Canonical:</b> <code>custom.key_ingredient</code> &nbsp;·&nbsp; <b>Accepted:</b> <code>ingredient</code>, <code>active</code>, <code>formulation</code>, <code>fragrance</code>, <code>extract</code></div>
@@ -216,12 +238,12 @@ article{ padding: 48px 0 64px; }
       <div class="slot">Care slot</div>
       <div class="val"><b>Canonical:</b> <code>custom.skin_type</code> &nbsp;·&nbsp; <b>Accepted:</b> <code>application</code>, <code>routine</code>, <code>usage</code>, <code>step</code></div>
     </div>
-    <div class="example"><b>Example value (key_ingredient):</b> "Niacinamide 10%, Zinc 1% — paraben-free, non-comedogenic"</div>
+    <div class="example"><b>Example value (key_ingredient):</b> "Niacinamide 10%, Zinc 1%, paraben-free, non-comedogenic"</div>
   </div>
 
-  <div class="vertical-card">
+  <div class="vertical-card lift-hover reveal">
     <div class="badge">HOME &amp; FURNITURE</div>
-    <h3>Home — wood type, dimensions, room</h3>
+    <h3>Home: wood type, dimensions, room</h3>
     <p>Furniture queries are dimensional ("dining table for 6", "queen bed frame", "shelf for small spaces"). Material drives the second wave ("solid oak", "marble coffee table", "rattan armchair"). Both must be set as structured fields, not buried in copy.</p>
     <div class="keys">
       <div class="slot">Material slot</div>
@@ -234,10 +256,10 @@ article{ padding: 48px 0 64px; }
     <div class="example"><b>Example value (dimensions):</b> "W 180 cm × D 90 cm × H 75 cm · seats 6 · 38 kg"</div>
   </div>
 
-  <div class="vertical-card">
+  <div class="vertical-card lift-hover reveal">
     <div class="badge">ELECTRONICS</div>
-    <h3>Electronics — chassis, specs, compatibility</h3>
-    <p>Electronics queries are spec-led ("USB-C laptop", "noise-cancelling headphones with 30h battery", "Matter-compatible smart bulb"). Compatibility is the highest-leverage slot here — agents match products to ecosystems (iOS, HomeKit, Matter, etc.) directly from the field.</p>
+    <h3>Electronics: chassis, specs, compatibility</h3>
+    <p>Electronics queries are spec-led ("USB-C laptop", "noise-cancelling headphones with 30h battery", "Matter-compatible smart bulb"). Compatibility is the highest-leverage slot here. Agents match products to ecosystems (iOS, HomeKit, Matter, etc.) directly from the field.</p>
     <div class="keys">
       <div class="slot">Material slot</div>
       <div class="val"><b>Canonical:</b> <code>custom.build</code> &nbsp;·&nbsp; <b>Accepted:</b> <code>material</code>, <code>housing</code>, <code>chassis</code>, <code>finish</code></div>
@@ -249,9 +271,9 @@ article{ padding: 48px 0 64px; }
     <div class="example"><b>Example value (compatibility):</b> "iOS 17+, Android 12+, Bluetooth 5.3, USB-C charging"</div>
   </div>
 
-  <div class="vertical-card">
+  <div class="vertical-card lift-hover reveal">
     <div class="badge">FITNESS</div>
-    <h3>Fitness — material, weight, activity</h3>
+    <h3>Fitness: material, weight, activity</h3>
     <p>Fitness gear is queried by activity ("yoga mat", "cycling shoes", "running shorts") then by attribute ("moisture-wicking", "non-slip", "ergonomic"). The activity field is your matching key into category queries.</p>
     <div class="keys">
       <div class="slot">Material slot</div>
@@ -264,10 +286,10 @@ article{ padding: 48px 0 64px; }
     <div class="example"><b>Example value (activity):</b> "Hot yoga, pilates, vinyasa flow · intermediate to advanced"</div>
   </div>
 
-  <div class="vertical-card">
+  <div class="vertical-card lift-hover reveal">
     <div class="badge">FOOD &amp; BEVERAGE</div>
-    <h3>Food — ingredients, serving size, storage</h3>
-    <p>Food queries are diet-led ("gluten-free granola", "high-protein vegan", "single-origin coffee under $20"). Ingredients and dietary attributes <em>must</em> be in a structured field — agents won't infer "vegan" from a product photo.</p>
+    <h3>Food: ingredients, serving size, storage</h3>
+    <p>Food queries are diet-led ("gluten-free granola", "high-protein vegan", "single-origin coffee under $20"). Ingredients and dietary attributes <em>must</em> be in a structured field. Agents won't infer "vegan" from a product photo.</p>
     <div class="keys">
       <div class="slot">Material slot</div>
       <div class="val"><b>Canonical:</b> <code>custom.ingredients</code> &nbsp;·&nbsp; <b>Accepted:</b> <code>ingredient</code>, <code>allergen</code>, <code>dietary</code>, <code>composition</code></div>
@@ -279,10 +301,10 @@ article{ padding: 48px 0 64px; }
     <div class="example"><b>Example value (ingredients):</b> "Organic rolled oats, almonds, maple syrup. Gluten-free, vegan, non-GMO."</div>
   </div>
 
-  <div class="vertical-card">
+  <div class="vertical-card lift-hover reveal">
     <div class="badge">PETS</div>
-    <h3>Pets — species, breed size, life stage</h3>
-    <p>Pet queries are tightly scoped ("food for senior small-breed dogs", "cat toy for kittens", "orthopedic dog bed for large breeds"). Species and life-stage are the two most disambiguating slots — without them your product matches no specific query.</p>
+    <h3>Pets: species, breed size, life stage</h3>
+    <p>Pet queries are tightly scoped ("food for senior small-breed dogs", "cat toy for kittens", "orthopedic dog bed for large breeds"). Species and life-stage are the two most disambiguating slots. Without them your product matches no specific query.</p>
     <div class="keys">
       <div class="slot">Material slot</div>
       <div class="val"><b>Canonical:</b> <code>custom.material</code> &nbsp;·&nbsp; <b>Accepted:</b> <code>composition</code>, <code>ingredient</code>, <code>content</code></div>
@@ -294,10 +316,10 @@ article{ padding: 48px 0 64px; }
     <div class="example"><b>Example value (species):</b> "Dogs · senior life stage · small breed (under 10 kg)"</div>
   </div>
 
-  <div class="vertical-card">
+  <div class="vertical-card lift-hover reveal">
     <div class="badge">BABY &amp; KIDS</div>
-    <h3>Baby — material safety, age range, certifications</h3>
-    <p>Baby product buyers query safety-first ("BPA-free pacifier", "GOTS-certified organic crib sheet", "newborn to 12 months"). Safety certifications and age range are the must-have slots — buyers won't trust a recommendation without these as structured fields.</p>
+    <h3>Baby: material safety, age range, certifications</h3>
+    <p>Baby product buyers query safety-first ("BPA-free pacifier", "GOTS-certified organic crib sheet", "newborn to 12 months"). Safety certifications and age range are the must-have slots. Buyers won't trust a recommendation without these as structured fields.</p>
     <div class="keys">
       <div class="slot">Material slot</div>
       <div class="val"><b>Canonical:</b> <code>custom.safety_cert</code> &nbsp;·&nbsp; <b>Accepted:</b> <code>material</code>, <code>composition</code>, <code>fabric</code>, <code>certification</code></div>
@@ -309,9 +331,9 @@ article{ padding: 48px 0 64px; }
     <div class="example"><b>Example value (safety_cert):</b> "CPSIA, ASTM F963, EN-71 certified · BPA-free, phthalate-free, GOTS organic cotton"</div>
   </div>
 
-  <div class="vertical-card">
+  <div class="vertical-card lift-hover reveal">
     <div class="badge">OUTDOOR</div>
-    <h3>Outdoor — material, capacity, weather rating</h3>
+    <h3>Outdoor: material, capacity, weather rating</h3>
     <p>Outdoor gear queries are condition-led ("3-season tent", "waterproof hiking boots", "ultralight backpack under 1 kg"). Weather and skill-level slots are how agents narrow from broad activity queries to specific products.</p>
     <div class="keys">
       <div class="slot">Material slot</div>
@@ -324,10 +346,10 @@ article{ padding: 48px 0 64px; }
     <div class="example"><b>Example value (weather_rating):</b> "3-season · comfort to -5°C · DWR shell, taped seams"</div>
   </div>
 
-  <div class="vertical-card">
+  <div class="vertical-card lift-hover reveal">
     <div class="badge">GIFTS</div>
-    <h3>Gifts — recipient, occasion, presentation</h3>
-    <p>Gift queries are intent-driven ("birthday gift under $50 for coffee lovers", "anniversary gift for him", "Mother's Day gift sets"). Recipient and occasion slots are essentially gift-specific — none of the other verticals have them, but gifts cannot be discovered without them.</p>
+    <h3>Gifts: recipient, occasion, presentation</h3>
+    <p>Gift queries are intent-driven ("birthday gift under $50 for coffee lovers", "anniversary gift for him", "Mother's Day gift sets"). Recipient and occasion slots are essentially gift-specific. None of the other verticals have them, but gifts cannot be discovered without them.</p>
     <div class="keys">
       <div class="slot">Material slot</div>
       <div class="val"><b>Canonical:</b> <code>custom.material</code> &nbsp;·&nbsp; <b>Accepted:</b> <code>composition</code>, <code>content</code>, <code>gift_packaging</code>, <code>presentation</code></div>
@@ -339,34 +361,60 @@ article{ padding: 48px 0 64px; }
     <div class="example"><b>Example value (recipient):</b> "Coffee enthusiasts · birthday, housewarming · presentation gift box"</div>
   </div>
 
-  <h2>How to set these in Shopify (the 5-minute version)</h2>
+    </section>
+
+    <section class="reveal" id="how-to-set-these-in-shopify">
+    <h2>How to set these in Shopify (the 5-minute version)</h2>
   <p>If you've never touched metafields in Shopify, the path is:</p>
   <ol>
     <li>Shopify admin → <strong>Settings → Custom data → Products</strong>.</li>
     <li><strong>Add definition</strong>. Pick a namespace (<code>custom</code> works for most stores). Pick a key (use the canonical one above for your vertical). Pick a type (text for ingredients/material, dimension for sizes, etc.).</li>
     <li>Save. The field now appears in the Metafields section of every product edit page.</li>
     <li>Fill it on every product. Use bulk edit or a CSV import for catalogs &gt; 20 SKUs.</li>
-    <li>Also set <strong>Google Product Category</strong> on each product (Products → bulk edit → Category). This is the standard taxonomy field — independent of your custom metafields but equally important.</li>
+    <li>Also set <strong>Google Product Category</strong> on each product (Products → bulk edit → Category). This is the standard taxonomy field, independent of your custom metafields but equally important.</li>
   </ol>
-  <p>Time investment: 30 minutes for the definitions + 1-3 hours of bulk-fill for a 100-SKU catalog. The hardest part is psychological — picking your three canonical slot names and committing to them.</p>
+  <p>Time investment: 30 minutes for the definitions + 1-3 hours of bulk-fill for a 100-SKU catalog. The hardest part is psychological: picking your three canonical slot names and committing to them.</p>
 
-  <h2>What this article doesn't claim</h2>
+    </section>
+
+    <section class="reveal" id="what-this-article-doesnt-claim">
+    <h2>What this article doesn't claim</h2>
   <p>To be explicit about what we don't have:</p>
   <ul>
-    <li>We <strong>don't</strong> have controlled A/B data showing "products with metafield X get cited Y% more". A real test would require merchant cooperation, holding all else equal, observing AI capture rates before and after — none of which is feasible at our scale yet.</li>
+    <li>We <strong>don't</strong> have controlled A/B data showing "products with metafield X get cited Y% more". A real test would require merchant cooperation, holding all else equal, observing AI capture rates before and after, none of which is feasible at our scale yet.</li>
     <li>We <strong>do</strong> have the rubric, which is open source and weighted based on what AI agents demonstrably parse from product feeds.</li>
-    <li>We <strong>do</strong> have the captures dataset, which lets us observe that AI agents heavily cite brands whose catalogs use structured fields — but this is a correlation, not a causal claim.</li>
+    <li>We <strong>do</strong> have the captures dataset, which lets us observe that AI agents heavily cite brands whose catalogs use structured fields. But this is a correlation, not a causal claim.</li>
   </ul>
   <p>Treat the canonical keys above as a tested checklist, not a yield prediction.</p>
 
-  <div class="cta-section">
-    <h2>Audit your metafields in 60 seconds</h2>
-    <p>Free audit covers the public catalog signals. Install the Shopify app to audit (and bulk-set) your metafields too.</p>
-    <a href="/audit" class="btn btn-primary">Run a free audit <span class="btn-arrow">→</span></a>
-    <a href="/#install" class="btn btn-dark-outline">Install on Shopify</a>
-    <div class="small">Score Guarantee: +10 pts in 30 days or full refund.</div>
-  </div>
-</article>
+    </section>
+
+    <div class="cta-section reveal">
+      <h2>Audit your metafields in 60 seconds</h2>
+      <p>Free audit covers the public catalog signals. Install the Shopify app to audit (and bulk-set) your metafields too.</p>
+      <a href="/audit" class="btn btn-primary">Run a free audit <span class="btn-arrow">→</span></a>
+      <a href="/#install" class="btn btn-dark-outline">Install on Shopify</a>
+      <div class="small">Score Guarantee: +10 pts in 30 days or full refund.</div>
+    </div>
+  </main>
+
+  <aside class="article-rail">
+    <div class="rail-card">
+      <div class="rail-title">Coverage</div>
+      <div class="rail-stat">10 verticals</div>
+      <div class="rail-stat-sub">covered in this guide</div>
+    </div>
+    <div class="rail-card">
+      <div class="rail-title">Related</div>
+      <a href="/blog/8-signals-ai-shopping-agents-look-at">The 8 signals rubric</a>
+      <a href="/blog/shopify-product-descriptions-for-ai-agents">Descriptions guide</a>
+    </div>
+    <div class="rail-card">
+      <div class="rail-title">Try it</div>
+      <a href="/audit" class="btn btn-sm btn-primary" style="display:inline-flex;">Run a free audit <span class="btn-arrow">→</span></a>
+    </div>
+  </aside>
+</div>
 
 <footer class="footer">
   <div class="container">

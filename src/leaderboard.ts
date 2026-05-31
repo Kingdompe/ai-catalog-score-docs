@@ -136,6 +136,13 @@ function shellStyles(): string {
   font-family: var(--font-mono);
 }
 .audit-link:hover{ color: var(--brand-deep); text-decoration: underline; }
+.lb-issue{
+  font-size: 12px;
+  color: var(--ink-3);
+  font-family: var(--font-body);
+}
+.lb-row{ transition: background var(--transition); }
+.lb-row:hover{ background: var(--bg-sunk); }
 .partial{
   margin: 24px 0;
   padding: 14px 18px;
@@ -213,7 +220,8 @@ function shellHead(title: string, desc: string, canonical: string, ogPath = '/og
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://api.fontshare.com/v2/css?f[]=general-sans@500,600,400,700&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/_shared-tokens.css">`;
+<link rel="stylesheet" href="/_shared-tokens.css">
+<script src="/_shared.js" defer></script>`;
 }
 
 function shellHeader(): string {
@@ -278,10 +286,10 @@ function shellFooter(): string {
 
 export function renderLeaderboardIndex(insights: Insights | null): string {
   const totals = insights?.totals;
-  const title = 'Shopify AI Visibility Leaderboard — Top brands recommended by ChatGPT, Claude, Perplexity';
+  const title = 'Shopify AI Visibility Leaderboard: Top brands recommended by ChatGPT, Claude, Perplexity';
   const desc = totals
     ? `Two leaderboards, calibrated on ${totals.captures.toLocaleString('en')} AI agent captures across ${totals.agents} agents and ${totals.brandsTracked.toLocaleString('en')} distinct brands. Updated hourly.`
-    : 'Two open leaderboards of Shopify AI visibility — most-mentioned by AI agents, and highest AI Catalog Score.';
+    : 'Two open leaderboards of Shopify AI visibility: most-mentioned by AI agents, and highest AI Catalog Score.';
   const canonical = 'https://aicatalogscore.com/leaderboard/';
 
   return `<!doctype html>
@@ -293,33 +301,35 @@ ${shellHead(title, desc, canonical)}
 <body>
 ${shellHeader()}
 <main class="container-medium">
-  <section class="lb-hero">
+  <header class="article-hero reveal">
+    <div class="meta">Open Dataset · Updated hourly</div>
     <h1>Shopify AI Visibility Leaderboards</h1>
-    <p class="sub">Two open rankings of Shopify catalogs from the AI agent perspective. ${totals ? `Based on ${totals.captures.toLocaleString('en')} captures across ${totals.agents} agents.` : ''}</p>
-    ${totals ? `
-    <div class="stat-grid">
-      <div class="stat"><b>${totals.captures.toLocaleString('en')}</b><span>captures</span></div>
-      <div class="stat"><b>${totals.agents}</b><span>AI agents</span></div>
-      <div class="stat"><b>${totals.brandsTracked.toLocaleString('en')}</b><span>brands tracked</span></div>
-      <div class="stat"><b>${totals.corpusDays}</b><span>days of data</span></div>
-    </div>` : ''}
-  </section>
+    <p class="lede">Two open rankings of Shopify catalogs from the AI agent perspective. ${totals ? `Based on ${totals.captures.toLocaleString('en')} captures across ${totals.agents} agents.` : ''}</p>
+  </header>
 
-  <section class="choice-grid">
-    <a class="choice" href="/leaderboard/ai-mentions">
+  ${totals ? `
+  <div class="stat-grid reveal-stagger">
+    <div class="stat"><b class="count-up">${totals.captures.toLocaleString('en')}</b><span>captures</span></div>
+    <div class="stat"><b>${totals.agents}</b><span>AI agents</span></div>
+    <div class="stat"><b class="count-up">${totals.brandsTracked.toLocaleString('en')}</b><span>brands tracked</span></div>
+    <div class="stat"><b>${totals.corpusDays}</b><span>days of data</span></div>
+  </div>` : ''}
+
+  <section class="choice-grid reveal-stagger">
+    <a class="choice lift-hover" href="/leaderboard/ai-mentions">
       <h2>Most-Mentioned by AI</h2>
       <p>The 100 brands AI shopping agents (ChatGPT, Claude, Perplexity, Gemini, Mistral, DeepSeek) recommend most across thousands of shopping queries.</p>
       <span class="arrow">View ranking →</span>
     </a>
 
-    <a class="choice" href="/leaderboard/catalog-score">
+    <a class="choice lift-hover" href="/leaderboard/catalog-score">
       <h2>Highest AI Catalog Score</h2>
-      <p>The top Shopify stores by AI-readiness score — title, description, images, variants, category, all weighted. Audited from public catalog data, no install required.</p>
+      <p>The top Shopify stores by AI-readiness score: title, description, images, variants, category, all weighted. Audited from public catalog data, no install required.</p>
       <span class="arrow">View ranking →</span>
     </a>
   </section>
 
-  <div class="cta-section">
+  <div class="cta-section reveal">
     <h2>See where your store ranks</h2>
     <p>Free public audit of any Shopify store. No install required.</p>
     <a href="/audit" class="btn btn-primary">Run a free audit <span class="btn-arrow">→</span></a>
@@ -333,8 +343,8 @@ ${shellFooter()}
 
 export function renderAiMentionsLeaderboard(insights: Insights): string {
   const top = insights.topBrands.slice(0, 100);
-  const title = 'Top 100 Brands Recommended by AI Shopping Agents — ChatGPT, Claude, Perplexity';
-  const desc = `The 100 brands AI agents recommend most — ${insights.topBrands[0]?.domain ?? ''} leads with ${insights.topBrands[0]?.mentions ?? 0} mentions. Calibrated on ${insights.totals.captures.toLocaleString('en')} captures across ${insights.totals.agents} agents.`;
+  const title = 'Top 100 Brands Recommended by AI Shopping Agents: ChatGPT, Claude, Perplexity';
+  const desc = `The 100 brands AI agents recommend most. ${insights.topBrands[0]?.domain ?? ''} leads with ${insights.topBrands[0]?.mentions ?? 0} mentions. Calibrated on ${insights.totals.captures.toLocaleString('en')} captures across ${insights.totals.agents} agents.`;
   const canonical = 'https://aicatalogscore.com/leaderboard/ai-mentions';
 
   const jsonLd = {
@@ -362,22 +372,24 @@ ${shellHead(title, desc, canonical)}
 <body>
 ${shellHeader()}
 <main class="container-medium">
-  <section class="lb-hero">
+  <header class="article-hero reveal">
+    <div class="meta">Open Dataset · Top 100</div>
     <h1>Top 100 Brands Recommended by AI</h1>
-    <p class="sub">Brands cited most often by ChatGPT, Claude, Perplexity, Gemini, Mistral, and DeepSeek when our standardized buyer-intent query suite is issued daily. Updated hourly from the open captures dataset. Not a sample of real shopper traffic — see methodology.</p>
-    <div class="stat-grid">
-      <div class="stat"><b>${insights.totals.captures.toLocaleString('en')}</b><span>captures analyzed</span></div>
-      <div class="stat"><b>${insights.topBrands.length.toLocaleString('en')}</b><span>brands tracked</span></div>
-      <div class="stat"><b>${insights.totals.agents}</b><span>AI agents</span></div>
-      <div class="stat"><b>${insights.totals.corpusDays}</b><span>days of data</span></div>
-    </div>
-  </section>
+    <p class="lede">Brands cited most often by ChatGPT, Claude, Perplexity, Gemini, Mistral, and DeepSeek when our standardized buyer-intent query suite is issued daily. Updated hourly from the open captures dataset. Not a sample of real shopper traffic; see methodology.</p>
+  </header>
 
-  <div class="partial">
+  <div class="stat-grid reveal-stagger">
+    <div class="stat"><b class="count-up">${insights.totals.captures.toLocaleString('en')}</b><span>captures analyzed</span></div>
+    <div class="stat"><b class="count-up">${insights.topBrands.length.toLocaleString('en')}</b><span>brands tracked</span></div>
+    <div class="stat"><b>${insights.totals.agents}</b><span>AI agents</span></div>
+    <div class="stat"><b>${insights.totals.corpusDays}</b><span>days of data</span></div>
+  </div>
+
+  <div class="partial reveal">
     Mentions reflect distinct AI agent capture events over the last 90 days. Methodology and raw dataset open at <a href="https://github.com/commerce-agentic/ai-visibility-metrics">commerce-agentic/ai-visibility-metrics</a> (MIT).
   </div>
 
-  <section class="leaderboard">
+  <section class="leaderboard reveal">
     <div class="lb-head">
       <div>#</div>
       <div>Brand</div>
@@ -397,7 +409,7 @@ ${shellHeader()}
     }).join('')}
   </section>
 
-  <div class="cta-section">
+  <div class="cta-section reveal">
     <h2>How does your store compare?</h2>
     <p>Free audit of any Shopify catalog. See where you'd rank.</p>
     <a href="/audit" class="btn btn-primary">Run a free audit <span class="btn-arrow">→</span></a>
@@ -421,8 +433,8 @@ export function renderCatalogScoreLeaderboard(
   meta: { totalScanned: number; auditedAt: string },
 ): string {
   const top = entries.slice(0, 100);
-  const title = `Top ${top.length} Shopify Stores by AI Catalog Score — open methodology, public audit`;
-  const desc = `The ${top.length} highest-scoring Shopify catalogs by AI-readiness. ${meta.totalScanned} stores scanned; ${top[0]?.domain ?? '—'} leads at ${top[0]?.score ?? 0}/100. Open methodology, audit any store free.`;
+  const title = `Top ${top.length} Shopify Stores by AI Catalog Score: open methodology, public audit`;
+  const desc = `The ${top.length} highest-scoring Shopify catalogs by AI-readiness. ${meta.totalScanned} stores scanned; ${top[0]?.domain ?? '·'} leads at ${top[0]?.score ?? 0}/100. Open methodology, audit any store free.`;
   const canonical = 'https://aicatalogscore.com/leaderboard/catalog-score';
 
   const jsonLd = {
@@ -450,22 +462,24 @@ ${shellHead(title, desc, canonical)}
 <body>
 ${shellHeader()}
 <main class="container-medium">
-  <section class="lb-hero">
+  <header class="article-hero reveal">
+    <div class="meta">Open Audit · Top ${top.length}</div>
     <h1>Top ${top.length} Shopify Stores by AI Catalog Score</h1>
-    <p class="sub">Highest AI-readiness scores from our public audit engine — derived from the brands most cited by AI agents, audited from their public Shopify catalogs (no install required).</p>
-    <div class="stat-grid">
-      <div class="stat"><b>${meta.totalScanned.toLocaleString('en')}</b><span>stores scanned</span></div>
-      <div class="stat"><b>${top.length}</b><span>top entries</span></div>
-      <div class="stat"><b>${Math.round(top.reduce((s, e) => s + e.score, 0) / Math.max(1, top.length))}</b><span>top 100 avg</span></div>
-      <div class="stat"><b>${new Date(meta.auditedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</b><span>last refresh</span></div>
-    </div>
-  </section>
+    <p class="lede">Highest AI-readiness scores from our public audit engine, derived from the brands most cited by AI agents, audited from their public Shopify catalogs (no install required).</p>
+  </header>
 
-  <div class="partial">
-    Public audit covers 61 of 100 signals — install the app to score the remaining 39 (metafields, SEO meta, alt text, barcodes, inventory). Full methodology at <a href="https://github.com/commerce-agentic/agentic-catalog-scanner">commerce-agentic/agentic-catalog-scanner</a> (CC0).
+  <div class="stat-grid reveal-stagger">
+    <div class="stat"><b class="count-up">${meta.totalScanned.toLocaleString('en')}</b><span>stores scanned</span></div>
+    <div class="stat"><b>${top.length}</b><span>top entries</span></div>
+    <div class="stat"><b>${Math.round(top.reduce((s, e) => s + e.score, 0) / Math.max(1, top.length))}</b><span>top 100 avg</span></div>
+    <div class="stat"><b>${new Date(meta.auditedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</b><span>last refresh</span></div>
   </div>
 
-  <section class="leaderboard">
+  <div class="partial reveal">
+    Public audit covers 61 of 100 signals. Install the app to score the remaining 39 (metafields, SEO meta, alt text, barcodes, inventory). Full methodology at <a href="https://github.com/commerce-agentic/agentic-catalog-scanner">commerce-agentic/agentic-catalog-scanner</a> (CC0).
+  </div>
+
+  <section class="leaderboard reveal">
     <div class="lb-head">
       <div>#</div>
       <div>Brand</div>
@@ -482,15 +496,15 @@ ${shellHeader()}
         <div class="lb-rank ${rankClass}">${rank}</div>
         <div class="lb-brand"><a href="/audit/${encodeURIComponent(e.domain)}">${esc(brandName(e.domain))}</a><span class="domain">${esc(e.domain)} · ${e.productCount} products</span></div>
         <div><span class="audit-pct" style="background:${color}">${e.score}/100</span></div>
-        <div style="font-size:12px;color:#5a6577">${esc(e.topIssue ?? '—')}</div>
+        <div class="lb-issue">${esc(e.topIssue ?? '·')}</div>
       </div>`;
     }).join('')}
   </section>
 
-  <div class="cta-section">
+  <div class="cta-section reveal">
     <h2>Want to make this list?</h2>
     <p>Install free, run Maximize, get on the leaderboard. Score Guarantee covers you.</p>
-    <a href="/#install">Install on Shopify →</a>
+    <a href="/#install" class="btn btn-primary">Install on Shopify <span class="btn-arrow">→</span></a>
     <div class="small">Free plan: 15 SKUs · Score Guarantee: +10 pts in 30 days or refund.</div>
   </div>
 </main>

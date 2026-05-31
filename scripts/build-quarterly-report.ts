@@ -78,18 +78,18 @@ function renderReport(ins: Insights, lb: LeaderboardData | null): string {
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>State of AI Commerce on Shopify — Q2 2026 Report | AI Catalog Score</title>
-<meta name="description" content="${esc(`${captures} AI agent captures, 6 agents, ${ins.totals.brandsTracked.toLocaleString('en')} distinct brands tracked. The first open dataset report on AI shopping behavior — what agents recommend, which catalogs win, what's missing.`)}">
+<title>State of AI Commerce on Shopify, Q2 2026 Report | AI Catalog Score</title>
+<meta name="description" content="${esc(`${captures} AI agent captures, 6 agents, ${ins.totals.brandsTracked.toLocaleString('en')} distinct brands tracked. The first open dataset report on AI shopping behavior: what agents recommend, which catalogs win, what's missing.`)}">
 <link rel="canonical" href="https://aicatalogscore.com/blog/state-of-ai-commerce-q2-2026">
-<meta property="og:title" content="State of AI Commerce on Shopify — Q2 2026 Report">
-<meta property="og:description" content="${esc(`First open dataset report — ${captures} AI agent captures across 6 agents. What ChatGPT, Claude, Perplexity recommend on Shopify, and the data behind it.`)}">
+<meta property="og:title" content="State of AI Commerce on Shopify, Q2 2026 Report">
+<meta property="og:description" content="${esc(`First open dataset report: ${captures} AI agent captures across 6 agents. What ChatGPT, Claude, Perplexity recommend on Shopify, and the data behind it.`)}">
 <meta property="og:url" content="https://aicatalogscore.com/blog/state-of-ai-commerce-q2-2026">
 <meta property="og:type" content="article">
 <meta property="og:image" content="https://aicatalogscore.com/og-card.png">
 <meta property="article:published_time" content="2026-05-20T16:00:00Z">
 <meta property="article:author" content="AI Catalog Score">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="State of AI Commerce on Shopify — Q2 2026 Report">
+<meta name="twitter:title" content="State of AI Commerce on Shopify, Q2 2026 Report">
 <meta name="twitter:description" content="${esc(`${captures} AI agent captures, 6 agents, ${ins.totals.brandsTracked.toLocaleString('en')} brands tracked. The open dataset report on AI shopping behavior.`)}">
 <meta name="twitter:image" content="https://aicatalogscore.com/og-card.png">
 <meta name="robots" content="index,follow,max-image-preview:large">
@@ -100,11 +100,12 @@ function renderReport(ins: Insights, lb: LeaderboardData | null): string {
 <link href="https://api.fontshare.com/v2/css?f[]=general-sans@500,600,400,700&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/_shared-tokens.css">
+<script src="/_shared.js" defer></script>
 <script type="application/ld+json">
 ${JSON.stringify({
   '@context': 'https://schema.org',
   '@type': 'Report',
-  headline: 'State of AI Commerce on Shopify — Q2 2026',
+  headline: 'State of AI Commerce on Shopify, Q2 2026',
   description: `${captures} AI agent captures across 6 agents and ${ins.totals.brandsTracked.toLocaleString('en')} distinct brands tracked.`,
   datePublished: '2026-05-20T16:00:00Z',
   dateModified: ins.updatedAt,
@@ -164,31 +165,50 @@ article{ padding: 48px 0 64px; }
   </div>
 </header>
 
-<article class="container-narrow">
-  <div class="meta">QUARTERLY REPORT · Q2 2026 · 12 min read · Published 20 May 2026</div>
-  <h1>State of AI Commerce on Shopify — Q2 2026</h1>
-  <p class="lede">The first open quarterly report on AI shopping agent behavior across Shopify catalogs. ${captures} ground-truth captures across ${ins.totals.agents} agents and ${ins.totals.brandsTracked.toLocaleString('en')} distinct brands. What ChatGPT, Claude, Perplexity, Gemini, Mistral and DeepSeek recommend — and what they don't.</p>
+<div class="article-layout">
+  <aside class="article-toc">
+    <div class="toc-title">On this page</div>
+    <ol>
+      <li><a href="#1-the-ai-shopping-channel-is-real">1. AI shopping channel is real</a></li>
+      <li><a href="#2-agent-share-who-recommends-how-much">2. Agent share</a></li>
+      <li><a href="#3-top-10-brands-ai-agents-recommend-most">3. Top 10 brands</a></li>
+      ${top10Audited.length > 0 ? `<li><a href="#4-catalog-quality-vs-mention-rank">4. Catalog quality vs rank</a></li>` : ''}
+      <li><a href="#top-queries-in-our-benchmark-suite">${top10Audited.length > 0 ? '5' : '4'}. Top benchmark queries</a></li>
+      <li><a href="#structural-takeaway">${top10Audited.length > 0 ? '6' : '5'}. The structural takeaway</a></li>
+      <li><a href="#methodology">Methodology</a></li>
+    </ol>
+  </aside>
 
-  <div class="stat-grid">
-    <div class="stat"><b>${captures}</b><span>captures observed</span></div>
-    <div class="stat"><b>${ins.totals.agents}</b><span>agents tracked</span></div>
-    <div class="stat"><b>${ins.totals.brandsTracked.toLocaleString('en')}</b><span>brands tracked</span></div>
-    <div class="stat"><b>${ins.totals.corpusDays}</b><span>days of data</span></div>
-  </div>
+  <main>
+    <header class="article-hero reveal">
+      <div class="meta">QUARTERLY REPORT · Q2 2026 · 12 min read · Published 20 May 2026</div>
+      <h1>State of AI Commerce on Shopify, Q2 2026</h1>
+      <p class="lede">The first open quarterly report on AI shopping agent behavior across Shopify catalogs. ${captures} ground-truth captures across ${ins.totals.agents} agents and ${ins.totals.brandsTracked.toLocaleString('en')} distinct brands. What ChatGPT, Claude, Perplexity, Gemini, Mistral and DeepSeek recommend, and what they don't.</p>
+    </header>
 
-  <div class="callout">
-    <strong>Open dataset.</strong> Methodology under CC0 at <a href="https://github.com/commerce-agentic/agentic-catalog-scanner">commerce-agentic/agentic-catalog-scanner</a>. Raw captures under MIT at <a href="https://github.com/commerce-agentic/ai-visibility-metrics">commerce-agentic/ai-visibility-metrics</a>. All numbers in this report are reproducible from the dataset.
-  </div>
+    <div class="stat-grid reveal-stagger">
+      <div class="stat"><b class="count-up">${captures}</b><span>captures observed</span></div>
+      <div class="stat"><b>${ins.totals.agents}</b><span>agents tracked</span></div>
+      <div class="stat"><b class="count-up">${ins.totals.brandsTracked.toLocaleString('en')}</b><span>brands tracked</span></div>
+      <div class="stat"><b>${ins.totals.corpusDays}</b><span>days of data</span></div>
+    </div>
 
-  <h2>1. The AI shopping channel is real, and it's growing fast</h2>
-  <p>Over the last ${ins.totals.corpusDays} days we captured ${captures} distinct product recommendations from six AI agents — running our standardized buyer-intent query set across five verticals (apparel, beauty, home, food, electronics). That's an average of <strong>${Math.round(ins.totals.captures / Math.max(ins.totals.corpusDays, 1)).toLocaleString('en')} captures per day</strong>, growing.</p>
+    <div class="callout">
+      <strong>Open dataset.</strong> Methodology under CC0 at <a href="https://github.com/commerce-agentic/agentic-catalog-scanner">commerce-agentic/agentic-catalog-scanner</a>. Raw captures under MIT at <a href="https://github.com/commerce-agentic/ai-visibility-metrics">commerce-agentic/ai-visibility-metrics</a>. All numbers in this report are reproducible from the dataset.
+    </div>
+
+    <section class="reveal" id="1-the-ai-shopping-channel-is-real">
+    <h2>1. The AI shopping channel is real, and it's growing fast</h2>
+  <p>Over the last ${ins.totals.corpusDays} days we captured ${captures} distinct product recommendations from six AI agents, running our standardized buyer-intent query set across five verticals (apparel, beauty, home, food, electronics). That's an average of <strong>${Math.round(ins.totals.captures / Math.max(ins.totals.corpusDays, 1)).toLocaleString('en')} captures per day</strong>, growing.</p>
   <p>Each capture is a record of what an agent returned when our benchmark suite issued a buyer-style query. It is <em>not</em> a sample of real shopper traffic (which is private to each agent). Two takeaways from the benchmark:</p>
-  <ul>
-    <li>The answers are deterministic enough to measure. Issue the same buyer-style query 30 days apart and you get largely overlapping product lists — meaning catalog-level signal is what moves the answers, not query phrasing noise.</li>
-    <li>The answers are concentrated. We'll show below that the top 10 brands receive a disproportionate share of mentions, which is bad news for the long tail and great news for whoever's optimizing.</li>
+  <ul class="icon-list reveal-stagger">
+    <li><span class="icon-chip"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></span><div class="body"><strong>The answers are deterministic enough to measure.</strong><span>Issue the same buyer-style query 30 days apart and you get largely overlapping product lists, meaning catalog-level signal is what moves the answers, not query phrasing noise.</span></div></li>
+    <li><span class="icon-chip"><svg viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></span><div class="body"><strong>The answers are concentrated.</strong><span>We'll show below that the top 10 brands receive a disproportionate share of mentions, which is bad news for the long tail and great news for whoever's optimizing.</span></div></li>
   </ul>
+    </section>
 
-  <h2>2. Agent share — who recommends how much</h2>
+    <section class="reveal" id="2-agent-share-who-recommends-how-much">
+    <h2>2. Agent share: who recommends how much</h2>
   <p>Not all AI agents capture share equally. Across the ${captures} captures in this window:</p>
 
   <div style="margin:16px 0 24px">
@@ -202,9 +222,12 @@ article{ padding: 48px 0 64px; }
     }).join('')}
   </div>
 
-  <p><strong>${esc(AGENT_LABEL[dominantAgent[0]] ?? dominantAgent[0])}</strong> leads with ${dominantAgent[1].toLocaleString('en')} captures (${((dominantAgent[1] / totalAgentCaptures) * 100).toFixed(0)}% share). At the other end, <strong>${esc(AGENT_LABEL[minAgent[0]] ?? minAgent[0])}</strong> trails at ${minAgent[1].toLocaleString('en')} (${((minAgent[1] / totalAgentCaptures) * 100).toFixed(0)}%). The gap matters because <em>different agents prioritize different signals</em> — what wins on ChatGPT may underperform on Claude, and vice versa.</p>
+  <p><strong>${esc(AGENT_LABEL[dominantAgent[0]] ?? dominantAgent[0])}</strong> leads with ${dominantAgent[1].toLocaleString('en')} captures (${((dominantAgent[1] / totalAgentCaptures) * 100).toFixed(0)}% share). At the other end, <strong>${esc(AGENT_LABEL[minAgent[0]] ?? minAgent[0])}</strong> trails at ${minAgent[1].toLocaleString('en')} (${((minAgent[1] / totalAgentCaptures) * 100).toFixed(0)}%). The gap matters because <em>different agents prioritize different signals</em>. What wins on ChatGPT may underperform on Claude, and vice versa.</p>
 
-  <h2>3. Top 10 brands AI agents recommend most</h2>
+    </section>
+
+    <section class="reveal" id="3-top-10-brands-ai-agents-recommend-most">
+    <h2>3. Top 10 brands AI agents recommend most</h2>
   <p>From the ${ins.topBrands.length.toLocaleString('en')} distinct brands we observed in the last 90 days, the top 10 received the following mention counts:</p>
 
   <table>
@@ -221,28 +244,33 @@ article{ padding: 48px 0 64px; }
 
   <p>The complete <a href="/leaderboard/ai-mentions">top 100 leaderboard is live</a> and updates hourly. A few observations from the long tail (positions 50-200, omitted from the table above to keep it readable):</p>
   <ul>
-    <li>Mention counts drop off sharply after the top 20. Position 50 typically gets &lt;10% of the mentions that position 1 does — long-tail visibility is a real opportunity for catalogs that optimize properly.</li>
+    <li>Mention counts drop off sharply after the top 20. Position 50 typically gets &lt;10% of the mentions that position 1 does. Long-tail visibility is a real opportunity for catalogs that optimize properly.</li>
     <li>Mid-tier brands (positions 30-100) are mostly cited by 2-3 agents, not all 6. Cross-agent visibility is rare and high-signal.</li>
   </ul>
 
-  ${top10Audited.length > 0 ? `
-  <h2>4. Catalog quality vs. mention rank</h2>
-  <p>We ran the public AI Catalog Score audit on the top ${lb!.totalScanned} most-mentioned brands. ${lb!.entries.length} stores returned valid catalog data. Average score: <strong>${avgScoreAudited}/100</strong>.</p>
-  <p>The top 10 by audit score:</p>
-  <table>
-    <thead><tr><th>#</th><th>Brand</th><th>AI Catalog Score</th><th>Products</th></tr></thead>
-    <tbody>
-      ${top10Audited.map((e, i) => `<tr>
-        <td>${i + 1}</td>
-        <td><a href="/audit/${encodeURIComponent(e.domain)}">${esc(brandName(e.domain))}</a></td>
-        <td class="num">${e.score}/100</td>
-        <td class="num">${e.productCount.toLocaleString('en')}</td>
-      </tr>`).join('')}
-    </tbody>
-  </table>
-  <p>The full audit-score leaderboard is at <a href="/leaderboard/catalog-score">/leaderboard/catalog-score</a>. Worth noting: the catalogs with the highest mention counts are <em>not</em> always the same as the catalogs with the highest audit scores. Discoverability and catalog quality are correlated but not identical.</p>` : ''}
+    </section>
 
-  <h2>${top10Audited.length > 0 ? '5' : '4'}. Top queries in our benchmark suite</h2>
+  ${top10Audited.length > 0 ? `
+    <section class="reveal" id="4-catalog-quality-vs-mention-rank">
+    <h2>4. Catalog quality vs. mention rank</h2>
+    <p>We ran the public AI Catalog Score audit on the top ${lb!.totalScanned} most-mentioned brands. ${lb!.entries.length} stores returned valid catalog data. Average score: <strong>${avgScoreAudited}/100</strong>.</p>
+    <p>The top 10 by audit score:</p>
+    <table>
+      <thead><tr><th>#</th><th>Brand</th><th>AI Catalog Score</th><th>Products</th></tr></thead>
+      <tbody>
+        ${top10Audited.map((e, i) => `<tr>
+          <td>${i + 1}</td>
+          <td><a href="/audit/${encodeURIComponent(e.domain)}">${esc(brandName(e.domain))}</a></td>
+          <td class="num">${e.score}/100</td>
+          <td class="num">${e.productCount.toLocaleString('en')}</td>
+        </tr>`).join('')}
+      </tbody>
+    </table>
+    <p>The full audit-score leaderboard is at <a href="/leaderboard/catalog-score">/leaderboard/catalog-score</a>. Worth noting: the catalogs with the highest mention counts are <em>not</em> always the same as the catalogs with the highest audit scores. Discoverability and catalog quality are correlated but not identical.</p>
+    </section>` : ''}
+
+    <section class="reveal" id="top-queries-in-our-benchmark-suite">
+    <h2>${top10Audited.length > 0 ? '5' : '4'}. Top queries in our benchmark suite</h2>
   <p>The 10 most-frequent queries our standardized benchmark suite issued in this window (queries are pre-defined, not sourced from real shopper search logs):</p>
   <table>
     <thead><tr><th>#</th><th>Query</th><th>Captures</th></tr></thead>
@@ -254,10 +282,13 @@ article{ padding: 48px 0 64px; }
       </tr>`).join('')}
     </tbody>
   </table>
-  <p>The pattern in our suite: specific queries elicit more confident answers than broad ones. Queries like "waterproof running jacket under $200" and "vegan skincare with niacinamide" return concrete brand-and-product lists; broad queries like "running gear" return generic category guidance. We constructed our suite to test the constraint-rich end of the distribution intentionally — that's where AI agent retrieval is most discriminating, and where catalog quality differences surface most clearly. <strong>If your catalog can't answer factual constraints, you don't get cited.</strong></p>
+  <p>The pattern in our suite: specific queries elicit more confident answers than broad ones. Queries like "waterproof running jacket under $200" and "vegan skincare with niacinamide" return concrete brand-and-product lists; broad queries like "running gear" return generic category guidance. We constructed our suite to test the constraint-rich end of the distribution intentionally. That's where AI agent retrieval is most discriminating, and where catalog quality differences surface most clearly. <strong>If your catalog can't answer factual constraints, you don't get cited.</strong></p>
 
-  <h2>${top10Audited.length > 0 ? '6' : '5'}. The structural takeaway</h2>
-  <p>Three qualitative patterns hold across the dataset, regardless of which agent or vertical we slice. None of these are causal claims — we don't run controlled merchant experiments. They're descriptions of what the captures look like.</p>
+    </section>
+
+    <section class="reveal" id="structural-takeaway">
+    <h2>${top10Audited.length > 0 ? '6' : '5'}. The structural takeaway</h2>
+  <p>Three qualitative patterns hold across the dataset, regardless of which agent or vertical we slice. None of these are causal claims; we don't run controlled merchant experiments. They're descriptions of what the captures look like.</p>
   <ol>
     <li><strong>Structure beats prose.</strong> Brands cited most often in the captures dataset overwhelmingly publish structured metafield data on the platforms where they're recommended. The reverse is not observed: catalogs that hide attributes in marketing prose rarely surface at the top.</li>
     <li><strong>Specificity correlates with citation.</strong> Top-ranked captures consistently surface products described with factual markers (units, ingredients, materials, certifications) rather than marketing superlatives. We haven't run a controlled comparison, but the pattern is visible at a glance.</li>
@@ -268,7 +299,10 @@ article{ padding: 48px 0 64px; }
     <strong>If you read one paragraph of this report:</strong> the single highest-leverage thing you can do for AI catalog visibility is set vertical-relevant metafields. The gap between "no AI-relevant metafields" and "3 vertical-relevant metafields" is the largest single jump in the rubric. We documented this in detail in the <a href="/blog/8-signals-ai-shopping-agents-look-at">8 signals article</a>.
   </div>
 
-  <h2>Methodology</h2>
+    </section>
+
+    <section class="reveal" id="methodology">
+    <h2>Methodology</h2>
   <p>Each day we run a ~5,000 query batch through six AI agents. The batch combines two sources: a 700-query <em>anchor set</em> of hand-curated queries kept identical across runs (so the same query's response can be tracked over time), and a probabilistically generated set that fills the rest.</p>
 
   <p>The probabilistic generator samples each query from explicit distributions:</p>
@@ -295,13 +329,33 @@ article{ padding: 48px 0 64px; }
   </ul>
   <p>Methodology open at <a href="https://github.com/commerce-agentic/agentic-catalog-scanner">commerce-agentic/agentic-catalog-scanner</a>. Raw dataset README at <a href="https://github.com/commerce-agentic/ai-visibility-metrics">commerce-agentic/ai-visibility-metrics</a>.</p>
 
-  <div class="cta-section">
-    <h2>Audit your catalog in 60 seconds</h2>
-    <p>Free public scan of any Shopify store. See where you'd rank.</p>
-    <a href="/audit" class="btn btn-primary">Run a free audit <span class="btn-arrow">→</span></a>
-    <a href="/#install" class="btn btn-dark-outline">Install on Shopify</a>
-  </div>
-</article>
+    </section>
+
+    <div class="cta-section reveal">
+      <h2>Audit your catalog in 60 seconds</h2>
+      <p>Free public scan of any Shopify store. See where you'd rank.</p>
+      <a href="/audit" class="btn btn-primary">Run a free audit <span class="btn-arrow">→</span></a>
+      <a href="/#install" class="btn btn-dark-outline">Install on Shopify</a>
+    </div>
+  </main>
+
+  <aside class="article-rail">
+    <div class="rail-card">
+      <div class="rail-title">Captures in this report</div>
+      <div class="rail-stat"><span class="count-up">${captures}</span></div>
+      <div class="rail-stat-sub">across ${ins.totals.agents} agents, ${ins.totals.corpusDays} days</div>
+    </div>
+    <div class="rail-card">
+      <div class="rail-title">Related</div>
+      <a href="/blog/8-signals-ai-shopping-agents-look-at">The 8 signals rubric</a>
+      <a href="/blog/23-percent-of-ai-recommended-brands-expose-their-catalog">23% open catalogs</a>
+    </div>
+    <div class="rail-card">
+      <div class="rail-title">Try it</div>
+      <a href="/audit" class="btn btn-sm btn-primary" style="display:inline-flex;">Run a free audit <span class="btn-arrow">→</span></a>
+    </div>
+  </aside>
+</div>
 
 <footer class="footer">
   <div class="container">
@@ -354,7 +408,7 @@ async function main(): Promise<void> {
   if (lb) {
     console.log(`✓ Loaded catalog-score leaderboard (${lb.entries.length} entries)`);
   } else {
-    console.log('  No catalog-score leaderboard yet — report will render without that section');
+    console.log('  No catalog-score leaderboard yet; report will render without that section');
   }
   const html = renderReport(insights, lb);
   writeFileSync(REPORT_PATH, html, 'utf-8');

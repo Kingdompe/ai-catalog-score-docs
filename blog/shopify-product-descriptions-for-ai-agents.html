@@ -3,10 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Shopify Product Descriptions for AI Visibility — Structure, Factuals, Length</title>
-<meta name="description" content="Descriptions are the highest-weighted signal in our AI catalog rubric (20 of 100 pts). What ChatGPT, Claude, and Perplexity actually parse — the 7 criteria, the HTML structure that wins, and the template per vertical.">
+<title>Shopify Product Descriptions for AI Visibility: Structure, Factuals, Length</title>
+<meta name="description" content="Descriptions are the highest-weighted signal in our AI catalog rubric (20 of 100 pts). What ChatGPT, Claude, and Perplexity actually parse: the 7 criteria, the HTML structure that wins, and the template per vertical.">
 <link rel="canonical" href="https://aicatalogscore.com/blog/shopify-product-descriptions-for-ai-agents">
-<meta property="og:title" content="Shopify Product Descriptions for AI Visibility — Structure, Factuals, Length">
+<meta property="og:title" content="Shopify Product Descriptions for AI Visibility: Structure, Factuals, Length">
 <meta property="og:description" content="The highest-weighted signal in our AI catalog rubric. 7 criteria, HTML structure agents prefer, template per vertical.">
 <meta property="og:url" content="https://aicatalogscore.com/blog/shopify-product-descriptions-for-ai-agents">
 <meta property="og:type" content="article">
@@ -14,7 +14,7 @@
 <meta property="article:published_time" content="2026-05-21T10:00:00Z">
 <meta property="article:author" content="AI Catalog Score">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Shopify Product Descriptions for AI Visibility — Structure, Factuals, Length">
+<meta name="twitter:title" content="Shopify Product Descriptions for AI Visibility: Structure, Factuals, Length">
 <meta name="twitter:description" content="The 7 criteria, the HTML structure that wins, the template per vertical.">
 <meta name="twitter:image" content="https://aicatalogscore.com/og-card.png">
 <meta name="robots" content="index,follow,max-image-preview:large">
@@ -25,11 +25,12 @@
 <link href="https://api.fontshare.com/v2/css?f[]=general-sans@500,600,400,700&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/_shared-tokens.css">
+<script src="/_shared.js" defer></script>
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "Article",
-  "headline": "Shopify Product Descriptions for AI Visibility — Structure, Factuals, Length",
+  "headline": "Shopify Product Descriptions for AI Visibility: Structure, Factuals, Length",
   "description": "The 7 criteria from our open rubric and what AI shopping agents actually parse from product descriptions.",
   "datePublished": "2026-05-21T10:00:00Z",
   "dateModified": "2026-05-21T10:00:00Z",
@@ -133,22 +134,42 @@ article{ padding: 48px 0 64px; }
   </div>
 </header>
 
-<article class="container-narrow">
-  <div class="meta">METHODOLOGY · 10 min read · 21 May 2026</div>
-  <h1>Shopify product descriptions for AI visibility — structure, factuals, length</h1>
-  <p class="lede">Descriptions are signal #2 in <a href="/blog/8-signals-ai-shopping-agents-look-at">the 8 signals rubric</a>, and they carry the heaviest weight: 20 of 100 points, more than any other single signal. They're also the dimension merchants under-invest in most. This article walks through the 7 criteria, the HTML structure AI agents actually parse, the template that hits all 7 at once, and the fluff antipatterns that quietly cost you points.</p>
+<div class="article-layout">
+  <aside class="article-toc">
+    <div class="toc-title">On this page</div>
+    <ol>
+      <li><a href="#how-ai-agents-parse-descriptions">How agents parse descriptions</a></li>
+      <li><a href="#the-7-criteria-from-the-rubric">The 7 criteria from the rubric</a></li>
+      <li><a href="#the-default-description-structure">The default description structure</a></li>
+      <li><a href="#concrete-examples-per-vertical">Concrete examples per vertical</a></li>
+      <li><a href="#the-5-antipatterns-to-drop">The 5 antipatterns to drop</a></li>
+      <li><a href="#how-to-bulk-rewrite-descriptions">How to bulk-rewrite descriptions</a></li>
+      <li><a href="#what-this-article-doesnt-claim">What this article doesn't claim</a></li>
+    </ol>
+  </aside>
 
-  <h2>How AI agents parse descriptions (hierarchically)</h2>
+  <main>
+    <header class="article-hero reveal">
+      <div class="meta">METHODOLOGY · 10 min read · 21 May 2026</div>
+      <h1>Shopify product descriptions for AI visibility: structure, factuals, length</h1>
+      <p class="lede">Descriptions are signal #2 in <a href="/blog/8-signals-ai-shopping-agents-look-at">the 8 signals rubric</a>, and they carry the heaviest weight: 20 of 100 points, more than any other single signal. They're also the dimension merchants under-invest in most. This article walks through the 7 criteria, the HTML structure AI agents actually parse, the template that hits all 7 at once, and the fluff antipatterns that quietly cost you points.</p>
+    </header>
+
+    <section class="reveal" id="how-ai-agents-parse-descriptions">
+    <h2>How AI agents parse descriptions (hierarchically)</h2>
   <p>An LLM doesn't read your description top-to-bottom the way a human does. It chunks the HTML, ranks chunks by perceived information density, then attends most strongly to the high-density blocks. The order of preference, consistently across the 6 agents we track:</p>
-  <ol>
-    <li><strong>Bulleted lists</strong> (<code>&lt;ul&gt;&lt;li&gt;</code>) — high density, low ambiguity. Each list item is a self-contained fact.</li>
-    <li><strong>Subheadings</strong> (<code>&lt;h3&gt;</code>) — semantic anchors. They tell the agent "this section is about Material".</li>
-    <li><strong>Spec lines</strong> ("Material: 100% merino wool") — pseudo-structured even inside prose.</li>
-    <li><strong>Paragraph prose</strong> — read last, weighted least. Most fluff lives here.</li>
-  </ol>
+  <ul class="icon-list reveal-stagger">
+    <li><span class="icon-chip"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></span><div class="body"><strong>Bulleted lists (<code>&lt;ul&gt;&lt;li&gt;</code>).</strong><span>High density, low ambiguity. Each list item is a self-contained fact.</span></div></li>
+    <li><span class="icon-chip"><svg viewBox="0 0 24 24"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg></span><div class="body"><strong>Subheadings (<code>&lt;h3&gt;</code>).</strong><span>Semantic anchors. They tell the agent "this section is about Material".</span></div></li>
+    <li><span class="icon-chip"><svg viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg></span><div class="body"><strong>Spec lines ("Material: 100% merino wool").</strong><span>Pseudo-structured even inside prose.</span></div></li>
+    <li><span class="icon-chip"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span><div class="body"><strong>Paragraph prose.</strong><span>Read last, weighted least. Most fluff lives here.</span></div></li>
+  </ul>
   <p>The implication: <em>where</em> you put a fact matters as much as <em>whether</em> the fact is present. Hiding "100% merino wool" inside a 200-word brand-story paragraph is functionally invisible. The same words in a bulleted list are far more reliably retrieved, without rewriting the content. (We don't have a clean controlled measurement of the exact weight difference, only consistent qualitative observation across our benchmark suite.)</p>
 
-  <h2>The 7 criteria from the rubric</h2>
+    </section>
+
+    <section class="reveal" id="the-7-criteria-from-the-rubric">
+    <h2>The 7 criteria from the rubric</h2>
   <p>Source: <a href="https://github.com/commerce-agentic/agentic-catalog-scanner">commerce-agentic/agentic-catalog-scanner</a> (CC0). Every criterion is implemented in the open audit engine.</p>
 
   <table class="criteria-table">
@@ -157,10 +178,10 @@ article{ padding: 48px 0 64px; }
       <tr><td>1</td><td>Word count ≥ 150</td><td class="pts">4</td><td>Sweet spot for AI context windows; under 80 words is too thin.</td></tr>
       <tr><td>2</td><td>At least one <code>&lt;ul&gt;&lt;li&gt;</code></td><td class="pts">3</td><td>LLMs parse structured lists much more reliably than prose.</td></tr>
       <tr><td>3</td><td>At least one <code>&lt;h3&gt;</code></td><td class="pts">2</td><td>Semantic section anchor (Materials / Care / Use).</td></tr>
-      <tr><td>4</td><td>≥ 3 factual markers</td><td class="pts">4</td><td>Units (mL, g, cm), percentages, ingredients, materials, certifications — measurable claims.</td></tr>
-      <tr><td>5</td><td>≥ 2 use-case mentions</td><td class="pts">2</td><td>"Ideal for X", "use morning", "designed for Y" — context patterns agents use for matching.</td></tr>
-      <tr><td>6</td><td>≥ 1 spec list with recognized labels</td><td class="pts">2</td><td>"Material:", "Size:", "Care:", "Ingredients:" — agents extract these as pseudo-fields.</td></tr>
-      <tr><td>7</td><td>Zero fluff terms</td><td class="pts">3</td><td>"Premium", "amazing", "best", "luxury" — downweighted explicitly.</td></tr>
+      <tr><td>4</td><td>≥ 3 factual markers</td><td class="pts">4</td><td>Units (mL, g, cm), percentages, ingredients, materials, certifications: measurable claims.</td></tr>
+      <tr><td>5</td><td>≥ 2 use-case mentions</td><td class="pts">2</td><td>"Ideal for X", "use morning", "designed for Y": context patterns agents use for matching.</td></tr>
+      <tr><td>6</td><td>≥ 1 spec list with recognized labels</td><td class="pts">2</td><td>"Material:", "Size:", "Care:", "Ingredients:": agents extract these as pseudo-fields.</td></tr>
+      <tr><td>7</td><td>Zero fluff terms</td><td class="pts">3</td><td>"Premium", "amazing", "best", "luxury": downweighted explicitly.</td></tr>
     </tbody>
   </table>
 
@@ -174,7 +195,10 @@ article{ padding: 48px 0 64px; }
     <strong>Honest disclaimer.</strong> We don't run controlled merchant experiments. What we have is the open rubric (calibrated against the brands AI agents cite most) plus consistent observation that catalogs which hit the 7 criteria predominate in our captures dataset. Treat this as a tested checklist, not a yield prediction.
   </div>
 
-  <h2>The default description structure that hits all 7 criteria</h2>
+    </section>
+
+    <section class="reveal" id="the-default-description-structure">
+    <h2>The default description structure that hits all 7 criteria</h2>
   <p>One paragraph of context, then a bulleted spec list, then a use-case paragraph. Under 250 words total. Every product, every vertical.</p>
 
   <pre class="code-block">&lt;p&gt;{One paragraph: what the product is, in concrete terms.
@@ -192,11 +216,14 @@ article{ padding: 48px 0 64px; }
 &lt;p&gt;{Ideal for {use-case 1}. Designed for {use-case 2}.
    Works with {compatibility}. Best when {condition}.}&lt;/p&gt;</pre>
 
-  <p>That template alone hits criteria #1 (≥150 words), #2 (bullets), #3 (h3), #6 (spec list with labels), and gives a natural home for criteria #4 (factuals) and #5 (use-cases). Criterion #7 (no fluff) is a discipline thing — bake it into your style guide and never use "premium" again.</p>
+  <p>That template alone hits criteria #1 (≥150 words), #2 (bullets), #3 (h3), #6 (spec list with labels), and gives a natural home for criteria #4 (factuals) and #5 (use-cases). Criterion #7 (no fluff) is a discipline thing: bake it into your style guide and never use "premium" again.</p>
 
-  <h2>Concrete examples per vertical</h2>
+    </section>
 
-  <div class="example-card">
+    <section class="reveal" id="concrete-examples-per-vertical">
+    <h2>Concrete examples per vertical</h2>
+
+  <div class="example-card lift-hover reveal">
     <div class="badge">APPAREL</div>
     <h3>Recycled polyester training hoodie</h3>
     <p>Cropped training hoodie cut from a recycled polyester blend with four-way stretch. Designed for moderate-intensity training (cardio, weights, mobility) and built to dry fast after sweat-heavy sessions. Slim fit through the body with a relaxed shoulder.</p>
@@ -210,7 +237,7 @@ article{ padding: 48px 0 64px; }
     <p>Ideal for indoor training, HIIT, and weight sessions. Works as a midlayer under a shell for cool outdoor runs. Pairs with our recycled poly joggers.</p>
   </div>
 
-  <div class="example-card">
+  <div class="example-card lift-hover reveal">
     <div class="badge">BEAUTY</div>
     <h3>Niacinamide 10% + Zinc Serum, 30 mL</h3>
     <p>A lightweight serum formulated with 10% niacinamide and 1% zinc PCA to support skin barrier function and visible pore appearance. Fragrance-free, alcohol-free, and tested on sensitive skin types. Suitable for daily use, morning and evening.</p>
@@ -224,7 +251,7 @@ article{ padding: 48px 0 64px; }
     <p>Apply 3-4 drops to clean dry skin in the morning and evening, before moisturizer. Ideal for combination, oily, and acne-prone skin types. Patch test before first use.</p>
   </div>
 
-  <div class="example-card">
+  <div class="example-card lift-hover reveal">
     <div class="badge">FOOD &amp; BEVERAGE</div>
     <h3>Organic Almond &amp; Maple Granola, 340 g</h3>
     <p>Slow-baked granola made with organic rolled oats, raw almonds, and pure Canadian maple syrup. Gluten-free, vegan, and made in a dedicated nut-friendly facility. Net weight 340 grams per pouch.</p>
@@ -241,43 +268,72 @@ article{ padding: 48px 0 64px; }
 
   <p>Same structure across verticals: lede paragraph → bulleted specs with labels → use-case paragraph. The labels (<b>Material:</b>, <b>Active:</b>, <b>Allergens:</b>) act as informal field names that agents extract as pseudo-structured data. This is the difference between "the agent reads the text" and "the agent reads <em>data</em>."</p>
 
-  <h2>The 5 antipatterns to drop</h2>
+    </section>
 
-  <div class="antipattern"><b>1. The brand story opening.</b> "Founded in a Brooklyn loft in 2018, we believe..." — this is paragraph 1 in many catalogs and contributes nothing to AI matching. Move brand story to a separate page or below the spec list, not above it. Costs roughly the entire weight of criteria #4 and #5 because the agent reads the brand story first and discounts the rest.</div>
+    <section class="reveal" id="the-5-antipatterns-to-drop">
+    <h2>The 5 antipatterns to drop</h2>
 
-  <div class="antipattern"><b>2. Fluff-led prose.</b> "Premium luxury silk amazing best high-quality" — every fluff term costs criterion #7 and risks the description being classified as low-confidence marketing copy. Strip them all. The factual content underneath usually survives the cut just fine.</div>
+  <div class="antipattern"><b>1. The brand story opening.</b> "Founded in a Brooklyn loft in 2018, we believe..." is paragraph 1 in many catalogs and contributes nothing to AI matching. Move brand story to a separate page or below the spec list, not above it. Costs roughly the entire weight of criteria #4 and #5 because the agent reads the brand story first and discounts the rest.</div>
 
-  <div class="antipattern"><b>3. No structure.</b> A 500-word prose blob with no bullets, no headings, no spec list — costs criteria #2, #3, and #6 simultaneously (8 of 20 pts). Even adding a single &lt;h3&gt; and one &lt;ul&gt; with 3 specs recovers most of the loss.</div>
+  <div class="antipattern"><b>2. Fluff-led prose.</b> "Premium luxury silk amazing best high-quality": every fluff term costs criterion #7 and risks the description being classified as low-confidence marketing copy. Strip them all. The factual content underneath usually survives the cut just fine.</div>
+
+  <div class="antipattern"><b>3. No structure.</b> A 500-word prose blob with no bullets, no headings, no spec list costs criteria #2, #3, and #6 simultaneously (8 of 20 pts). Even adding a single &lt;h3&gt; and one &lt;ul&gt; with 3 specs recovers most of the loss.</div>
 
   <div class="antipattern"><b>4. Vague factuals.</b> "Made from the finest materials" → fails criterion #4 (no measurable claim). "100% merino wool, 220 gsm" → passes criterion #4. The rubric counts <em>measurable</em> factuals (units, percentages, certifications), not unverifiable adjectives.</div>
 
   <div class="antipattern"><b>5. Description == title.</b> A 5-word description that just repeats the title triggers the floor check and caps the score at 6/20. If you have nothing more to say than the title, add the spec list at minimum.</div>
 
-  <h2>How to bulk-rewrite descriptions in Shopify</h2>
+    </section>
+
+    <section class="reveal" id="how-to-bulk-rewrite-descriptions">
+    <h2>How to bulk-rewrite descriptions in Shopify</h2>
   <ol>
-    <li>Export your products to CSV (Products → bulk actions → Export). Sort by description word count ascending — the bottom of the list is your biggest opportunity.</li>
+    <li>Export your products to CSV (Products → bulk actions → Export). Sort by description word count ascending. The bottom of the list is your biggest opportunity.</li>
     <li>Rewrite a sample of 5-10 products using the template above. Re-run <a href="/audit">our public audit</a> to verify the description score increase.</li>
     <li>For full-catalog rewrites, the <a href="/#install">Shopify app</a> bulk-runs the same template via a Claude prompt under a per-criterion pre-flight check (won't ship a rewrite that doesn't improve <code>scoreDesc</code>).</li>
   </ol>
   <p>One product at a time, the rewrite is ~10 minutes. For a 100-product catalog this is a long afternoon manually or about an hour with the app's Maximize cascade.</p>
 
-  <h2>What this article doesn't claim</h2>
+    </section>
+
+    <section class="reveal" id="what-this-article-doesnt-claim">
+    <h2>What this article doesn't claim</h2>
   <ul>
     <li>We <strong>don't</strong> have controlled before/after data showing "rewriting descriptions to hit all 7 criteria increases AI mentions by X%". We can't run that experiment without merchant cooperation and a clean counterfactual.</li>
     <li>We <strong>do</strong> have the open rubric, and the consistent observation that catalogs hitting the 7 criteria predominate in our captures dataset.</li>
-    <li>We <strong>do</strong> observe that catalogs scoring under 6/20 on descriptions are systematically absent from top recommendations — the floor checks exist because that pattern is real.</li>
+    <li>We <strong>do</strong> observe that catalogs scoring under 6/20 on descriptions are systematically absent from top recommendations. The floor checks exist because that pattern is real.</li>
   </ul>
 
   <p>With titles (signal #1, 15 pts) and descriptions (signal #2, 20 pts) handled, the next highest-leverage move is the structured fields agents actively prefer: <a href="/blog/shopify-metafields-for-ai-agents-vertical-guide">the metafields guide, vertical by vertical</a> (signal #5, 15 pts).</p>
 
-  <div class="cta-section">
-    <h2>Score your descriptions in 60 seconds</h2>
-    <p>Free audit grades all 7 description criteria across every product in your public catalog.</p>
-    <a href="/audit" class="btn btn-primary">Run a free audit <span class="btn-arrow">→</span></a>
-    <a href="/#install" class="btn btn-dark-outline">Install on Shopify</a>
-    <div class="small">Score Guarantee: +10 pts in 30 days or full refund.</div>
-  </div>
-</article>
+    </section>
+
+    <div class="cta-section reveal">
+      <h2>Score your descriptions in 60 seconds</h2>
+      <p>Free audit grades all 7 description criteria across every product in your public catalog.</p>
+      <a href="/audit" class="btn btn-primary">Run a free audit <span class="btn-arrow">→</span></a>
+      <a href="/#install" class="btn btn-dark-outline">Install on Shopify</a>
+      <div class="small">Score Guarantee: +10 pts in 30 days or full refund.</div>
+    </div>
+  </main>
+
+  <aside class="article-rail">
+    <div class="rail-card">
+      <div class="rail-title">Signal weight</div>
+      <div class="rail-stat">20 pts</div>
+      <div class="rail-stat-sub">on the description signal (highest)</div>
+    </div>
+    <div class="rail-card">
+      <div class="rail-title">Related</div>
+      <a href="/blog/shopify-product-titles-for-ai-agents">Product titles guide</a>
+      <a href="/blog/shopify-metafields-for-ai-agents-vertical-guide">Metafields per vertical</a>
+    </div>
+    <div class="rail-card">
+      <div class="rail-title">Try it</div>
+      <a href="/audit" class="btn btn-sm btn-primary" style="display:inline-flex;">Run a free audit <span class="btn-arrow">→</span></a>
+    </div>
+  </aside>
+</div>
 
 <footer class="footer">
   <div class="container">

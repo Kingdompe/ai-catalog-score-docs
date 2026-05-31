@@ -128,6 +128,134 @@ article strong{ color: var(--ink-0); font-weight: 600; }
 .container-medium{ max-width: 1080px; margin: 0 auto; padding: 0 24px; }
 @media (max-width: 720px){ .container-medium{ padding: 0 16px; } }
 
+/* ============ ARTICLE LAYOUT ============
+   Three-column grid for editorial pages: a sticky TOC rail on the left,
+   the article content (read-optimized at 720px), and a right rail for
+   pull quotes, stats, related links. Collapses to single column under
+   1080px. Breakouts (.fullwidth) escape the grid for hero images,
+   tables, full-bleed callouts. */
+.article-layout{
+  display: grid;
+  grid-template-columns: 220px minmax(0, 720px) 220px;
+  gap: 48px;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 48px 32px 64px;
+  position: relative;
+}
+.article-toc{
+  position: sticky; top: 110px;
+  align-self: start;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--ink-3);
+  max-height: calc(100vh - 140px);
+  overflow-y: auto;
+}
+.article-toc .toc-title{
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 10px;
+  color: var(--ink-4);
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+.article-toc ol{
+  list-style: none; padding: 0; margin: 0;
+  display: flex; flex-direction: column; gap: 6px;
+}
+.article-toc a{
+  color: var(--ink-2);
+  text-decoration: none;
+  display: block;
+  padding: 4px 10px;
+  border-radius: var(--r-sm);
+  border-left: 2px solid transparent;
+  transition: color var(--transition), background var(--transition), border-color var(--transition);
+}
+.article-toc a:hover{ color: var(--ink-0); background: var(--bg-sunk); }
+.article-toc a.is-active{
+  color: var(--brand-deep);
+  border-left-color: var(--brand);
+  background: var(--brand-wash);
+  font-weight: 600;
+}
+.article-rail{
+  position: sticky; top: 110px;
+  align-self: start;
+  display: flex; flex-direction: column; gap: 18px;
+}
+.rail-card{
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  padding: 18px 20px;
+  font-size: 13px;
+  color: var(--ink-2);
+  line-height: 1.55;
+}
+.rail-card .rail-title{
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  color: var(--ink-4);
+  text-transform: uppercase;
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+.rail-card .rail-stat{
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--brand-deep);
+  line-height: 1.1;
+  letter-spacing: -.02em;
+  font-variant-numeric: tabular-nums;
+  margin-bottom: 4px;
+}
+.rail-card .rail-stat-sub{
+  font-size: 12px;
+  color: var(--ink-3);
+}
+.rail-card a{
+  color: var(--brand-deep);
+  font-weight: 500;
+  text-decoration: none;
+  display: block;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--border);
+  transition: color var(--transition);
+}
+.rail-card a:last-child{ border-bottom: 0; }
+.rail-card a:hover{ color: var(--ink-0); }
+
+/* Full-bleed breakout inside article-layout */
+.fullwidth{
+  grid-column: 1 / -1;
+  margin: 32px -32px;
+}
+@media (max-width: 720px){ .fullwidth{ margin: 24px -16px; } }
+
+@media (max-width: 1180px){
+  .article-layout{
+    grid-template-columns: 200px minmax(0, 1fr);
+    max-width: 1080px;
+  }
+  .article-rail{ display: none; }
+}
+@media (max-width: 880px){
+  .article-layout{
+    grid-template-columns: 1fr;
+    gap: 24px;
+    padding: 32px 20px 56px;
+  }
+  .article-toc{ position: static; max-height: none; }
+  .article-toc ol{ flex-direction: row; flex-wrap: wrap; gap: 4px 12px; }
+  .article-toc a{ padding: 2px 8px; border-left: 0; }
+  .article-toc a.is-active{ background: var(--brand-wash); border-radius: var(--r-sm); }
+}
+
 /* ============ BUTTONS ============ */
 .btn{
   position: relative;
@@ -408,4 +536,187 @@ table td.pts{ font-weight: 700; color: var(--brand-deep); }
   font-family: var(--font-mono);
   font-size: 11px;
   color: var(--ink-4);
+}
+
+/* ============ ARTICLE HERO (illustrated band above the lede) ============ */
+.article-hero{
+  position: relative;
+  margin: 0 0 40px;
+  padding: 64px 40px 56px;
+  background: linear-gradient(135deg, var(--bg-raised) 0%, var(--brand-wash) 100%);
+  border-radius: var(--r-2xl);
+  border: 1px solid var(--border);
+  overflow: hidden;
+  isolation: isolate;
+}
+.article-hero::before{
+  content: '';
+  position: absolute; inset: 0;
+  background-image: radial-gradient(rgba(0,167,106,.08) 1px, transparent 1px);
+  background-size: 24px 24px;
+  mask-image: radial-gradient(ellipse 70% 80% at 50% 50%, #000 0%, transparent 80%);
+  -webkit-mask-image: radial-gradient(ellipse 70% 80% at 50% 50%, #000 0%, transparent 80%);
+  opacity: .55;
+  pointer-events: none;
+  z-index: -1;
+}
+.article-hero::after{
+  content: '';
+  position: absolute;
+  top: -40%; right: -20%;
+  width: 520px; height: 520px;
+  background: radial-gradient(circle, rgba(0,208,132,.18), transparent 70%);
+  filter: blur(48px);
+  pointer-events: none;
+  z-index: -1;
+}
+.article-hero .meta{ margin-bottom: 18px; color: var(--ink-3); }
+.article-hero h1{
+  font-size: clamp(34px, 4.4vw, 52px);
+  margin: 0 0 18px;
+  letter-spacing: -.025em;
+  line-height: 1.1;
+  color: var(--ink-0);
+  max-width: 820px;
+}
+.article-hero .lede{
+  font-size: 18px;
+  color: var(--ink-1);
+  margin: 0;
+  max-width: 780px;
+}
+@media (max-width: 720px){
+  .article-hero{ padding: 40px 24px 36px; border-radius: var(--r-lg); }
+  .article-hero h1{ font-size: 28px; }
+  .article-hero .lede{ font-size: 16px; }
+}
+
+/* ============ ICON CHIP (inline illustration markers) ============ */
+.icon-chip{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px; height: 38px;
+  border-radius: var(--r-md);
+  background: var(--brand-wash);
+  color: var(--brand-deep);
+  border: 1px solid color-mix(in oklab, var(--brand) 28%, transparent);
+  flex-shrink: 0;
+}
+.icon-chip svg{ width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+/* List with icon chips on the left of each item */
+.icon-list{
+  list-style: none;
+  padding: 0;
+  margin: 24px 0;
+  display: flex; flex-direction: column; gap: 14px;
+}
+.icon-list li{
+  display: flex; gap: 16px;
+  align-items: flex-start;
+  padding: 14px 18px;
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  transition: transform var(--transition), border-color var(--transition), box-shadow var(--transition);
+}
+.icon-list li:hover{
+  transform: translateY(-1px);
+  border-color: var(--border-strong);
+  box-shadow: var(--shadow-sm);
+}
+.icon-list li .body{ flex: 1; }
+.icon-list li .body strong{ display: block; color: var(--ink-0); margin-bottom: 2px; font-weight: 600; }
+.icon-list li .body span{ font-size: 14px; color: var(--ink-2); }
+
+/* ============ ILLUSTRATION FIGURE ============ */
+.figure{
+  margin: 32px 0;
+  padding: 24px;
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  text-align: center;
+}
+.figure img{
+  display: block;
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--r-md);
+  margin: 0 auto;
+  box-shadow: var(--shadow-md);
+}
+.figure figcaption{
+  margin-top: 14px;
+  font-size: 13px;
+  color: var(--ink-3);
+  font-family: var(--font-mono);
+}
+
+/* Side-by-side illustration grid for "before / after" demonstrations */
+.figure-pair{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin: 32px 0;
+}
+@media (max-width: 680px){ .figure-pair{ grid-template-columns: 1fr; } }
+.figure-pair .figure{ margin: 0; padding: 16px; }
+.figure-pair .figure img{ aspect-ratio: 4/3; object-fit: cover; }
+
+/* ============ ANIMATED HOVER for post cards / signal cards ============ */
+.lift-hover{ transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition); }
+.lift-hover:hover{
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--border-strong);
+}
+
+/* ============ SCROLL REVEAL ============
+   The IntersectionObserver script in each page adds .is-visible when a
+   .reveal element scrolls into view. Pure CSS fallback keeps content
+   visible if JS is off (no FOUC of hidden content). */
+@media (prefers-reduced-motion: no-preference){
+  .reveal{
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity .8s var(--ease-out), transform .8s var(--ease-out);
+    will-change: opacity, transform;
+  }
+  .reveal.is-visible{
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .reveal-stagger > *{
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity .7s var(--ease-out), transform .7s var(--ease-out);
+  }
+  .reveal-stagger.is-visible > *{ opacity: 1; transform: translateY(0); }
+  .reveal-stagger.is-visible > *:nth-child(2){ transition-delay: .08s; }
+  .reveal-stagger.is-visible > *:nth-child(3){ transition-delay: .16s; }
+  .reveal-stagger.is-visible > *:nth-child(4){ transition-delay: .24s; }
+  .reveal-stagger.is-visible > *:nth-child(5){ transition-delay: .32s; }
+  .reveal-stagger.is-visible > *:nth-child(6){ transition-delay: .40s; }
+}
+
+/* ============ ANIMATED COUNTERS (used on stat grids) ============ */
+.stat b.count-up{
+  font-variant-numeric: tabular-nums;
+  display: inline-block;
+}
+
+/* ============ DECORATIVE BACKDROP (page-level) ============
+   Subtle dot grid + soft brand glow behind the article for visual depth
+   without competing with the editorial. */
+.editorial-backdrop{
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: -1;
+  background-image: radial-gradient(rgba(0,167,106,.05) 1px, transparent 1px);
+  background-size: 32px 32px;
+  mask-image: radial-gradient(ellipse 60% 70% at 50% 30%, #000 0%, transparent 90%);
+  -webkit-mask-image: radial-gradient(ellipse 60% 70% at 50% 30%, #000 0%, transparent 90%);
 }

@@ -25,6 +25,7 @@
 <link href="https://api.fontshare.com/v2/css?f[]=general-sans@500,600,400,700&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/_shared-tokens.css">
+<script src="/_shared.js" defer></script>
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -133,32 +134,51 @@ article{ padding: 48px 0 64px; }
   </div>
 </header>
 
-<article class="container-narrow">
-  <div class="meta">METHODOLOGY · 9 min read · 21 May 2026</div>
-  <h1>How to write Shopify product titles that AI shopping agents actually read</h1>
-  <p class="lede">Titles are signal #1 in <a href="/blog/8-signals-ai-shopping-agents-look-at">the 8 signals rubric</a> — 15 of 100 points. They're also the first filter AI agents apply when deciding whether your product is a candidate at all. A title that fails the basic checks doesn't get further consideration, no matter how well the rest of the catalog is set up. This article walks through the 6 title criteria, what to write per vertical, and the antipatterns to drop today.</p>
+<div class="article-layout">
+  <aside class="article-toc">
+    <div class="toc-title">On this page</div>
+    <ol>
+      <li><a href="#how-agents-read-titles">How agents read titles</a></li>
+      <li><a href="#the-6-criteria-from-the-rubric">The 6 criteria from the rubric</a></li>
+      <li><a href="#the-default-title-formula-that-works">The default title formula</a></li>
+      <li><a href="#vertical-patterns-before-after">Vertical patterns: before / after</a></li>
+      <li><a href="#the-5-antipatterns-to-drop">The 5 antipatterns to drop</a></li>
+      <li><a href="#how-to-bulk-fix-titles-in-shopify">How to bulk-fix titles</a></li>
+      <li><a href="#what-this-article-doesnt-claim">What this article doesn't claim</a></li>
+    </ol>
+  </aside>
 
-  <h2>How agents read titles (different from how Google reads them)</h2>
-  <p>Traditional SEO advice says: stuff your title with keywords your buyer searches for. AI shopping agents flip that. They want titles that are <strong>specific, factual, and parseable</strong> — close to a structured field. The agent's internal task isn't "rank pages by keyword density" but "tell the user which product matches what they asked for."</p>
+  <main>
+    <header class="article-hero reveal">
+      <div class="meta">METHODOLOGY · 9 min read · 21 May 2026</div>
+      <h1>How to write Shopify product titles that AI shopping agents actually read</h1>
+      <p class="lede">Titles are signal #1 in <a href="/blog/8-signals-ai-shopping-agents-look-at">the 8 signals rubric</a>, worth 15 of 100 points. They're also the first filter AI agents apply when deciding whether your product is a candidate at all. A title that fails the basic checks doesn't get further consideration, no matter how well the rest of the catalog is set up. This article walks through the 6 title criteria, what to write per vertical, and the antipatterns to drop today.</p>
+    </header>
+
+    <section class="reveal" id="how-agents-read-titles">
+    <h2>How agents read titles (different from how Google reads them)</h2>
+  <p>Traditional SEO advice says: stuff your title with keywords your buyer searches for. AI shopping agents flip that. They want titles that are <strong>specific, factual, and parseable</strong>, close to a structured field. The agent's internal task isn't "rank pages by keyword density" but "tell the user which product matches what they asked for."</p>
   <p>Three downstream behaviors fall out of that:</p>
-  <ul>
-    <li>Titles with the product-type noun in them get matched cleanly into category queries.</li>
-    <li>Titles with a distinctive attribute (material, ingredient, use-case) get matched into attribute queries, which are the majority of queries in our buyer-intent benchmark suite (see the <a href="/blog/state-of-ai-commerce-q2-2026#methodology">methodology section of the Q2 report</a>).</li>
-    <li>Titles padded with marketing fluff ("premium", "amazing", "best") are downweighted as low-confidence — agents are explicitly trained to mistrust brand self-claims.</li>
+  <ul class="icon-list reveal-stagger">
+    <li><span class="icon-chip"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></span><div class="body"><strong>Product-type match.</strong><span>Titles with the product-type noun in them get matched cleanly into category queries.</span></div></li>
+    <li><span class="icon-chip"><svg viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></span><div class="body"><strong>Attribute match.</strong><span>Titles with a distinctive attribute (material, ingredient, use-case) get matched into attribute queries, which are the majority of queries in our buyer-intent benchmark suite (see the <a href="/blog/state-of-ai-commerce-q2-2026#methodology">methodology section of the Q2 report</a>).</span></div></li>
+    <li><span class="icon-chip"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span><div class="body"><strong>Fluff downweighting.</strong><span>Titles padded with marketing fluff ("premium", "amazing", "best") are downweighted as low-confidence. Agents are explicitly trained to mistrust brand self-claims.</span></div></li>
   </ul>
+    </section>
 
-  <h2>The 6 criteria from the rubric</h2>
+    <section class="reveal" id="the-6-criteria-from-the-rubric">
+    <h2>The 6 criteria from the rubric</h2>
   <p>Source: <a href="https://github.com/commerce-agentic/agentic-catalog-scanner">commerce-agentic/agentic-catalog-scanner</a> (CC0). Every criterion below is implemented in the open rubric, so you can verify exactly how we score.</p>
 
   <table class="criteria-table">
     <thead><tr><th>#</th><th>Criterion</th><th>Pts</th><th>Pass condition</th></tr></thead>
     <tbody>
-      <tr><td>1</td><td>Length 30-80 chars</td><td class="pts">4</td><td>Strict on both bounds — under 30 carries no info; over 80 truncates in most agent UIs.</td></tr>
+      <tr><td>1</td><td>Length 30-80 chars</td><td class="pts">4</td><td>Strict on both bounds: under 30 carries no info; over 80 truncates in most agent UIs.</td></tr>
       <tr><td>2</td><td>Word count ≥ 5</td><td class="pts">2</td><td>Single-token titles like "Hoodie" are too ambiguous to match queries.</td></tr>
       <tr><td>3</td><td>Contains product-type noun</td><td class="pts">3</td><td>Matches your <code>productType</code> field OR a vertical's spec pattern.</td></tr>
-      <tr><td>4</td><td>Contains distinctive attribute</td><td class="pts">3</td><td>Material, ingredient, color, use-case, certification — anything that disambiguates this product from a thousand others.</td></tr>
+      <tr><td>4</td><td>Contains distinctive attribute</td><td class="pts">3</td><td>Material, ingredient, color, use-case, certification: anything that disambiguates this product from a thousand others.</td></tr>
       <tr><td>5</td><td>Not ALL CAPS</td><td class="pts">2</td><td>Title-case is parsed more reliably; all-caps is associated with low-quality marketing.</td></tr>
-      <tr><td>6</td><td>No fluff superlatives</td><td class="pts">1</td><td>"Premium", "amazing", "best", "luxury", "high-quality" — all downweighted.</td></tr>
+      <tr><td>6</td><td>No fluff superlatives</td><td class="pts">1</td><td>"Premium", "amazing", "best", "luxury", "high-quality": all downweighted.</td></tr>
     </tbody>
   </table>
 
@@ -168,16 +188,22 @@ article{ padding: 48px 0 64px; }
     <strong>Honest disclaimer.</strong> We don't run merchant-controlled experiments testing "products with criterion X get cited Y% more." What we have is the open rubric and the observation that the brands AI agents cite most often largely follow these patterns. Treat the criteria as a tested checklist, not a yield prediction.
   </div>
 
-  <h2>The default title formula that works</h2>
+    </section>
+
+    <section class="reveal" id="the-default-title-formula-that-works">
+    <h2>The default title formula that works</h2>
   <p>A reliable template that hits criteria #1, #2, #3, and #4 in a single line:</p>
   <p><code>{Brand or gender qualifier} · {Product type} · {Distinctive attribute or spec}</code></p>
   <p>Most catalogs that score well across all 6 criteria are some variant of this. The pattern works because it pushes the product-type noun into the visible portion of the title and forces at least one factual marker.</p>
 
-  <h2>Vertical patterns — before / after</h2>
+    </section>
+
+    <section class="reveal" id="vertical-patterns-before-after">
+    <h2>Vertical patterns: before / after</h2>
 
   <div class="vertical-set">
     <h3>Apparel</h3>
-    <div class="rewrite">
+    <div class="rewrite lift-hover">
       <div class="row"><div class="label bad">Before</div><div><span class="bad">"PREMIUM HOODIE"</span> <span class="note">15 chars · ALL CAPS · no product-type qualifier · "premium" fluff</span></div></div>
       <div class="row"><div class="label good">After</div><div><span class="good">"Men's Cropped Hoodie · Recycled Polyester · Training Fit"</span> <span class="note">56 chars · gender + product-type + material + use-case</span></div></div>
     </div>
@@ -185,7 +211,7 @@ article{ padding: 48px 0 64px; }
 
   <div class="vertical-set">
     <h3>Beauty</h3>
-    <div class="rewrite">
+    <div class="rewrite lift-hover">
       <div class="row"><div class="label bad">Before</div><div><span class="bad">"Amazing Serum"</span> <span class="note">13 chars · "amazing" fluff · no active ingredient · no skin type</span></div></div>
       <div class="row"><div class="label good">After</div><div><span class="good">"Niacinamide 10% + Zinc Serum · Sensitive Skin · Paraben-Free"</span> <span class="note">60 chars · active ingredient + concentration + skin type + claim</span></div></div>
     </div>
@@ -193,7 +219,7 @@ article{ padding: 48px 0 64px; }
 
   <div class="vertical-set">
     <h3>Food &amp; beverage</h3>
-    <div class="rewrite">
+    <div class="rewrite lift-hover">
       <div class="row"><div class="label bad">Before</div><div><span class="bad">"Best Granola"</span> <span class="note">13 chars · "best" fluff · no ingredient · no dietary attribute</span></div></div>
       <div class="row"><div class="label good">After</div><div><span class="good">"Organic Almond &amp; Maple Granola · Gluten-Free · 340g"</span> <span class="note">52 chars · ingredient + dietary + serving size</span></div></div>
     </div>
@@ -201,7 +227,7 @@ article{ padding: 48px 0 64px; }
 
   <div class="vertical-set">
     <h3>Home &amp; furniture</h3>
-    <div class="rewrite">
+    <div class="rewrite lift-hover">
       <div class="row"><div class="label bad">Before</div><div><span class="bad">"Coffee Table"</span> <span class="note">12 chars · product-type only · no material · no dimension</span></div></div>
       <div class="row"><div class="label good">After</div><div><span class="good">"Solid Oak Coffee Table · 120cm · Mid-Century Style"</span> <span class="note">52 chars · material + product-type + dimension + style</span></div></div>
     </div>
@@ -209,7 +235,7 @@ article{ padding: 48px 0 64px; }
 
   <div class="vertical-set">
     <h3>Electronics</h3>
-    <div class="rewrite">
+    <div class="rewrite lift-hover">
       <div class="row"><div class="label bad">Before</div><div><span class="bad">"Wireless Earbuds Pro"</span> <span class="note">20 chars · no compatibility · no battery life · no key feature</span></div></div>
       <div class="row"><div class="label good">After</div><div><span class="good">"Wireless Earbuds · Active Noise Cancelling · 30h Battery · USB-C"</span> <span class="note">66 chars · product-type + key feature + spec + compatibility</span></div></div>
     </div>
@@ -217,7 +243,7 @@ article{ padding: 48px 0 64px; }
 
   <div class="vertical-set">
     <h3>Pets</h3>
-    <div class="rewrite">
+    <div class="rewrite lift-hover">
       <div class="row"><div class="label bad">Before</div><div><span class="bad">"Dog Food"</span> <span class="note">8 chars · no breed size · no life stage · no diet attribute</span></div></div>
       <div class="row"><div class="label good">After</div><div><span class="good">"Grain-Free Senior Dog Food · Small Breed · Chicken &amp; Rice"</span> <span class="note">57 chars · diet + life stage + product-type + breed size + protein</span></div></div>
     </div>
@@ -225,43 +251,72 @@ article{ padding: 48px 0 64px; }
 
   <p>The pattern is consistent across all 10 verticals: <em>name the product type, then specify the disambiguating attribute</em>. The "before" examples all fail criterion #3 or #4 (or both), which is the most common reason a catalog underperforms on AI recommendations.</p>
 
-  <h2>The 5 antipatterns to drop</h2>
+    </section>
+
+    <section class="reveal" id="the-5-antipatterns-to-drop">
+    <h2>The 5 antipatterns to drop</h2>
 
   <div class="antipattern"><b>1. ALL CAPS titles.</b> "PREMIUM LUXURY HOODIE" doesn't get parsed as a hoodie + descriptors; it gets parsed as low-confidence content. Switch to title case immediately. Costs 2 pts per product.</div>
 
-  <div class="antipattern"><b>2. Fluff openers.</b> "Premium", "luxury", "amazing", "best", "high-quality", "exclusive" — none of these tell the agent anything about the product. They're brand self-claims. The rubric explicitly downweights them. Costs 1 pt per occurrence and risks tipping the title into "low-confidence marketing copy" classification.</div>
+  <div class="antipattern"><b>2. Fluff openers.</b> "Premium", "luxury", "amazing", "best", "high-quality", "exclusive": none of these tell the agent anything about the product. They're brand self-claims. The rubric explicitly downweights them. Costs 1 pt per occurrence and risks tipping the title into "low-confidence marketing copy" classification.</div>
 
-  <div class="antipattern"><b>3. Single-word titles.</b> "Hoodie" / "Serum" / "Table" — these match no specific query. They're indistinguishable from a thousand other products in the same category. Costs criteria #2, #3, and #4 simultaneously.</div>
+  <div class="antipattern"><b>3. Single-word titles.</b> "Hoodie" / "Serum" / "Table": these match no specific query. They're indistinguishable from a thousand other products in the same category. Costs criteria #2, #3, and #4 simultaneously.</div>
 
-  <div class="antipattern"><b>4. Brand-name-only titles.</b> "ACME Style 42" — agents have no way to know what this product is. Brand belongs in the title only when paired with the product-type noun: "ACME Performance Hoodie" rather than "ACME 42".</div>
+  <div class="antipattern"><b>4. Brand-name-only titles.</b> "ACME Style 42": agents have no way to know what this product is. Brand belongs in the title only when paired with the product-type noun: "ACME Performance Hoodie" rather than "ACME 42".</div>
 
-  <div class="antipattern"><b>5. Keyword stuffing.</b> "Hoodie Sweatshirt Pullover Jumper Top Cotton Polyester Workout Casual" — old SEO playbook, hurts AI parsing. Agents read this as a comma-separated keyword salad with no factual structure. Stick to one product-type noun + 1-2 disambiguating attributes.</div>
+  <div class="antipattern"><b>5. Keyword stuffing.</b> "Hoodie Sweatshirt Pullover Jumper Top Cotton Polyester Workout Casual" is old SEO playbook and hurts AI parsing. Agents read this as a comma-separated keyword salad with no factual structure. Stick to one product-type noun + 1-2 disambiguating attributes.</div>
 
-  <h2>How to bulk-fix titles in Shopify</h2>
+    </section>
+
+    <section class="reveal" id="how-to-bulk-fix-titles-in-shopify">
+    <h2>How to bulk-fix titles in Shopify</h2>
   <p>For catalogs under 50 SKUs you can rewrite manually in the product edit page. Past that, the productive path is:</p>
   <ol>
     <li>Export your products to CSV (Products → bulk actions → Export).</li>
-    <li>Open the CSV in a spreadsheet. Audit the existing titles against the 6 criteria — quick wins: length out of range, missing product-type noun, fluff openers.</li>
+    <li>Open the CSV in a spreadsheet. Audit the existing titles against the 6 criteria. Quick wins: length out of range, missing product-type noun, fluff openers.</li>
     <li>Rewrite a sample of 5-10 titles using the formula above. Run <a href="/audit">our public audit</a> on your store after re-importing to verify the title-score increase.</li>
     <li>For full-catalog rewrites, the <a href="/#install">Shopify app</a> bulk-runs the same rubric with Claude-driven rewrites under a per-criterion pre-flight check (it won't ship a rewrite that doesn't improve the title score).</li>
   </ol>
 
-  <h2>What this article doesn't claim</h2>
+    </section>
+
+    <section class="reveal" id="what-this-article-doesnt-claim">
+    <h2>What this article doesn't claim</h2>
   <ul>
     <li>We <strong>don't</strong> have controlled before/after data showing "fixing title criterion X increased AI mentions by Y%." The required experiment is hard to run cleanly.</li>
     <li>We <strong>do</strong> have the open rubric, calibrated against the brands AI agents cite most. The catalogs that follow the 6 criteria predominate in those captures.</li>
     <li>We <strong>do</strong> observe that catalogs where titles violate the antipatterns above are systematically absent from top recommendations in our captures.</li>
   </ul>
-  <p>Once your titles are fixed, descriptions are next — they're signal #2 (20 of 100 pts, the highest single-signal weight). See <a href="/blog/shopify-product-descriptions-for-ai-agents">the descriptions deep-dive</a>. After that, set the structured fields the agents prefer: <a href="/blog/shopify-metafields-for-ai-agents-vertical-guide">the metafields guide</a>.</p>
+  <p>Once your titles are fixed, descriptions are next. They're signal #2 (20 of 100 pts, the highest single-signal weight). See <a href="/blog/shopify-product-descriptions-for-ai-agents">the descriptions deep-dive</a>. After that, set the structured fields the agents prefer: <a href="/blog/shopify-metafields-for-ai-agents-vertical-guide">the metafields guide</a>.</p>
 
-  <div class="cta-section">
-    <h2>Score your titles in 60 seconds</h2>
-    <p>Free audit covers all 6 title criteria across every product in your public catalog.</p>
-    <a href="/audit" class="btn btn-primary">Run a free audit <span class="btn-arrow">→</span></a>
-    <a href="/#install" class="btn btn-dark-outline">Install on Shopify</a>
-    <div class="small">Score Guarantee: +10 pts in 30 days or full refund.</div>
-  </div>
-</article>
+    </section>
+
+    <div class="cta-section reveal">
+      <h2>Score your titles in 60 seconds</h2>
+      <p>Free audit covers all 6 title criteria across every product in your public catalog.</p>
+      <a href="/audit" class="btn btn-primary">Run a free audit <span class="btn-arrow">→</span></a>
+      <a href="/#install" class="btn btn-dark-outline">Install on Shopify</a>
+      <div class="small">Score Guarantee: +10 pts in 30 days or full refund.</div>
+    </div>
+  </main>
+
+  <aside class="article-rail">
+    <div class="rail-card">
+      <div class="rail-title">Signal weight</div>
+      <div class="rail-stat">15 pts</div>
+      <div class="rail-stat-sub">on the title signal</div>
+    </div>
+    <div class="rail-card">
+      <div class="rail-title">Related</div>
+      <a href="/blog/shopify-product-descriptions-for-ai-agents">Descriptions guide</a>
+      <a href="/blog/shopify-metafields-for-ai-agents-vertical-guide">Metafields per vertical</a>
+    </div>
+    <div class="rail-card">
+      <div class="rail-title">Try it</div>
+      <a href="/audit" class="btn btn-sm btn-primary" style="display:inline-flex;">Run a free audit <span class="btn-arrow">→</span></a>
+    </div>
+  </aside>
+</div>
 
 <footer class="footer">
   <div class="container">
