@@ -135,6 +135,9 @@ PITCH_ONELINER = {
 }
 
 
+APP_STORE_URL = "https://apps.shopify.com/ai-catalog-score"
+
+
 def build_message(brand: str, score: int, top_issue: str, audit_url: str,
                   tier: str, product_count: int, oneliner: str) -> str:
     issue_clean = clean_issue(top_issue)
@@ -145,9 +148,10 @@ def build_message(brand: str, score: int, top_issue: str, audit_url: str,
         f"Perplexity) read Shopify catalogs. {brand} just scored {score}/100 "
         f"in our public audit. The top issue is: {issue_clean}.\n\n"
         f"{oneliner}\n\n"
-        f"You can see the full breakdown at {audit_url} (no install, no "
-        f"signup). Our app rewrites the top issues with one click and lets "
-        f"you verify the revenue lift causally. {pricing}\n\n"
+        f"Full breakdown without install: {audit_url}\n"
+        f"App Store listing: {APP_STORE_URL}\n\n"
+        f"Our app rewrites the top issues with one click and lets you "
+        f"verify the revenue lift causally. {pricing}\n\n"
         f"If this is useful, hit reply and I'll walk you through the biggest "
         f"two fixes for your specific catalog.\n\n"
         f"Best,\n"
