@@ -125,24 +125,80 @@ article strong{ color: var(--ink-0); font-weight: 600; }
 .container-narrow{ max-width: 760px; margin: 0 auto; padding: 0 20px; }
 @media (max-width: 720px){ .container-narrow{ padding: 0 16px; } }
 
-.container-medium{ max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+.container-medium{ max-width: 1320px; margin: 0 auto; padding: 0 32px; }
 @media (max-width: 720px){ .container-medium{ padding: 0 16px; } }
 
+/* ============ ARTICLE SHELL ============
+   Wide top-of-page container for the hero band and the stat grid.
+   Lives ABOVE .article-layout so hero + stats use the full page
+   width (the user explicitly didn't want the hero trapped in the
+   narrow middle column of the editorial grid). */
+.article-shell{
+  max-width: 1480px;
+  margin: 0 auto;
+  padding: 40px 48px 0;
+}
+@media (max-width: 1500px){ .article-shell{ padding: 40px 32px 0; } }
+@media (max-width: 880px){ .article-shell{ padding: 24px 20px 0; } }
+
+.article-shell .article-hero{
+  margin: 0;
+  padding: 72px 64px 64px;
+  border-radius: var(--r-2xl);
+}
+.article-shell .article-hero h1{
+  font-size: clamp(38px, 5.2vw, 64px);
+  max-width: 920px;
+}
+.article-shell .article-hero .lede{
+  font-size: 20px;
+  max-width: 860px;
+}
+@media (max-width: 880px){
+  .article-shell .article-hero{ padding: 40px 24px 36px; }
+  .article-shell .article-hero h1{ font-size: 30px; }
+  .article-shell .article-hero .lede{ font-size: 17px; }
+}
+
+.article-shell .stat-grid{
+  margin: 28px 0 0;
+}
+
 /* ============ ARTICLE LAYOUT ============
-   Three-column grid for editorial pages: a sticky TOC rail on the left,
-   the article content (read-optimized at 720px), and a right rail for
-   pull quotes, stats, related links. Collapses to single column under
-   1080px. Breakouts (.fullwidth) escape the grid for hero images,
-   tables, full-bleed callouts. */
+   Below the hero shell: three-column grid for TOC + body + rail.
+   The body content (.article-layout main) caps prose at ~860px for
+   readability even when the column is wider, with tables / cards /
+   figures allowed to break wider via .breakout. */
 .article-layout{
   display: grid;
-  grid-template-columns: 220px minmax(0, 720px) 220px;
-  gap: 48px;
-  max-width: 1280px;
+  grid-template-columns: 220px minmax(0, 1fr) 280px;
+  gap: 64px;
+  max-width: 1480px;
   margin: 0 auto;
-  padding: 48px 32px 64px;
+  padding: 56px 48px 72px;
   position: relative;
 }
+@media (max-width: 1500px){
+  .article-layout{ padding: 48px 32px 72px; gap: 48px; }
+}
+
+.article-layout main{
+  min-width: 0;
+}
+.article-layout main > p,
+.article-layout main > ul,
+.article-layout main > ol,
+.article-layout main > .callout,
+.article-layout main section > p,
+.article-layout main section > ul,
+.article-layout main section > ol,
+.article-layout main section > .callout{
+  max-width: 860px;
+}
+
+/* Optional breakout class: lets tables / signal-cards / illustrations
+   extend wider than the prose column, up to the full main column width. */
+.breakout{ max-width: none !important; margin-left: 0; margin-right: 0; }
 .article-toc{
   position: sticky; top: 110px;
   align-self: start;
@@ -240,7 +296,7 @@ article strong{ color: var(--ink-0); font-weight: 600; }
 @media (max-width: 1180px){
   .article-layout{
     grid-template-columns: 200px minmax(0, 1fr);
-    max-width: 1080px;
+    gap: 40px;
   }
   .article-rail{ display: none; }
 }

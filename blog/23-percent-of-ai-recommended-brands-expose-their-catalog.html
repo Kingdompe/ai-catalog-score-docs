@@ -100,6 +100,20 @@ article{ padding: 48px 0 64px; }
   </div>
 </header>
 
+<div class="article-shell">
+  <header class="article-hero reveal">
+    <div class="meta">DATA · 6 min read · 20 May 2026</div>
+    <h1>We tried to audit the 200 brands AI recommends most. Only 23% had a public catalog we could read.</h1>
+    <p class="lede">We pulled the top 200 brands AI shopping agents (ChatGPT, Claude, Gemini, Perplexity, Mistral, DeepSeek) recommend most often. We then pointed our public audit at each, the same audit anyone can run for free at <a href="/audit">aicatalogscore.com/audit</a>. Forty-six brands returned a usable catalog. The other 154 (77%) gave us something else.</p>
+  </header>
+
+  <div class="stat-grid reveal-stagger">
+    <div class="stat"><b>200</b><span>brands probed</span></div>
+    <div class="stat"><b>46</b><span>open catalogs (23%)</span></div>
+    <div class="stat"><b>154</b><span>closed / blocked / not Shopify (77%)</span></div>
+  </div>
+</div>
+
 <div class="article-layout">
   <aside class="article-toc">
     <div class="toc-title">On this page</div>
@@ -111,18 +125,6 @@ article{ padding: 48px 0 64px; }
   </aside>
 
   <main>
-    <header class="article-hero reveal">
-      <div class="meta">DATA · 6 min read · 20 May 2026</div>
-      <h1>We tried to audit the 200 brands AI recommends most. Only 23% had a public catalog we could read.</h1>
-      <p class="lede">We pulled the top 200 brands AI shopping agents (ChatGPT, Claude, Gemini, Perplexity, Mistral, DeepSeek) recommend most often. We then pointed our public audit at each, the same audit anyone can run for free at <a href="/audit">aicatalogscore.com/audit</a>. Forty-six brands returned a usable catalog. The other 154 (77%) gave us something else.</p>
-    </header>
-
-    <div class="stat-grid reveal-stagger">
-      <div class="stat"><b>200</b><span>brands probed</span></div>
-      <div class="stat"><b>46</b><span>open catalogs (23%)</span></div>
-      <div class="stat"><b>154</b><span>closed / blocked / not Shopify (77%)</span></div>
-    </div>
-
     <section class="reveal" id="the-experiment">
     <h2>The experiment</h2>
   <p>The top-mentioned brands are taken from our open AI agent captures dataset: 1M+ ground-truth captures (released under MIT at <a href="https://github.com/commerce-agentic/ai-visibility-metrics">commerce-agentic/ai-visibility-metrics</a>). For each brand domain, we tried to fetch the standard Shopify public catalog endpoint:</p>

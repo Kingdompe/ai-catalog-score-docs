@@ -165,6 +165,21 @@ article{ padding: 48px 0 64px; }
   </div>
 </header>
 
+<div class="article-shell">
+  <header class="article-hero reveal">
+    <div class="meta">QUARTERLY REPORT · Q2 2026 · 12 min read · Published 20 May 2026</div>
+    <h1>State of AI Commerce on Shopify, Q2 2026</h1>
+    <p class="lede">The first open quarterly report on AI shopping agent behavior across Shopify catalogs. ${captures} ground-truth captures across ${ins.totals.agents} agents and ${ins.totals.brandsTracked.toLocaleString('en')} distinct brands. What ChatGPT, Claude, Perplexity, Gemini, Mistral and DeepSeek recommend, and what they don't.</p>
+  </header>
+
+  <div class="stat-grid reveal-stagger">
+    <div class="stat"><b class="count-up">${captures}</b><span>captures observed</span></div>
+    <div class="stat"><b>${ins.totals.agents}</b><span>agents tracked</span></div>
+    <div class="stat"><b class="count-up">${ins.totals.brandsTracked.toLocaleString('en')}</b><span>brands tracked</span></div>
+    <div class="stat"><b>${ins.totals.corpusDays}</b><span>days of data</span></div>
+  </div>
+</div>
+
 <div class="article-layout">
   <aside class="article-toc">
     <div class="toc-title">On this page</div>
@@ -180,19 +195,6 @@ article{ padding: 48px 0 64px; }
   </aside>
 
   <main>
-    <header class="article-hero reveal">
-      <div class="meta">QUARTERLY REPORT · Q2 2026 · 12 min read · Published 20 May 2026</div>
-      <h1>State of AI Commerce on Shopify, Q2 2026</h1>
-      <p class="lede">The first open quarterly report on AI shopping agent behavior across Shopify catalogs. ${captures} ground-truth captures across ${ins.totals.agents} agents and ${ins.totals.brandsTracked.toLocaleString('en')} distinct brands. What ChatGPT, Claude, Perplexity, Gemini, Mistral and DeepSeek recommend, and what they don't.</p>
-    </header>
-
-    <div class="stat-grid reveal-stagger">
-      <div class="stat"><b class="count-up">${captures}</b><span>captures observed</span></div>
-      <div class="stat"><b>${ins.totals.agents}</b><span>agents tracked</span></div>
-      <div class="stat"><b class="count-up">${ins.totals.brandsTracked.toLocaleString('en')}</b><span>brands tracked</span></div>
-      <div class="stat"><b>${ins.totals.corpusDays}</b><span>days of data</span></div>
-    </div>
-
     <div class="callout">
       <strong>Open dataset.</strong> Methodology under CC0 at <a href="https://github.com/commerce-agentic/agentic-catalog-scanner">commerce-agentic/agentic-catalog-scanner</a>. Raw captures under MIT at <a href="https://github.com/commerce-agentic/ai-visibility-metrics">commerce-agentic/ai-visibility-metrics</a>. All numbers in this report are reproducible from the dataset.
     </div>
