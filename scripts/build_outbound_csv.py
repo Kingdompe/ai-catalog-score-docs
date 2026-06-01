@@ -71,12 +71,40 @@ def tier_for(product_count: int) -> str:
     return "Performance"
 
 
+# Pricing facts (must match aicatalogscore.com/#pricing exactly)
+TIER_PRICES = {
+    "Free": 0,
+    "Growth": 49,
+    "Pro": 149,
+    "Performance": 399,
+}
 TIER_LIMITS = {
     "Free": "50",
     "Growth": "500",
     "Pro": "3,000",
     "Performance": "unlimited",
 }
+
+
+def pricing_line(tier: str, product_count: int) -> str:
+    """One honest line of pricing context, tailored to the target tier.
+
+    Never claims a paid tier is free. The Free tier is free up to 50 SKUs;
+    every tier above is paid monthly. For Growth/Pro/Performance targets
+    we tell the prospect they can test the app on 50 SKUs free, then name
+    the actual monthly price for their catalog size.
+    """
+    if tier == "Free":
+        return (
+            "Pricing: the Free plan covers up to 50 SKUs, which is your "
+            f"full {product_count}-product catalog. No card required."
+        )
+    price = TIER_PRICES[tier]
+    return (
+        f"Pricing: Free plan up to 50 SKUs to test the app on a slice "
+        f"of your catalog. For your {product_count} products the {tier} "
+        f"plan at ${price}/mo is the fit."
+    )
 
 
 def pitch_angle(score: int) -> str:
@@ -108,9 +136,9 @@ PITCH_ONELINER = {
 
 
 def build_message(brand: str, score: int, top_issue: str, audit_url: str,
-                  tier: str, oneliner: str) -> str:
-    tier_limit = TIER_LIMITS[tier]
+                  tier: str, product_count: int, oneliner: str) -> str:
     issue_clean = clean_issue(top_issue)
+    pricing = pricing_line(tier, product_count)
     return (
         f"Hi there,\n\n"
         f"We benchmark how AI shopping agents (ChatGPT, Claude, Gemini, "
@@ -119,8 +147,7 @@ def build_message(brand: str, score: int, top_issue: str, audit_url: str,
         f"{oneliner}\n\n"
         f"You can see the full breakdown at {audit_url} (no install, no "
         f"signup). Our app rewrites the top issues with one click and lets "
-        f"you verify the revenue lift causally. {tier} tier is free up to "
-        f"{tier_limit} SKUs.\n\n"
+        f"you verify the revenue lift causally. {pricing}\n\n"
         f"If this is useful, hit reply and I'll walk you through the biggest "
         f"two fixes for your specific catalog.\n\n"
         f"Best,\n"
@@ -152,7 +179,7 @@ def main() -> None:
         oneliner = PITCH_ONELINER[angle]
         subject_line = f"{possessive(brand)} AI catalog score: {score}/100"
         message_body = build_message(
-            brand, score, top_issue, audit_url, tier, oneliner
+            brand, score, top_issue, audit_url, tier, product_count, oneliner
         )
 
         rows.append({
