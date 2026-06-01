@@ -69,20 +69,20 @@ function scoreTitle(p: PublicProduct): { score: number; issues: string[] } {
   const t = p.title || '';
   const tlen = t.length;
   if (PLACEHOLDER_RE.test(t)) {
-    issues.push('Title is a placeholder — replace with a real product name');
+    issues.push('Title is a placeholder. Replace with a real product name.');
     return { score: 2, issues };
   }
   if (tlen >= 30 && tlen <= 80) s += 4;
-  else issues.push(`Title length ${tlen} chars — aim 30-80 for AI matching`);
+  else issues.push(`Title length is ${tlen} characters. Aim for 30 to 80 for AI matching.`);
   const words = t.split(/\s+/).filter(Boolean);
   if (words.length >= 5) s += 2;
-  else issues.push(`Title only ${words.length} words — add product type + distinctive attribute`);
+  else issues.push(`Title only has ${words.length} words. Add product type plus a distinctive attribute.`);
   if (p.product_type && t.toLowerCase().includes(p.product_type.toLowerCase())) s += 3;
-  else if (p.product_type) issues.push(`Product type "${p.product_type}" missing from title — AI agents use it for category matching`);
+  else if (p.product_type) issues.push(`Product type "${p.product_type}" is missing from the title. AI agents use it for category matching.`);
   if (FACTUAL_RE.test(t)) s += 3;
-  else issues.push('Title has no factual marker (material/spec/ingredient) — AI matches better with one');
+  else issues.push('Title has no factual marker (material, spec, ingredient). AI matches better with at least one.');
   if (t.toUpperCase() !== t || t.length < 4) s += 2;
-  else { issues.push('Title is ALL CAPS — AI agents parse title-case more reliably'); }
+  else { issues.push('Title is ALL CAPS. AI agents parse title case more reliably.'); }
   if (!FLUFF_RE.test(t)) s += 1;
   return { score: Math.min(s, 15), issues };
 }
@@ -95,16 +95,16 @@ function scoreDescription(p: PublicProduct): { score: number; issues: string[] }
   const words = desc.split(/\s+/).filter(Boolean);
   if (words.length >= 150) s += 6;
   else if (words.length >= 80) s += 3;
-  else issues.push(`Description only ${words.length} words — too short for AI matching, aim 150+`);
+  else issues.push(`Description only has ${words.length} words. Too short for AI matching, aim for 150 or more.`);
   if (/<ul[\s>]|<ol[\s>]/i.test(html)) s += 3;
-  else issues.push('No bullet list in description — AI agents parse structured lists better than prose');
+  else issues.push('No bullet list in the description. AI agents parse structured lists much more reliably than prose.');
   if (/<h[1-6][\s>]/i.test(html)) s += 2;
   const factualHits = (desc.match(new RegExp(FACTUAL_RE.source, 'gi')) || []).length;
   if (factualHits >= 3) s += 4;
   else if (factualHits >= 1) s += 2;
-  else issues.push('Description has no specific attributes (materials, dimensions, ingredients, certifications)');
+  else issues.push('Description has no specific attributes (materials, dimensions, ingredients, certifications).');
   if (!FLUFF_RE.test(desc)) s += 3;
-  else issues.push('Description contains fluff words (premium, amazing, best) — replace with specific attributes');
+  else issues.push('Description contains fluff words (premium, amazing, best). Replace with specific attributes.');
   if (/\b(use|wear|apply|ideal|perfect for|designed for|works with)\b/i.test(desc)) s += 2;
   return { score: Math.min(s, 20), issues };
 }
@@ -117,9 +117,9 @@ function scoreImages(p: PublicProduct): { score: number; issues: string[] } {
   const imgs = p.images || [];
   if (imgs.length >= 5) s += 8;
   else if (imgs.length >= 3) s += 6;
-  else if (imgs.length >= 2) { s += 4; issues.push(`Only ${imgs.length} images — add 1-2 more angles for AI confidence`); }
-  else if (imgs.length >= 1) { s += 2; issues.push('Only 1 image — add at least 2 more angles for AI discovery'); }
-  else issues.push('No product images — AI agents need visuals to match queries');
+  else if (imgs.length >= 2) { s += 4; issues.push(`Only ${imgs.length} images. Add 1 or 2 more angles for AI confidence.`); }
+  else if (imgs.length >= 1) { s += 2; issues.push('Only 1 image. Add at least 2 more angles for AI discovery.'); }
+  else issues.push('No product images. AI agents need visuals to match queries.');
   return { score: Math.min(s, 8), issues };
 }
 
@@ -131,9 +131,9 @@ function scoreVariants(p: PublicProduct): { score: number; issues: string[] } {
   const variants = p.variants || [];
   if (variants.length > 1) s += 4;
   else if (variants.length === 1 && variants[0].option1 !== 'Default Title') s += 4;
-  else { issues.push('Only default variant — add size/color/style options if product has them'); }
+  else { issues.push('Only the default variant exists. Add size, color, or style options if the product has them.'); }
   if (variants.length > 0 && variants.every(v => v.sku && v.sku.length > 0)) s += 3;
-  else issues.push('Some variants missing SKU — AI agents use SKU for unique-product identification');
+  else issues.push('Some variants are missing a SKU. AI agents use SKU for unique product identification.');
   if (variants.length > 0 && variants[0].option1 && variants[0].option1 !== 'Default Title') s += 1;
   return { score: Math.min(s, 8), issues };
 }
@@ -145,10 +145,10 @@ function scoreCategoryTags(p: PublicProduct): { score: number; issues: string[] 
     ? p.tags.map(t => String(t).trim()).filter(Boolean)
     : String(p.tags || '').split(',').map(t => t.trim()).filter(Boolean);
   if (p.product_type && p.product_type.length > 0) s += 4;
-  else issues.push('No product_type field — AI agents use it for taxonomy mapping');
+  else issues.push('No product_type field. AI agents use it for taxonomy mapping.');
   if (tags.length >= 5) s += 4;
-  else if (tags.length >= 3) { s += 2; issues.push(`Only ${tags.length} tags — add more attribute tags (material, style, use-case)`); }
-  else issues.push(`Only ${tags.length} tags — major AI signal gap, add 5+ relevant tags`);
+  else if (tags.length >= 3) { s += 2; issues.push(`Only ${tags.length} tags. Add more attribute tags (material, style, use case).`); }
+  else issues.push(`Only ${tags.length} tags. Major AI signal gap, add at least 5 relevant tags.`);
   if (p.vendor && p.vendor.length > 0) s += 2;
   return { score: Math.min(s, 10), issues };
 }
@@ -195,17 +195,21 @@ export function auditStore(shop: string, products: PublicProduct[]): StoreAudit 
   const needsWork = audited.filter(a => a.scorePct >= 50 && a.scorePct < 80).length;
   const invisible = audited.filter(a => a.scorePct < 50).length;
 
-  // Aggregate top issues across all products
+  // Aggregate top issues across all products. We normalize numbers and
+  // quoted snippets to group similar issues together, but we KEEP one
+  // concrete example of each issue for display so the user sees real
+  // values (e.g. "Description only 87 words..."), not placeholders.
   const issueCounts = new Map<string, number>();
+  const issueExamples = new Map<string, string>();
   for (const a of audited) {
     for (const issue of a.issues) {
-      // Normalize numbers + quoted snippets so similar issues group together
       const key = issue.replace(/\d+/g, 'N').replace(/"[^"]+"/g, '"..."');
       issueCounts.set(key, (issueCounts.get(key) || 0) + 1);
+      if (!issueExamples.has(key)) issueExamples.set(key, issue);
     }
   }
   const topIssues = Array.from(issueCounts.entries())
-    .map(([issue, count]) => ({ issue, count }))
+    .map(([key, count]) => ({ issue: issueExamples.get(key) ?? key, count }))
     .sort((a, b) => b.count - a.count)
     .slice(0, 8);
 
