@@ -35,7 +35,7 @@ AGENCIES: list[Agency] = [
         hook="your DJI Hasselblad full-funnel SEO programme that turned organic search into a primary revenue channel",
         why_us="Our 1.2M-capture dataset is exactly the source-of-truth you need to build the AI search angle into your SEO offering for brands like DJI and Gold Collagen",
         priority=1,
-        notes="UK-based. Contact form only on site, no public email. LinkedIn search 'Eastside Co partnerships' likely productive.",
+        notes="UK-based. Contact form is the primary public channel: eastsideco.com/contact. Sub: 'Partnership inquiry from AI Catalog Score (Shopify app)' so it routes to the right inbox.",
     ),
     Agency(
         name="Lantern Sol",
@@ -46,7 +46,7 @@ AGENCIES: list[Agency] = [
         hook="your $113M+ in Shopify revenue generated and the 538+ stores built playbook for D2C growth",
         why_us="Your growth playbook is heavily SEO-driven. As shopper queries shift to AI agents, our scoring rubric is a natural addition to your SEO toolkit",
         priority=2,
-        notes="Has Calendly booking link (calendly.com/lanternsol/30min). Easy meeting path if pitch lands.",
+        notes="Has Calendly booking link (calendly.com/lanternsol/30min). After they reply via the contact form, can book directly from Calendly. Easy meeting path.",
     ),
     Agency(
         name="Swanky",
@@ -57,7 +57,7 @@ AGENCIES: list[Agency] = [
         hook="your work for Shackleton (74% YoY revenue increase) and the subscription DTC specialization",
         why_us="Subscription brands depend on AI agent recommendation for new-customer acquisition. Our app measures that channel quantitatively, which complements your CRO data work",
         priority=3,
-        notes="Named contact: Essie Eslami, Commercial Director (mentioned in their published articles). Phone +44 1392 92 70 70.",
+        notes="Public phone +44 1392 92 70 70 if contact form fails. UK time zone overlaps morning Paris.",
     ),
     Agency(
         name="Avex Designs",
@@ -68,7 +68,7 @@ AGENCIES: list[Agency] = [
         hook="your premium DTC work for brands like KHAITE, AriZona Beverages, FILA, and quip",
         why_us="Your client portfolio is exactly the apparel + beauty + lifestyle population where our captures dataset has the strongest coverage. Concrete numbers for your clients to act on",
         priority=4,
-        notes="NYC-based. Contact form has structured fields (company, project details) which suggests they expect specific intent before responding.",
+        notes="NYC-based. Contact form has structured fields (company, project details) so be specific in the form. NY time zone = afternoon Paris.",
     ),
 ]
 
@@ -87,25 +87,24 @@ def build_subject(agency: Agency) -> str:
 
 
 def build_message(agency: Agency) -> str:
-    short = short_name(agency.name)
-    return f"""Hi [first name to find on LinkedIn],
+    return f"""Hello,
 
-I'm Alexandre, founder of AI Catalog Score (apps.shopify.com/ai-catalog-score). It's a Shopify app that scores how AI shopping agents (ChatGPT, Claude, Gemini, Perplexity, Mistral, DeepSeek) read product catalogs and applies one-click fixes. The methodology is CC0 (github.com/commerce-agentic/agentic-catalog-scanner). The captures dataset is MIT-licensed at 1.2M+ rows.
+We're the team behind AI Catalog Score (apps.shopify.com/ai-catalog-score), a Shopify app that scores how AI shopping agents (ChatGPT, Claude, Gemini, Perplexity, Mistral, DeepSeek) read product catalogs and applies one-click fixes. The scoring methodology is CC0 (github.com/commerce-agentic/agentic-catalog-scanner) and the captures dataset is MIT-licensed at 1.2M+ rows.
 
-Two reasons I'm reaching out to {agency.name} specifically:
+Two reasons we're reaching out to {agency.name} specifically:
 
 1. {agency.hook}. {agency.why_us}.
 
-2. I'd like to discuss a partner program. We don't have one set up yet; I want to design it with 1 or 2 launch agencies who understand the merchant side. The shape I'm thinking is revenue share on referred installs, or a flat referral fee per closed Pro/Performance plan ($149 to $399 per month per merchant). Open to your structure.
+2. We'd like to discuss a partner program. We don't have one set up yet and want to design it with 1 or 2 launch agencies who understand the merchant side. The shape we're thinking is revenue share on referred installs, or a flat referral fee per closed Pro/Performance plan ($149 to $399 per month per merchant). Open to your preferred structure.
 
 You can audit any Shopify store free in 60 seconds at:
 https://aicatalogscore.com/audit
 
-If this is interesting, a 15-minute call this week or next would be useful. If not, no worries, happy to ship you a recap of our methodology + dataset for your team's reference regardless.
+If this is interesting, a 15-minute call this week or next would be useful. If not, no worries, happy to send a recap of our methodology and dataset for your team's reference regardless.
 
 Best,
-Alexandre Poulain
-alexandre@aicatalogscore.com
+The AI Catalog Score team
+hello@aicatalogscore.com
 """
 
 
