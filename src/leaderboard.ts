@@ -237,7 +237,7 @@ function shellHeader(): string {
       <a href="/blog/">Blog</a>
       <a href="https://github.com/commerce-agentic" target="_blank" rel="noopener">GitHub</a>
     </nav>
-    <a href="/#install" class="btn btn-sm btn-primary">Install free <span class="btn-arrow">→</span></a>
+    <a href="https://apps.shopify.com/ai-catalog-score?ref=leaderboard" target="_blank" rel="noopener" class="btn btn-sm btn-primary">Install free <span class="btn-arrow">→</span></a>
   </div>
 </header>`;
 }
@@ -259,7 +259,7 @@ function shellFooter(): string {
           <a href="/audit">Free audit</a>
           <a href="/leaderboard/">Leaderboard</a>
           <a href="/blog/">Blog</a>
-          <a href="/#install">Install on Shopify</a>
+          <a href="https://apps.shopify.com/ai-catalog-score?ref=leaderboard" target="_blank" rel="noopener">Install on Shopify</a>
         </div>
       </div>
       <div class="footer-col">
@@ -504,7 +504,7 @@ ${shellHeader()}
   <div class="cta-section reveal">
     <h2>Want to make this list?</h2>
     <p>Install free, run Maximize, get on the leaderboard. Score Guarantee covers you.</p>
-    <a href="/#install" class="btn btn-primary">Install on Shopify <span class="btn-arrow">→</span></a>
+    <a href="https://apps.shopify.com/ai-catalog-score?ref=leaderboard" target="_blank" rel="noopener" class="btn btn-primary">Install on Shopify <span class="btn-arrow">→</span></a>
     <div class="small">Free plan: 15 SKUs · Score Guarantee: +10 pts in 30 days or refund.</div>
   </div>
 </main>

@@ -93,7 +93,7 @@ function shellFooter(): string {
           <a href="/audit">Free audit</a>
           <a href="/leaderboard/">Leaderboard</a>
           <a href="/blog/">Blog</a>
-          <a href="/#install">Install on Shopify</a>
+          <a href="https://apps.shopify.com/ai-catalog-score?ref=audit_form" target="_blank" rel="noopener">Install on Shopify</a>
         </div>
       </div>
       <div class="footer-col">
